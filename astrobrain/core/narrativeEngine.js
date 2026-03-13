@@ -64,6 +64,33 @@ const ASTRO_ES = {
   opposition: 'oposición', sextile: 'sextil',
 };
 
+// Planet names in Spanish with grammatical article where natural
+const PLANET_NAMES_ES = {
+  moon: 'la Luna',
+  sun: 'el Sol',
+  mars: 'Marte',
+  venus: 'Venus',
+  mercury: 'Mercurio',
+  jupiter: 'Júpiter',
+  saturn: 'Saturno',
+  uranus: 'Urano',
+  neptune: 'Neptuno',
+  pluto: 'Plutón',
+};
+
+// Interpretive phrases mapped to emotional states (used in symbolic anchors).
+// Written as predicate verbs so "Planet en Sign [phrase]" forms a complete sentence.
+const ANCHOR_EMOTION_PHRASES = {
+  reactividad: 'toca las emociones con más velocidad de lo habitual',
+  frustración: 'mueve una tensión que busca su salida',
+  pesadez: 'pide ir despacio y sostener sin prisa',
+  armonía: 'invita a sostener con más calma lo que se siente',
+  sensibilidad: 'pide más atención y cuidado interno',
+  impulso: 'busca dirección y movimiento',
+  expansión: 'abre hacia algo más generoso y amplio',
+  presión: 'pide que se sostenga con calma antes de avanzar',
+};
+
 function sanitizeTechnicalTokens(text = '') {
   let result = text
     .replace(/\b\w+_en_\w+\b/gi, '')
@@ -141,6 +168,112 @@ function reduceAbstractDensity(text = '') {
     return result.join(' ');
   });
   return processed.filter(Boolean).join('\n\n');
+}
+
+/**
+ * Detects the dominant planet/sign/aspect combinations from the active neurons
+ * and astrological context, then selects at most 2 symbolic anchors to embed
+ * naturally in the interpretation paragraph (PARTE 2).
+ *
+ * @param {Array} activeNeurons - Activated neural patterns (used for scoring guidance).
+ * @param {Array} astroContext  - Array of enriched/interpreted transits, each with
+ *                               `planet`, `aspect`, `target`, `emotion`, `score`, and
+ *                               a `context` sub-object that may include `planetSign`
+ *                               and `planetHouse`.
+ * @returns {Array} Up to 2 anchor objects ready for narrative embedding.
+ */
+function createSymbolicAnchors(activeNeurons = [], astroContext = []) {
+  const transits = Array.isArray(astroContext) ? astroContext : [];
+  const candidates = [];
+
+  transits.forEach((transit) => {
+    const planetKey = (transit.planet || '').toLowerCase();
+    const planetEs = PLANET_NAMES_ES[planetKey];
+    if (!planetEs) return;
+
+    const ctx = transit.context || {};
+    const signEs = ctx.planetSign || null;
+    const houseEs = ctx.planetHouse || null;
+    const aspectRaw = (transit.aspect || '').toLowerCase();
+    const aspectEs = ASTRO_ES[aspectRaw] || null;
+    const targetKey = (transit.target || '').toLowerCase();
+    const targetEs = PLANET_NAMES_ES[targetKey] || transit.target || null;
+    const emotion = transit.emotion || '';
+    const interpretation = ANCHOR_EMOTION_PHRASES[emotion] || '';
+    const score = Number(transit.score) || 5;
+
+    if (signEs) {
+      candidates.push({ type: 'planet_sign', planet: planetEs, sign: signEs, interpretation, score });
+    } else if (houseEs) {
+      candidates.push({ type: 'planet_house', planet: planetEs, house: houseEs, interpretation, score });
+    } else if (aspectEs && targetEs) {
+      candidates.push({ type: 'aspect', planet: planetEs, aspect: aspectEs, target: targetEs, interpretation, score });
+    }
+  });
+
+  // Sort by score descending; pick at most 2 anchors with distinct planets
+  const sorted = candidates.sort((a, b) => b.score - a.score);
+  const chosen = [];
+  const usedPlanets = new Set();
+
+  for (const candidate of sorted) {
+    if (chosen.length >= 2) break;
+    if (usedPlanets.has(candidate.planet)) continue;
+    chosen.push(candidate);
+    usedPlanets.add(candidate.planet);
+  }
+
+  return chosen;
+}
+
+/**
+ * Builds the interpretation paragraph from symbolic anchors.
+ * Falls back to `fallbackTranslation` when no anchors are available.
+ */
+function buildAnchoredTranslation(anchors = [], fallbackTranslation = '') {
+  if (!anchors.length) return fallbackTranslation;
+
+  const phrases = anchors.map((anchor, i) => {
+    let phrase = '';
+
+    if (anchor.type === 'planet_sign') {
+      // i=0: "Con la Luna en Aries, [interpretation]." (comma after sign)
+      // i>0: "Al mismo tiempo, Venus en Capricornio [interpretation]." (no comma; planet is subject)
+      if (i === 0) {
+        phrase = anchor.interpretation
+          ? `Con ${anchor.planet} en ${anchor.sign}, ${anchor.interpretation}.`
+          : `Con ${anchor.planet} en ${anchor.sign}.`;
+      } else {
+        phrase = anchor.interpretation
+          ? `Al mismo tiempo, ${anchor.planet} en ${anchor.sign} ${anchor.interpretation}.`
+          : `Al mismo tiempo, ${anchor.planet} en ${anchor.sign}.`;
+      }
+    } else if (anchor.type === 'planet_house') {
+      if (i === 0) {
+        phrase = anchor.interpretation
+          ? `Con ${anchor.planet} en casa ${anchor.house}, ${anchor.interpretation}.`
+          : `Con ${anchor.planet} en casa ${anchor.house}.`;
+      } else {
+        phrase = anchor.interpretation
+          ? `Al mismo tiempo, ${anchor.planet} en casa ${anchor.house} ${anchor.interpretation}.`
+          : `Al mismo tiempo, ${anchor.planet} en casa ${anchor.house}.`;
+      }
+    } else if (anchor.type === 'aspect') {
+      if (i === 0) {
+        phrase = anchor.interpretation
+          ? `Con ${anchor.planet} en ${anchor.aspect} con ${anchor.target}, ${anchor.interpretation}.`
+          : `Con ${anchor.planet} en ${anchor.aspect} con ${anchor.target}.`;
+      } else {
+        phrase = anchor.interpretation
+          ? `Al mismo tiempo, ${anchor.planet} en ${anchor.aspect} con ${anchor.target} ${anchor.interpretation}.`
+          : `Al mismo tiempo, ${anchor.planet} en ${anchor.aspect} con ${anchor.target}.`;
+      }
+    }
+
+    return phrase;
+  }).filter(Boolean);
+
+  return phrases.length ? phrases.join(' ') : fallbackTranslation;
 }
 
 function prioritizeNeurons(neurons = []) {
@@ -228,11 +361,16 @@ function regulationFromNeurons(context = [], patterns = []) {
   return `Por ahora conviene ${finalLabel}. ${patternHint}`;
 }
 
-function buildNarrativeStructure(prioritizedNeurons = {}, patterns = []) {
+function buildNarrativeStructure(prioritizedNeurons = {}, patterns = [], astroContext = []) {
   const { core = [], support = [], context = [] } = prioritizedNeurons;
+  const fallbackTranslation = translationFromNeurons(core, support);
+  const anchors = createSymbolicAnchors([], astroContext);
+  const translation = anchors.length
+    ? buildAnchoredTranslation(anchors, fallbackTranslation)
+    : fallbackTranslation;
   return {
     opening: openingFromNeurons(core, support),
-    translation: translationFromNeurons(core, support),
+    translation,
     regulation: regulationFromNeurons(context, patterns),
   };
 }
@@ -340,9 +478,10 @@ function synthesizeNarrative({
   narrativePatterns = [],
   voiceProfile = {},
   learnedRules = [],
+  astroContext = [],
 } = {}) {
   const prioritized = prioritizeNeurons(activeNeurons);
-  const structure = buildNarrativeStructure(prioritized, narrativePatterns);
+  const structure = buildNarrativeStructure(prioritized, narrativePatterns, astroContext);
 
   const draft = [
     structure.opening,
@@ -390,6 +529,7 @@ function buildNarrative({
     narrativePatterns,
     voiceProfile,
     learnedRules,
+    astroContext: interpretedTransits,
   });
 }
 
@@ -406,4 +546,5 @@ module.exports = {
   refineNarrative,
   synthesizeNarrative,
   buildNarrative,
+  createSymbolicAnchors,
 };
