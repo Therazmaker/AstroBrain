@@ -26,6 +26,72 @@ function endWithPeriod(str) {
   return /[.!?]$/.test(s) ? s : s + '.';
 }
 
+function normalizeAspect(aspect) {
+  return cleanText(String(aspect || '')).toLowerCase();
+}
+
+function isRelationalHouse(house) {
+  return [1, 4, 5, 7, 8].includes(Number(house));
+}
+
+function buildTensionProfile(transits = []) {
+  const items = Array.isArray(transits) ? transits : [];
+
+  const squareTransits = items.filter((transit) => {
+    const aspect = normalizeAspect(transit.aspect);
+    return aspect === 'square' || aspect === 'cuadratura';
+  });
+
+  const hasRelationalHouses = squareTransits.some((transit) => {
+    const context = transit.context || {};
+    return isRelationalHouse(context.planetHouse) || isRelationalHouse(context.targetHouse);
+  });
+
+  return {
+    hasSquare: squareTransits.length > 0,
+    hasSquareRelational: squareTransits.length > 0 && hasRelationalHouses,
+    squareTransits,
+  };
+}
+
+function buildRelationalContextBlock(squareTransits = []) {
+  if (!squareTransits.length) return '';
+
+  const houses = squareTransits.flatMap((transit) => {
+    const context = transit.context || {};
+    return [context.planetHouse, context.targetHouse].filter((house) => Number.isFinite(Number(house)));
+  });
+
+  const relationalHouses = [...new Set(houses.map(Number).filter(isRelationalHouse))];
+  if (!relationalHouses.length) {
+    return 'En el vínculo puede aparecer fricción entre necesidad emocional y forma de responder.';
+  }
+
+  const casas = relationalHouses.map((house) => `casa ${house}`).join(' y ');
+  return `La tensión se activa en ${casas}: el vínculo pide ajustar límites, tiempos y forma de contacto.`;
+}
+
+
+function buildAspectTensionBlock(squareTransits = []) {
+  if (!squareTransits.length) return '';
+
+  const transit = squareTransits[0];
+  const planet = PLANET_ES[transit.planet] || transit.planet || 'Un planeta';
+  const target = PLANET_ES[transit.target] || transit.target || 'otro punto';
+  return `${planet} en cuadratura a ${target} aumenta la fricción y exige respuestas más conscientes en el vínculo.`;
+}
+
+function buildProcessAwarenessBlock() {
+  return 'El proceso clave es regular antes de reaccionar: nombrar lo que duele, bajar la velocidad y recién después conversar.';
+}
+
+function reduceSoftLanguage(text = '') {
+  return text
+    .replace(/\bsuavidad\b/gi, 'contención')
+    .replace(/\bsoltar\b/gi, 'procesar')
+    .replace(/\bfluidez\b/gi, 'claridad');
+}
+
 // ─── DETECCIÓN DE EMOCIÓN ────────────────────────────────────────────────────
 // Mapea palabras clave del campo `energy` a una emoción del base JSON
 
@@ -146,10 +212,17 @@ function generateAstrologerVoice(signals = {}) {
   const use    = cleanText(signals.use)    || 'las acciones conscientes';
   const focus  = cleanText(signals.focus)  || 'lo que hoy necesita atención real';
 
-  const tone      = detectTone(signals);
+  const tensionProfile = buildTensionProfile(signals.transits || []);
+  const tone      = tensionProfile.hasSquare ? 'intensa' : detectTone(signals);
   const emotion   = detectEmotion(energy, avoid);
   const combo     = detectCombination(signals.transits || []);
-  const metaBlock = buildMetaBlock(signals.metaSignals || []);
+  const metaSignals = tensionProfile.hasSquare
+    ? (signals.metaSignals || []).filter((signal) => {
+      const raw = typeof signal === 'object' ? `${signal.id || ''} ${signal.then || ''}` : String(signal || '');
+      return !/(signo|grado)/i.test(raw);
+    })
+    : (signals.metaSignals || []);
+  const metaBlock = buildMetaBlock(metaSignals);
 
   // ── 1. Apertura ─────────────────────────────────────────────────────────────
   const apertura = endWithPeriod(pick(BASE.aperturas[tone] || BASE.aperturas.activa));
@@ -167,9 +240,11 @@ function generateAstrologerVoice(signals = {}) {
     bloqueEmocional = endWithPeriod(`${capitalize(transicion)} ${energy}`);
   }
 
-  // ── 3. Contexto cotidiano ────────────────────────────────────────────────────
+  // ── 3. Contexto cotidiano / relacional ─────────────────────────────────────
   let bloqueContexto = '';
-  if (metaBlock) {
+  if (tensionProfile.hasSquareRelational) {
+    bloqueContexto = endWithPeriod(buildRelationalContextBlock(tensionProfile.squareTransits));
+  } else if (metaBlock) {
     const primer = metaBlock.charAt(0).toUpperCase() + metaBlock.slice(1);
     bloqueContexto = endWithPeriod(primer);
   }
@@ -178,7 +253,14 @@ function generateAstrologerVoice(signals = {}) {
   let bloqueCombo = '';
   if (combo) {
     bloqueCombo = endWithPeriod(combo.tension) + ' ' + endWithPeriod(combo.consejo);
+  } else if (tensionProfile.hasSquare) {
+    bloqueCombo = endWithPeriod(buildAspectTensionBlock(tensionProfile.squareTransits));
   }
+
+  // ── 4.1 Conciencia de proceso para aspectos tensos ─────────────────────────
+  const bloqueProceso = tensionProfile.hasSquare
+    ? endWithPeriod(buildProcessAwarenessBlock())
+    : '';
 
   // ── 5. Consejo (avoid / use / focus) ────────────────────────────────────────
   const bloqueConsejo = buildAdvice(avoid, use, focus);
@@ -192,19 +274,32 @@ function generateAstrologerVoice(signals = {}) {
     : '';
 
   // ── Ensamblar párrafo ────────────────────────────────────────────────────────
-  const partes = [
-    apertura,
-    bloqueEmocional,
-    bloqueContexto,
-    bloqueCombo,
-    anclaje,
-    bloqueConsejo,
-    cierre,
-  ].filter(Boolean).map(p => p.trim());
+  const partes = tensionProfile.hasSquare
+    ? [
+      bloqueEmocional,
+      bloqueCombo,
+      bloqueContexto,
+      bloqueProceso,
+      anclaje,
+      bloqueConsejo,
+      cierre,
+    ]
+    : [
+      apertura,
+      bloqueEmocional,
+      bloqueContexto,
+      bloqueCombo,
+      anclaje,
+      bloqueConsejo,
+      cierre,
+    ];
 
-  const paragraph = partes.join(' ');
+  const paragraph = partes
+    .filter(Boolean)
+    .map(p => p.trim())
+    .join(' ');
 
-  return { paragraph };
+  return { paragraph: tensionProfile.hasSquare ? reduceSoftLanguage(paragraph) : paragraph };
 }
 
 module.exports = { generateAstrologerVoice };
