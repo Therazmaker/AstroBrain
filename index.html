@@ -1,0 +1,1999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AstroBrain — Neural Transit Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=JetBrains+Mono:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --void: #06050d;
+    --deep: #0e0c1a;
+    --surface: #16132a;
+    --card: #1e1a35;
+    --card-hi: #2a2448;
+    --border: rgba(160, 130, 255, 0.12);
+    --border-hi: rgba(160, 130, 255, 0.28);
+    --gold: #d4a843;
+    --gold-dim: rgba(212, 168, 67, 0.6);
+    --gold-glow: rgba(212, 168, 67, 0.15);
+    --violet: #9b72f5;
+    --violet-dim: rgba(155, 114, 245, 0.6);
+    --violet-glow: rgba(155, 114, 245, 0.12);
+    --rose: #e57373;
+    --teal: #4dd0c4;
+    --teal-dim: rgba(77, 208, 196, 0.6);
+    --text-primary: #ede8ff;
+    --text-secondary: #9b95bc;
+    --text-muted: #5d5880;
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Cormorant Garamond', serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── CANVAS STARS ─────────────────────────────────── */
+  #star-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ─── LAYOUT ─────────────────────────────────────── */
+  .app {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 28px 80px;
+  }
+
+  /* ─── HEADER ─────────────────────────────────────── */
+  header {
+    padding: 44px 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+
+  .logo-block {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+
+  .logo-text {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+
+  .logo-text span {
+    color: var(--gold);
+  }
+
+  .logo-sub {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .status-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(77, 208, 196, 0.08);
+    border: 1px solid rgba(77, 208, 196, 0.2);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--teal);
+    letter-spacing: 0.1em;
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  /* ─── HERO SECTION ─────────────────────────────── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 48px;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: 3.2rem;
+    font-weight: 900;
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-desc {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 480px;
+    margin-bottom: 32px;
+  }
+
+  /* ─── TRANSIT INPUT PANEL ───────────────────────── */
+  .input-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .input-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.5;
+  }
+
+  .panel-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .panel-sub {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    margin-bottom: 24px;
+  }
+
+  /* Transit Row */
+  .transit-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+
+  .transit-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .transit-row select,
+  .transit-row input[type="number"] {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 8px 10px;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    outline: none;
+    width: 100%;
+  }
+
+  .transit-row select:focus,
+  .transit-row input[type="number"]:focus {
+    border-color: var(--violet-dim);
+  }
+
+  .transit-row select option { background: var(--deep); }
+
+  .btn-remove {
+    background: none;
+    border: 1px solid rgba(229, 115, 115, 0.2);
+    border-radius: 6px;
+    color: var(--rose);
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 6px 8px;
+    transition: all 0.2s;
+    line-height: 1;
+  }
+  .btn-remove:hover { background: rgba(229,115,115,0.1); border-color: var(--rose); }
+
+  .row-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  .col-labels {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto auto;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .btn-add {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 9px 14px;
+    transition: all 0.2s;
+    width: 100%;
+    letter-spacing: 0.05em;
+  }
+  .btn-add:hover { border-color: var(--violet-dim); color: var(--violet); }
+
+  .btn-run {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 16px;
+    padding: 15px;
+    background: linear-gradient(135deg, #7c52e8, #d4a843);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-run::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #9b72f5, #e8c063);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .btn-run:hover::before { opacity: 1; }
+  .btn-run:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(155, 114, 245, 0.3); }
+  .btn-run:active { transform: translateY(0); }
+  .btn-run span { position: relative; z-index: 1; }
+
+  /* ─── RAW TEXT INPUT ────────────────────────────── */
+  .raw-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .raw-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--violet), transparent);
+    opacity: 0.5;
+  }
+
+  .raw-panel textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    padding: 14px 16px;
+    resize: vertical;
+    min-height: 110px;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-top: 12px;
+  }
+  .raw-panel textarea::placeholder { color: var(--text-muted); }
+  .raw-panel textarea:focus { border-color: var(--violet-dim); }
+
+  .raw-panel .btn-run-raw {
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 13px;
+    background: var(--surface);
+    border: 1px solid var(--violet-dim);
+    border-radius: 10px;
+    color: var(--violet);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    transition: all 0.2s;
+  }
+  .raw-panel .btn-run-raw:hover {
+    background: var(--violet-glow);
+    border-color: var(--violet);
+  }
+
+  /* ─── NARRATIVE OUTPUT ──────────────────────────── */
+  .narrative-section {
+    margin-bottom: 48px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .narrative-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+
+  .section-badge {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+  }
+
+  .narrative-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .narrative-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 26px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .narrative-card:hover {
+    border-color: var(--border-hi);
+    transform: translateY(-2px);
+  }
+
+  .narrative-card .card-icon {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .narrative-card .card-label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .narrative-card .card-value {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--text-primary);
+    line-height: 1.55;
+  }
+
+  .card-energy { border-top: 2px solid var(--gold); }
+  .card-energy .card-label { color: var(--gold-dim); }
+  .card-avoid { border-top: 2px solid var(--rose); }
+  .card-avoid .card-label { color: rgba(229,115,115,0.7); }
+  .card-use { border-top: 2px solid var(--teal); }
+  .card-use .card-label { color: var(--teal-dim); }
+  .card-focus { border-top: 2px solid var(--violet); }
+  .card-focus .card-label { color: var(--violet-dim); }
+
+  /* ─── NEURAL ENGINE DASHBOARD ───────────────────── */
+  .engine-section {
+    margin-bottom: 48px;
+  }
+
+  .engine-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.4fr;
+    gap: 20px;
+  }
+
+  /* Cluster bars */
+  .cluster-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .cluster-bars { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .bar-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    width: 80px;
+    flex-shrink: 0;
+    text-transform: capitalize;
+    letter-spacing: 0.05em;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 5px;
+    background: var(--surface);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .bar-fill.emotional { background: linear-gradient(90deg, #e57373, #f48fb1); }
+  .bar-fill.mental { background: linear-gradient(90deg, #4dd0c4, #80deea); }
+  .bar-fill.relational { background: linear-gradient(90deg, #d4a843, #ffe082); }
+  .bar-fill.actional { background: linear-gradient(90deg, #9b72f5, #ce93d8); }
+
+  .bar-val {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    width: 36px;
+    text-align: right;
+  }
+
+  /* Neurons table */
+  .neuron-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    overflow: hidden;
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+  }
+
+  .data-table th {
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 0;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .data-table td {
+    padding: 8px 0;
+    color: var(--text-secondary);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    vertical-align: top;
+  }
+
+  .data-table tr:last-child td { border-bottom: none; }
+
+  .weight-bar {
+    display: inline-block;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--violet);
+    margin-top: 3px;
+    vertical-align: middle;
+    transition: width 0.6s ease;
+  }
+
+  .neuron-id { color: var(--text-primary); font-size: 0.6rem; }
+  .auto-badge {
+    font-size: 0.5rem;
+    padding: 1px 5px;
+    background: var(--violet-glow);
+    border: 1px solid rgba(155, 114, 245, 0.3);
+    border-radius: 4px;
+    color: var(--violet-dim);
+    margin-left: 4px;
+  }
+
+  /* Growth log */
+  .growth-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    overflow: hidden;
+  }
+
+  .growth-log {
+    list-style: none;
+    margin-top: 16px;
+    max-height: 280px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .growth-log li {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    align-items: flex-start;
+  }
+
+  .growth-log li:last-child { border-bottom: none; }
+
+  .log-time {
+    color: var(--gold-dim);
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+
+  .log-text { color: var(--text-secondary); }
+
+  .log-changes { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; }
+
+  .change-chip {
+    font-size: 0.58rem;
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+  .change-chip.pos { border-color: rgba(77, 208, 196, 0.3); color: var(--teal); }
+  .change-chip.neg { border-color: rgba(229, 115, 115, 0.3); color: var(--rose); }
+
+  /* ─── TRANSIT BREAKDOWN ─────────────────────────── */
+  .transits-section { margin-bottom: 48px; }
+
+  .transit-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+  .transit-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+  .transit-card:hover { border-color: var(--border-hi); }
+
+  .tc-rank {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+  }
+
+  .tc-header {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+  }
+
+  .tc-planet { color: var(--gold); }
+
+  .tc-meta {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  .tc-scores {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .score-chip {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    padding: 3px 9px;
+    border-radius: 6px;
+    border: 1px solid;
+  }
+
+  .score-chip.total { border-color: var(--gold-dim); color: var(--gold); }
+  .score-chip.planet-s { border-color: rgba(155,114,245,0.3); color: var(--violet); }
+  .score-chip.aspect-s { border-color: rgba(77,208,196,0.3); color: var(--teal); }
+  .score-chip.orb-s { border-color: rgba(255,255,255,0.1); color: var(--text-muted); }
+
+  .tc-emotion {
+    margin-top: 12px;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+  }
+
+  .tc-action {
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--teal-dim);
+    letter-spacing: 0.06em;
+  }
+
+  /* ─── MEMORY SECTION ────────────────────────────── */
+  .memory-section { margin-bottom: 48px; }
+
+  .memory-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .memory-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .memory-card h4 {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+  }
+
+  .context-entry {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: grid;
+    grid-template-columns: auto 1fr 1fr 1fr;
+    gap: 12px;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+  }
+  .context-entry:last-child { border-bottom: none; }
+
+  .ctx-date { color: var(--gold-dim); }
+  .ctx-emotion { color: var(--text-secondary); }
+  .ctx-tone { color: var(--violet-dim); }
+  .ctx-cluster { color: var(--teal-dim); text-transform: capitalize; }
+
+  .meta-signals { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .signal-chip {
+    padding: 6px 14px;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+  }
+
+  .signal-chip.high {
+    border-color: rgba(229,115,115,0.3);
+    color: var(--rose);
+    background: rgba(229,115,115,0.06);
+  }
+
+  /* ─── TRAINING SECTION ──────────────────────────── */
+  .training-section { margin-bottom: 48px; }
+
+  .training-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .training-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .training-card textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    padding: 14px;
+    resize: vertical;
+    min-height: 140px;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-top: 12px;
+  }
+  .training-card textarea:focus { border-color: var(--violet-dim); }
+  .training-card textarea::placeholder { color: var(--text-muted); }
+
+  .training-card input[type="text"] {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-top: 8px;
+    margin-bottom: 12px;
+  }
+  .training-card input[type="text"]:focus { border-color: var(--violet-dim); }
+  .training-card input[type="text"]::placeholder { color: var(--text-muted); }
+
+  .btn-train {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    background: var(--surface);
+    border: 1px solid rgba(212, 168, 67, 0.3);
+    border-radius: 10px;
+    color: var(--gold);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    transition: all 0.2s;
+  }
+  .btn-train:hover { background: var(--gold-glow); border-color: var(--gold); }
+
+  /* ─── HISTORY SECTION ───────────────────────────── */
+  .history-section { margin-bottom: 48px; }
+
+  .history-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .history-entry {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 20px;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .history-entry:hover { border-color: var(--border-hi); background: var(--card-hi); }
+
+  .he-time {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .he-preview {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .he-tone {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    padding: 3px 10px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .he-tone.intense { border-color: rgba(229,115,115,0.3); color: var(--rose); }
+  .he-tone.active { border-color: rgba(155,114,245,0.3); color: var(--violet); }
+  .he-tone.soft { border-color: rgba(77,208,196,0.3); color: var(--teal); }
+
+  /* ─── LOADER ─────────────────────────────────────── */
+  .loader {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 40px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+  .loader.active { display: flex; }
+
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border);
+    border-top-color: var(--violet);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ─── TOAST ──────────────────────────────────────── */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-primary);
+    z-index: 100;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 320px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { border-left: 3px solid var(--teal); }
+  .toast.error { border-left: 3px solid var(--rose); }
+  .toast.info { border-left: 3px solid var(--violet); }
+
+  /* ─── EMPTY STATE ────────────────────────────────── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 0 40px;
+    color: var(--text-muted);
+  }
+  .empty-state .es-icon { font-size: 3rem; margin-bottom: 12px; display: block; opacity: 0.4; }
+  .empty-state p { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; }
+
+  /* ─── RESPONSIVE ─────────────────────────────────── */
+  @media (max-width: 1100px) {
+    .hero { grid-template-columns: 1fr; }
+    .narrative-grid { grid-template-columns: repeat(2, 1fr); }
+    .engine-grid { grid-template-columns: 1fr 1fr; }
+    .growth-card { grid-column: 1 / -1; }
+    .transit-cards { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 700px) {
+    .narrative-grid { grid-template-columns: 1fr; }
+    .engine-grid { grid-template-columns: 1fr; }
+    .transit-cards { grid-template-columns: 1fr; }
+    .memory-grid, .training-grid { grid-template-columns: 1fr; }
+    .hero-title { font-size: 2.2rem; }
+    .transit-row { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ─── SCROLL REVEAL ──────────────────────────────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal:nth-child(2) { transition-delay: 0.1s; }
+  .reveal:nth-child(3) { transition-delay: 0.2s; }
+  .reveal:nth-child(4) { transition-delay: 0.3s; }
+
+  /* ─── GLOW DECORATIONS ───────────────────────────── */
+  .glow-violet {
+    position: fixed;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(155,114,245,0.06) 0%, transparent 70%);
+    top: -100px; right: -200px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-gold {
+    position: fixed;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,168,67,0.05) 0%, transparent 70%);
+    bottom: -100px; left: -150px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* section hr */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  /* tab switcher for hero */
+  .mode-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+    width: fit-content;
+  }
+
+  .mode-tab {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 7px;
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    transition: all 0.2s;
+  }
+  .mode-tab.active {
+    background: var(--card);
+    color: var(--text-primary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  .mode-panel { display: none; }
+  .mode-panel.active { display: block; }
+
+  /* scroll to top fab */
+  .fab {
+    position: fixed;
+    bottom: 32px;
+    left: 32px;
+    width: 44px; height: 44px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .fab.visible { opacity: 1; pointer-events: all; }
+  .fab:hover { border-color: var(--violet-dim); color: var(--violet); }
+</style>
+</head>
+<body>
+
+<canvas id="star-canvas"></canvas>
+<div class="glow-violet"></div>
+<div class="glow-gold"></div>
+
+<div class="app">
+
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="logo-block">
+      <div>
+        <div class="logo-text">Astro<span>Brain</span></div>
+        <div class="logo-sub">Neural Transit Engine · v2.0</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-pill">
+        <div class="status-dot"></div>
+        <span id="status-text">READY</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-left reveal">
+      <div class="hero-eyebrow">Planetary Transit Interpretation</div>
+      <h1 class="hero-title">
+        The sky speaks.<br>
+        <em>We translate.</em>
+      </h1>
+      <p class="hero-desc">
+        AstroBrain maps planetary transits through a self-learning neural architecture,
+        generating human-readable emotional narratives tuned to your psyche — and growing sharper with every session.
+      </p>
+    </div>
+
+    <div class="input-panel reveal">
+      <div class="panel-title">Run Interpretation</div>
+      <div class="panel-sub">INPUT / TRANSIT PIPELINE</div>
+
+      <div class="mode-tabs">
+        <button class="mode-tab active" onclick="setMode('transits')">Transits</button>
+        <button class="mode-tab" onclick="setMode('raw')">Free Text</button>
+      </div>
+
+      <!-- TRANSIT MODE -->
+      <div class="mode-panel active" id="mode-transits">
+        <div class="col-labels">
+          <div class="row-label">PLANET</div>
+          <div class="row-label">ASPECT</div>
+          <div class="row-label">TARGET</div>
+          <div class="row-label">ORB</div>
+          <div class="row-label"></div>
+        </div>
+        <div class="transit-rows" id="transit-rows"></div>
+        <button class="btn-add" onclick="addTransitRow()">+ add transit</button>
+        <button class="btn-run" onclick="runInterpretation()">
+          <span>✦ Interpret Transits</span>
+        </button>
+      </div>
+
+      <!-- RAW TEXT MODE -->
+      <div class="mode-panel" id="mode-raw">
+        <textarea id="raw-text" placeholder="Describe a feeling, a situation, a day... AstroBrain will extract emotional patterns and generate a narrative from your words.&#10;&#10;E.g.: 'I've been feeling overwhelmed and anxious. There's too much going on at work and my relationships feel strained…'" rows="6"></textarea>
+        <button class="btn-run-raw" onclick="runRawInterpretation()">
+          ▶ RUN RAW PIPELINE
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── LOADER ── -->
+  <div class="loader" id="main-loader">
+    <div class="spinner"></div>
+    <span>PROCESSING NEURAL PIPELINE…</span>
+  </div>
+
+  <!-- ── NARRATIVE OUTPUT ── -->
+  <section class="narrative-section" id="narrative-section">
+    <div class="section-header">
+      <h2 class="section-title">Narrative Output</h2>
+      <span class="section-badge" id="narrative-tone-badge">—</span>
+    </div>
+    <div class="narrative-grid" id="narrative-grid"></div>
+  </section>
+
+  <hr class="divider" id="divider-1" style="display:none">
+
+  <!-- ── TRANSIT BREAKDOWN ── -->
+  <section class="transits-section" id="transits-section" style="display:none">
+    <div class="section-header">
+      <h2 class="section-title">Transit Breakdown</h2>
+      <span class="section-badge">SCORED & PRIORITIZED</span>
+    </div>
+    <div class="transit-cards" id="transit-cards-output"></div>
+  </section>
+
+  <hr class="divider" id="divider-2" style="display:none">
+
+  <!-- ── NEURAL ENGINE ── -->
+  <section class="engine-section reveal" id="engine-section">
+    <div class="section-header">
+      <h2 class="section-title">Neural Engine</h2>
+      <span class="section-badge">LIVE STATE</span>
+    </div>
+    <div class="engine-grid">
+
+      <div class="cluster-card">
+        <div class="panel-sub">CLUSTER WEIGHTS</div>
+        <div class="cluster-bars" id="cluster-bars">
+          <div class="bar-row"><span class="bar-label">emotional</span><div class="bar-track"><div class="bar-fill emotional" style="width:0%"></div></div><span class="bar-val">—</span></div>
+          <div class="bar-row"><span class="bar-label">mental</span><div class="bar-track"><div class="bar-fill mental" style="width:0%"></div></div><span class="bar-val">—</span></div>
+          <div class="bar-row"><span class="bar-label">relational</span><div class="bar-track"><div class="bar-fill relational" style="width:0%"></div></div><span class="bar-val">—</span></div>
+          <div class="bar-row"><span class="bar-label">actional</span><div class="bar-track"><div class="bar-fill actional" style="width:0%"></div></div><span class="bar-val">—</span></div>
+        </div>
+      </div>
+
+      <div class="neuron-card">
+        <div class="panel-sub">ACTIVE NEURONS</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Weight</th>
+              <th>Auto</th>
+            </tr>
+          </thead>
+          <tbody id="neurons-body">
+            <tr><td colspan="3" style="color:var(--text-muted);padding-top:16px;font-size:0.62rem">No neurons activated yet</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="growth-card">
+        <div class="panel-sub">GROWTH LOG</div>
+        <ul class="growth-log" id="growth-log">
+          <li style="border:none;padding-top:16px"><span class="log-text" style="color:var(--text-muted)">Awaiting first run…</span></li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── CONTEXT MEMORY & META SIGNALS ── -->
+  <section class="memory-section reveal" id="memory-section">
+    <div class="section-header">
+      <h2 class="section-title">Memory & Signals</h2>
+      <span class="section-badge">INDEXEDDB</span>
+    </div>
+    <div class="memory-grid">
+      <div class="memory-card">
+        <h4>Context Memory <span style="font-family:var(--font-mono);font-weight:400;font-size:0.65rem;color:var(--text-muted)">(last 3 sessions)</span></h4>
+        <div id="context-memory-list">
+          <div class="empty-state"><span class="es-icon">🧠</span><p>NO SESSIONS RECORDED YET</p></div>
+        </div>
+      </div>
+      <div class="memory-card">
+        <h4>Meta Signals</h4>
+        <div class="meta-signals" id="meta-signals-list">
+          <div class="empty-state" style="width:100%"><span class="es-icon">⚡</span><p>NO SIGNALS DETECTED</p></div>
+        </div>
+        <div style="margin-top:24px">
+          <div class="panel-sub" style="margin-bottom:8px">DOMINANT CLUSTER</div>
+          <div id="dominant-cluster" style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--violet)">—</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── TRAINING ── -->
+  <section class="training-section reveal">
+    <div class="section-header">
+      <h2 class="section-title">Training</h2>
+      <span class="section-badge">HIPPOCAMPUS</span>
+    </div>
+    <div class="training-grid">
+      <div class="training-card">
+        <div class="panel-title">Ingest Transcript</div>
+        <div class="panel-sub" style="margin-bottom:12px">TEACH THE BRAIN NEW PATTERNS</div>
+        <input type="text" id="transcript-key" placeholder="memory key (e.g. session_healing_talk)" />
+        <textarea id="transcript-text" placeholder="Paste a conversation, journal entry, or therapeutic dialogue here. AstroBrain will extract emotional tones, phrases, and patterns to reinforce its interpretive memory."></textarea>
+        <button class="btn-train" onclick="runTrainTranscript()">⬆ INGEST INTO HIPPOCAMPUS</button>
+      </div>
+      <div class="training-card">
+        <div class="panel-title">Hippocampus Entries</div>
+        <div class="panel-sub" style="margin-bottom:12px">STORED PATTERNS</div>
+        <div id="hippocampus-list" style="max-height:320px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent">
+          <div class="empty-state"><span class="es-icon">💾</span><p>NO ENTRIES STORED</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── HISTORY ── -->
+  <section class="history-section reveal">
+    <div class="section-header">
+      <h2 class="section-title">Session History</h2>
+      <span class="section-badge" id="history-count">0 SESSIONS</span>
+    </div>
+    <div class="history-list" id="history-list">
+      <div class="empty-state"><span class="es-icon">🌌</span><p>RUN YOUR FIRST INTERPRETATION TO BEGIN</p></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FAB -->
+<button class="fab" id="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// STAR CANVAS
+// ─────────────────────────────────────────────────────────────
+(function initStars() {
+  const canvas = document.getElementById('star-canvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  let W, H;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function createStars() {
+    stars = Array.from({ length: 160 }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.2 + 0.2,
+      alpha: Math.random() * 0.5 + 0.1,
+      speed: Math.random() * 0.004 + 0.001,
+      phase: Math.random() * Math.PI * 2
+    }));
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    stars.forEach(s => {
+      const a = s.alpha * (0.6 + 0.4 * Math.sin(t * s.speed + s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(220,210,255,${a})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => { resize(); createStars(); });
+  resize(); createStars();
+  requestAnimationFrame(draw);
+})();
+
+// ─────────────────────────────────────────────────────────────
+// INDEXEDDB
+// ─────────────────────────────────────────────────────────────
+const DB_NAME = 'AstroBrainDB';
+const DB_VERSION = 1;
+let db = null;
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    if (db) { resolve(db); return; }
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = e => {
+      const d = e.target.result;
+      if (!d.objectStoreNames.contains('sessions')) {
+        const s = d.createObjectStore('sessions', { keyPath: 'id', autoIncrement: true });
+        s.createIndex('timestamp', 'timestamp');
+        s.createIndex('tone', 'tone');
+      }
+      if (!d.objectStoreNames.contains('contextMemory')) {
+        d.createObjectStore('contextMemory', { keyPath: 'date' });
+      }
+      if (!d.objectStoreNames.contains('hippocampus')) {
+        d.createObjectStore('hippocampus', { keyPath: 'key' });
+      }
+      if (!d.objectStoreNames.contains('neuronWeights')) {
+        d.createObjectStore('neuronWeights', { keyPath: 'id' });
+      }
+      if (!d.objectStoreNames.contains('coactivations')) {
+        const c = d.createObjectStore('coactivations', { keyPath: 'id', autoIncrement: true });
+        c.createIndex('timestamp', 'timestamp');
+      }
+      if (!d.objectStoreNames.contains('metaNeurons')) {
+        d.createObjectStore('metaNeurons', { keyPath: 'id' });
+      }
+    };
+    req.onsuccess = e => { db = e.target.result; resolve(db); };
+    req.onerror = e => reject(e.target.error);
+  });
+}
+
+async function dbPut(store, item) {
+  const d = await openDB();
+  return new Promise((res, rej) => {
+    const tx = d.transaction(store, 'readwrite');
+    const req = tx.objectStore(store).put(item);
+    req.onsuccess = () => res(req.result);
+    req.onerror = e => rej(e.target.error);
+  });
+}
+
+async function dbGetAll(store) {
+  const d = await openDB();
+  return new Promise((res, rej) => {
+    const tx = d.transaction(store, 'readonly');
+    const req = tx.objectStore(store).getAll();
+    req.onsuccess = () => res(req.result);
+    req.onerror = e => rej(e.target.error);
+  });
+}
+
+async function dbAdd(store, item) {
+  const d = await openDB();
+  return new Promise((res, rej) => {
+    const tx = d.transaction(store, 'readwrite');
+    const req = tx.objectStore(store).add(item);
+    req.onsuccess = () => res(req.result);
+    req.onerror = e => rej(e.target.error);
+  });
+}
+
+// ─────────────────────────────────────────────────────────────
+// CORE ENGINE (browser port)
+// ─────────────────────────────────────────────────────────────
+
+// Score Transits
+const PLANET_SCORE = { Moon:5, Mars:4, Saturn:4, Mercury:3, Venus:3, Sun:3, Jupiter:2 };
+const ASPECT_SCORE = { conjunction:3, opposition:3, square:2, trine:2, sextile:1 };
+
+function scoreOrb(orb) {
+  if (orb < 1) return 3;
+  if (orb < 2) return 2;
+  if (orb < 3) return 1;
+  return 0;
+}
+
+function scoreTransit(t) {
+  const p = PLANET_SCORE[t.planet] || 0;
+  const a = ASPECT_SCORE[t.aspect] || 0;
+  const o = scoreOrb(t.orb);
+  return { ...t, score: p+a+o, scoreBreakdown: { planet:p, aspect:a, orb:o } };
+}
+
+function priorityWeight(t) {
+  const p = (t.planet||'').toLowerCase();
+  if (['moon','mars','saturn'].includes(p)) return 3;
+  if (['sun','venus','jupiter'].includes(p)) return 2;
+  return 1;
+}
+
+function filterTransits(transits, limit=3) {
+  return transits
+    .map(t => ({ ...scoreTransit(t), priorityWeight: priorityWeight(t) }))
+    .sort((a,b) => {
+      if (b.priorityWeight !== a.priorityWeight) return b.priorityWeight - a.priorityWeight;
+      if (b.score !== a.score) return b.score - a.score;
+      return (a.orb||99) - (b.orb||99);
+    })
+    .slice(0, limit);
+}
+
+// Emotional translation
+function emotionalTranslation(t) {
+  if (t.planet==='Mars' && t.aspect==='square') return { emotion:'frustration', action:'channel heat into movement before hard talks' };
+  if (t.planet==='Moon' && t.target==='Mars') return { emotion:'reactivity', action:'slow down and name what you feel first' };
+  if (t.planet==='Mars' && t.target==='Moon') return { emotion:'reactivity', action:'respond, do not react in the moment' };
+  if (t.planet==='Venus' && t.aspect==='trine') return { emotion:'harmony', action:'lean into connection and support' };
+  if (t.planet==='Saturn' && t.aspect==='conjunction') return { emotion:'heaviness', action:'do one responsible thing at a time' };
+  const BASE = { Mars:'impulse / anger', Saturn:'pressure / block', Moon:'sensitivity', Mercury:'mind', Venus:'desire', Jupiter:'expansion', Sun:'clarity' };
+  return { emotion: BASE[t.planet]||'emotional movement', action:'keep your pace intentional and simple' };
+}
+
+function toneFromScore(score) {
+  if (score > 9) return 'intense';
+  if (score >= 6) return 'active';
+  return 'soft';
+}
+
+function clusterFromId(id) {
+  if (/moon|emotion|reactive|frustration|saturn/.test(id)) return 'emotional';
+  if (/mercury|mind/.test(id)) return 'mental';
+  if (/venus|partnership|relationship/.test(id)) return 'relational';
+  return 'actional';
+}
+
+// Raw Parser (browser)
+const EMOTION_LEXICON = {
+  anger:['angry','anger','furious','irritated','frustrated','mad'],
+  anxiety:['anxious','nervous','worried','overthinking','uncertain'],
+  sadness:['sad','down','hurt','grief','lonely'],
+  overwhelm:['overwhelmed','too much','burned out','exhausted','drained'],
+  calm:['calm','steady','grounded','peaceful'],
+  hope:['hopeful','optimistic','relieved','encouraged'],
+};
+const ADVICE_CUES = ['should','need to','try','remember to','focus on','avoid',"don't",'must'];
+const SITUATION_CUES = ['when','if','at work','in my relationship','with my family','during','because','after','before'];
+
+function parseRaw(rawText) {
+  const lower = rawText.toLowerCase();
+  const sentences = rawText.split(/(?<=[.!?])\s+/).map(s=>s.trim()).filter(Boolean);
+  const emotions = Object.entries(EMOTION_LEXICON)
+    .filter(([,v]) => v.some(w => lower.includes(w)))
+    .map(([k]) => k);
+  const situations = sentences.filter(s => SITUATION_CUES.some(c => s.toLowerCase().includes(c)));
+  const advice = sentences.filter(s => ADVICE_CUES.some(c => s.toLowerCase().includes(c)));
+  const tone = emotions.some(e => ['anger','anxiety','overwhelm'].includes(e)) ? 'intense'
+    : advice.length>=3 ? 'active'
+    : emotions.includes('calm')||emotions.includes('hope') ? 'soft' : 'active';
+  return { rawText, emotions, situations, advice, tone };
+}
+
+// Main interpret function
+function interpretTransits(transits) {
+  const prioritized = filterTransits(transits, 3);
+  const interpreted = prioritized.map(t => ({ ...t, ...emotionalTranslation(t), neuronId: `${t.planet}_${t.target}_${t.aspect}`.toLowerCase() }));
+
+  const emotions = interpreted.map(t=>t.emotion).filter(Boolean);
+  const actions = interpreted.map(t=>t.action).filter(Boolean);
+  const topScore = interpreted[0]?.score || 0;
+  const tone = toneFromScore(topScore);
+
+  // Cluster from interpreted transits
+  const clusterScores = { emotional:0, mental:0, relational:0, actional:0 };
+  interpreted.forEach(t => {
+    const cluster = clusterFromId(t.neuronId);
+    clusterScores[cluster] += 0.4;
+  });
+
+  const avoidMap = {
+    frustration:'reactive discussions and pressure conversations',
+    reactivity:'quick replies and defensive moments',
+    harmony:'people-pleasing at the cost of clarity',
+    heaviness:'prolonged obligations without rest',
+  };
+  const focusMap = {
+    frustration:'emotional regulation and grounding',
+    reactivity:'pause, name what you feel, then respond',
+    harmony:'heart-led clarity and shared rituals',
+    heaviness:'one responsible thing at a time',
+  };
+
+  const narrative = {
+    energy: `${tone}: ${[...new Set(emotions)].join(', ')||'mixed emotional weather'}`,
+    avoid: interpreted[0] ? (avoidMap[interpreted[0].emotion]||'pushing conversations before you feel settled') : 'pushing conversations before you feel settled',
+    use: actions[0]||'clear priorities and simple actions',
+    focus: interpreted[0] ? (focusMap[interpreted[0].emotion]||'pause, regulate, and answer with intention') : 'pause, regulate, and answer with intention',
+  };
+
+  const metaSignals = [];
+  if (clusterScores.emotional >= 1.0) metaSignals.push({ id:'high_emotional_load', then:'day emotionally intense' });
+
+  const dominantCluster = Object.entries(clusterScores).sort((a,b)=>b[1]-a[1])[0][0];
+
+  return { topTransits: interpreted, narrative, clusterScores, dominantCluster, metaSignals, tone };
+}
+
+function interpretRaw(rawText) {
+  const signals = parseRaw(rawText);
+  const forecast = signals.emotions.some(e=>['anger','anxiety','overwhelm'].includes(e))
+    ? 'reactive spirals without a pause'
+    : signals.situations.length>1
+    ? 'multiple contexts competing for attention'
+    : 'steady progress with consistency';
+
+  const narrative = {
+    energy: `${signals.tone}: ${signals.emotions.join(', ')||'mixed emotional weather'}`,
+    avoid: forecast,
+    use: signals.advice[0]||'keep actions simple and intentional',
+    focus: signals.situations[0]||'name the pattern and choose one clean action',
+  };
+
+  const clusterScores = { emotional:signals.emotions.length*0.3, mental:0, relational:0, actional:signals.advice.length*0.2 };
+  const dominantCluster = Object.entries(clusterScores).sort((a,b)=>b[1]-a[1])[0][0];
+  const metaSignals = signals.emotions.length>=3 ? [{ id:'high_emotional_load', then:'day emotionally intense' }] : [];
+
+  return { topTransits: [], narrative, clusterScores, dominantCluster, metaSignals, tone: signals.tone, signals };
+}
+
+// ─────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────
+let currentMode = 'transits';
+let currentResult = null;
+let growthLog = [];
+let previousWeights = {};
+
+// ─────────────────────────────────────────────────────────────
+// TRANSIT ROWS
+// ─────────────────────────────────────────────────────────────
+const PLANETS = ['Moon','Mars','Saturn','Sun','Venus','Mercury','Jupiter'];
+const ASPECTS = ['conjunction','opposition','square','trine','sextile'];
+
+function addTransitRow(planet='Mars', aspect='square', target='Moon', orb=0.8) {
+  const row = document.createElement('div');
+  row.className = 'transit-row';
+  row.innerHTML = `
+    <select class="tr-planet">
+      ${PLANETS.map(p=>`<option value="${p}" ${p===planet?'selected':''}>${p}</option>`).join('')}
+    </select>
+    <select class="tr-aspect">
+      ${ASPECTS.map(a=>`<option value="${a}" ${a===aspect?'selected':''}>${a}</option>`).join('')}
+    </select>
+    <select class="tr-target">
+      ${PLANETS.map(p=>`<option value="${p}" ${p===target?'selected':''}>${p}</option>`).join('')}
+    </select>
+    <input type="number" class="tr-orb" value="${orb}" min="0" max="10" step="0.1" style="width:60px">
+    <button class="btn-remove" onclick="this.closest('.transit-row').remove()">✕</button>
+  `;
+  document.getElementById('transit-rows').appendChild(row);
+}
+
+function getTransits() {
+  return Array.from(document.querySelectorAll('.transit-row')).map(row => ({
+    planet: row.querySelector('.tr-planet').value,
+    aspect: row.querySelector('.tr-aspect').value,
+    target: row.querySelector('.tr-target').value,
+    orb: parseFloat(row.querySelector('.tr-orb').value)||0,
+  }));
+}
+
+// Init default rows
+addTransitRow('Mars','square','Moon',0.8);
+addTransitRow('Venus','trine','Sun',1.2);
+addTransitRow('Saturn','conjunction','Sun',1.7);
+
+// ─────────────────────────────────────────────────────────────
+// MODE SWITCH
+// ─────────────────────────────────────────────────────────────
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-tab').forEach((tab, i) => {
+    tab.classList.toggle('active', (i===0&&mode==='transits')||(i===1&&mode==='raw'));
+  });
+  document.getElementById('mode-transits').classList.toggle('active', mode==='transits');
+  document.getElementById('mode-raw').classList.toggle('active', mode==='raw');
+}
+
+// ─────────────────────────────────────────────────────────────
+// RUN INTERPRETATION
+// ─────────────────────────────────────────────────────────────
+async function runInterpretation() {
+  const transits = getTransits();
+  if (!transits.length) { showToast('Add at least one transit', 'error'); return; }
+  setLoading(true);
+  await delay(600);
+  try {
+    const result = interpretTransits(transits);
+    currentResult = result;
+    await saveSession(result, transits, 'transit');
+    renderResult(result);
+    updateEnginePanel(result);
+    await renderContextMemory(result);
+    await renderHistory();
+    showToast('Interpretation complete', 'success');
+  } catch(err) {
+    showToast('Error: ' + err.message, 'error');
+  } finally {
+    setLoading(false);
+  }
+}
+
+async function runRawInterpretation() {
+  const text = document.getElementById('raw-text').value.trim();
+  if (!text) { showToast('Enter some text first', 'error'); return; }
+  setLoading(true);
+  await delay(500);
+  try {
+    const result = interpretRaw(text);
+    currentResult = result;
+    await saveSession(result, [], 'raw', text);
+    renderResult(result, true);
+    updateEnginePanel(result);
+    await renderContextMemory(result);
+    await renderHistory();
+    showToast('Raw pipeline complete', 'success');
+  } catch(err) {
+    showToast('Error: ' + err.message, 'error');
+  } finally {
+    setLoading(false);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// RENDER NARRATIVE
+// ─────────────────────────────────────────────────────────────
+function renderResult(result, isRaw=false) {
+  const { narrative, tone, topTransits } = result;
+  const section = document.getElementById('narrative-section');
+  const badge = document.getElementById('narrative-tone-badge');
+  badge.textContent = tone.toUpperCase();
+
+  const CARDS = [
+    { key:'energy', label:'Energy', icon:'☀', cls:'card-energy' },
+    { key:'avoid', label:'Avoid', icon:'⚡', cls:'card-avoid' },
+    { key:'use', label:'Use', icon:'🌊', cls:'card-use' },
+    { key:'focus', label:'Focus', icon:'✦', cls:'card-focus' },
+  ];
+
+  document.getElementById('narrative-grid').innerHTML = CARDS.map(c => `
+    <div class="narrative-card ${c.cls}">
+      <span class="card-icon">${c.icon}</span>
+      <div class="card-label">${c.label}</div>
+      <div class="card-value">${narrative[c.key]||'—'}</div>
+    </div>
+  `).join('');
+
+  section.classList.add('visible');
+
+  // Transit breakdown (only for transit mode)
+  const tsSection = document.getElementById('transits-section');
+  const d1 = document.getElementById('divider-1');
+
+  if (!isRaw && topTransits.length) {
+    d1.style.display = '';
+    tsSection.style.display = '';
+    renderTransitCards(topTransits);
+  } else {
+    d1.style.display = 'none';
+    tsSection.style.display = 'none';
+  }
+
+  document.getElementById('divider-2').style.display = '';
+}
+
+function renderTransitCards(transits) {
+  const container = document.getElementById('transit-cards-output');
+  container.innerHTML = transits.map((t, i) => `
+    <div class="transit-card">
+      <div class="tc-rank">RANK ${i+1} · PRIORITY ${t.priorityWeight||'—'}</div>
+      <div class="tc-header"><span class="tc-planet">${t.planet}</span> ${t.aspect} ${t.target}</div>
+      <div class="tc-meta">orb: ${t.orb}°</div>
+      <div class="tc-scores">
+        <span class="score-chip total">score: ${t.score}</span>
+        <span class="score-chip planet-s">planet: ${t.scoreBreakdown?.planet||0}</span>
+        <span class="score-chip aspect-s">aspect: ${t.scoreBreakdown?.aspect||0}</span>
+        <span class="score-chip orb-s">orb: ${t.scoreBreakdown?.orb||0}</span>
+      </div>
+      ${t.emotion ? `<div class="tc-emotion">${t.emotion}</div>` : ''}
+      ${t.action ? `<div class="tc-action">→ ${t.action}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+// ─────────────────────────────────────────────────────────────
+// ENGINE PANEL
+// ─────────────────────────────────────────────────────────────
+function updateEnginePanel(result) {
+  const { clusterScores, dominantCluster, topTransits, metaSignals } = result;
+
+  // Cluster bars
+  const clusters = ['emotional','mental','relational','actional'];
+  const max = Math.max(...Object.values(clusterScores), 0.01);
+  const bars = document.querySelectorAll('#cluster-bars .bar-row');
+  clusters.forEach((cl, i) => {
+    const val = clusterScores[cl]||0;
+    const pct = Math.round((val/max)*100);
+    bars[i].querySelector('.bar-fill').style.width = pct + '%';
+    bars[i].querySelector('.bar-val').textContent = val.toFixed(2);
+  });
+
+  // Neurons
+  const neurons = topTransits.map(t => ({
+    id: t.neuronId || t.planet,
+    weight: t.score ? (t.score/12).toFixed(3) : '0.400',
+    auto: false
+  }));
+
+  const tbody = document.getElementById('neurons-body');
+  if (!neurons.length) {
+    tbody.innerHTML = '<tr><td colspan="3" style="color:var(--text-muted);font-size:0.62rem;padding-top:8px">No neurons activated</td></tr>';
+  } else {
+    tbody.innerHTML = neurons.map(n => `
+      <tr>
+        <td class="neuron-id">${n.id}${n.auto?'<span class="auto-badge">AUTO</span>':''}</td>
+        <td>
+          <div>${n.weight}</div>
+          <div><span class="weight-bar" style="width:${Math.round(parseFloat(n.weight)*80)}px"></span></div>
+        </td>
+        <td style="color:var(--text-muted)">${n.auto?'yes':'no'}</td>
+      </tr>
+    `).join('');
+  }
+
+  // Dominant cluster
+  document.getElementById('dominant-cluster').textContent = dominantCluster;
+
+  // Meta signals
+  const msList = document.getElementById('meta-signals-list');
+  if (!metaSignals.length) {
+    msList.innerHTML = '<div class="empty-state" style="width:100%"><span class="es-icon">⚡</span><p>NO SIGNALS</p></div>';
+  } else {
+    msList.innerHTML = metaSignals.map(s => `
+      <div class="signal-chip high">⚡ ${s.then}</div>
+    `).join('');
+  }
+
+  // Growth log entry
+  const now = new Date().toLocaleTimeString();
+  const changes = topTransits.map(t => {
+    const prev = previousWeights[t.neuronId||t.planet];
+    const cur = t.score ? parseFloat((t.score/12).toFixed(3)) : 0.4;
+    if (prev !== undefined && prev !== cur) {
+      const d = (cur-prev).toFixed(3);
+      return { id: t.neuronId||t.planet, delta: d, pos: cur>prev };
+    }
+    return null;
+  }).filter(Boolean);
+
+  topTransits.forEach(t => {
+    previousWeights[t.neuronId||t.planet] = t.score ? parseFloat((t.score/12).toFixed(3)) : 0.4;
+  });
+
+  growthLog.unshift({ time: now, newNeurons: neurons.length, changes });
+  if (growthLog.length > 30) growthLog.pop();
+
+  const gl = document.getElementById('growth-log');
+  gl.innerHTML = growthLog.map(e => `
+    <li>
+      <span class="log-time">${e.time}</span>
+      <div>
+        <div class="log-text">neurons: ${e.newNeurons} ${e.changes.length?'·':''}</div>
+        ${e.changes.length ? `<div class="log-changes">${e.changes.map(c=>`<span class="change-chip ${c.pos?'pos':'neg'}">${c.id} ${c.pos?'+':''}${c.delta}</span>`).join('')}</div>` : ''}
+      </div>
+    </li>
+  `).join('');
+}
+
+// ─────────────────────────────────────────────────────────────
+// CONTEXT MEMORY (IndexedDB)
+// ─────────────────────────────────────────────────────────────
+async function saveSession(result, transits, type, rawText='') {
+  const session = {
+    timestamp: Date.now(),
+    type,
+    rawText: rawText.slice(0,200),
+    tone: result.tone,
+    dominantCluster: result.dominantCluster,
+    narrative: result.narrative,
+    transits: transits.slice(0,3),
+    metaSignals: result.metaSignals,
+  };
+  await dbAdd('sessions', session);
+
+  // Update context memory
+  const date = new Date().toISOString().slice(0,10);
+  const emotion = (result.topTransits[0]?.emotion || result.signals?.emotions?.[0] || 'mixed');
+  await dbPut('contextMemory', {
+    date,
+    emotion,
+    tone: result.tone,
+    dominantCluster: result.dominantCluster,
+  });
+}
+
+async function renderContextMemory(result) {
+  const all = await dbGetAll('contextMemory');
+  const recent = all.sort((a,b)=>a.date>b.date?-1:1).slice(0,3);
+  const container = document.getElementById('context-memory-list');
+  if (!recent.length) {
+    container.innerHTML = '<div class="empty-state"><span class="es-icon">🧠</span><p>NO SESSIONS</p></div>';
+    return;
+  }
+  container.innerHTML = recent.map(e => `
+    <div class="context-entry">
+      <span class="ctx-date">${e.date}</span>
+      <span class="ctx-emotion">${e.emotion}</span>
+      <span class="ctx-tone">${e.tone}</span>
+      <span class="ctx-cluster">${e.dominantCluster}</span>
+    </div>
+  `).join('');
+}
+
+async function renderHistory() {
+  const all = await dbGetAll('sessions');
+  const sorted = all.sort((a,b)=>b.timestamp-a.timestamp).slice(0,20);
+  const container = document.getElementById('history-list');
+  const badge = document.getElementById('history-count');
+  badge.textContent = all.length + ' SESSION' + (all.length!==1?'S':'');
+
+  if (!sorted.length) {
+    container.innerHTML = '<div class="empty-state"><span class="es-icon">🌌</span><p>NO HISTORY YET</p></div>';
+    return;
+  }
+
+  container.innerHTML = sorted.map(s => {
+    const d = new Date(s.timestamp);
+    const time = d.toLocaleDateString() + ' · ' + d.toLocaleTimeString();
+    const preview = s.narrative?.energy || s.rawText || '—';
+    return `
+      <div class="history-entry" onclick="loadSession(${s.id})">
+        <span class="he-time">${time}</span>
+        <span class="he-preview">${preview}</span>
+        <span class="he-tone ${s.tone}">${s.tone}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+async function loadSession(id) {
+  const all = await dbGetAll('sessions');
+  const s = all.find(x=>x.id===id);
+  if (!s) return;
+  renderResult(s, s.type==='raw');
+  updateEnginePanel(s);
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+// ─────────────────────────────────────────────────────────────
+// TRAINING / HIPPOCAMPUS
+// ─────────────────────────────────────────────────────────────
+async function runTrainTranscript() {
+  const key = document.getElementById('transcript-key').value.trim() || 'transcript_' + Date.now();
+  const text = document.getElementById('transcript-text').value.trim();
+  if (!text) { showToast('Enter a transcript to ingest', 'error'); return; }
+
+  const words = text.toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(Boolean);
+  const counts = {};
+  for (let i=0; i<words.length-2; i++) {
+    const p = words.slice(i,i+3).join(' ');
+    counts[p] = (counts[p]||0) + 1;
+  }
+  const phrases = Object.entries(counts).filter(([,c])=>c>1).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([p])=>p);
+
+  const TONE_WORDS = ['angry','sad','anxious','calm','tense','hopeful','frustrated','sensitive','overwhelmed','clear'];
+  const lower = text.toLowerCase();
+  const tones = TONE_WORDS.filter(w=>lower.includes(w));
+
+  const entry = {
+    key,
+    emotion: tones.join(', ') || 'mixed',
+    phrases,
+    updatedAt: new Date().toISOString(),
+  };
+
+  await dbPut('hippocampus', entry);
+  await renderHippocampus();
+
+  document.getElementById('transcript-key').value = '';
+  document.getElementById('transcript-text').value = '';
+  showToast('Ingested into hippocampus', 'success');
+}
+
+async function renderHippocampus() {
+  const all = await dbGetAll('hippocampus');
+  const container = document.getElementById('hippocampus-list');
+  if (!all.length) {
+    container.innerHTML = '<div class="empty-state"><span class="es-icon">💾</span><p>NO ENTRIES</p></div>';
+    return;
+  }
+  container.innerHTML = all.sort((a,b)=>a.updatedAt>b.updatedAt?-1:1).map(e => `
+    <div style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04)">
+      <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--gold-dim);margin-bottom:4px">${e.key}</div>
+      <div style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:4px;font-style:italic">${e.emotion}</div>
+      ${e.phrases?.length ? `<div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-muted)">${e.phrases.slice(0,4).join(' · ')}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+// ─────────────────────────────────────────────────────────────
+// UTILS
+// ─────────────────────────────────────────────────────────────
+function setLoading(on) {
+  document.getElementById('main-loader').classList.toggle('active', on);
+  if (!on) document.getElementById('status-text').textContent = 'READY';
+  else document.getElementById('status-text').textContent = 'PROCESSING';
+}
+
+function delay(ms) { return new Promise(r=>setTimeout(r,ms)); }
+
+let toastTimer;
+function showToast(msg, type='info') {
+  const t = document.getElementById('toast');
+  const icon = type==='success'?'✓':type==='error'?'✕':'◈';
+  t.innerHTML = `<span>${icon}</span> ${msg}`;
+  t.className = `toast ${type} show`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Scroll reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// FAB
+window.addEventListener('scroll', () => {
+  document.getElementById('fab').classList.toggle('visible', window.scrollY > 400);
+});
+
+// ─────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────
+(async () => {
+  await openDB();
+  await renderHistory();
+  await renderHippocampus();
+  const ctxAll = await dbGetAll('contextMemory');
+  if (ctxAll.length) {
+    const container = document.getElementById('context-memory-list');
+    const recent = ctxAll.sort((a,b)=>a.date>b.date?-1:1).slice(0,3);
+    container.innerHTML = recent.map(e=>`
+      <div class="context-entry">
+        <span class="ctx-date">${e.date}</span>
+        <span class="ctx-emotion">${e.emotion}</span>
+        <span class="ctx-tone">${e.tone}</span>
+        <span class="ctx-cluster">${e.dominantCluster}</span>
+      </div>
+    `).join('');
+  }
+})();
+</script>
+</body>
+</html>
