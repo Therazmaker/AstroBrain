@@ -1,0 +1,30 @@
+[
+  {
+    "id": "venus_en_aries_deseo_directo",
+    "triggers": ["venus_en_aries", "venus_fuego"],
+    "match": "flex",
+    "minimum": 1,
+    "peso": 0.71,
+    "clusters": ["relational", "actional"],
+    "output": {
+      "energy": "afecto directo y deseo de respuesta rápida",
+      "avoid": "tomar la urgencia como única verdad",
+      "use": "expresar lo que quieres sin atropellar",
+      "focus": "iniciativa afectiva"
+    }
+  },
+  {
+    "id": "moon_en_cancer_marea_sensible",
+    "triggers": ["moon_en_cancer", "moon_agua"],
+    "match": "flex",
+    "minimum": 1,
+    "peso": 0.69,
+    "clusters": ["emotional"],
+    "output": {
+      "energy": "emociones más receptivas y permeables",
+      "avoid": "absorber lo de todos sin filtro",
+      "use": "poner límites suaves y claros",
+      "focus": "nutrición emocional"
+    }
+  }
+]

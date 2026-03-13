@@ -1,0 +1,41 @@
+[
+  {
+    "id": "venus_casa_7_espejo_relacional",
+    "triggers": ["venus_casa_7"],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": ["relational"],
+    "output": {
+      "energy": "más sensibilidad en la dinámica con otros",
+      "avoid": "poner todo el peso emocional en la respuesta ajena",
+      "use": "mirar qué te está mostrando el vínculo",
+      "focus": "relaciones y espejos"
+    }
+  },
+  {
+    "id": "moon_casa_4_registro_intimo",
+    "triggers": ["moon_casa_4"],
+    "match": "all",
+    "peso": 0.63,
+    "clusters": ["emotional"],
+    "output": {
+      "energy": "la emoción vuelve al territorio íntimo",
+      "avoid": "cerrarte por completo por sentirte expuesto",
+      "use": "dar nombre a la necesidad de cuidado",
+      "focus": "hogar emocional y contención"
+    }
+  },
+  {
+    "id": "sun_casa_10_enfoque_publico",
+    "triggers": ["sun_casa_10"],
+    "match": "all",
+    "peso": 0.68,
+    "clusters": ["actional"],
+    "output": {
+      "energy": "se ilumina la responsabilidad visible",
+      "avoid": "hacerlo todo desde la exigencia",
+      "use": "priorizar una meta profesional concreta",
+      "focus": "dirección y reputación"
+    }
+  }
+]

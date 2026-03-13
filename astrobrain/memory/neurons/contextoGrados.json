@@ -1,0 +1,41 @@
+[
+  {
+    "id": "venus_grado_temprano_inicio_afectivo",
+    "triggers": ["venus_grado_temprano"],
+    "match": "all",
+    "peso": 0.66,
+    "clusters": ["relational"],
+    "output": {
+      "energy": "el vínculo se siente naciente o en fase de impulso",
+      "avoid": "dar por cerrado algo que recién abre",
+      "use": "explorar con honestidad y paciencia",
+      "focus": "inicio del aprendizaje afectivo"
+    }
+  },
+  {
+    "id": "saturn_grado_tardio_cierre_estructural",
+    "triggers": ["saturn_grado_tardio"],
+    "match": "all",
+    "peso": 0.79,
+    "clusters": ["actional", "mental"],
+    "output": {
+      "energy": "se acelera la necesidad de resolver una etapa",
+      "avoid": "resistirte a ajustes necesarios",
+      "use": "cerrar pendientes con madurez",
+      "focus": "transición y consolidación"
+    }
+  },
+  {
+    "id": "target_grado_tardio_urgencia_contextual",
+    "triggers": ["target_grado_tardio"],
+    "match": "all",
+    "peso": 0.62,
+    "clusters": ["actional"],
+    "output": {
+      "energy": "el tema de fondo pide resolución cercana",
+      "avoid": "estirar definiciones por inercia",
+      "use": "ordenar prioridades antes del cambio",
+      "focus": "cierre de ciclo"
+    }
+  }
+]
