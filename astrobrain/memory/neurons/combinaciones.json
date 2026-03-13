@@ -1,15 +1,576 @@
 [
   {
     "id": "moon_square_venus__venus_en_aries",
-    "triggers": ["moon_square_venus", "venus_en_aries"],
+    "triggers": [
+      "moon_square_venus",
+      "venus_en_aries"
+    ],
     "match": "all",
     "peso": 0.8,
-    "clusters": ["emotional", "relational"],
+    "clusters": [
+      "emocional",
+      "relacional",
+      "fuego"
+    ],
     "output": {
       "energy": "intensidad emocional con deseo de respuesta inmediata",
       "avoid": "reaccionar sin procesar lo que sientes",
       "use": "poner en palabras la necesidad antes de actuar",
       "focus": "regular emoción y deseo en el vínculo"
+    }
+  },
+  {
+    "id": "moon_square_venus__venus_en_piscis",
+    "triggers": [
+      "moon_square_venus",
+      "venus_en_piscis"
+    ],
+    "match": "all",
+    "peso": 0.81,
+    "clusters": [
+      "emocional",
+      "relacional",
+      "agua"
+    ],
+    "output": {
+      "energy": "la sensibilidad afectiva se vuelve porosa, romántica y muy receptiva",
+      "avoid": "idealizar el vínculo mientras crece la incomodidad por debajo",
+      "use": "nombrar la herida sin perder delicadeza",
+      "focus": "sensibilidad, vínculo y límites"
+    }
+  },
+  {
+    "id": "moon_square_venus__venus_en_libra",
+    "triggers": [
+      "moon_square_venus",
+      "venus_en_libra"
+    ],
+    "match": "all",
+    "peso": 0.82,
+    "clusters": [
+      "emocional",
+      "relacional",
+      "aire"
+    ],
+    "output": {
+      "energy": "hay tensión entre necesidad emocional y deseo de sostener armonía",
+      "avoid": "complacer por fuera mientras algo adentro ya se tensó",
+      "use": "buscar equilibrio sin silenciar lo que sientes",
+      "focus": "armonía, emoción y honestidad"
+    }
+  },
+  {
+    "id": "moon_square_venus__venus_en_escorpio",
+    "triggers": [
+      "moon_square_venus",
+      "venus_en_escorpio"
+    ],
+    "match": "all",
+    "peso": 0.85,
+    "clusters": [
+      "emocional",
+      "relacional",
+      "agua",
+      "intensidad"
+    ],
+    "output": {
+      "energy": "la fricción afectiva se vuelve intensa y toca capas más profundas del deseo",
+      "avoid": "confundir necesidad emocional con control o prueba afectiva",
+      "use": "habitar lo que sientes sin irte al extremo",
+      "focus": "intimidad, intensidad y regulación"
+    }
+  },
+  {
+    "id": "saturn_conjunction_sun__sun_en_capricornio",
+    "triggers": [
+      "saturn_conjunction_sun",
+      "sol_en_capricornio"
+    ],
+    "match": "all",
+    "peso": 0.9,
+    "clusters": [
+      "identidad",
+      "estructura",
+      "tierra"
+    ],
+    "output": {
+      "energy": "la identidad entra en una fase de exigencia, madurez y construcción real",
+      "avoid": "medirte solo por rendimiento o cumplimiento",
+      "use": "desarrollar autoridad interna con paciencia",
+      "focus": "madurez, estructura y propósito"
+    }
+  },
+  {
+    "id": "saturn_conjunction_sun__sun_en_aries",
+    "triggers": [
+      "saturn_conjunction_sun",
+      "sol_en_aries"
+    ],
+    "match": "all",
+    "peso": 0.87,
+    "clusters": [
+      "identidad",
+      "estructura",
+      "fuego"
+    ],
+    "output": {
+      "energy": "el impulso de afirmarte se encuentra con un límite que pide más conciencia y forma",
+      "avoid": "chocar con la realidad como si fuera enemiga de tu deseo",
+      "use": "usar la frustración como entrenamiento de carácter",
+      "focus": "impulso, límite y madurez"
+    }
+  },
+  {
+    "id": "mars_conjunction_sun__sol_en_aries",
+    "triggers": [
+      "mars_conjunction_sun",
+      "sol_en_aries"
+    ],
+    "match": "all",
+    "peso": 0.89,
+    "clusters": [
+      "acción",
+      "identidad",
+      "fuego"
+    ],
+    "output": {
+      "energy": "la energía vital sube y empuja a actuar con fuerza, rapidez y mucha afirmación",
+      "avoid": "quemarte o reaccionar sin medir el impacto",
+      "use": "canalizar coraje en acción enfocada",
+      "focus": "iniciativa, fuerza y dirección"
+    }
+  },
+  {
+    "id": "mars_conjunction_sun__sol_en_leo",
+    "triggers": [
+      "mars_conjunction_sun",
+      "sol_en_leo"
+    ],
+    "match": "all",
+    "peso": 0.88,
+    "clusters": [
+      "acción",
+      "identidad",
+      "fuego",
+      "expresión"
+    ],
+    "output": {
+      "energy": "hay empuje para brillar, crear y moverte desde el corazón",
+      "avoid": "confundir entusiasmo con derecho a arrasar con todo",
+      "use": "expresar fuerza con nobleza y centro",
+      "focus": "expresión, coraje y presencia"
+    }
+  },
+  {
+    "id": "mercury_trine_jupiter__mercurio_en_geminis",
+    "triggers": [
+      "mercury_trine_jupiter",
+      "mercurio_en_geminis"
+    ],
+    "match": "all",
+    "peso": 0.83,
+    "clusters": [
+      "mente",
+      "expansión",
+      "aire"
+    ],
+    "output": {
+      "energy": "la mente conecta ideas con rapidez y encuentra amplitud para pensar",
+      "avoid": "irte a demasiadas posibilidades sin aterrizar ninguna",
+      "use": "usar curiosidad con dirección",
+      "focus": "aprendizaje, visión y palabra"
+    }
+  },
+  {
+    "id": "venus_sextile_jupiter__venus_en_tauro",
+    "triggers": [
+      "venus_sextile_jupiter",
+      "venus_en_tauro"
+    ],
+    "match": "all",
+    "peso": 0.82,
+    "clusters": [
+      "relacional",
+      "expansión",
+      "tierra"
+    ],
+    "output": {
+      "energy": "lo afectivo puede sentirse fértil, cálido y dispuesto a crecer con calma",
+      "avoid": "caer en exceso por comodidad o placer fácil",
+      "use": "disfrutar sin perder medida",
+      "focus": "placer, apertura y valor"
+    }
+  },
+  {
+    "id": "moon_square_venus__venus_casa_7",
+    "triggers": [
+      "moon_square_venus",
+      "venus_casa_7"
+    ],
+    "match": "all",
+    "peso": 0.88,
+    "clusters": [
+      "emocional",
+      "relacional",
+      "vínculos"
+    ],
+    "output": {
+      "energy": "la fricción emocional se vuelve más visible en la relación y en la respuesta del otro",
+      "avoid": "esperar que el otro regule lo que se activó dentro de ti",
+      "use": "nombrar la necesidad antes de exigir cercanía",
+      "focus": "vínculo, emoción y espejo relacional"
+    }
+  },
+  {
+    "id": "moon_square_venus__venus_casa_4",
+    "triggers": [
+      "moon_square_venus",
+      "venus_casa_4"
+    ],
+    "match": "all",
+    "peso": 0.86,
+    "clusters": [
+      "emocional",
+      "hogar",
+      "relacional"
+    ],
+    "output": {
+      "energy": "la tensión afectiva toca intimidad, refugio y sensación de hogar",
+      "avoid": "cerrarte por sensibilidad y después resentir la distancia",
+      "use": "cuidar tu base emocional antes de buscar respuesta afuera",
+      "focus": "intimidad, refugio y afecto"
+    }
+  },
+  {
+    "id": "saturn_conjunction_sun__sol_casa_10",
+    "triggers": [
+      "saturn_conjunction_sun",
+      "sol_casa_10"
+    ],
+    "match": "all",
+    "peso": 0.91,
+    "clusters": [
+      "identidad",
+      "estructura",
+      "vocación"
+    ],
+    "output": {
+      "energy": "la exigencia cae sobre dirección, trabajo, reputación y sentido de responsabilidad",
+      "avoid": "creer que solo vales si sostienes todo perfecto",
+      "use": "construir autoridad con tiempo y coherencia",
+      "focus": "vocación, exigencia y madurez"
+    }
+  },
+  {
+    "id": "saturn_conjunction_sun__sol_casa_1",
+    "triggers": [
+      "saturn_conjunction_sun",
+      "sol_casa_1"
+    ],
+    "match": "all",
+    "peso": 0.89,
+    "clusters": [
+      "identidad",
+      "estructura",
+      "presencia"
+    ],
+    "output": {
+      "energy": "la vida pide más sobriedad, contención y responsabilidad personal",
+      "avoid": "endurecerte demasiado para demostrar fortaleza",
+      "use": "afirmarte desde consistencia y no desde rigidez",
+      "focus": "presencia, madurez y autoestructura"
+    }
+  },
+  {
+    "id": "mars_conjunction_sun__marte_casa_1",
+    "triggers": [
+      "mars_conjunction_sun",
+      "marte_casa_1"
+    ],
+    "match": "all",
+    "peso": 0.9,
+    "clusters": [
+      "acción",
+      "presencia",
+      "impulso"
+    ],
+    "output": {
+      "energy": "la energía busca salida directa y pide movimiento inmediato",
+      "avoid": "actuar tan rápido que no veas el contexto completo",
+      "use": "moverte con valentía y algo más de conciencia",
+      "focus": "acción, cuerpo y presencia"
+    }
+  },
+  {
+    "id": "mars_conjunction_sun__sol_casa_5",
+    "triggers": [
+      "mars_conjunction_sun",
+      "sol_casa_5"
+    ],
+    "match": "all",
+    "peso": 0.87,
+    "clusters": [
+      "acción",
+      "creatividad",
+      "expresión"
+    ],
+    "output": {
+      "energy": "hay fuego para crear, expresarte y mostrar deseo con intensidad",
+      "avoid": "dramatizar para sostener atención o validación",
+      "use": "usar la fuerza para crear y no solo para imponerte",
+      "focus": "creatividad, deseo y expresión"
+    }
+  },
+  {
+    "id": "moon_square_venus__venus_grado_temprano",
+    "triggers": [
+      "moon_square_venus",
+      "venus_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.84,
+    "clusters": [
+      "emocional",
+      "relacional",
+      "fase_inicio"
+    ],
+    "output": {
+      "energy": "la experiencia afectiva aún está tomando forma y la tensión se siente más reactiva que clara",
+      "avoid": "forzar definiciones cuando todavía todo se está revelando",
+      "use": "observar el deseo antes de traducirlo en decisión",
+      "focus": "inicio emocional y aprendizaje vincular"
+    }
+  },
+  {
+    "id": "moon_square_venus__venus_grado_tardio",
+    "triggers": [
+      "moon_square_venus",
+      "venus_grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.86,
+    "clusters": [
+      "emocional",
+      "relacional",
+      "fase_cierre"
+    ],
+    "output": {
+      "energy": "la fricción afectiva puede mostrar algo que ya viene pidiendo cierre o redefinición",
+      "avoid": "repetir un patrón solo porque cuesta soltarlo",
+      "use": "mirar con honestidad qué dinámica ya cumplió su ciclo",
+      "focus": "cierre afectivo y claridad"
+    }
+  },
+  {
+    "id": "saturn_conjunction_sun__sol_grado_tardio",
+    "triggers": [
+      "saturn_conjunction_sun",
+      "sol_grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.9,
+    "clusters": [
+      "identidad",
+      "estructura",
+      "fase_cierre"
+    ],
+    "output": {
+      "energy": "la exigencia se siente como evaluación de una etapa que necesita madurar o reordenarse",
+      "avoid": "aferrarte a una versión antigua de ti solo por deber",
+      "use": "integrar lo aprendido y ajustar forma, ritmo o dirección",
+      "focus": "síntesis, madurez y redefinición"
+    }
+  },
+  {
+    "id": "mars_conjunction_sun__marte_grado_temprano",
+    "triggers": [
+      "mars_conjunction_sun",
+      "marte_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.88,
+    "clusters": [
+      "acción",
+      "fase_inicio",
+      "fuego"
+    ],
+    "output": {
+      "energy": "la energía arranca con mucha fuerza y ganas de abrir camino",
+      "avoid": "gastar impulso en reacción en vez de dirección",
+      "use": "usar el arranque como chispa y no como desborde",
+      "focus": "inicio, fuerza y dirección"
+    }
+  },
+  {
+    "id": "mercury_trine_jupiter__jupiter_grado_temprano",
+    "triggers": [
+      "mercury_trine_jupiter",
+      "jupiter_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.81,
+    "clusters": [
+      "mente",
+      "expansión",
+      "fase_inicio"
+    ],
+    "output": {
+      "energy": "las ideas quieren crecer y abrir horizonte, aunque todavía estén naciendo",
+      "avoid": "prometer más de lo que la visión puede sostener por ahora",
+      "use": "dejar que la comprensión se expanda paso a paso",
+      "focus": "aprendizaje y visión naciente"
+    }
+  },
+  {
+    "id": "moon_square_venus__venus_en_aries__venus_casa_7",
+    "triggers": [
+      "moon_square_venus",
+      "venus_en_aries",
+      "venus_casa_7"
+    ],
+    "match": "all",
+    "peso": 0.93,
+    "clusters": [
+      "emocional",
+      "relacional",
+      "fuego",
+      "vínculos"
+    ],
+    "output": {
+      "energy": "hay deseo de respuesta inmediata y la tensión se juega con fuerza en la relación cercana",
+      "avoid": "responder desde herida e impulso al mismo tiempo",
+      "use": "decir lo que necesitas antes de actuarlo",
+      "focus": "deseo, vínculo y regulación emocional"
+    }
+  },
+  {
+    "id": "moon_square_venus__venus_en_aries__venus_grado_temprano",
+    "triggers": [
+      "moon_square_venus",
+      "venus_en_aries",
+      "venus_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.92,
+    "clusters": [
+      "emocional",
+      "relacional",
+      "fuego",
+      "fase_inicio"
+    ],
+    "output": {
+      "energy": "la tensión afectiva aparece rápida, viva y todavía en fase de descubrimiento",
+      "avoid": "querer resolver ya algo que aún está naciendo",
+      "use": "darle tiempo a la experiencia antes de fijar conclusiones",
+      "focus": "impulso afectivo e inicio"
+    }
+  },
+  {
+    "id": "saturn_conjunction_sun__sol_en_capricornio__sol_casa_10",
+    "triggers": [
+      "saturn_conjunction_sun",
+      "sol_en_capricornio",
+      "sol_casa_10"
+    ],
+    "match": "all",
+    "peso": 0.95,
+    "clusters": [
+      "identidad",
+      "estructura",
+      "vocación",
+      "tierra"
+    ],
+    "output": {
+      "energy": "la vida aprieta en la zona de responsabilidad, propósito y dirección pública para consolidar algo serio",
+      "avoid": "creer que la exigencia es castigo en vez de proceso de construcción",
+      "use": "ordenar prioridades y asumir autoridad con paciencia",
+      "focus": "vocación, madurez y estructura profunda"
+    }
+  },
+  {
+    "id": "mars_conjunction_sun__sol_en_aries__marte_grado_temprano",
+    "triggers": [
+      "mars_conjunction_sun",
+      "sol_en_aries",
+      "marte_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.94,
+    "clusters": [
+      "acción",
+      "identidad",
+      "fuego",
+      "fase_inicio"
+    ],
+    "output": {
+      "energy": "hay arranque, impulso y deseo de afirmarte con fuerza inmediata",
+      "avoid": "confundir valentía con precipitación",
+      "use": "dar dirección al fuego antes de lanzarlo",
+      "focus": "inicio, coraje y enfoque"
+    }
+  },
+  {
+    "id": "venus_en_libra__marte_en_aries__venus_grado_medio",
+    "triggers": [
+      "venus_en_libra",
+      "marte_en_aries",
+      "venus_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.87,
+    "clusters": [
+      "relacional",
+      "acción",
+      "polaridad"
+    ],
+    "output": {
+      "energy": "el deseo de armonía convive con una fuerza que quiere resolver rápido y tomar iniciativa",
+      "avoid": "oscilar entre diplomacia excesiva e impulso brusco",
+      "use": "integrar firmeza con capacidad de acuerdo",
+      "focus": "equilibrio, deseo y acción"
+    }
+  },
+  {
+    "id": "luna_en_cancer__saturn_conjunction_sun__sol_casa_1",
+    "triggers": [
+      "luna_en_cancer",
+      "saturn_conjunction_sun",
+      "sol_casa_1"
+    ],
+    "match": "all",
+    "peso": 0.9,
+    "clusters": [
+      "emocional",
+      "identidad",
+      "estructura"
+    ],
+    "output": {
+      "energy": "la sensibilidad necesita cuidado mientras la vida exige más presencia, orden y madurez personal",
+      "avoid": "endurecerte para sostenerlo todo sin admitir que algo te pesa",
+      "use": "cuidar tu mundo emocional mientras fortaleces tu centro",
+      "focus": "contención, presencia y responsabilidad"
+    }
+  },
+  {
+    "id": "mercurio_en_geminis__jupiter_en_sagitario__mercury_trine_jupiter",
+    "triggers": [
+      "mercurio_en_geminis",
+      "jupiter_en_sagitario",
+      "mercury_trine_jupiter"
+    ],
+    "match": "all",
+    "peso": 0.88,
+    "clusters": [
+      "mente",
+      "expansión",
+      "aire",
+      "fuego"
+    ],
+    "output": {
+      "energy": "la mente se abre con rapidez y encuentra un puente entre curiosidad y sentido",
+      "avoid": "irte a demasiadas ideas sin construir una línea clara",
+      "use": "usar apertura mental con propósito y síntesis",
+      "focus": "aprendizaje, visión y pensamiento amplio"
     }
   }
 ]
