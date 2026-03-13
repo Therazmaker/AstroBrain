@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AstroBrain — Neural Transit Engine</title>
+<title>AstroBrain — Motor de Tránsitos Neurales</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=JetBrains+Mono:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
@@ -53,7 +53,7 @@
     position: fixed;
     inset: 0;
     z-index: 0;
-    pointer-events: none;
+    pointer-events: ninguno;
   }
 
   /* ─── LAYOUT ─────────────────────────────────────── */
@@ -232,8 +232,8 @@
     font-size: 0.75rem;
     padding: 8px 10px;
     transition: border-color 0.2s;
-    -webkit-appearance: none;
-    outline: none;
+    -webkit-appearance: ninguno;
+    outline: ninguno;
     width: 100%;
   }
 
@@ -245,7 +245,7 @@
   .transit-row select option { background: var(--deep); }
 
   .btn-remove {
-    background: none;
+    background: ninguno;
     border: 1px solid rgba(229, 115, 115, 0.2);
     border-radius: 6px;
     color: var(--rose);
@@ -275,7 +275,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background: none;
+    background: ninguno;
     border: 1px dashed var(--border);
     border-radius: 8px;
     color: var(--text-muted);
@@ -298,7 +298,7 @@
     margin-top: 16px;
     padding: 15px;
     background: linear-gradient(135deg, #7c52e8, #d4a843);
-    border: none;
+    border: ninguno;
     border-radius: 12px;
     color: white;
     cursor: pointer;
@@ -322,7 +322,7 @@
 
   .btn-run:hover::before { opacity: 1; }
   .btn-run:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(155, 114, 245, 0.3); }
-  .btn-run:active { transform: translateY(0); }
+  .btn-run:activa { transform: translateY(0); }
   .btn-run span { position: relative; z-index: 1; }
 
   /* ─── RAW TEXT INPUT ────────────────────────────── */
@@ -357,7 +357,7 @@
     padding: 14px 16px;
     resize: vertical;
     min-height: 110px;
-    outline: none;
+    outline: ninguno;
     transition: border-color 0.2s;
     margin-top: 12px;
   }
@@ -524,10 +524,10 @@
     border-radius: 100px;
     transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .bar-fill.emotional { background: linear-gradient(90deg, #e57373, #f48fb1); }
+  .bar-fill.emocional { background: linear-gradient(90deg, #e57373, #f48fb1); }
   .bar-fill.mental { background: linear-gradient(90deg, #4dd0c4, #80deea); }
-  .bar-fill.relational { background: linear-gradient(90deg, #d4a843, #ffe082); }
-  .bar-fill.actional { background: linear-gradient(90deg, #9b72f5, #ce93d8); }
+  .bar-fill.relacional { background: linear-gradient(90deg, #d4a843, #ffe082); }
+  .bar-fill.accional { background: linear-gradient(90deg, #9b72f5, #ce93d8); }
 
   .bar-val {
     font-family: var(--font-mono);
@@ -570,7 +570,7 @@
     vertical-align: top;
   }
 
-  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:last-child td { border-bottom: ninguno; }
 
   .weight-bar {
     display: inline-block;
@@ -603,7 +603,7 @@
   }
 
   .growth-log {
-    list-style: none;
+    list-style: ninguno;
     margin-top: 16px;
     max-height: 280px;
     overflow-y: auto;
@@ -622,7 +622,7 @@
     align-items: flex-start;
   }
 
-  .growth-log li:last-child { border-bottom: none; }
+  .growth-log li:last-child { border-bottom: ninguno; }
 
   .log-time {
     color: var(--gold-dim);
@@ -752,7 +752,7 @@
     font-family: var(--font-mono);
     font-size: 0.65rem;
   }
-  .context-entry:last-child { border-bottom: none; }
+  .context-entry:last-child { border-bottom: ninguno; }
 
   .ctx-date { color: var(--gold-dim); }
   .ctx-emotion { color: var(--text-secondary); }
@@ -805,7 +805,7 @@
     padding: 14px;
     resize: vertical;
     min-height: 140px;
-    outline: none;
+    outline: ninguno;
     transition: border-color 0.2s;
     margin-top: 12px;
   }
@@ -821,7 +821,7 @@
     font-family: var(--font-mono);
     font-size: 0.75rem;
     padding: 10px 14px;
-    outline: none;
+    outline: ninguno;
     transition: border-color 0.2s;
     margin-top: 8px;
     margin-bottom: 12px;
@@ -892,13 +892,13 @@
     white-space: nowrap;
   }
 
-  .he-tone.intense { border-color: rgba(229,115,115,0.3); color: var(--rose); }
-  .he-tone.active { border-color: rgba(155,114,245,0.3); color: var(--violet); }
-  .he-tone.soft { border-color: rgba(77,208,196,0.3); color: var(--teal); }
+  .he-tone.intensa { border-color: rgba(229,115,115,0.3); color: var(--rose); }
+  .he-tone.activa { border-color: rgba(155,114,245,0.3); color: var(--violet); }
+  .he-tone.suave { border-color: rgba(77,208,196,0.3); color: var(--teal); }
 
   /* ─── LOADER ─────────────────────────────────────── */
   .loader {
-    display: none;
+    display: ninguno;
     align-items: center;
     justify-content: center;
     gap: 8px;
@@ -908,7 +908,7 @@
     color: var(--text-muted);
     letter-spacing: 0.1em;
   }
-  .loader.active { display: flex; }
+  .loader.activa { display: flex; }
 
   .spinner {
     width: 18px; height: 18px;
@@ -935,7 +935,7 @@
     transform: translateY(20px);
     opacity: 0;
     transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-    pointer-events: none;
+    pointer-events: ninguno;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -994,7 +994,7 @@
     border-radius: 50%;
     background: radial-gradient(circle, rgba(155,114,245,0.06) 0%, transparent 70%);
     top: -100px; right: -200px;
-    pointer-events: none;
+    pointer-events: ninguno;
     z-index: 0;
   }
   .glow-gold {
@@ -1003,13 +1003,13 @@
     border-radius: 50%;
     background: radial-gradient(circle, rgba(212,168,67,0.05) 0%, transparent 70%);
     bottom: -100px; left: -150px;
-    pointer-events: none;
+    pointer-events: ninguno;
     z-index: 0;
   }
 
   /* section hr */
   .divider {
-    border: none;
+    border: ninguno;
     border-top: 1px solid var(--border);
     margin: 48px 0;
   }
@@ -1028,9 +1028,9 @@
 
   .mode-tab {
     padding: 8px 18px;
-    border: none;
+    border: ninguno;
     border-radius: 7px;
-    background: none;
+    background: ninguno;
     color: var(--text-muted);
     cursor: pointer;
     font-family: var(--font-mono);
@@ -1038,14 +1038,14 @@
     letter-spacing: 0.1em;
     transition: all 0.2s;
   }
-  .mode-tab.active {
+  .mode-tab.activa {
     background: var(--card);
     color: var(--text-primary);
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   }
 
-  .mode-panel { display: none; }
-  .mode-panel.active { display: block; }
+  .mode-panel { display: ninguno; }
+  .mode-panel.activa { display: block; }
 
   /* scroll to top fab */
   .fab {
@@ -1065,7 +1065,7 @@
     transition: all 0.2s;
     z-index: 50;
     opacity: 0;
-    pointer-events: none;
+    pointer-events: ninguno;
   }
   .fab.visible { opacity: 1; pointer-events: all; }
   .fab:hover { border-color: var(--violet-dim); color: var(--violet); }
@@ -1084,13 +1084,13 @@
     <div class="logo-block">
       <div>
         <div class="logo-text">Astro<span>Brain</span></div>
-        <div class="logo-sub">Neural Transit Engine · v2.0</div>
+        <div class="logo-sub">Motor de Tránsitos Neurales · v2.0</div>
       </div>
     </div>
     <div class="header-right">
       <div class="status-pill">
         <div class="status-dot"></div>
-        <span id="status-text">READY</span>
+        <span id="status-text">LISTO</span>
       </div>
     </div>
   </header>
@@ -1098,47 +1098,47 @@
   <!-- ── HERO ── -->
   <section class="hero">
     <div class="hero-left reveal">
-      <div class="hero-eyebrow">Planetary Transit Interpretation</div>
+      <div class="hero-eyebrow">Interpretación de Tránsitos Planetarios</div>
       <h1 class="hero-title">
-        The sky speaks.<br>
-        <em>We translate.</em>
+        El cielo habla.<br>
+        <em>Nosotros traducimos.</em>
       </h1>
       <p class="hero-desc">
-        AstroBrain maps planetary transits through a self-learning neural architecture,
-        generating human-readable emotional narratives tuned to your psyche — and growing sharper with every session.
+        AstroBrain mapea tránsitos planetarios a través de una arquitectura neuronal auto-aprendiente,
+        generando narrativas emocionales legibles y afinadas a tu psique — y volviéndose más precisa con cada sesión.
       </p>
     </div>
 
     <div class="input-panel reveal">
-      <div class="panel-title">Run Interpretation</div>
-      <div class="panel-sub">INPUT / TRANSIT PIPELINE</div>
+      <div class="panel-title">Correr Interpretación</div>
+      <div class="panel-sub">ENTRADA / PIPELINE DE TRÁNSITOS</div>
 
       <div class="mode-tabs">
-        <button class="mode-tab active" onclick="setMode('transits')">Transits</button>
-        <button class="mode-tab" onclick="setMode('raw')">Free Text</button>
+        <button class="mode-tab activa" onclick="setMode('transits')">Tránsitos</button>
+        <button class="mode-tab" onclick="setMode('libre')">Texto Libre</button>
       </div>
 
       <!-- TRANSIT MODE -->
-      <div class="mode-panel active" id="mode-transits">
+      <div class="mode-panel activa" id="mode-transits">
         <div class="col-labels">
-          <div class="row-label">PLANET</div>
-          <div class="row-label">ASPECT</div>
-          <div class="row-label">TARGET</div>
-          <div class="row-label">ORB</div>
+          <div class="row-label">PLANETA</div>
+          <div class="row-label">ASPECTO</div>
+          <div class="row-label">DESTINO</div>
+          <div class="row-label">ORBE</div>
           <div class="row-label"></div>
         </div>
         <div class="transit-rows" id="transit-rows"></div>
-        <button class="btn-add" onclick="addTransitRow()">+ add transit</button>
+        <button class="btn-add" onclick="addTransitRow()">+ agregar tránsito</button>
         <button class="btn-run" onclick="runInterpretation()">
-          <span>✦ Interpret Transits</span>
+          <span>✦ Interpret Tránsitos</span>
         </button>
       </div>
 
       <!-- RAW TEXT MODE -->
       <div class="mode-panel" id="mode-raw">
-        <textarea id="raw-text" placeholder="Describe a feeling, a situation, a day... AstroBrain will extract emotional patterns and generate a narrative from your words.&#10;&#10;E.g.: 'I've been feeling overwhelmed and anxious. There's too much going on at work and my relationships feel strained…'" rows="6"></textarea>
+        <textarea id="raw-text" placeholder="Describe un sentimiento, una situación, un día... AstroBrain extraerá patrones emocionales y generará una narrativa desde tus palabras.&#10;&#10;E.g.: 'I've been feeling overwhelmed and anxious. There's too much going on at work and my relationships feel strained…'" rows="6"></textarea>
         <button class="btn-run-raw" onclick="runRawInterpretation()">
-          ▶ RUN RAW PIPELINE
+          ▶ CORRER PIPELINE LIBRE
         </button>
       </div>
     </div>
@@ -1147,69 +1147,69 @@
   <!-- ── LOADER ── -->
   <div class="loader" id="main-loader">
     <div class="spinner"></div>
-    <span>PROCESSING NEURAL PIPELINE…</span>
+    <span>PROCESANDO PIPELINE NEURONAL…</span>
   </div>
 
   <!-- ── NARRATIVE OUTPUT ── -->
   <section class="narrative-section" id="narrative-section">
     <div class="section-header">
-      <h2 class="section-title">Narrative Output</h2>
+      <h2 class="section-title">Narrativa de Salida</h2>
       <span class="section-badge" id="narrative-tone-badge">—</span>
     </div>
     <div class="narrative-grid" id="narrative-grid"></div>
   </section>
 
-  <hr class="divider" id="divider-1" style="display:none">
+  <hr class="divider" id="divider-1" style="display:ninguno">
 
   <!-- ── TRANSIT BREAKDOWN ── -->
-  <section class="transits-section" id="transits-section" style="display:none">
+  <section class="transits-section" id="transits-section" style="display:ninguno">
     <div class="section-header">
-      <h2 class="section-title">Transit Breakdown</h2>
-      <span class="section-badge">SCORED & PRIORITIZED</span>
+      <h2 class="section-title">Desglose de Tránsitos</h2>
+      <span class="section-badge">PUNTUADO Y PRIORIZADO</span>
     </div>
     <div class="transit-cards" id="transit-cards-output"></div>
   </section>
 
-  <hr class="divider" id="divider-2" style="display:none">
+  <hr class="divider" id="divider-2" style="display:ninguno">
 
   <!-- ── NEURAL ENGINE ── -->
   <section class="engine-section reveal" id="engine-section">
     <div class="section-header">
-      <h2 class="section-title">Neural Engine</h2>
-      <span class="section-badge">LIVE STATE</span>
+      <h2 class="section-title">Motor Neuronal</h2>
+      <span class="section-badge">ESTADO EN VIVO</span>
     </div>
     <div class="engine-grid">
 
       <div class="cluster-card">
-        <div class="panel-sub">CLUSTER WEIGHTS</div>
+        <div class="panel-sub">PESOS POR CLUSTER</div>
         <div class="cluster-bars" id="cluster-bars">
-          <div class="bar-row"><span class="bar-label">emotional</span><div class="bar-track"><div class="bar-fill emotional" style="width:0%"></div></div><span class="bar-val">—</span></div>
+          <div class="bar-row"><span class="bar-label">emocional</span><div class="bar-track"><div class="bar-fill emocional" style="width:0%"></div></div><span class="bar-val">—</span></div>
           <div class="bar-row"><span class="bar-label">mental</span><div class="bar-track"><div class="bar-fill mental" style="width:0%"></div></div><span class="bar-val">—</span></div>
-          <div class="bar-row"><span class="bar-label">relational</span><div class="bar-track"><div class="bar-fill relational" style="width:0%"></div></div><span class="bar-val">—</span></div>
-          <div class="bar-row"><span class="bar-label">actional</span><div class="bar-track"><div class="bar-fill actional" style="width:0%"></div></div><span class="bar-val">—</span></div>
+          <div class="bar-row"><span class="bar-label">relacional</span><div class="bar-track"><div class="bar-fill relacional" style="width:0%"></div></div><span class="bar-val">—</span></div>
+          <div class="bar-row"><span class="bar-label">accional</span><div class="bar-track"><div class="bar-fill accional" style="width:0%"></div></div><span class="bar-val">—</span></div>
         </div>
       </div>
 
       <div class="neuron-card">
-        <div class="panel-sub">ACTIVE NEURONS</div>
+        <div class="panel-sub">NEURONAS ACTIVAS</div>
         <table class="data-table">
           <thead>
             <tr>
               <th>ID</th>
-              <th>Weight</th>
+              <th>Peso</th>
               <th>Auto</th>
             </tr>
           </thead>
           <tbody id="neurons-body">
-            <tr><td colspan="3" style="color:var(--text-muted);padding-top:16px;font-size:0.62rem">No neurons activated yet</td></tr>
+            <tr><td colspan="3" style="color:var(--text-muted);padding-top:16px;font-size:0.62rem">Sin neuronas activadas yet</td></tr>
           </tbody>
         </table>
       </div>
 
       <div class="growth-card">
-        <div class="panel-sub">GROWTH LOG</div>
+        <div class="panel-sub">REGISTRO DE CRECIMIENTO</div>
         <ul class="growth-log" id="growth-log">
-          <li style="border:none;padding-top:16px"><span class="log-text" style="color:var(--text-muted)">Awaiting first run…</span></li>
+          <li style="border:ninguno;padding-top:16px"><span class="log-text" style="color:var(--text-muted)">Esperando primera ejecución…</span></li>
         </ul>
       </div>
 
@@ -1221,23 +1221,23 @@
   <!-- ── CONTEXT MEMORY & META SIGNALS ── -->
   <section class="memory-section reveal" id="memory-section">
     <div class="section-header">
-      <h2 class="section-title">Memory & Signals</h2>
+      <h2 class="section-title">Memoria y Señales</h2>
       <span class="section-badge">INDEXEDDB</span>
     </div>
     <div class="memory-grid">
       <div class="memory-card">
-        <h4>Context Memory <span style="font-family:var(--font-mono);font-weight:400;font-size:0.65rem;color:var(--text-muted)">(last 3 sessions)</span></h4>
+        <h4>Memoria de Contexto <span style="font-family:var(--font-mono);font-weight:400;font-size:0.65rem;color:var(--text-muted)">(últimas 3 sesiones)</span></h4>
         <div id="context-memory-list">
-          <div class="empty-state"><span class="es-icon">🧠</span><p>NO SESSIONS RECORDED YET</p></div>
+          <div class="empty-state"><span class="es-icon">🧠</span><p>SIN SESIONES REGISTRADAS AÚN</p></div>
         </div>
       </div>
       <div class="memory-card">
-        <h4>Meta Signals</h4>
+        <h4>Señales Meta</h4>
         <div class="meta-signals" id="meta-signals-list">
-          <div class="empty-state" style="width:100%"><span class="es-icon">⚡</span><p>NO SIGNALS DETECTED</p></div>
+          <div class="empty-state" style="width:100%"><span class="es-icon">⚡</span><p>SIN SEÑALES DETECTADAS</p></div>
         </div>
         <div style="margin-top:24px">
-          <div class="panel-sub" style="margin-bottom:8px">DOMINANT CLUSTER</div>
+          <div class="panel-sub" style="margin-bottom:8px">CLUSTER DOMINANTE</div>
           <div id="dominant-cluster" style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--violet)">—</div>
         </div>
       </div>
@@ -1249,22 +1249,22 @@
   <!-- ── TRAINING ── -->
   <section class="training-section reveal">
     <div class="section-header">
-      <h2 class="section-title">Training</h2>
-      <span class="section-badge">HIPPOCAMPUS</span>
+      <h2 class="section-title">Entrenamiento</h2>
+      <span class="section-badge">HIPOCAMPO</span>
     </div>
     <div class="training-grid">
       <div class="training-card">
-        <div class="panel-title">Ingest Transcript</div>
-        <div class="panel-sub" style="margin-bottom:12px">TEACH THE BRAIN NEW PATTERNS</div>
-        <input type="text" id="transcript-key" placeholder="memory key (e.g. session_healing_talk)" />
-        <textarea id="transcript-text" placeholder="Paste a conversation, journal entry, or therapeutic dialogue here. AstroBrain will extract emotional tones, phrases, and patterns to reinforce its interpretive memory."></textarea>
-        <button class="btn-train" onclick="runTrainTranscript()">⬆ INGEST INTO HIPPOCAMPUS</button>
+        <div class="panel-title">Ingerir Transcripción</div>
+        <div class="panel-sub" style="margin-bottom:12px">ENSEÑA AL CEREBRO NUEVOS PATRONES</div>
+        <input type="text" id="transcript-key" placeholder="clave de memoria (ej. sesion_charla_sanacion)" />
+        <textarea id="transcript-text" placeholder="Pega una conversación, entrada de diario o diálogo terapéutico aquí. AstroBrain extraerá tonos emocionales, frases y patrones para reforzar su memoria interpretativa."></textarea>
+        <button class="btn-train" onclick="runTrainTranscript()">⬆ INGERIR EN EL HIPOCAMPO</button>
       </div>
       <div class="training-card">
-        <div class="panel-title">Hippocampus Entries</div>
-        <div class="panel-sub" style="margin-bottom:12px">STORED PATTERNS</div>
+        <div class="panel-title">Entradas del Hipocampo</div>
+        <div class="panel-sub" style="margin-bottom:12px">PATRONES ALMACENADOS</div>
         <div id="hippocampus-list" style="max-height:320px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent">
-          <div class="empty-state"><span class="es-icon">💾</span><p>NO ENTRIES STORED</p></div>
+          <div class="empty-state"><span class="es-icon">💾</span><p>SIN ENTRADAS ALMACENADAS</p></div>
         </div>
       </div>
     </div>
@@ -1275,11 +1275,11 @@
   <!-- ── HISTORY ── -->
   <section class="history-section reveal">
     <div class="section-header">
-      <h2 class="section-title">Session History</h2>
-      <span class="section-badge" id="history-count">0 SESSIONS</span>
+      <h2 class="section-title">Historial de Sesiones</h2>
+      <span class="section-badge" id="history-count">0 SESIONES</span>
     </div>
     <div class="history-list" id="history-list">
-      <div class="empty-state"><span class="es-icon">🌌</span><p>RUN YOUR FIRST INTERPRETATION TO BEGIN</p></div>
+      <div class="empty-state"><span class="es-icon">🌌</span><p>CORRE TU PRIMERA INTERPRETACIÓN PARA COMENZAR</p></div>
     </div>
   </section>
 
@@ -1408,9 +1408,9 @@ async function dbAdd(store, item) {
 // CORE ENGINE (browser port)
 // ─────────────────────────────────────────────────────────────
 
-// Score Transits
-const PLANET_SCORE = { Moon:5, Mars:4, Saturn:4, Mercury:3, Venus:3, Sun:3, Jupiter:2 };
-const ASPECT_SCORE = { conjunction:3, opposition:3, square:2, trine:2, sextile:1 };
+// Score Tránsitos
+const PLANETA_SCORE = { Moon:5, Mars:4, Saturn:4, Mercury:3, Venus:3, Sun:3, Jupiter:2 };
+const ASPECTO_SCORE = { conjunction:3, opposition:3, square:2, trine:2, sextile:1 };
 
 function scoreOrb(orb) {
   if (orb < 1) return 3;
@@ -1420,10 +1420,10 @@ function scoreOrb(orb) {
 }
 
 function scoreTransit(t) {
-  const p = PLANET_SCORE[t.planet] || 0;
-  const a = ASPECT_SCORE[t.aspect] || 0;
+  const p = PLANETA_SCORE[t.planet] || 0;
+  const a = ASPECTO_SCORE[t.aspect] || 0;
   const o = scoreOrb(t.orb);
-  return { ...t, score: p+a+o, scoreBreakdown: { planet:p, aspect:a, orb:o } };
+  return { ...t, puntuación: p+a+o, scoreBreakdown: { planeta:p, aspecto:a, orb:o } };
 }
 
 function priorityWeight(t) {
@@ -1433,7 +1433,7 @@ function priorityWeight(t) {
   return 1;
 }
 
-function filterTransits(transits, limit=3) {
+function filterTránsitos(transits, limit=3) {
   return transits
     .map(t => ({ ...scoreTransit(t), priorityWeight: priorityWeight(t) }))
     .sort((a,b) => {
@@ -1445,37 +1445,37 @@ function filterTransits(transits, limit=3) {
 }
 
 // Emotional translation
-function emotionalTranslation(t) {
+function emocionalTranslation(t) {
   if (t.planet==='Mars' && t.aspect==='square') return { emotion:'frustration', action:'channel heat into movement before hard talks' };
   if (t.planet==='Moon' && t.target==='Mars') return { emotion:'reactivity', action:'slow down and name what you feel first' };
   if (t.planet==='Mars' && t.target==='Moon') return { emotion:'reactivity', action:'respond, do not react in the moment' };
   if (t.planet==='Venus' && t.aspect==='trine') return { emotion:'harmony', action:'lean into connection and support' };
   if (t.planet==='Saturn' && t.aspect==='conjunction') return { emotion:'heaviness', action:'do one responsible thing at a time' };
   const BASE = { Mars:'impulse / anger', Saturn:'pressure / block', Moon:'sensitivity', Mercury:'mind', Venus:'desire', Jupiter:'expansion', Sun:'clarity' };
-  return { emotion: BASE[t.planet]||'emotional movement', action:'keep your pace intentional and simple' };
+  return { emotion: BASE[t.planet]||'emocional movement', action:'keep your pace intentional and simple' };
 }
 
 function toneFromScore(score) {
-  if (score > 9) return 'intense';
-  if (score >= 6) return 'active';
-  return 'soft';
+  if (score > 9) return 'intensa';
+  if (score >= 6) return 'activa';
+  return 'suave';
 }
 
 function clusterFromId(id) {
-  if (/moon|emotion|reactive|frustration|saturn/.test(id)) return 'emotional';
+  if (/moon|emotion|reactiva|frustration|saturn/.test(id)) return 'emocional';
   if (/mercury|mind/.test(id)) return 'mental';
-  if (/venus|partnership|relationship/.test(id)) return 'relational';
-  return 'actional';
+  if (/venus|partnership|relationship/.test(id)) return 'relacional';
+  return 'accional';
 }
 
 // Raw Parser (browser)
 const EMOTION_LEXICON = {
-  anger:['angry','anger','furious','irritated','frustrated','mad'],
-  anxiety:['anxious','nervous','worried','overthinking','uncertain'],
-  sadness:['sad','down','hurt','grief','lonely'],
-  overwhelm:['overwhelmed','too much','burned out','exhausted','drained'],
-  calm:['calm','steady','grounded','peaceful'],
-  hope:['hopeful','optimistic','relieved','encouraged'],
+  ira:['enojado','ira','furioso','irritado','frustrado','molesto'],
+  ansiedad:['ansioso','nervioso','preocupado','rumiando','inseguro'],
+  tristeza:['triste','decaído','herido','duelo','solo'],
+  desborde:['abrumado','demasiado','agotado','exhausto','vaciado'],
+  calma:['calma','estable','anclado','en paz'],
+  esperanza:['esperanzado','optimista','aliviado','animado'],
 };
 const ADVICE_CUES = ['should','need to','try','remember to','focus on','avoid',"don't",'must'];
 const SITUATION_CUES = ['when','if','at work','in my relationship','with my family','during','because','after','before'];
@@ -1488,16 +1488,16 @@ function parseRaw(rawText) {
     .map(([k]) => k);
   const situations = sentences.filter(s => SITUATION_CUES.some(c => s.toLowerCase().includes(c)));
   const advice = sentences.filter(s => ADVICE_CUES.some(c => s.toLowerCase().includes(c)));
-  const tone = emotions.some(e => ['anger','anxiety','overwhelm'].includes(e)) ? 'intense'
-    : advice.length>=3 ? 'active'
-    : emotions.includes('calm')||emotions.includes('hope') ? 'soft' : 'active';
+  const tone = emotions.some(e => ['anger','anxiety','overwhelm'].includes(e)) ? 'intensa'
+    : advice.length>=3 ? 'activa'
+    : emotions.includes('calma')||emotions.includes('esperanza') ? 'suave' : 'activa';
   return { rawText, emotions, situations, advice, tone };
 }
 
 // Main interpret function
-function interpretTransits(transits) {
-  const prioritized = filterTransits(transits, 3);
-  const interpreted = prioritized.map(t => ({ ...t, ...emotionalTranslation(t), neuronId: `${t.planet}_${t.target}_${t.aspect}`.toLowerCase() }));
+function interpretTránsitos(transits) {
+  const prioritized = filterTránsitos(transits, 3);
+  const interpreted = prioritized.map(t => ({ ...t, ...emocionalTranslation(t), neuronId: `${t.planet}_${t.target}_${t.aspect}`.toLowerCase() }));
 
   const emotions = interpreted.map(t=>t.emotion).filter(Boolean);
   const actions = interpreted.map(t=>t.action).filter(Boolean);
@@ -1505,60 +1505,60 @@ function interpretTransits(transits) {
   const tone = toneFromScore(topScore);
 
   // Cluster from interpreted transits
-  const clusterScores = { emotional:0, mental:0, relational:0, actional:0 };
+  const clusterScores = { emocional:0, mental:0, relacional:0, accional:0 };
   interpreted.forEach(t => {
     const cluster = clusterFromId(t.neuronId);
     clusterScores[cluster] += 0.4;
   });
 
   const avoidMap = {
-    frustration:'reactive discussions and pressure conversations',
+    frustration:'reactiva discussions and pressure conversations',
     reactivity:'quick replies and defensive moments',
     harmony:'people-pleasing at the cost of clarity',
     heaviness:'prolonged obligations without rest',
   };
   const focusMap = {
-    frustration:'emotional regulation and grounding',
+    frustration:'emocional regulation and grounding',
     reactivity:'pause, name what you feel, then respond',
     harmony:'heart-led clarity and shared rituals',
     heaviness:'one responsible thing at a time',
   };
 
   const narrative = {
-    energy: `${tone}: ${[...new Set(emotions)].join(', ')||'mixed emotional weather'}`,
-    avoid: interpreted[0] ? (avoidMap[interpreted[0].emotion]||'pushing conversations before you feel settled') : 'pushing conversations before you feel settled',
-    use: actions[0]||'clear priorities and simple actions',
-    focus: interpreted[0] ? (focusMap[interpreted[0].emotion]||'pause, regulate, and answer with intention') : 'pause, regulate, and answer with intention',
+    energy: `${tone}: ${[...new Set(emotions)].join(', ')||'clima emocional mixto'}`,
+    avoid: interpreted[0] ? (avoidMap[interpreted[0].emotion]||'empujar conversaciones antes de sentirte estable') : 'empujar conversaciones antes de sentirte estable',
+    use: actions[0]||'prioridades claras y acciones simples',
+    focus: interpreted[0] ? (focusMap[interpreted[0].emotion]||'pausa, regula y responde con intención') : 'pausa, regula y responde con intención',
   };
 
   const metaSignals = [];
-  if (clusterScores.emotional >= 1.0) metaSignals.push({ id:'high_emotional_load', then:'day emotionally intense' });
+  if (clusterScores.emocional >= 1.0) metaSignals.push({ id:'high_emocional_load', then:'day emocionally intensa' });
 
   const dominantCluster = Object.entries(clusterScores).sort((a,b)=>b[1]-a[1])[0][0];
 
-  return { topTransits: interpreted, narrative, clusterScores, dominantCluster, metaSignals, tone };
+  return { topTránsitos: interpreted, narrative, clusterScores, dominantCluster, metaSignals, tone };
 }
 
 function interpretRaw(rawText) {
   const signals = parseRaw(rawText);
   const forecast = signals.emotions.some(e=>['anger','anxiety','overwhelm'].includes(e))
-    ? 'reactive spirals without a pause'
+    ? 'espirales reactivas sin una pausa'
     : signals.situations.length>1
-    ? 'multiple contexts competing for attention'
-    : 'steady progress with consistency';
+    ? 'múltiples contextos compitiendo por atención'
+    : 'progreso estable con consistencia';
 
   const narrative = {
-    energy: `${signals.tone}: ${signals.emotions.join(', ')||'mixed emotional weather'}`,
+    energy: `${signals.tone}: ${signals.emotions.join(', ')||'clima emocional mixto'}`,
     avoid: forecast,
-    use: signals.advice[0]||'keep actions simple and intentional',
-    focus: signals.situations[0]||'name the pattern and choose one clean action',
+    use: signals.advice[0]||'mantén las acciones simples e intencionales',
+    focus: signals.situations[0]||'nombra el patrón y elige una acción limpia',
   };
 
-  const clusterScores = { emotional:signals.emotions.length*0.3, mental:0, relational:0, actional:signals.advice.length*0.2 };
+  const clusterScores = { emocional:signals.emotions.length*0.3, mental:0, relacional:0, accional:signals.advice.length*0.2 };
   const dominantCluster = Object.entries(clusterScores).sort((a,b)=>b[1]-a[1])[0][0];
-  const metaSignals = signals.emotions.length>=3 ? [{ id:'high_emotional_load', then:'day emotionally intense' }] : [];
+  const metaSignals = signals.emotions.length>=3 ? [{ id:'high_emocional_load', then:'day emocionally intensa' }] : [];
 
-  return { topTransits: [], narrative, clusterScores, dominantCluster, metaSignals, tone: signals.tone, signals };
+  return { topTránsitos: [], narrative, clusterScores, dominantCluster, metaSignals, tone: signals.tone, signals };
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -1572,21 +1572,21 @@ let previousWeights = {};
 // ─────────────────────────────────────────────────────────────
 // TRANSIT ROWS
 // ─────────────────────────────────────────────────────────────
-const PLANETS = ['Moon','Mars','Saturn','Sun','Venus','Mercury','Jupiter'];
-const ASPECTS = ['conjunction','opposition','square','trine','sextile'];
+const PLANETAS = ['Moon','Mars','Saturn','Sun','Venus','Mercury','Jupiter'];
+const ASPECTOS = ['conjunction','opposition','square','trine','sextile'];
 
 function addTransitRow(planet='Mars', aspect='square', target='Moon', orb=0.8) {
   const row = document.createElement('div');
   row.className = 'transit-row';
   row.innerHTML = `
     <select class="tr-planet">
-      ${PLANETS.map(p=>`<option value="${p}" ${p===planet?'selected':''}>${p}</option>`).join('')}
+      ${PLANETAS.map(p=>`<option value="${p}" ${p===planet?'selected':''}>${p}</option>`).join('')}
     </select>
     <select class="tr-aspect">
-      ${ASPECTS.map(a=>`<option value="${a}" ${a===aspect?'selected':''}>${a}</option>`).join('')}
+      ${ASPECTOS.map(a=>`<option value="${a}" ${a===aspect?'selected':''}>${a}</option>`).join('')}
     </select>
     <select class="tr-target">
-      ${PLANETS.map(p=>`<option value="${p}" ${p===target?'selected':''}>${p}</option>`).join('')}
+      ${PLANETAS.map(p=>`<option value="${p}" ${p===target?'selected':''}>${p}</option>`).join('')}
     </select>
     <input type="number" class="tr-orb" value="${orb}" min="0" max="10" step="0.1" style="width:60px">
     <button class="btn-remove" onclick="this.closest('.transit-row').remove()">✕</button>
@@ -1594,10 +1594,10 @@ function addTransitRow(planet='Mars', aspect='square', target='Moon', orb=0.8) {
   document.getElementById('transit-rows').appendChild(row);
 }
 
-function getTransits() {
+function getTránsitos() {
   return Array.from(document.querySelectorAll('.transit-row')).map(row => ({
-    planet: row.querySelector('.tr-planet').value,
-    aspect: row.querySelector('.tr-aspect').value,
+    planeta: row.querySelector('.tr-planet').value,
+    aspecto: row.querySelector('.tr-aspect').value,
     target: row.querySelector('.tr-target').value,
     orb: parseFloat(row.querySelector('.tr-orb').value)||0,
   }));
@@ -1614,29 +1614,29 @@ addTransitRow('Saturn','conjunction','Sun',1.7);
 function setMode(mode) {
   currentMode = mode;
   document.querySelectorAll('.mode-tab').forEach((tab, i) => {
-    tab.classList.toggle('active', (i===0&&mode==='transits')||(i===1&&mode==='raw'));
+    tab.classList.toggle('activa', (i===0&&mode==='transits')||(i===1&&mode==='libre'));
   });
-  document.getElementById('mode-transits').classList.toggle('active', mode==='transits');
-  document.getElementById('mode-raw').classList.toggle('active', mode==='raw');
+  document.getElementById('mode-transits').classList.toggle('activa', mode==='transits');
+  document.getElementById('mode-raw').classList.toggle('activa', mode==='libre');
 }
 
 // ─────────────────────────────────────────────────────────────
 // RUN INTERPRETATION
 // ─────────────────────────────────────────────────────────────
 async function runInterpretation() {
-  const transits = getTransits();
-  if (!transits.length) { showToast('Add at least one transit', 'error'); return; }
+  const transits = getTránsitos();
+  if (!transits.length) { showToast('Agrega al menos un tránsito', 'error'); return; }
   setLoading(true);
   await delay(600);
   try {
-    const result = interpretTransits(transits);
+    const result = interpretTránsitos(transits);
     currentResult = result;
-    await saveSession(result, transits, 'transit');
+    await saveSession(result, transits, 'transito');
     renderResult(result);
     updateEnginePanel(result);
     await renderContextMemory(result);
     await renderHistory();
-    showToast('Interpretation complete', 'success');
+    showToast('Interpretación completa', 'success');
   } catch(err) {
     showToast('Error: ' + err.message, 'error');
   } finally {
@@ -1646,18 +1646,18 @@ async function runInterpretation() {
 
 async function runRawInterpretation() {
   const text = document.getElementById('raw-text').value.trim();
-  if (!text) { showToast('Enter some text first', 'error'); return; }
+  if (!text) { showToast('Ingresa algún texto primero', 'error'); return; }
   setLoading(true);
   await delay(500);
   try {
     const result = interpretRaw(text);
     currentResult = result;
-    await saveSession(result, [], 'raw', text);
+    await saveSession(result, [], 'libre', text);
     renderResult(result, true);
     updateEnginePanel(result);
     await renderContextMemory(result);
     await renderHistory();
-    showToast('Raw pipeline complete', 'success');
+    showToast('Pipeline libre completo', 'success');
   } catch(err) {
     showToast('Error: ' + err.message, 'error');
   } finally {
@@ -1669,14 +1669,16 @@ async function runRawInterpretation() {
 // RENDER NARRATIVE
 // ─────────────────────────────────────────────────────────────
 function renderResult(result, isRaw=false) {
-  const { narrative, tone, topTransits } = result;
+  const { narrative, tone, topTránsitos } = result;
   const section = document.getElementById('narrative-section');
   const badge = document.getElementById('narrative-tone-badge');
   badge.textContent = tone.toUpperCase();
 
   const CARDS = [
-    { key:'energy', label:'Energy', icon:'☀', cls:'card-energy' },
-    { key:'avoid', label:'Avoid', icon:'⚡', cls:'card-avoid' },
+    { key:'energy', label:'Energía', icon:'☀', cls:'card-energy' },
+    { key:'avoid', label:'Evita', icon:'⚡', cls:'card-avoid' },
+    { key:'use', label:'Usa', icon:'🌊', cls:'card-use' },
+    { key:'focus', label:'Enfoque', icon:'✦', cls:'card-focus' },
     { key:'use', label:'Use', icon:'🌊', cls:'card-use' },
     { key:'focus', label:'Focus', icon:'✦', cls:'card-focus' },
   ];
@@ -1695,13 +1697,13 @@ function renderResult(result, isRaw=false) {
   const tsSection = document.getElementById('transits-section');
   const d1 = document.getElementById('divider-1');
 
-  if (!isRaw && topTransits.length) {
+  if (!isRaw && topTránsitos.length) {
     d1.style.display = '';
     tsSection.style.display = '';
-    renderTransitCards(topTransits);
+    renderTransitCards(topTránsitos);
   } else {
-    d1.style.display = 'none';
-    tsSection.style.display = 'none';
+    d1.style.display = 'ninguno';
+    tsSection.style.display = 'ninguno';
   }
 
   document.getElementById('divider-2').style.display = '';
@@ -1711,14 +1713,14 @@ function renderTransitCards(transits) {
   const container = document.getElementById('transit-cards-output');
   container.innerHTML = transits.map((t, i) => `
     <div class="transit-card">
-      <div class="tc-rank">RANK ${i+1} · PRIORITY ${t.priorityWeight||'—'}</div>
+      <div class="tc-rank">RANGO ${i+1} · PRIORIDAD ${t.priorityWeight||'—'}</div>
       <div class="tc-header"><span class="tc-planet">${t.planet}</span> ${t.aspect} ${t.target}</div>
-      <div class="tc-meta">orb: ${t.orb}°</div>
+      <div class="tc-meta">orbe: ${t.orb}°</div>
       <div class="tc-scores">
-        <span class="score-chip total">score: ${t.score}</span>
-        <span class="score-chip planet-s">planet: ${t.scoreBreakdown?.planet||0}</span>
-        <span class="score-chip aspect-s">aspect: ${t.scoreBreakdown?.aspect||0}</span>
-        <span class="score-chip orb-s">orb: ${t.scoreBreakdown?.orb||0}</span>
+        <span class="score-chip total">puntuación: ${t.score}</span>
+        <span class="score-chip planet-s">planeta: ${t.scoreBreakdown?.planet||0}</span>
+        <span class="score-chip aspect-s">aspecto: ${t.scoreBreakdown?.aspect||0}</span>
+        <span class="score-chip orb-s">orbe: ${t.scoreBreakdown?.orb||0}</span>
       </div>
       ${t.emotion ? `<div class="tc-emotion">${t.emotion}</div>` : ''}
       ${t.action ? `<div class="tc-action">→ ${t.action}</div>` : ''}
@@ -1730,10 +1732,10 @@ function renderTransitCards(transits) {
 // ENGINE PANEL
 // ─────────────────────────────────────────────────────────────
 function updateEnginePanel(result) {
-  const { clusterScores, dominantCluster, topTransits, metaSignals } = result;
+  const { clusterScores, dominantCluster, topTránsitos, metaSignals } = result;
 
   // Cluster bars
-  const clusters = ['emotional','mental','relational','actional'];
+  const clusters = ['emocional','mental','relacional','accional'];
   const max = Math.max(...Object.values(clusterScores), 0.01);
   const bars = document.querySelectorAll('#cluster-bars .bar-row');
   clusters.forEach((cl, i) => {
@@ -1744,7 +1746,7 @@ function updateEnginePanel(result) {
   });
 
   // Neurons
-  const neurons = topTransits.map(t => ({
+  const neurons = topTránsitos.map(t => ({
     id: t.neuronId || t.planet,
     weight: t.score ? (t.score/12).toFixed(3) : '0.400',
     auto: false
@@ -1752,7 +1754,7 @@ function updateEnginePanel(result) {
 
   const tbody = document.getElementById('neurons-body');
   if (!neurons.length) {
-    tbody.innerHTML = '<tr><td colspan="3" style="color:var(--text-muted);font-size:0.62rem;padding-top:8px">No neurons activated</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="3" style="color:var(--text-muted);font-size:0.62rem;padding-top:8px">Sin neuronas activadas</td></tr>';
   } else {
     tbody.innerHTML = neurons.map(n => `
       <tr>
@@ -1761,7 +1763,7 @@ function updateEnginePanel(result) {
           <div>${n.weight}</div>
           <div><span class="weight-bar" style="width:${Math.round(parseFloat(n.weight)*80)}px"></span></div>
         </td>
-        <td style="color:var(--text-muted)">${n.auto?'yes':'no'}</td>
+        <td style="color:var(--text-muted)">${n.auto?'sí':'no'}</td>
       </tr>
     `).join('');
   }
@@ -1772,7 +1774,7 @@ function updateEnginePanel(result) {
   // Meta signals
   const msList = document.getElementById('meta-signals-list');
   if (!metaSignals.length) {
-    msList.innerHTML = '<div class="empty-state" style="width:100%"><span class="es-icon">⚡</span><p>NO SIGNALS</p></div>';
+    msList.innerHTML = '<div class="empty-state" style="width:100%"><span class="es-icon">⚡</span><p>SIN SEÑALES</p></div>';
   } else {
     msList.innerHTML = metaSignals.map(s => `
       <div class="signal-chip high">⚡ ${s.then}</div>
@@ -1781,7 +1783,7 @@ function updateEnginePanel(result) {
 
   // Growth log entry
   const now = new Date().toLocaleTimeString();
-  const changes = topTransits.map(t => {
+  const changes = topTránsitos.map(t => {
     const prev = previousWeights[t.neuronId||t.planet];
     const cur = t.score ? parseFloat((t.score/12).toFixed(3)) : 0.4;
     if (prev !== undefined && prev !== cur) {
@@ -1791,7 +1793,7 @@ function updateEnginePanel(result) {
     return null;
   }).filter(Boolean);
 
-  topTransits.forEach(t => {
+  topTránsitos.forEach(t => {
     previousWeights[t.neuronId||t.planet] = t.score ? parseFloat((t.score/12).toFixed(3)) : 0.4;
   });
 
@@ -1803,7 +1805,7 @@ function updateEnginePanel(result) {
     <li>
       <span class="log-time">${e.time}</span>
       <div>
-        <div class="log-text">neurons: ${e.newNeurons} ${e.changes.length?'·':''}</div>
+        <div class="log-text">neuronas: ${e.newNeurons} ${e.changes.length?'·':''}</div>
         ${e.changes.length ? `<div class="log-changes">${e.changes.map(c=>`<span class="change-chip ${c.pos?'pos':'neg'}">${c.id} ${c.pos?'+':''}${c.delta}</span>`).join('')}</div>` : ''}
       </div>
     </li>
@@ -1828,7 +1830,7 @@ async function saveSession(result, transits, type, rawText='') {
 
   // Update context memory
   const date = new Date().toISOString().slice(0,10);
-  const emotion = (result.topTransits[0]?.emotion || result.signals?.emotions?.[0] || 'mixed');
+  const emotion = (result.topTránsitos[0]?.emotion || result.signals?.emotions?.[0] || 'mixto');
   await dbPut('contextMemory', {
     date,
     emotion,
@@ -1842,7 +1844,7 @@ async function renderContextMemory(result) {
   const recent = all.sort((a,b)=>a.date>b.date?-1:1).slice(0,3);
   const container = document.getElementById('context-memory-list');
   if (!recent.length) {
-    container.innerHTML = '<div class="empty-state"><span class="es-icon">🧠</span><p>NO SESSIONS</p></div>';
+    container.innerHTML = '<div class="empty-state"><span class="es-icon">🧠</span><p>NO SESIÓNS</p></div>';
     return;
   }
   container.innerHTML = recent.map(e => `
@@ -1860,10 +1862,10 @@ async function renderHistory() {
   const sorted = all.sort((a,b)=>b.timestamp-a.timestamp).slice(0,20);
   const container = document.getElementById('history-list');
   const badge = document.getElementById('history-count');
-  badge.textContent = all.length + ' SESSION' + (all.length!==1?'S':'');
+  badge.textContent = all.length + ' SESIÓN' + (all.length!==1?'S':'');
 
   if (!sorted.length) {
-    container.innerHTML = '<div class="empty-state"><span class="es-icon">🌌</span><p>NO HISTORY YET</p></div>';
+    container.innerHTML = '<div class="empty-state"><span class="es-icon">🌌</span><p>SIN HISTORIAL AÚN</p></div>';
     return;
   }
 
@@ -1885,18 +1887,18 @@ async function loadSession(id) {
   const all = await dbGetAll('sessions');
   const s = all.find(x=>x.id===id);
   if (!s) return;
-  renderResult(s, s.type==='raw');
+  renderResult(s, s.type==='libre');
   updateEnginePanel(s);
   window.scrollTo({ top:0, behavior:'smooth' });
 }
 
 // ─────────────────────────────────────────────────────────────
-// TRAINING / HIPPOCAMPUS
+// TRAINING / HIPOCAMPO
 // ─────────────────────────────────────────────────────────────
 async function runTrainTranscript() {
   const key = document.getElementById('transcript-key').value.trim() || 'transcript_' + Date.now();
   const text = document.getElementById('transcript-text').value.trim();
-  if (!text) { showToast('Enter a transcript to ingest', 'error'); return; }
+  if (!text) { showToast('Ingresa una transcripción para ingerir', 'error'); return; }
 
   const words = text.toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(Boolean);
   const counts = {};
@@ -1912,7 +1914,7 @@ async function runTrainTranscript() {
 
   const entry = {
     key,
-    emotion: tones.join(', ') || 'mixed',
+    emotion: tones.join(', ') || 'mixto',
     phrases,
     updatedAt: new Date().toISOString(),
   };
@@ -1922,14 +1924,14 @@ async function runTrainTranscript() {
 
   document.getElementById('transcript-key').value = '';
   document.getElementById('transcript-text').value = '';
-  showToast('Ingested into hippocampus', 'success');
+  showToast('Ingerido en el hipocampo', 'success');
 }
 
 async function renderHippocampus() {
   const all = await dbGetAll('hippocampus');
   const container = document.getElementById('hippocampus-list');
   if (!all.length) {
-    container.innerHTML = '<div class="empty-state"><span class="es-icon">💾</span><p>NO ENTRIES</p></div>';
+    container.innerHTML = '<div class="empty-state"><span class="es-icon">💾</span><p>SIN ENTRADAS</p></div>';
     return;
   }
   container.innerHTML = all.sort((a,b)=>a.updatedAt>b.updatedAt?-1:1).map(e => `
@@ -1945,9 +1947,9 @@ async function renderHippocampus() {
 // UTILS
 // ─────────────────────────────────────────────────────────────
 function setLoading(on) {
-  document.getElementById('main-loader').classList.toggle('active', on);
-  if (!on) document.getElementById('status-text').textContent = 'READY';
-  else document.getElementById('status-text').textContent = 'PROCESSING';
+  document.getElementById('main-loader').classList.toggle('activa', on);
+  if (!on) document.getElementById('status-text').textContent = 'LISTO';
+  else document.getElementById('status-text').textContent = 'PROCESANDO';
 }
 
 function delay(ms) { return new Promise(r=>setTimeout(r,ms)); }
