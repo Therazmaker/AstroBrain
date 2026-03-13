@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const filterTransits = require('./filterTransits');
 const { buildNarrative } = require('./narrativeEngine');
+const neuralNet = require('./neuralNet');
 
 const BASE_MEANINGS = {
   Mars: 'impulse / anger',
@@ -53,17 +54,6 @@ function emotionalTranslation(transit) {
   };
 }
 
-function activateNeurons(transits, neurons) {
-  return neurons.filter((neuron) =>
-    transits.some(
-      (transit) =>
-        neuron.if.planet === transit.planet &&
-        neuron.if.aspect === transit.aspect &&
-        neuron.if.target === transit.target,
-    ),
-  );
-}
-
 function gatherMemoryPhrases(transits, hippocampus) {
   const phrases = [];
   transits.forEach((transit) => {
@@ -77,27 +67,42 @@ function gatherMemoryPhrases(transits, hippocampus) {
 
 function interpretTransits(transits = []) {
   const hippocampus = loadJson('hippocampus.json');
-  const neurons = loadJson('neurons.json');
 
   const prioritized = filterTransits(transits, 3);
   const interpretedTransits = prioritized.map((transit) => ({
     ...transit,
     ...emotionalTranslation(transit),
+    neuronId: neuralNet.neuronIdFromTransit(transit),
   }));
 
-  const activatedNeurons = activateNeurons(interpretedTransits, neurons);
+  const activatedNeurons = neuralNet.activateNeurons(interpretedTransits);
+  neuralNet.logCoactivations(activatedNeurons);
+  const generatedNeurons = neuralNet.generateNewNeurons();
+
+  const clusterScores = neuralNet.clusterNeurons(activatedNeurons);
+  const metaSignals = neuralNet.generateMetaSignals(activatedNeurons);
   const memoryPhrases = gatherMemoryPhrases(interpretedTransits, hippocampus);
   const narrative = buildNarrative({
     interpretedTransits,
     activatedNeurons,
-    memoryPhrases,
+    memoryPhrases: [
+      ...memoryPhrases,
+      ...metaSignals.map((signal) => signal.then),
+    ],
   });
+
+  const improvedNarrative = neuralNet.assessNarrativeRelevance({ clusterScores, metaSignals });
+  const learnedWeights = neuralNet.updateWeights(activatedNeurons, { improvedNarrative });
 
   return {
     topTransits: interpretedTransits,
     activatedNeurons,
     memoryPhrases,
     narrative,
+    clusterScores,
+    metaSignals,
+    generatedNeurons,
+    learnedWeights,
   };
 }
 
