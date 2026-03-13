@@ -1,0 +1,15 @@
+[
+  {
+    "id": "venus_en_aries",
+    "triggers": ["venus_en_aries"],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": ["relational", "actional"],
+    "output": {
+      "energy": "deseo directo y espontáneo",
+      "avoid": "confundir impulso con certeza",
+      "use": "expresar lo que quieres con tacto",
+      "focus": "iniciativa afectiva consciente"
+    }
+  }
+]
