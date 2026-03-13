@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mars_moon_square",
+    "if": {
+      "planet": "Mars",
+      "aspect": "square",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "reactive discussions",
+      "focus": "emotional regulation"
+    }
+  },
+  {
+    "id": "venus_sun_trine",
+    "if": {
+      "planet": "Venus",
+      "aspect": "trine",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "people-pleasing",
+      "focus": "heart-led clarity"
+    }
+  }
+]

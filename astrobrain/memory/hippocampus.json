@@ -1,0 +1,25 @@
+{
+  "mars_square_moon": {
+    "emotion": "emotional reactivity",
+    "phrases": [
+      "respond, don't react",
+      "pause before speaking"
+    ]
+  },
+  "venus_trine_sun": {
+    "emotion": "warmth and flow",
+    "phrases": [
+      "receive support",
+      "share what you value"
+    ]
+  },
+  "transcript_training": {
+    "emotion": "angry, calm, clear",
+    "phrases": [
+      "pause before speaking"
+    ],
+    "usefulLines": [
+      "Pause before speaking. Pause before speaking when angry. Stay calm and clear."
+    ]
+  }
+}
