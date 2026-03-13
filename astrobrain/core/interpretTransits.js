@@ -15,13 +15,13 @@ const { enrichTransits } = require('./enrichTransitContext');
 const { buildLearningExample } = require('./learningEngine');
 
 const BASE_MEANINGS = {
-  Mars: 'impulse / anger',
-  Saturn: 'pressure / block',
-  Moon: 'sensitivity',
-  Mercury: 'mind',
-  Venus: 'desire',
-  Jupiter: 'expansion',
-  Sun: 'clarity',
+  Mars: 'impulso / enojo',
+  Saturn: 'presión / bloqueo',
+  Moon: 'sensibilidad',
+  Mercury: 'mente',
+  Venus: 'deseo',
+  Jupiter: 'expansión',
+  Sun: 'claridad',
 };
 
 function loadJson(fileName) {
@@ -47,41 +47,41 @@ function emotionalTranslation(transit) {
   if (planet === 'Moon' && aspect === 'square' && target === 'Venus') {
     if (tags.includes('tono_afectivo_impulsivo')) {
       return {
-        emotion: 'reactivity',
+        emotion: 'reactividad',
         action: 'podrías notar impulso afectivo y poca paciencia emocional; conviene pausar antes de responder',
       };
     }
 
     if ((context.targetElement || '').toLowerCase() === 'agua') {
       return {
-        emotion: 'sensitivity',
+        emotion: 'sensibilidad',
         action: 'puede sentirse una necesidad fuerte de conexión; tal vez ayude hablar desde la vulnerabilidad',
       };
     }
   }
 
   if (planet === 'Mars' && aspect === 'square') {
-    return { emotion: 'frustration', action: 'conviene canalizar el calor en movimiento antes de conversaciones tensas' };
+    return { emotion: 'frustración', action: 'conviene canalizar el calor en movimiento antes de conversaciones tensas' };
   }
 
   if (planet === 'Moon' && target === 'Mars') {
-    return { emotion: 'reactivity', action: 'puedes bajar el ritmo y nombrar lo que sientes primero' };
+    return { emotion: 'reactividad', action: 'puedes bajar el ritmo y nombrar lo que sientes primero' };
   }
 
   if (planet === 'Mars' && target === 'Moon') {
-    return { emotion: 'reactivity', action: 'quizás ayude responder con pausa en lugar de reaccionar al instante' };
+    return { emotion: 'reactividad', action: 'quizás ayude responder con pausa en lugar de reaccionar al instante' };
   }
 
   if (planet === 'Venus' && aspect === 'trine') {
-    return { emotion: 'harmony', action: 'puede sentirse más fácil abrirte al vínculo y al apoyo mutuo' };
+    return { emotion: 'armonía', action: 'puede sentirse más fácil abrirte al vínculo y al apoyo mutuo' };
   }
 
   if (planet === 'Saturn' && aspect === 'conjunction') {
-    return { emotion: 'heaviness', action: 'conviene ir paso a paso con lo responsable sin exigirte de más' };
+    return { emotion: 'pesadez', action: 'conviene ir paso a paso con lo responsable sin exigirte de más' };
   }
 
   return {
-    emotion: BASE_MEANINGS[planet] || 'emotional movement',
+    emotion: BASE_MEANINGS[planet] || 'movimiento emocional',
     action: 'quizás convenga sostener un ritmo intencional y simple',
   };
 }
@@ -109,11 +109,11 @@ function buildSituationSummary(emotions = []) {
     .filter(Boolean);
 
   if (!situations.length) return '';
-  return `likely human situations: ${[...new Set(situations)].join(', ')}`;
+  return `situaciones humanas probables: ${[...new Set(situations)].join(', ')}`;
 }
 
 function estimateTension(interpretedTransits = [], topScore = 0) {
-  const tenseEmotions = ['frustration', 'reactivity', 'heaviness', 'pressure'];
+  const tenseEmotions = ['frustración', 'reactividad', 'pesadez', 'presión'];
   const emotionHits = interpretedTransits.filter((transit) => tenseEmotions.includes(transit.emotion)).length;
   const scoreTension = topScore >= 8 ? 1 : 0;
   return emotionHits + scoreTension;
@@ -133,7 +133,7 @@ function applyHumanLayer(narrative, tone, recentContext) {
 
   if (recentContext.length) {
     const last = recentContext[recentContext.length - 1];
-    next.focus = `${next.focus}. Recent continuity: ${last.emotion} with a ${last.tone} tone.`;
+    next.focus = `${next.focus}. Continuidad reciente: ${last.emotion} con un tono ${last.tone}.`;
   }
 
   return refineNarrative(next, tone);

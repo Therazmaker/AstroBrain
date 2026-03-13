@@ -2502,13 +2502,13 @@ function filterTránsitos(transits, limit=3) {
 
 // Emotional translation
 function emotionalTranslation(t) {
-  if (t.planet==='Mars' && t.aspect==='square') return { emotion:'frustration', action:'channel heat into movement before hard talks' };
-  if (t.planet==='Moon' && t.target==='Mars') return { emotion:'reactivity', action:'slow down and name what you feel first' };
-  if (t.planet==='Mars' && t.target==='Moon') return { emotion:'reactivity', action:'respond, do not react in the moment' };
-  if (t.planet==='Venus' && t.aspect==='trine') return { emotion:'harmony', action:'lean into connection and support' };
-  if (t.planet==='Saturn' && t.aspect==='conjunction') return { emotion:'heaviness', action:'do one responsible thing at a time' };
-  const BASE = { Mars:'impulse / anger', Saturn:'pressure / block', Moon:'sensitivity', Mercury:'mind', Venus:'desire', Jupiter:'expansion', Sun:'clarity' };
-  return { emotion: BASE[t.planet]||'movimiento emocional', action:'keep your pace intentional and simple' };
+  if (t.planet==='Mars' && t.aspect==='square') return { emotion:'frustración', action:'conviene canalizar el calor en movimiento antes de conversaciones difíciles' };
+  if (t.planet==='Moon' && t.target==='Mars') return { emotion:'reactividad', action:'baja el ritmo y nombra lo que sientes primero' };
+  if (t.planet==='Mars' && t.target==='Moon') return { emotion:'reactividad', action:'responde, no reacciones en el momento' };
+  if (t.planet==='Venus' && t.aspect==='trine') return { emotion:'armonía', action:'apóyate en la conexión y el apoyo mutuo' };
+  if (t.planet==='Saturn' && t.aspect==='conjunction') return { emotion:'pesadez', action:'haz una cosa responsable a la vez' };
+  const BASE = { Mars:'impulso / enojo', Saturn:'presión / bloqueo', Moon:'sensibilidad', Mercury:'mente', Venus:'deseo', Jupiter:'expansión', Sun:'claridad' };
+  return { emotion: BASE[t.planet]||'movimiento emocional', action:'quizás convenga sostener un ritmo intencional y simple' };
 }
 
 function toneFromScore(score) {
