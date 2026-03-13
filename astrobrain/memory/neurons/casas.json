@@ -1,15 +1,975 @@
 [
   {
-    "id": "venus_casa_7",
-    "triggers": ["venus_casa_7"],
+    "id": "casa_1_escenario_base",
+    "triggers": [
+      "casa_1_activa"
+    ],
+    "match": "all",
+    "peso": 0.56,
+    "clusters": [
+      "identidad",
+      "presencia"
+    ],
+    "output": {
+      "energy": "la experiencia pasa por tu identidad y tu forma inmediata de reaccionar",
+      "avoid": "actuar por reflejo sin notar lo que realmente te mueve",
+      "use": "escuchar cómo se siente esto en tu cuerpo y en tu presencia",
+      "focus": "identidad, presencia y reacción personal"
+    }
+  },
+  {
+    "id": "casa_2_escenario_base",
+    "triggers": [
+      "casa_2_activa"
+    ],
+    "match": "all",
+    "peso": 0.56,
+    "clusters": [
+      "valor",
+      "seguridad"
+    ],
+    "output": {
+      "energy": "el tránsito toca valor personal, recursos y sensación de estabilidad",
+      "avoid": "confundir ansiedad con falta de valor o con escasez real",
+      "use": "revisar qué te da seguridad de verdad",
+      "focus": "recursos, autoestima y estabilidad"
+    }
+  },
+  {
+    "id": "casa_3_escenario_base",
+    "triggers": [
+      "casa_3_activa"
+    ],
+    "match": "all",
+    "peso": 0.56,
+    "clusters": [
+      "mente",
+      "comunicación"
+    ],
+    "output": {
+      "energy": "la experiencia se mueve a través de pensamientos, palabras y entorno cercano",
+      "avoid": "decir algo demasiado rápido sin dejar que madure",
+      "use": "ordenar la idea antes de comunicarla",
+      "focus": "ideas, conversación y entorno cercano"
+    }
+  },
+  {
+    "id": "casa_4_escenario_base",
+    "triggers": [
+      "casa_4_activa"
+    ],
+    "match": "all",
+    "peso": 0.56,
+    "clusters": [
+      "emocional",
+      "hogar"
+    ],
+    "output": {
+      "energy": "el movimiento se siente íntimo y ligado a tu base emocional",
+      "avoid": "encerrarte en memorias o defensas automáticas",
+      "use": "dar espacio a lo que necesita contención y raíz",
+      "focus": "hogar, refugio y mundo interno"
+    }
+  },
+  {
+    "id": "casa_5_escenario_base",
+    "triggers": [
+      "casa_5_activa"
+    ],
+    "match": "all",
+    "peso": 0.56,
+    "clusters": [
+      "creatividad",
+      "expresión"
+    ],
+    "output": {
+      "energy": "el tránsito busca expresarse con deseo, juego y creatividad",
+      "avoid": "buscar validación inmediata o dramatizar para sentir intensidad",
+      "use": "canalizar lo que sientes en arte, juego o expresión genuina",
+      "focus": "creatividad, deseo y autoexpresión"
+    }
+  },
+  {
+    "id": "casa_6_escenario_base",
+    "triggers": [
+      "casa_6_activa"
+    ],
+    "match": "all",
+    "peso": 0.56,
+    "clusters": [
+      "rutina",
+      "cuidado"
+    ],
+    "output": {
+      "energy": "la experiencia pide orden, hábito y conciencia del día a día",
+      "avoid": "querer controlar todo desde la autoexigencia",
+      "use": "hacer ajustes pequeños y sostenibles",
+      "focus": "rutina, cuerpo y organización"
+    }
+  },
+  {
+    "id": "casa_7_escenario_base",
+    "triggers": [
+      "casa_7_activa"
+    ],
+    "match": "all",
+    "peso": 0.56,
+    "clusters": [
+      "relacional",
+      "vínculos"
+    ],
+    "output": {
+      "energy": "el tránsito toma forma a través del vínculo y la respuesta del otro",
+      "avoid": "poner toda tu estabilidad emocional en la reacción ajena",
+      "use": "negociar con claridad, límites y escucha",
+      "focus": "pareja, vínculos y equilibrio"
+    }
+  },
+  {
+    "id": "casa_8_escenario_base",
+    "triggers": [
+      "casa_8_activa"
+    ],
+    "match": "all",
+    "peso": 0.56,
+    "clusters": [
+      "profundidad",
+      "transformación"
+    ],
+    "output": {
+      "energy": "la experiencia toca capas intensas y difíciles de controlar",
+      "avoid": "forzar intimidad o control por miedo",
+      "use": "nombrar lo profundo con honestidad",
+      "focus": "intimidad, crisis y transformación"
+    }
+  },
+  {
+    "id": "casa_9_escenario_base",
+    "triggers": [
+      "casa_9_activa"
+    ],
+    "match": "all",
+    "peso": 0.56,
+    "clusters": [
+      "sentido",
+      "expansión"
+    ],
+    "output": {
+      "energy": "el tránsito abre preguntas de sentido, visión y creencias",
+      "avoid": "aferrarte a una verdad rígida para no sentir incertidumbre",
+      "use": "abrir la mirada y permitir aprendizaje",
+      "focus": "creencias, horizonte y expansión"
+    }
+  },
+  {
+    "id": "casa_10_escenario_base",
+    "triggers": [
+      "casa_10_activa"
+    ],
+    "match": "all",
+    "peso": 0.56,
+    "clusters": [
+      "vocación",
+      "imagen_publica"
+    ],
+    "output": {
+      "energy": "la experiencia se vuelve visible y toca metas, deberes o exposición",
+      "avoid": "medir todo por rendimiento o aprobación",
+      "use": "alinear lo que haces afuera con lo que sostienes adentro",
+      "focus": "vocación, dirección y reputación"
+    }
+  },
+  {
+    "id": "casa_11_escenario_base",
+    "triggers": [
+      "casa_11_activa"
+    ],
+    "match": "all",
+    "peso": 0.56,
+    "clusters": [
+      "colectivo",
+      "futuro"
+    ],
+    "output": {
+      "energy": "el tránsito se mueve entre amistades, redes y visión de futuro",
+      "avoid": "diluirte en el grupo o desconectarte de tu deseo propio",
+      "use": "revisar qué alianzas sí te acercan a la vida que quieres",
+      "focus": "amistades, comunidad y futuro"
+    }
+  },
+  {
+    "id": "casa_12_escenario_base",
+    "triggers": [
+      "casa_12_activa"
+    ],
+    "match": "all",
+    "peso": 0.56,
+    "clusters": [
+      "inconsciente",
+      "cierre"
+    ],
+    "output": {
+      "energy": "la experiencia ocurre en planos sutiles e internos",
+      "avoid": "huir de lo que sientes con distracción o agotamiento",
+      "use": "bajar el ritmo y escuchar lo que emerge desde el fondo",
+      "focus": "descanso, cierre y mundo invisible"
+    }
+  },
+  {
+    "id": "venus_casa_1",
+    "triggers": [
+      "venus_casa_1"
+    ],
     "match": "all",
     "peso": 0.75,
-    "clusters": ["relational"],
+    "clusters": [
+      "relacional",
+      "casa_1"
+    ],
     "output": {
-      "energy": "el vínculo toma más protagonismo",
-      "avoid": "ceder tu centro por agradar",
-      "use": "negociar con claridad y cuidado",
-      "focus": "equilibrio en relaciones cercanas"
+      "energy": "el deseo y el magnetismo pasan por tu presencia y tu forma de mostrarte",
+      "avoid": "buscar aprobación estética o afectiva para sentirte suficiente",
+      "use": "habitar tu encanto sin dejarte definir por la mirada ajena",
+      "focus": "magnetismo y presencia"
+    }
+  },
+  {
+    "id": "venus_casa_2",
+    "triggers": [
+      "venus_casa_2"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "casa_2"
+    ],
+    "output": {
+      "energy": "el valor, el placer y el dinero se vuelven tema sensible",
+      "avoid": "gastar o aferrarte por ansiedad emocional",
+      "use": "revisar qué te nutre de verdad y qué solo calma un rato",
+      "focus": "valor, placer y recursos"
+    }
+  },
+  {
+    "id": "venus_casa_3",
+    "triggers": [
+      "venus_casa_3"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "casa_3"
+    ],
+    "output": {
+      "energy": "la conexión se juega en palabras, tono y pequeños gestos",
+      "avoid": "decir lo amable sin decir lo verdadero",
+      "use": "cuidar la forma de decir sin perder verdad",
+      "focus": "afecto y comunicación"
+    }
+  },
+  {
+    "id": "venus_casa_4",
+    "triggers": [
+      "venus_casa_4"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "casa_4"
+    ],
+    "output": {
+      "energy": "lo afectivo busca intimidad, calma y sensación de hogar",
+      "avoid": "callar necesidades afectivas por miedo a incomodar",
+      "use": "crear intimidad con honestidad emocional",
+      "focus": "intimidad y hogar"
+    }
+  },
+  {
+    "id": "venus_casa_5",
+    "triggers": [
+      "venus_casa_5"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "casa_5"
+    ],
+    "output": {
+      "energy": "el deseo quiere expresión, romance, belleza y juego",
+      "avoid": "confundir intensidad romántica con conexión real",
+      "use": "dar salida creativa a lo afectivo y al deseo",
+      "focus": "romance y creatividad"
+    }
+  },
+  {
+    "id": "venus_casa_6",
+    "triggers": [
+      "venus_casa_6"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "casa_6"
+    ],
+    "output": {
+      "energy": "el vínculo entra en la rutina y muestra cómo cuidas o te cuidan",
+      "avoid": "normalizar desequilibrios en la forma de cuidar",
+      "use": "observar cómo el amor aparece en lo cotidiano",
+      "focus": "cuidado cotidiano"
+    }
+  },
+  {
+    "id": "venus_casa_7",
+    "triggers": [
+      "venus_casa_7"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "casa_7"
+    ],
+    "output": {
+      "energy": "las relaciones cercanas toman protagonismo y funcionan como espejo",
+      "avoid": "ceder tu centro para sostener la paz",
+      "use": "negociar con claridad, reciprocidad y respeto propio",
+      "focus": "relaciones y espejo"
+    }
+  },
+  {
+    "id": "venus_casa_8",
+    "triggers": [
+      "venus_casa_8"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "casa_8"
+    ],
+    "output": {
+      "energy": "el deseo se vuelve intenso, vulnerable y transformador",
+      "avoid": "fusionarte por miedo a perder cercanía",
+      "use": "dejar que la intimidad sea profunda sin volverse invasiva",
+      "focus": "intimidad y transformación"
+    }
+  },
+  {
+    "id": "venus_casa_9",
+    "triggers": [
+      "venus_casa_9"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "casa_9"
+    ],
+    "output": {
+      "energy": "el amor y el valor buscan expansión, sentido y apertura",
+      "avoid": "idealizar demasiado y omitir límites concretos",
+      "use": "abrirte al amor con visión, pero también con realidad",
+      "focus": "amor y expansión"
+    }
+  },
+  {
+    "id": "venus_casa_10",
+    "triggers": [
+      "venus_casa_10"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "casa_10"
+    ],
+    "output": {
+      "energy": "el afecto toca imagen pública, metas o necesidad de reconocimiento",
+      "avoid": "medir tu valor por respuesta externa o imagen",
+      "use": "alinear valor personal con vocación y dignidad",
+      "focus": "valor e imagen pública"
+    }
+  },
+  {
+    "id": "venus_casa_11",
+    "triggers": [
+      "venus_casa_11"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "casa_11"
+    ],
+    "output": {
+      "energy": "la afinidad se mueve en amistades, redes y visión compartida",
+      "avoid": "quedarte en lo amistoso cuando en realidad necesitas definición",
+      "use": "cultivar vínculos que compartan futuro y libertad",
+      "focus": "afinidad y redes"
+    }
+  },
+  {
+    "id": "venus_casa_12",
+    "triggers": [
+      "venus_casa_12"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "casa_12"
+    ],
+    "output": {
+      "energy": "lo afectivo se vuelve sutil, reservado o difícil de expresar de inmediato",
+      "avoid": "esconder deseo, tristeza o ternura hasta confundirlo todo",
+      "use": "darle nombre a lo que sientes aunque aún esté madurando",
+      "focus": "deseo sutil y mundo interno"
+    }
+  },
+  {
+    "id": "luna_casa_1",
+    "triggers": [
+      "luna_casa_1"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "casa_1"
+    ],
+    "output": {
+      "energy": "lo emocional se vuelve visible y reacciona rápido a lo que pasa",
+      "avoid": "reaccionar sin filtrar lo que estás sintiendo",
+      "use": "darle nombre a tu reacción antes de convertirla en acción",
+      "focus": "reacción emocional y presencia"
+    }
+  },
+  {
+    "id": "luna_casa_2",
+    "triggers": [
+      "luna_casa_2"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "casa_2"
+    ],
+    "output": {
+      "energy": "la seguridad afectiva se mezcla con recursos, cuerpo y necesidad de estabilidad",
+      "avoid": "buscar calma comprando seguridad externa a toda prisa",
+      "use": "crear pequeñas bases de estabilidad emocional concreta",
+      "focus": "seguridad y calma"
+    }
+  },
+  {
+    "id": "luna_casa_3",
+    "triggers": [
+      "luna_casa_3"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "casa_3"
+    ],
+    "output": {
+      "energy": "las emociones pasan por palabras, pensamientos y conversaciones",
+      "avoid": "hablar desde el pico emocional sin procesar",
+      "use": "hablar con honestidad después de respirar y ordenar",
+      "focus": "palabra y procesamiento"
+    }
+  },
+  {
+    "id": "luna_casa_4",
+    "triggers": [
+      "luna_casa_4"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "casa_4"
+    ],
+    "output": {
+      "energy": "la sensibilidad vuelve a casa y busca protección, intimidad y refugio",
+      "avoid": "encerrarte en memorias o defensas automáticas",
+      "use": "cuidar tu refugio y escuchar lo que tu mundo interno necesita",
+      "focus": "refugio y raíz"
+    }
+  },
+  {
+    "id": "luna_casa_5",
+    "triggers": [
+      "luna_casa_5"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "casa_5"
+    ],
+    "output": {
+      "energy": "la emoción quiere expresarse, jugar o recibir respuesta cálida",
+      "avoid": "pedir validación afectiva a través de drama innecesario",
+      "use": "expresar ternura, juego o creatividad sin sobredramatizar",
+      "focus": "expresión afectiva"
+    }
+  },
+  {
+    "id": "luna_casa_6",
+    "triggers": [
+      "luna_casa_6"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "casa_6"
+    ],
+    "output": {
+      "energy": "el estado anímico afecta rutinas, cuerpo y nivel de orden interno",
+      "avoid": "somatizar en exceso por no escuchar tu estado interno",
+      "use": "revisar hábitos que afectan tu ánimo",
+      "focus": "cuerpo y hábitos emocionales"
+    }
+  },
+  {
+    "id": "luna_casa_7",
+    "triggers": [
+      "luna_casa_7"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "casa_7"
+    ],
+    "output": {
+      "energy": "lo que sientes se activa con fuerza en el vínculo y en la respuesta ajena",
+      "avoid": "esperar que el otro regule todo lo que tú sientes",
+      "use": "distinguir entre necesidad emocional y expectativa proyectada",
+      "focus": "vínculo y espejo emocional"
+    }
+  },
+  {
+    "id": "luna_casa_8",
+    "triggers": [
+      "luna_casa_8"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "casa_8"
+    ],
+    "output": {
+      "energy": "la emoción se hace honda, intensa y difícil de controlar del todo",
+      "avoid": "irte a extremos emocionales por miedo a la vulnerabilidad",
+      "use": "permitirte sentir sin necesidad de controlar cada ola",
+      "focus": "intensidad y vulnerabilidad"
+    }
+  },
+  {
+    "id": "luna_casa_9",
+    "triggers": [
+      "luna_casa_9"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "casa_9"
+    ],
+    "output": {
+      "energy": "el sentir busca sentido, fe o perspectiva para acomodarse",
+      "avoid": "intelectualizar el sentir para no habitarlo",
+      "use": "abrir preguntas que te den aire sin negar lo que te duele",
+      "focus": "sentido para lo que sientes"
+    }
+  },
+  {
+    "id": "luna_casa_10",
+    "triggers": [
+      "luna_casa_10"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "casa_10"
+    ],
+    "output": {
+      "energy": "el estado emocional se vuelve visible en deberes, metas o exposición",
+      "avoid": "esconder emoción detrás de control o eficiencia",
+      "use": "hacer espacio para sentir sin abandonar lo importante",
+      "focus": "emoción y responsabilidad"
+    }
+  },
+  {
+    "id": "luna_casa_11",
+    "triggers": [
+      "luna_casa_11"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "casa_11"
+    ],
+    "output": {
+      "energy": "la sensibilidad se mueve a través de amistades, grupo y futuro",
+      "avoid": "buscar pertenencia sacrificando autenticidad emocional",
+      "use": "observar qué grupos sí nutren tu sensibilidad",
+      "focus": "pertenencia y afecto colectivo"
+    }
+  },
+  {
+    "id": "luna_casa_12",
+    "triggers": [
+      "luna_casa_12"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "casa_12"
+    ],
+    "output": {
+      "energy": "lo emocional se vuelve silencioso, poroso y más difícil de nombrar al instante",
+      "avoid": "ahogarte en silencio sin darte tiempo de descanso real",
+      "use": "descansar, escribir o quedarte a solas para aclararte",
+      "focus": "descanso y mundo interno"
+    }
+  },
+  {
+    "id": "sol_casa_1",
+    "triggers": [
+      "sol_casa_1",
+      "eje_angular_casa_1"
+    ],
+    "match": "any",
+    "peso": 0.74,
+    "clusters": [
+      "identidad",
+      "casa_1"
+    ],
+    "output": {
+      "energy": "tu presencia se vuelve más visible y hay necesidad de afirmarte con claridad",
+      "avoid": "creer que afirmarte implica endurecerte o imponerte",
+      "use": "mostrarte con presencia sin sobreactuar",
+      "focus": "presencia y autoafirmación"
+    }
+  },
+  {
+    "id": "sol_casa_4",
+    "triggers": [
+      "sol_casa_4",
+      "eje_angular_casa_4"
+    ],
+    "match": "any",
+    "peso": 0.74,
+    "clusters": [
+      "identidad",
+      "casa_4"
+    ],
+    "output": {
+      "energy": "tu centro se vuelve más íntimo y necesita raíz antes que exhibición",
+      "avoid": "cerrarte cuando algo toca tu sensibilidad de fondo",
+      "use": "volver a tu base y cuidar lo que sostiene tu energía",
+      "focus": "raíz y refugio interno"
+    }
+  },
+  {
+    "id": "sol_casa_7",
+    "triggers": [
+      "sol_casa_7",
+      "eje_angular_casa_7"
+    ],
+    "match": "any",
+    "peso": 0.74,
+    "clusters": [
+      "identidad",
+      "casa_7"
+    ],
+    "output": {
+      "energy": "tu identidad se espeja con fuerza en vínculos y acuerdos",
+      "avoid": "perderte en el otro para sentirte validado",
+      "use": "ver qué te muestran los vínculos sobre tu identidad",
+      "focus": "vínculos y espejo"
+    }
+  },
+  {
+    "id": "sol_casa_10",
+    "triggers": [
+      "sol_casa_10",
+      "eje_angular_casa_10"
+    ],
+    "match": "any",
+    "peso": 0.74,
+    "clusters": [
+      "identidad",
+      "casa_10"
+    ],
+    "output": {
+      "energy": "tu identidad se vuelve pública y pide dirección, autoridad y coherencia",
+      "avoid": "confundir éxito con desconexión emocional",
+      "use": "asumir liderazgo con humanidad y eje interno",
+      "focus": "dirección y visibilidad"
+    }
+  },
+  {
+    "id": "marte_casa_1",
+    "triggers": [
+      "marte_casa_1",
+      "eje_angular_casa_1"
+    ],
+    "match": "any",
+    "peso": 0.76,
+    "clusters": [
+      "acción",
+      "casa_1"
+    ],
+    "output": {
+      "energy": "la energía sale directa y te empuja a actuar con rapidez",
+      "avoid": "reaccionar antes de escuchar el contexto",
+      "use": "moverte con decisión pero con conciencia del impacto",
+      "focus": "acción personal"
+    }
+  },
+  {
+    "id": "marte_casa_4",
+    "triggers": [
+      "marte_casa_4",
+      "eje_angular_casa_4"
+    ],
+    "match": "any",
+    "peso": 0.76,
+    "clusters": [
+      "acción",
+      "casa_4"
+    ],
+    "output": {
+      "energy": "la fuerza se mueve en lo privado, lo emocional y lo doméstico",
+      "avoid": "guardar enojo hasta que salga de forma brusca",
+      "use": "ordenar lo que sientes para no explotar desde abajo",
+      "focus": "fuerza interna y hogar"
+    }
+  },
+  {
+    "id": "marte_casa_7",
+    "triggers": [
+      "marte_casa_7",
+      "eje_angular_casa_7"
+    ],
+    "match": "any",
+    "peso": 0.76,
+    "clusters": [
+      "acción",
+      "casa_7"
+    ],
+    "output": {
+      "energy": "la energía aparece con fuerza en vínculos, acuerdos o fricción con otros",
+      "avoid": "convertir todo desacuerdo en combate",
+      "use": "negociar firmeza sin perder escucha",
+      "focus": "fricción y negociación"
+    }
+  },
+  {
+    "id": "marte_casa_10",
+    "triggers": [
+      "marte_casa_10",
+      "eje_angular_casa_10"
+    ],
+    "match": "any",
+    "peso": 0.76,
+    "clusters": [
+      "acción",
+      "casa_10"
+    ],
+    "output": {
+      "energy": "la ambición sube y empuja a moverte hacia metas visibles",
+      "avoid": "quemarte por demostrar fuerza o capacidad",
+      "use": "dirigir tu ambición con estrategia y no solo con prisa",
+      "focus": "meta y ambición"
+    }
+  },
+  {
+    "id": "saturno_casa_10",
+    "triggers": [
+      "saturno_casa_10",
+      "eje_angular_casa_10"
+    ],
+    "match": "any",
+    "peso": 0.77,
+    "clusters": [
+      "estructura",
+      "casa_10"
+    ],
+    "output": {
+      "energy": "la vocación y la imagen pública entran en fase de exigencia y consolidación",
+      "avoid": "sacrificar humanidad por cumplimiento",
+      "use": "asumir autoridad desde coherencia interna",
+      "focus": "vocación y estructura"
+    }
+  },
+  {
+    "id": "jupiter_casa_9",
+    "triggers": [
+      "jupiter_casa_9"
+    ],
+    "match": "all",
+    "peso": 0.68,
+    "clusters": [
+      "expansión",
+      "casa_9"
+    ],
+    "output": {
+      "energy": "el sentido, el estudio y la visión de vida se expanden con fuerza",
+      "avoid": "usar grandes verdades para esquivar preguntas humildes",
+      "use": "expandir horizonte y sentido con aprendizaje real",
+      "focus": "sentido y horizonte"
+    }
+  },
+  {
+    "id": "mercurio_casa_3",
+    "triggers": [
+      "mercurio_casa_3"
+    ],
+    "match": "all",
+    "peso": 0.69,
+    "clusters": [
+      "mente",
+      "casa_3"
+    ],
+    "output": {
+      "energy": "la mente se acelera y necesita intercambio, curiosidad y movimiento",
+      "avoid": "dispersarte entre demasiados estímulos",
+      "use": "ordenar conversaciones y aprender del intercambio",
+      "focus": "comunicación y aprendizaje"
+    }
+  },
+  {
+    "id": "quiron_casa_7",
+    "triggers": [
+      "quiron_casa_7"
+    ],
+    "match": "all",
+    "peso": 0.73,
+    "clusters": [
+      "herida",
+      "relacional",
+      "casa_7"
+    ],
+    "output": {
+      "energy": "los vínculos espejan heridas relacionales y necesidad de reparación consciente",
+      "avoid": "esperar que el otro cure lo que te toca mirar",
+      "use": "mirar qué se activa en vínculo sin entregar tu centro",
+      "focus": "herida vincular"
+    }
+  },
+  {
+    "id": "lilith_casa_8",
+    "triggers": [
+      "lilith_casa_8"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "sombra",
+      "transformación",
+      "casa_8"
+    ],
+    "output": {
+      "energy": "se despiertan capas tabúes, intensas y profundamente vulnerables",
+      "avoid": "quedarte atrapado en lo tabú sin procesarlo",
+      "use": "nombrar lo tabú con profundidad y cuidado",
+      "focus": "tabú y profundidad"
+    }
+  },
+  {
+    "id": "luna_casa_4__venus_casa_7",
+    "triggers": [
+      "luna_casa_4",
+      "venus_casa_7"
+    ],
+    "match": "all",
+    "peso": 0.87,
+    "clusters": [
+      "emocional",
+      "relacional",
+      "hogar"
+    ],
+    "output": {
+      "energy": "la necesidad de refugio emocional puede chocar o dialogar con lo que pasa en el vínculo cercano",
+      "avoid": "esperar que la relación adivine lo que necesitas cuando en realidad buscas contención más íntima",
+      "use": "nombrar necesidad afectiva y cuidar tu base antes de pedir respuesta afuera",
+      "focus": "hogar interno, cercanía y equilibrio relacional"
+    }
+  },
+  {
+    "id": "sol_casa_10__saturno_casa_10",
+    "triggers": [
+      "sol_casa_10",
+      "saturno_casa_10"
+    ],
+    "match": "all",
+    "peso": 0.91,
+    "clusters": [
+      "vocación",
+      "estructura",
+      "imagen_publica"
+    ],
+    "output": {
+      "energy": "la dirección pública se vuelve seria y exige coherencia, autoridad y madurez",
+      "avoid": "creer que solo vales si rindes perfecto frente a los demás",
+      "use": "asumir responsabilidad sin desconectarte de tu centro humano",
+      "focus": "vocación, estructura y autoridad interna"
+    }
+  },
+  {
+    "id": "marte_casa_1__jupiter_casa_9",
+    "triggers": [
+      "marte_casa_1",
+      "jupiter_casa_9"
+    ],
+    "match": "all",
+    "peso": 0.84,
+    "clusters": [
+      "acción",
+      "expansión",
+      "dirección"
+    ],
+    "output": {
+      "energy": "hay impulso para abrir camino con fuerza y moverte hacia una visión más grande",
+      "avoid": "lanzarte con entusiasmo sin medir sostén real",
+      "use": "convertir coraje en dirección consciente",
+      "focus": "acción con horizonte"
+    }
+  },
+  {
+    "id": "venus_casa_2__lilith_casa_8",
+    "triggers": [
+      "venus_casa_2",
+      "lilith_casa_8"
+    ],
+    "match": "all",
+    "peso": 0.88,
+    "clusters": [
+      "valor",
+      "intimidad",
+      "transformación"
+    ],
+    "output": {
+      "energy": "se activan temas de valor, apego y deseo profundo con bastante intensidad",
+      "avoid": "confundir necesidad de seguridad con control afectivo",
+      "use": "revisar qué deseas conservar y qué te pide verdad cruda",
+      "focus": "valor propio, apego y profundidad"
     }
   }
 ]
