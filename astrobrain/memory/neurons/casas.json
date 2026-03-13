@@ -1,0 +1,15 @@
+[
+  {
+    "id": "venus_casa_7",
+    "triggers": ["venus_casa_7"],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": ["relational"],
+    "output": {
+      "energy": "el vínculo toma más protagonismo",
+      "avoid": "ceder tu centro por agradar",
+      "use": "negociar con claridad y cuidado",
+      "focus": "equilibrio en relaciones cercanas"
+    }
+  }
+]

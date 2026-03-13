@@ -1,8 +1,10 @@
 const fs = require('fs');
 const path = require('path');
+const { buildTransitTags } = require('./buildTransitTags');
 
 const MEMORY_DIR = path.join(__dirname, '..', 'memory');
 const CONTEXT_NEURONS_DIR = path.join(MEMORY_DIR, 'neurons');
+const CONTEXT_NEURON_FILES = ['casas.json', 'signos.json', 'grados.json', 'combinaciones.json'];
 const COACTIVATIONS_PATH = path.join(MEMORY_DIR, 'coactivations.json');
 const WEIGHTS_PATH = path.join(MEMORY_DIR, 'neuronWeights.json');
 const META_PATH = path.join(MEMORY_DIR, 'metaNeurons.json');
@@ -42,9 +44,7 @@ function loadBaseNeurons() {
 function loadContextualNeurons() {
   if (!fs.existsSync(CONTEXT_NEURONS_DIR)) return [];
 
-  const files = fs.readdirSync(CONTEXT_NEURONS_DIR)
-    .filter((file) => file.endsWith('.json'))
-    .sort();
+  const files = CONTEXT_NEURON_FILES.filter((file) => fs.existsSync(path.join(CONTEXT_NEURONS_DIR, file)));
 
   return files.flatMap((file) => readJson(path.join(CONTEXT_NEURONS_DIR, file), []));
 }
@@ -140,11 +140,15 @@ function patternNeuronMatch(activeIds, neuron) {
 }
 
 function normalizeContextNeuron(neuron = {}) {
-  const triggers = neuron.triggers || neuron.tags || [];
+  const triggers = Array.isArray(neuron.triggers)
+    ? neuron.triggers
+    : (Array.isArray(neuron.tags) ? neuron.tags : []);
   const tags = Array.isArray(neuron.clusters) ? neuron.clusters : (neuron.tags || ['actional']);
   return {
     ...neuron,
-    triggers,
+    triggers: triggers
+      .map((tag) => String(tag || '').trim().toLowerCase())
+      .filter(Boolean),
     match: neuron.match || 'all',
     minimum: Number(neuron.minimum || neuron.minimo || 1),
     tags,
@@ -156,11 +160,26 @@ function contextualNeuronMatch(neuron = {}, transitTags = []) {
   const triggers = Array.isArray(neuron.triggers) ? neuron.triggers.filter(Boolean) : [];
   if (!triggers.length) return false;
 
-  const hits = triggers.filter((tag) => transitTags.includes(tag)).length;
+  const normalizedTransitTags = [...new Set(transitTags
+    .map((tag) => String(tag || '').trim().toLowerCase())
+    .filter(Boolean))];
+
+  const hits = triggers.filter((tag) => normalizedTransitTags.includes(tag)).length;
 
   if (neuron.match === 'any') return hits >= 1;
   if (neuron.match === 'flex') return hits >= Math.max(1, neuron.minimum || Math.ceil(triggers.length / 2));
   return hits === triggers.length;
+}
+
+function collectTransitTags(transit = {}) {
+  const directTags = [
+    ...(Array.isArray(transit.derivedTags) ? transit.derivedTags : []),
+    ...(Array.isArray(transit.tags) ? transit.tags : []),
+    ...(Array.isArray(transit.contextTags) ? transit.contextTags : []),
+  ];
+
+  const generated = buildTransitTags(transit);
+  return [...new Set([...directTags, ...generated].filter(Boolean))];
 }
 
 function activateNeurons(transits = []) {
@@ -185,7 +204,7 @@ function activateNeurons(transits = []) {
       }
     });
 
-    const transitTags = transit.derivedTags || [];
+    const transitTags = collectTransitTags(transit);
     contextLibrary.forEach((neuron) => {
       if (contextualNeuronMatch(neuron, transitTags)) {
         activeContext.push({

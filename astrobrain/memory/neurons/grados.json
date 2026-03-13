@@ -1,0 +1,15 @@
+[
+  {
+    "id": "venus_grado_temprano",
+    "triggers": ["venus_grado_temprano"],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": ["relational"],
+    "output": {
+      "energy": "la experiencia afectiva está en fase inicial",
+      "avoid": "forzar definiciones prematuras",
+      "use": "probar, observar y ajustar",
+      "focus": "aprendizaje vincular en desarrollo"
+    }
+  }
+]
