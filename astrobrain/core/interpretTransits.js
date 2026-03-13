@@ -12,6 +12,7 @@ const { applyPersonalityTone, softenStatements } = require('./personalityTone');
 const { recordFeedback, adjustWeightsFromFeedback } = require('./feedbackLoop');
 const { loadProfile, personalizeNarrative } = require('./natalProfile');
 const { enrichTransits } = require('./enrichTransitContext');
+const { buildLearningExample } = require('./learningEngine');
 
 const BASE_MEANINGS = {
   Mars: 'impulse / anger',
@@ -138,6 +139,25 @@ function applyHumanLayer(narrative, tone, recentContext) {
   return refineNarrative(next, tone);
 }
 
+function buildLearningSeed(interpretedTransits = [], memoryPhrases = [], metaSignals = []) {
+  const lines = [];
+
+  interpretedTransits.forEach((transit) => {
+    const eventLine = `${transit.planet} ${transit.aspect} ${transit.target} ${transit.action || ''}`.trim();
+    if (eventLine) lines.push(eventLine);
+  });
+
+  memoryPhrases.slice(0, 5).forEach((phrase) => {
+    if (typeof phrase === 'string' && phrase.trim()) lines.push(phrase.trim());
+  });
+
+  metaSignals.slice(0, 3).forEach((signal) => {
+    if (signal?.then) lines.push(signal.then);
+  });
+
+  return lines.join('. ');
+}
+
 function interpretTransits(transits = []) {
   const sessionId = Date.now().toString();
   const hippocampus = loadJson('hippocampus.json');
@@ -171,17 +191,20 @@ function interpretTransits(transits = []) {
     secondaryNeurons: transitActivations[0]?.activation?.secondaryNeurons || [],
   });
 
-  const baseNarrative = buildNarrative({
+  const learningSeed = buildLearningSeed(interpretedTransits, memoryPhrases, metaSignals);
+  const learnedLayer = learningSeed
+    ? buildLearningExample(learningSeed, { type: 'runtime_synthesis', origin: 'interpret_transits' })
+    : { contentLearning: { neurons: [] }, narrativeLearning: { patterns: [] }, voiceLearning: {}, learnedRules: [] };
+
+  const synthesizedNarrative = buildNarrative({
     interpretedTransits,
-    activatedNeurons,
-    memoryPhrases: [
-      ...memoryPhrases,
-      ...metaSignals.map((signal) => signal.then),
-      ...frasesNeuronales,
-      ...compositeNarrativeSignals.energy,
-      ...compositeNarrativeSignals.avoid,
-      situationSummary,
+    activatedNeurons: [
+      ...activatedNeurons,
+      ...(learnedLayer.contentLearning?.neurons || []),
     ],
+    narrativePatterns: learnedLayer.narrativeLearning?.patterns || [],
+    voiceProfile: learnedLayer.voiceLearning || {},
+    learnedRules: learnedLayer.learnedRules || [],
   });
 
   const tone = toneFromScore(interpretedTransits[0]?.score || 0);
@@ -192,8 +215,8 @@ function interpretTransits(transits = []) {
   });
 
   const withAnticipation = anticipation
-    ? { ...baseNarrative, focus: `${baseNarrative.focus}, ${anticipation}` }
-    : baseNarrative;
+    ? { ...synthesizedNarrative, focus: `${synthesizedNarrative.focus}, ${anticipation}` }
+    : synthesizedNarrative;
 
   const withComposite = compositeNarrativeSignals.dominantFocus
     ? { ...withAnticipation, focus: `${withAnticipation.focus}. Matiz dominante: ${compositeNarrativeSignals.dominantFocus}` }
@@ -252,6 +275,12 @@ function interpretTransits(transits = []) {
     activatedNeurons,
     memoryPhrases,
     narrative: personalizedNarrative,
+    narrativeSynthesis: {
+      prioritizedNeurons: synthesizedNarrative.prioritizedNeurons,
+      structure: synthesizedNarrative.structure,
+      text: synthesizedNarrative.text,
+      learningLayer: learnedLayer,
+    },
     clusterScores,
     dominantCluster,
     metaSignals,
