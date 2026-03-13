@@ -1,41 +1,701 @@
 [
   {
-    "id": "venus_grado_temprano_inicio_afectivo",
-    "triggers": ["venus_grado_temprano"],
+    "id": "contexto_grado_temprano_general",
+    "triggers": [
+      "grado_temprano"
+    ],
     "match": "all",
-    "peso": 0.66,
-    "clusters": ["relational"],
+    "peso": 0.55,
+    "clusters": [
+      "contextual"
+    ],
     "output": {
-      "energy": "el vínculo se siente naciente o en fase de impulso",
-      "avoid": "dar por cerrado algo que recién abre",
-      "use": "explorar con honestidad y paciencia",
-      "focus": "inicio del aprendizaje afectivo"
+      "energy": "la experiencia está comenzando y todavía se está definiendo",
+      "avoid": "apresurarte a interpretar algo que aún no muestra su forma",
+      "use": "observar el proceso sin forzarlo",
+      "focus": "inicio y desarrollo"
     }
   },
   {
-    "id": "saturn_grado_tardio_cierre_estructural",
-    "triggers": ["saturn_grado_tardio"],
+    "id": "contexto_grado_medio_general",
+    "triggers": [
+      "grado_medio"
+    ],
     "match": "all",
-    "peso": 0.79,
-    "clusters": ["actional", "mental"],
+    "peso": 0.55,
+    "clusters": [
+      "contextual"
+    ],
     "output": {
-      "energy": "se acelera la necesidad de resolver una etapa",
-      "avoid": "resistirte a ajustes necesarios",
-      "use": "cerrar pendientes con madurez",
-      "focus": "transición y consolidación"
+      "energy": "el proceso está en pleno movimiento y pide presencia activa",
+      "avoid": "dispersarte o perder continuidad",
+      "use": "sostener atención consciente",
+      "focus": "desarrollo y ajuste"
     }
   },
   {
-    "id": "target_grado_tardio_urgencia_contextual",
-    "triggers": ["target_grado_tardio"],
+    "id": "contexto_grado_tardio_general",
+    "triggers": [
+      "grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.57,
+    "clusters": [
+      "contextual"
+    ],
+    "output": {
+      "energy": "el proceso se acerca a resolución o transición",
+      "avoid": "aferrarte cuando algo ya cambió",
+      "use": "integrar lo aprendido",
+      "focus": "cierre y transición"
+    }
+  },
+  {
+    "id": "contexto_sun_grado_temprano",
+    "triggers": [
+      "sun_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.68,
+    "clusters": [
+      "sun",
+      "fase_inicio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a sun está en fase inicial",
+      "avoid": "querer conclusiones inmediatas",
+      "use": "dejar que el proceso muestre su forma",
+      "focus": "inicio de proceso sun"
+    }
+  },
+  {
+    "id": "contexto_sun_grado_medio",
+    "triggers": [
+      "sun_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.69,
+    "clusters": [
+      "sun",
+      "fase_desarrollo"
+    ],
+    "output": {
+      "energy": "los temas asociados a sun están activos y visibles",
+      "avoid": "perder consistencia en medio del proceso",
+      "use": "sostener coherencia",
+      "focus": "desarrollo de sun"
+    }
+  },
+  {
+    "id": "contexto_sun_grado_tardio",
+    "triggers": [
+      "sun_grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "sun",
+      "fase_cierre"
+    ],
+    "output": {
+      "energy": "los temas asociados a sun se acercan a resolución",
+      "avoid": "resistirte al cierre natural",
+      "use": "integrar la experiencia",
+      "focus": "cierre de sun"
+    }
+  },
+  {
+    "id": "contexto_moon_grado_temprano",
+    "triggers": [
+      "moon_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.68,
+    "clusters": [
+      "moon",
+      "fase_inicio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a moon está en fase inicial",
+      "avoid": "querer conclusiones inmediatas",
+      "use": "dejar que el proceso muestre su forma",
+      "focus": "inicio de proceso moon"
+    }
+  },
+  {
+    "id": "contexto_moon_grado_medio",
+    "triggers": [
+      "moon_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.69,
+    "clusters": [
+      "moon",
+      "fase_desarrollo"
+    ],
+    "output": {
+      "energy": "los temas asociados a moon están activos y visibles",
+      "avoid": "perder consistencia en medio del proceso",
+      "use": "sostener coherencia",
+      "focus": "desarrollo de moon"
+    }
+  },
+  {
+    "id": "contexto_moon_grado_tardio",
+    "triggers": [
+      "moon_grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "moon",
+      "fase_cierre"
+    ],
+    "output": {
+      "energy": "los temas asociados a moon se acercan a resolución",
+      "avoid": "resistirte al cierre natural",
+      "use": "integrar la experiencia",
+      "focus": "cierre de moon"
+    }
+  },
+  {
+    "id": "contexto_mercury_grado_temprano",
+    "triggers": [
+      "mercury_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.68,
+    "clusters": [
+      "mercury",
+      "fase_inicio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mercury está en fase inicial",
+      "avoid": "querer conclusiones inmediatas",
+      "use": "dejar que el proceso muestre su forma",
+      "focus": "inicio de proceso mercury"
+    }
+  },
+  {
+    "id": "contexto_mercury_grado_medio",
+    "triggers": [
+      "mercury_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.69,
+    "clusters": [
+      "mercury",
+      "fase_desarrollo"
+    ],
+    "output": {
+      "energy": "los temas asociados a mercury están activos y visibles",
+      "avoid": "perder consistencia en medio del proceso",
+      "use": "sostener coherencia",
+      "focus": "desarrollo de mercury"
+    }
+  },
+  {
+    "id": "contexto_mercury_grado_tardio",
+    "triggers": [
+      "mercury_grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "mercury",
+      "fase_cierre"
+    ],
+    "output": {
+      "energy": "los temas asociados a mercury se acercan a resolución",
+      "avoid": "resistirte al cierre natural",
+      "use": "integrar la experiencia",
+      "focus": "cierre de mercury"
+    }
+  },
+  {
+    "id": "contexto_venus_grado_temprano",
+    "triggers": [
+      "venus_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.68,
+    "clusters": [
+      "venus",
+      "fase_inicio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a venus está en fase inicial",
+      "avoid": "querer conclusiones inmediatas",
+      "use": "dejar que el proceso muestre su forma",
+      "focus": "inicio de proceso venus"
+    }
+  },
+  {
+    "id": "contexto_venus_grado_medio",
+    "triggers": [
+      "venus_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.69,
+    "clusters": [
+      "venus",
+      "fase_desarrollo"
+    ],
+    "output": {
+      "energy": "los temas asociados a venus están activos y visibles",
+      "avoid": "perder consistencia en medio del proceso",
+      "use": "sostener coherencia",
+      "focus": "desarrollo de venus"
+    }
+  },
+  {
+    "id": "contexto_venus_grado_tardio",
+    "triggers": [
+      "venus_grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "venus",
+      "fase_cierre"
+    ],
+    "output": {
+      "energy": "los temas asociados a venus se acercan a resolución",
+      "avoid": "resistirte al cierre natural",
+      "use": "integrar la experiencia",
+      "focus": "cierre de venus"
+    }
+  },
+  {
+    "id": "contexto_mars_grado_temprano",
+    "triggers": [
+      "mars_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.68,
+    "clusters": [
+      "mars",
+      "fase_inicio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mars está en fase inicial",
+      "avoid": "querer conclusiones inmediatas",
+      "use": "dejar que el proceso muestre su forma",
+      "focus": "inicio de proceso mars"
+    }
+  },
+  {
+    "id": "contexto_mars_grado_medio",
+    "triggers": [
+      "mars_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.69,
+    "clusters": [
+      "mars",
+      "fase_desarrollo"
+    ],
+    "output": {
+      "energy": "los temas asociados a mars están activos y visibles",
+      "avoid": "perder consistencia en medio del proceso",
+      "use": "sostener coherencia",
+      "focus": "desarrollo de mars"
+    }
+  },
+  {
+    "id": "contexto_mars_grado_tardio",
+    "triggers": [
+      "mars_grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "mars",
+      "fase_cierre"
+    ],
+    "output": {
+      "energy": "los temas asociados a mars se acercan a resolución",
+      "avoid": "resistirte al cierre natural",
+      "use": "integrar la experiencia",
+      "focus": "cierre de mars"
+    }
+  },
+  {
+    "id": "contexto_jupiter_grado_temprano",
+    "triggers": [
+      "jupiter_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.68,
+    "clusters": [
+      "jupiter",
+      "fase_inicio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a jupiter está en fase inicial",
+      "avoid": "querer conclusiones inmediatas",
+      "use": "dejar que el proceso muestre su forma",
+      "focus": "inicio de proceso jupiter"
+    }
+  },
+  {
+    "id": "contexto_jupiter_grado_medio",
+    "triggers": [
+      "jupiter_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.69,
+    "clusters": [
+      "jupiter",
+      "fase_desarrollo"
+    ],
+    "output": {
+      "energy": "los temas asociados a jupiter están activos y visibles",
+      "avoid": "perder consistencia en medio del proceso",
+      "use": "sostener coherencia",
+      "focus": "desarrollo de jupiter"
+    }
+  },
+  {
+    "id": "contexto_jupiter_grado_tardio",
+    "triggers": [
+      "jupiter_grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "jupiter",
+      "fase_cierre"
+    ],
+    "output": {
+      "energy": "los temas asociados a jupiter se acercan a resolución",
+      "avoid": "resistirte al cierre natural",
+      "use": "integrar la experiencia",
+      "focus": "cierre de jupiter"
+    }
+  },
+  {
+    "id": "contexto_saturn_grado_temprano",
+    "triggers": [
+      "saturn_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.68,
+    "clusters": [
+      "saturn",
+      "fase_inicio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a saturn está en fase inicial",
+      "avoid": "querer conclusiones inmediatas",
+      "use": "dejar que el proceso muestre su forma",
+      "focus": "inicio de proceso saturn"
+    }
+  },
+  {
+    "id": "contexto_saturn_grado_medio",
+    "triggers": [
+      "saturn_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.69,
+    "clusters": [
+      "saturn",
+      "fase_desarrollo"
+    ],
+    "output": {
+      "energy": "los temas asociados a saturn están activos y visibles",
+      "avoid": "perder consistencia en medio del proceso",
+      "use": "sostener coherencia",
+      "focus": "desarrollo de saturn"
+    }
+  },
+  {
+    "id": "contexto_saturn_grado_tardio",
+    "triggers": [
+      "saturn_grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "saturn",
+      "fase_cierre"
+    ],
+    "output": {
+      "energy": "los temas asociados a saturn se acercan a resolución",
+      "avoid": "resistirte al cierre natural",
+      "use": "integrar la experiencia",
+      "focus": "cierre de saturn"
+    }
+  },
+  {
+    "id": "contexto_uranus_grado_temprano",
+    "triggers": [
+      "uranus_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.68,
+    "clusters": [
+      "uranus",
+      "fase_inicio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a uranus está en fase inicial",
+      "avoid": "querer conclusiones inmediatas",
+      "use": "dejar que el proceso muestre su forma",
+      "focus": "inicio de proceso uranus"
+    }
+  },
+  {
+    "id": "contexto_uranus_grado_medio",
+    "triggers": [
+      "uranus_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.69,
+    "clusters": [
+      "uranus",
+      "fase_desarrollo"
+    ],
+    "output": {
+      "energy": "los temas asociados a uranus están activos y visibles",
+      "avoid": "perder consistencia en medio del proceso",
+      "use": "sostener coherencia",
+      "focus": "desarrollo de uranus"
+    }
+  },
+  {
+    "id": "contexto_uranus_grado_tardio",
+    "triggers": [
+      "uranus_grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "uranus",
+      "fase_cierre"
+    ],
+    "output": {
+      "energy": "los temas asociados a uranus se acercan a resolución",
+      "avoid": "resistirte al cierre natural",
+      "use": "integrar la experiencia",
+      "focus": "cierre de uranus"
+    }
+  },
+  {
+    "id": "contexto_neptune_grado_temprano",
+    "triggers": [
+      "neptune_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.68,
+    "clusters": [
+      "neptune",
+      "fase_inicio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a neptune está en fase inicial",
+      "avoid": "querer conclusiones inmediatas",
+      "use": "dejar que el proceso muestre su forma",
+      "focus": "inicio de proceso neptune"
+    }
+  },
+  {
+    "id": "contexto_neptune_grado_medio",
+    "triggers": [
+      "neptune_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.69,
+    "clusters": [
+      "neptune",
+      "fase_desarrollo"
+    ],
+    "output": {
+      "energy": "los temas asociados a neptune están activos y visibles",
+      "avoid": "perder consistencia en medio del proceso",
+      "use": "sostener coherencia",
+      "focus": "desarrollo de neptune"
+    }
+  },
+  {
+    "id": "contexto_neptune_grado_tardio",
+    "triggers": [
+      "neptune_grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "neptune",
+      "fase_cierre"
+    ],
+    "output": {
+      "energy": "los temas asociados a neptune se acercan a resolución",
+      "avoid": "resistirte al cierre natural",
+      "use": "integrar la experiencia",
+      "focus": "cierre de neptune"
+    }
+  },
+  {
+    "id": "contexto_pluto_grado_temprano",
+    "triggers": [
+      "pluto_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.68,
+    "clusters": [
+      "pluto",
+      "fase_inicio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a pluto está en fase inicial",
+      "avoid": "querer conclusiones inmediatas",
+      "use": "dejar que el proceso muestre su forma",
+      "focus": "inicio de proceso pluto"
+    }
+  },
+  {
+    "id": "contexto_pluto_grado_medio",
+    "triggers": [
+      "pluto_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.69,
+    "clusters": [
+      "pluto",
+      "fase_desarrollo"
+    ],
+    "output": {
+      "energy": "los temas asociados a pluto están activos y visibles",
+      "avoid": "perder consistencia en medio del proceso",
+      "use": "sostener coherencia",
+      "focus": "desarrollo de pluto"
+    }
+  },
+  {
+    "id": "contexto_pluto_grado_tardio",
+    "triggers": [
+      "pluto_grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "pluto",
+      "fase_cierre"
+    ],
+    "output": {
+      "energy": "los temas asociados a pluto se acercan a resolución",
+      "avoid": "resistirte al cierre natural",
+      "use": "integrar la experiencia",
+      "focus": "cierre de pluto"
+    }
+  },
+  {
+    "id": "contexto_target_temprano",
+    "triggers": [
+      "target_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.6,
+    "clusters": [
+      "contextual"
+    ],
+    "output": {
+      "energy": "el tema de fondo está en etapa inicial",
+      "avoid": "querer definir demasiado pronto",
+      "use": "explorar con apertura",
+      "focus": "inicio del proceso"
+    }
+  },
+  {
+    "id": "contexto_target_medio",
+    "triggers": [
+      "target_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.6,
+    "clusters": [
+      "contextual"
+    ],
+    "output": {
+      "energy": "el tema central se encuentra activo",
+      "avoid": "dispersarte en lo secundario",
+      "use": "sostener foco",
+      "focus": "proceso activo"
+    }
+  },
+  {
+    "id": "contexto_target_tardio",
+    "triggers": [
+      "target_grado_tardio"
+    ],
     "match": "all",
     "peso": 0.62,
-    "clusters": ["actional"],
+    "clusters": [
+      "contextual"
+    ],
     "output": {
-      "energy": "el tema de fondo pide resolución cercana",
-      "avoid": "estirar definiciones por inercia",
-      "use": "ordenar prioridades antes del cambio",
-      "focus": "cierre de ciclo"
+      "energy": "el tema principal se acerca a cierre",
+      "avoid": "posponer decisiones necesarias",
+      "use": "ordenar lo pendiente",
+      "focus": "cierre del ciclo"
+    }
+  },
+  {
+    "id": "contexto_luna_temprano__venus_medio",
+    "triggers": [
+      "moon_grado_temprano",
+      "venus_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "relacional"
+    ],
+    "output": {
+      "energy": "lo emocional aún se está formando mientras lo vincular ya está activo",
+      "avoid": "reaccionar sin claridad",
+      "use": "observar antes de actuar",
+      "focus": "regulación emocional"
+    }
+  },
+  {
+    "id": "contexto_saturno_tardio__sol_medio",
+    "triggers": [
+      "saturn_grado_tardio",
+      "sol_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.82,
+    "clusters": [
+      "estructura",
+      "identidad"
+    ],
+    "output": {
+      "energy": "la exigencia estructural se mezcla con visibilidad personal",
+      "avoid": "forzarte sin pausa",
+      "use": "actuar con madurez",
+      "focus": "estructura y presencia"
+    }
+  },
+  {
+    "id": "contexto_marte_medio__jupiter_temprano",
+    "triggers": [
+      "mars_grado_medio",
+      "jupiter_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.76,
+    "clusters": [
+      "accion",
+      "expansion"
+    ],
+    "output": {
+      "energy": "la acción avanza mientras la visión recién nace",
+      "avoid": "moverte sin dirección clara",
+      "use": "alinear impulso con propósito",
+      "focus": "dirección y expansión"
     }
   }
 ]
