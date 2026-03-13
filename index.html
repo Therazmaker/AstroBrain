@@ -1142,6 +1142,82 @@
   }
   .btn-train:hover { background: var(--gold-glow); border-color: var(--gold); }
 
+  /* ─── TRAINING ROOM ───────────────────────────── */
+  .training-room-section { margin-bottom: 48px; }
+  .training-room-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 20px;
+    margin-top: 18px;
+  }
+  .training-room-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+  }
+  .training-room-card textarea,
+  .training-room-card input,
+  .training-room-card select {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    padding: 10px 12px;
+    outline: none;
+  }
+  .training-room-card textarea { min-height: 220px; resize: vertical; }
+  .training-room-card textarea:focus,
+  .training-room-card input:focus,
+  .training-room-card select:focus { border-color: var(--violet-dim); }
+  .training-room-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top: 14px; }
+  .btn-training-room {
+    background: var(--surface);
+    border: 1px solid var(--border-hi);
+    color: var(--text-primary);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+  }
+  .btn-training-room:hover { border-color: var(--gold); color: var(--gold); }
+  .training-analysis-list { display:grid; gap:10px; }
+  .training-analysis-item {
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 10px;
+    background: rgba(0,0,0,0.15);
+  }
+  .training-analysis-item h5 { font-family: var(--font-mono); font-size: 0.62rem; color: var(--gold); margin-bottom: 6px; }
+  .training-analysis-item p, .training-analysis-item li { font-size: 0.9rem; color: var(--text-secondary); }
+  .training-neuron-list { display:grid; gap:12px; margin-top: 14px; }
+  .training-neuron-card { border:1px solid var(--border); border-radius:12px; padding:14px; background: rgba(0,0,0,0.18); }
+  .training-neuron-head { display:flex; justify-content:space-between; gap:10px; margin-bottom:10px; align-items:center; }
+  .training-neuron-id { font-family: var(--font-mono); font-size: 0.66rem; color: var(--gold-dim); }
+  .estado-neurona { font-family: var(--font-mono); font-size: 0.58rem; padding:3px 8px; border-radius:999px; border:1px solid var(--border); }
+  .estado-neurona.completa { color: var(--teal); border-color: rgba(77,208,196,0.35); }
+  .estado-neurona.incompleta { color: var(--rose); border-color: rgba(229,115,115,0.35); }
+  .training-neuron-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .training-neuron-grid label { font-family: var(--font-mono); font-size: 0.58rem; color: var(--text-muted); display:block; margin-bottom:3px; letter-spacing:0.04em; }
+  .faltantes-lista { margin-top:8px; font-size:0.82rem; color: var(--rose); }
+  .training-room-msg { margin-top: 10px; font-family: var(--font-mono); font-size:0.62rem; color: var(--teal); }
+  .btn-training-shortcut {
+    background: rgba(77,208,196,0.08);
+    border:1px solid rgba(77,208,196,0.25);
+    border-radius:100px;
+    color: var(--teal);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    padding: 7px 14px;
+    letter-spacing: 0.08em;
+    cursor:pointer;
+  }
+  .btn-training-shortcut:hover { border-color: var(--teal); }
+
   /* ─── HISTORY SECTION ───────────────────────────── */
   .history-section { margin-bottom: 48px; }
 
@@ -1619,6 +1695,7 @@
         <span class="graph-btn-icon">✦</span>
         Red Neuronal
       </button>
+      <button class="btn-training-shortcut" onclick="irATrainingRoom()">Training Room</button>
       <div class="status-pill">
         <div class="status-dot"></div>
         <span id="status-text">LISTO</span>
@@ -1663,6 +1740,7 @@
           <div class="gl-item"><span class="gl-line" style="background:#ff9966"></span>Cuadratura</div>
           <div class="gl-item"><span class="gl-line" style="background:#4dd0c4"></span>Trígono</div>
           <div class="gl-item"><span class="gl-line" style="background:#9b72f5"></span>Sextil</div>
+          <div class="gl-item"><span class="gl-line" style="background:#4dd0c4"></span>Conexión Training Room</div>
         </div>
         <div class="graph-tooltip" id="graph-tooltip"></div>
       </div>
@@ -2082,6 +2160,46 @@
 
   <hr class="divider">
 
+  <!-- ── TRAINING ROOM ── -->
+  <section class="training-room-section reveal" id="training-room">
+    <div class="section-header">
+      <h2 class="section-title">Training Room</h2>
+      <span class="section-badge">LABORATORIO DE ENTRENAMIENTO</span>
+    </div>
+    <p style="color:var(--text-secondary);max-width:900px">Convierte texto RAW humano en propuestas neuronales editables. Aquí puedes analizar, completar faltantes y enviar nuevas neuronas al sistema y al grafo.</p>
+    <div class="training-room-grid">
+      <div class="training-room-card">
+        <div class="panel-title">Texto RAW para entrenamiento</div>
+        <div class="panel-sub" style="margin-bottom:12px">PEGA CONTENIDO NARRATIVO, TÉCNICO O CONVERSACIONAL</div>
+        <textarea id="training-raw-text" placeholder="Ejemplo: explicación de luna nueva, narrativa de eclipse, lectura de tránsito o reflexión astrológica humana."></textarea>
+        <div class="training-room-actions">
+          <button class="btn-training-room" onclick="analizarTextoTraining()">Analizar texto</button>
+          <button class="btn-training-room" onclick="generarNeuronasTraining()">Generar neuronas</button>
+          <button class="btn-training-room" onclick="completarFaltantesTraining()">Completar faltantes</button>
+          <button class="btn-training-room" onclick="guardarNeuronasTraining()">Guardar neuronas</button>
+          <button class="btn-training-room" onclick="enviarNeuronasAlGrafo()">Enviar al grafo</button>
+        </div>
+        <div class="training-room-msg" id="training-room-msg">Sin análisis aún.</div>
+      </div>
+      <div class="training-room-card">
+        <div class="panel-title">Análisis del sistema</div>
+        <div class="panel-sub" style="margin-bottom:12px">DETECCIÓN DE PATRONES Y CATEGORÍAS</div>
+        <div class="training-analysis-list" id="training-analysis-output">
+          <div class="empty-state"><span class="es-icon">🧪</span><p>AQUÍ VERÁS TEMA, TONO, ESTRUCTURA Y PATRONES ÚTILES</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="training-room-card" style="margin-top:20px">
+      <div class="panel-title">Neuronas propuestas</div>
+      <div class="panel-sub" style="margin-bottom:10px">PREVISUALIZACIÓN EDITABLE ANTES DE GUARDAR</div>
+      <div id="training-neurons-output" class="training-neuron-list">
+        <div class="empty-state"><span class="es-icon">🧠</span><p>ANALIZA TEXTO Y GENERA PROPUESTAS PARA EMPEZAR</p></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
   <!-- ── HISTORY ── -->
   <section class="history-section reveal">
     <div class="section-header">
@@ -2148,7 +2266,7 @@
 // INDEXEDDB
 // ─────────────────────────────────────────────────────────────
 const DB_NAME = 'AstroBrainDB';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 let db = null;
 
 function openDB() {
@@ -2177,6 +2295,9 @@ function openDB() {
       }
       if (!d.objectStoreNames.contains('metaNeurons')) {
         d.createObjectStore('metaNeurons', { keyPath: 'id' });
+      }
+      if (!d.objectStoreNames.contains('trainingNeurons')) {
+        d.createObjectStore('trainingNeurons', { keyPath: 'id' });
       }
     };
     req.onsuccess = e => { db = e.target.result; resolve(db); };
@@ -3290,6 +3411,274 @@ function showToast(msg, type='info') {
   toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
 }
 
+
+
+function irATrainingRoom() {
+  const section = document.getElementById('training-room');
+  if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+const trainingRoomState = {
+  analysis: null,
+  drafts: [],
+};
+
+function extraerListaPorComas(texto) {
+  return (texto || '').split(',').map(x => x.trim()).filter(Boolean);
+}
+
+function detectarCategoriasTraining(texto) {
+  const t = texto.toLowerCase();
+  const reglas = [
+    ['tono narrativo', ['historia', 'narrativa', 'relato', 'vivencia']],
+    ['evento colectivo', ['colectivo', 'sociedad', 'país', 'comunidad', 'mundo']],
+    ['interpretación de tránsito', ['tránsito', 'cuadratura', 'conjunción', 'orbe', 'aspecto']],
+    ['explicación técnica suave', ['signo', 'casa', 'grado', 'luna', 'sol', 'venus', 'marte']],
+    ['guía práctica', ['haz', 'práctica', 'acción', 'paso', 'intención', 'ritual']],
+    ['estructura conversacional', ['tú', 'te', 'pregunta', 'hoy', 'ahora']],
+  ];
+  return reglas.filter(([, claves]) => claves.some(k => t.includes(k))).map(([cat]) => cat);
+}
+
+function analizarRawTraining(texto) {
+  const limpio = texto.replace(/\s+/g, ' ').trim();
+  const oraciones = limpio.split(/(?<=[.!?])\s+/).filter(Boolean);
+  const palabras = limpio.toLowerCase().replace(/[^a-záéíóúñü0-9\s]/gi, ' ').split(/\s+/).filter(Boolean);
+  const frecuentes = Object.entries(palabras.reduce((acc, w) => {
+    if (w.length > 4) acc[w] = (acc[w] || 0) + 1;
+    return acc;
+  }, {})).sort((a,b) => b[1]-a[1]).slice(0,8).map(([w]) => w);
+
+  const tono = limpio.match(/\?|tú|te|hoy|ahora|respira|intención|invita/i)
+    ? 'humano y conversacional'
+    : 'explicativo';
+
+  const estructura = ['contexto', 'explicación', 'significado', 'acción'].filter((parte) => {
+    if (parte === 'contexto') return /hoy|ahora|momento|clima/i.test(limpio);
+    if (parte === 'explicación') return /porque|esto|significa|tránsito|aspecto/i.test(limpio);
+    if (parte === 'significado') return /invita|aprendizaje|mensaje|sentido/i.test(limpio);
+    return /haz|acción|paso|escribe|observa|intención/i.test(limpio);
+  });
+
+  const triggers = Array.from(new Set([
+    ...frecuentes.slice(0,4),
+    ...['luna','eclipse','tránsito','intención','relación','cambio'].filter(k => limpio.toLowerCase().includes(k)),
+  ])).slice(0,8);
+
+  return {
+    temaPrincipal: frecuentes[0] || 'tema por definir',
+    tono,
+    estructuraNarrativa: estructura.length ? estructura.join(' → ') : 'estructura no detectada',
+    patronesUtiles: [
+      tono.includes('conversacional') ? 'tono humano y conversacional' : 'explicación técnica',
+      estructura.includes('acción') ? 'cierre con acción concreta' : 'sin cierre explícito',
+      estructura.includes('contexto') ? 'apertura contextual' : 'apertura difusa',
+    ],
+    frasesRelevantes: oraciones.slice(0,4),
+    posiblesTriggers: triggers,
+    tipoContenido: detectarCategoriasTraining(limpio),
+  };
+}
+
+function construirDraftsDesdeRaw(analysis, rawText) {
+  const baseCategorias = analysis.tipoContenido.length ? analysis.tipoContenido : ['tono narrativo'];
+  return baseCategorias.slice(0,4).map((categoria, idx) => {
+    const baseId = `training_${Date.now()}_${idx + 1}`;
+    const triggers = analysis.posiblesTriggers.slice(idx, idx + 3);
+    const cluster = categoria.includes('evento') ? 'relational' : categoria.includes('guía') ? 'actional' : categoria.includes('técnica') ? 'mental' : 'emotional';
+    const outputEnergy = analysis.frasesRelevantes[idx] || analysis.frasesRelevantes[0] || '';
+    const draft = {
+      id: baseId,
+      triggers,
+      match: analysis.temaPrincipal || '',
+      peso: idx === 0 ? 0.72 : '',
+      clusters: [cluster],
+      output: {
+        energy: outputEnergy,
+        avoid: analysis.patronesUtiles[1] || '',
+        use: 'traducir astrología a lenguaje humano',
+        focus: categoria,
+      },
+      categoriaNarrativa: categoria,
+      tipoEvento: categoria.includes('evento') ? 'colectivo' : '',
+      contexto: rawText.slice(0, 160),
+      source: 'training_room',
+      sourceTextType: categoria,
+      createdAt: new Date().toISOString(),
+      validationStatus: 'borrador',
+      estado: 'completa',
+      faltantes: [],
+    };
+
+    const faltantes = [];
+    if (!draft.triggers.length) faltantes.push('falta trigger');
+    if (!draft.clusters.length) faltantes.push('falta cluster');
+    if (!draft.peso && draft.peso !== 0) faltantes.push('falta peso');
+    if (!draft.contexto) faltantes.push('falta contexto');
+    if (!draft.categoriaNarrativa) faltantes.push('falta categoría narrativa');
+    if (!draft.tipoEvento) faltantes.push('falta tipo de evento');
+    if (!draft.output.energy || !draft.output.avoid || !draft.output.use || !draft.output.focus) faltantes.push('output parcial');
+    draft.faltantes = faltantes;
+    draft.estado = faltantes.length ? 'incompleta' : 'completa';
+    return draft;
+  });
+}
+
+function renderizarAnalisisTraining(analysis) {
+  const el = document.getElementById('training-analysis-output');
+  if (!analysis) return;
+  el.innerHTML = `
+    <div class="training-analysis-item"><h5>Tema principal</h5><p>${analysis.temaPrincipal}</p></div>
+    <div class="training-analysis-item"><h5>Tono detectado</h5><p>${analysis.tono}</p></div>
+    <div class="training-analysis-item"><h5>Estructura narrativa</h5><p>${analysis.estructuraNarrativa}</p></div>
+    <div class="training-analysis-item"><h5>Patrones útiles</h5><ul>${analysis.patronesUtiles.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+    <div class="training-analysis-item"><h5>Frases relevantes</h5><ul>${analysis.frasesRelevantes.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+    <div class="training-analysis-item"><h5>Posibles triggers</h5><p>${analysis.posiblesTriggers.join(', ') || 'sin detectar'}</p></div>
+    <div class="training-analysis-item"><h5>Tipo de contenido</h5><p>${analysis.tipoContenido.join(', ') || 'por clasificar'}</p></div>
+  `;
+}
+
+function actualizarDraftDesdeUI(index) {
+  const pref = `draft-${index}-`;
+  const d = trainingRoomState.drafts[index];
+  if (!d) return;
+  d.id = document.getElementById(pref+'id').value.trim();
+  d.triggers = extraerListaPorComas(document.getElementById(pref+'triggers').value);
+  d.match = document.getElementById(pref+'match').value.trim();
+  d.peso = document.getElementById(pref+'peso').value ? Number(document.getElementById(pref+'peso').value) : '';
+  d.clusters = extraerListaPorComas(document.getElementById(pref+'clusters').value);
+  d.output.energy = document.getElementById(pref+'energy').value.trim();
+  d.output.avoid = document.getElementById(pref+'avoid').value.trim();
+  d.output.use = document.getElementById(pref+'use').value.trim();
+  d.output.focus = document.getElementById(pref+'focus').value.trim();
+  d.categoriaNarrativa = document.getElementById(pref+'categoria').value.trim();
+  d.tipoEvento = document.getElementById(pref+'evento').value.trim();
+  d.contexto = document.getElementById(pref+'contexto').value.trim();
+
+  const faltantes = [];
+  if (!d.triggers.length) faltantes.push('falta trigger');
+  if (!d.clusters.length) faltantes.push('falta cluster');
+  if (!d.peso && d.peso !== 0) faltantes.push('falta peso');
+  if (!d.contexto) faltantes.push('falta contexto');
+  if (!d.categoriaNarrativa) faltantes.push('falta categoría narrativa');
+  if (!d.tipoEvento) faltantes.push('falta tipo de evento');
+  if (!d.output.energy || !d.output.avoid || !d.output.use || !d.output.focus) faltantes.push('output parcial');
+  d.faltantes = faltantes;
+  d.estado = faltantes.length ? 'incompleta' : 'completa';
+}
+
+function renderizarDraftsTraining() {
+  const cont = document.getElementById('training-neurons-output');
+  if (!trainingRoomState.drafts.length) {
+    cont.innerHTML = '<div class="empty-state"><span class="es-icon">🧠</span><p>NO HAY NEURONAS PROPUESTAS TODAVÍA</p></div>';
+    return;
+  }
+  cont.innerHTML = trainingRoomState.drafts.map((d, idx) => `
+    <div class="training-neuron-card">
+      <div class="training-neuron-head">
+        <div class="training-neuron-id">origen: Training Room · origen técnico: ${d.source}</div>
+        <span class="estado-neurona ${d.estado}">${d.estado === 'completa' ? 'completa' : 'incompleta'}</span>
+      </div>
+      <div class="training-neuron-grid">
+        <div><label>ID</label><input id="draft-${idx}-id" value="${d.id}"></div>
+        <div><label>Match</label><input id="draft-${idx}-match" value="${d.match || ''}"></div>
+        <div><label>Triggers (separados por coma)</label><input id="draft-${idx}-triggers" value="${(d.triggers||[]).join(', ')}"></div>
+        <div><label>Clusters (separados por coma)</label><input id="draft-${idx}-clusters" value="${(d.clusters||[]).join(', ')}"></div>
+        <div><label>Peso</label><input type="number" step="0.01" min="0" max="1" id="draft-${idx}-peso" value="${d.peso}"></div>
+        <div><label>Categoría narrativa</label><input id="draft-${idx}-categoria" value="${d.categoriaNarrativa || ''}"></div>
+        <div><label>Tipo de evento</label><input id="draft-${idx}-evento" value="${d.tipoEvento || ''}" placeholder="colectivo, personal, tránsito"></div>
+        <div><label>Contexto</label><input id="draft-${idx}-contexto" value="${d.contexto || ''}"></div>
+        <div><label>output.energy</label><input id="draft-${idx}-energy" value="${d.output.energy || ''}"></div>
+        <div><label>output.avoid</label><input id="draft-${idx}-avoid" value="${d.output.avoid || ''}"></div>
+        <div><label>output.use</label><input id="draft-${idx}-use" value="${d.output.use || ''}"></div>
+        <div><label>output.focus</label><input id="draft-${idx}-focus" value="${d.output.focus || ''}"></div>
+      </div>
+      ${d.faltantes.length ? `<div class="faltantes-lista">Campos faltantes: ${d.faltantes.join(', ')}</div>` : '<div class="faltantes-lista" style="color:var(--teal)">Neurona lista para guardar.</div>'}
+      <div class="training-room-actions" style="margin-top:8px"><button class="btn-training-room" onclick="actualizarYRenderizarDraft(${idx})">Actualizar tarjeta</button></div>
+    </div>`).join('');
+}
+
+function actualizarYRenderizarDraft(index) {
+  actualizarDraftDesdeUI(index);
+  renderizarDraftsTraining();
+}
+
+function analizarTextoTraining() {
+  const raw = document.getElementById('training-raw-text').value.trim();
+  if (!raw) { showToast('Pega texto RAW para analizar.', 'error'); return; }
+  const analysis = analizarRawTraining(raw);
+  trainingRoomState.analysis = analysis;
+  renderizarAnalisisTraining(analysis);
+  document.getElementById('training-room-msg').textContent = 'Análisis completado. Ya puedes generar neuronas propuestas.';
+  showToast('Texto analizado con éxito', 'success');
+}
+
+function generarNeuronasTraining() {
+  const raw = document.getElementById('training-raw-text').value.trim();
+  if (!raw) { showToast('No hay texto RAW para generar neuronas.', 'error'); return; }
+  if (!trainingRoomState.analysis) trainingRoomState.analysis = analizarRawTraining(raw);
+  trainingRoomState.drafts = construirDraftsDesdeRaw(trainingRoomState.analysis, raw);
+  renderizarDraftsTraining();
+  document.getElementById('training-room-msg').textContent = 'Neuronas propuestas generadas. Revisa y edita los faltantes.';
+  showToast('Neuronas propuestas creadas', 'success');
+}
+
+function completarFaltantesTraining() {
+  if (!trainingRoomState.drafts.length) { showToast('Primero genera neuronas propuestas.', 'error'); return; }
+  trainingRoomState.drafts.forEach((_, idx) => actualizarDraftDesdeUI(idx));
+  renderizarDraftsTraining();
+  const incompletas = trainingRoomState.drafts.filter(d => d.estado === 'incompleta').length;
+  document.getElementById('training-room-msg').textContent = incompletas
+    ? `Aún hay ${incompletas} neuronas incompletas. Completa los campos marcados.`
+    : 'Todas las neuronas están completas y listas para guardar.';
+}
+
+async function guardarNeuronasTraining() {
+  if (!trainingRoomState.drafts.length) { showToast('No hay neuronas para guardar.', 'error'); return; }
+  trainingRoomState.drafts.forEach((_, idx) => actualizarDraftDesdeUI(idx));
+  const completas = trainingRoomState.drafts.filter(d => d.estado === 'completa');
+  if (!completas.length) { showToast('No hay neuronas completas para guardar.', 'error'); return; }
+
+  for (const n of completas) {
+    await dbPut('trainingNeurons', n);
+    await dbPut('neuronWeights', { id: n.id, weight: n.peso || 0.45, source: 'training_room' });
+    await dbPut('metaNeurons', { id: n.id, cluster: (n.clusters[0] || 'emotional'), type: n.categoriaNarrativa || 'training', autoGenerated: false, source: 'training_room', createdAt: n.createdAt, validationStatus: n.validationStatus, sourceTextType: n.sourceTextType });
+  }
+
+  for (let i = 0; i < completas.length; i++) {
+    for (let j = i + 1; j < completas.length; j++) {
+      const a = completas[i], b = completas[j];
+      const comparteCluster = a.clusters.some(c => b.clusters.includes(c));
+      const comparteTrigger = a.triggers.some(t => b.triggers.includes(t));
+      if (comparteCluster || comparteTrigger) {
+        await dbAdd('coactivations', { timestamp: Date.now(), source: 'training_room', pair: [a.id, b.id], count: 1 });
+      }
+    }
+  }
+
+  document.getElementById('training-room-msg').textContent = `${completas.length} neurona(s) guardadas e integradas al sistema.`;
+  showToast('Neuronas guardadas y sincronizadas', 'success');
+  await enviarNeuronasAlGrafo(false);
+}
+
+async function obtenerNeuronasTrainingGuardadas() {
+  const all = await dbGetAll('trainingNeurons');
+  return (all || []).filter(n => n && n.id);
+}
+
+async function enviarNeuronasAlGrafo(show = true) {
+  const saved = await obtenerNeuronasTrainingGuardadas();
+  if (!saved.length) {
+    if (show) showToast('No hay neuronas de Training Room guardadas.', 'error');
+    return;
+  }
+  await refreshGraphData();
+  if (show) {
+    openGraphModal();
+    showToast('Neuronas enviadas al grafo', 'success');
+  }
+}
+
 // Scroll reveal
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
@@ -3573,14 +3962,16 @@ let graphInitialized = false;
 let currentFilter = 'all';
 let animFrame = null;
 let nodes = [], edges = [], dragging = null;
+let trainingGraphNeurons = [];
 let camX = 0, camY = 0, camScale = 1;
 let isPanning = false, panStart = null;
 
-function openGraphModal() {
+async function openGraphModal() {
   document.getElementById('graph-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
+  await refreshGraphData();
   if (!graphInitialized) { initGraph(); graphInitialized = true; }
-  else startGraphLoop();
+  else { rebuildGraphNodes(); buildEdges(); startGraphLoop(); }
 }
 
 function closeGraphModal() {
@@ -3596,17 +3987,9 @@ function filterAspect(aspect, btn) {
   if (graphInitialized) buildEdges();
 }
 
-function initGraph() {
-  const canvas = document.getElementById('graph-canvas');
-  const rect = canvas.parentElement.getBoundingClientRect();
-  canvas.width = rect.width;
-  canvas.height = rect.height;
-  camX = rect.width / 2;
-  camY = rect.height / 2;
-
-  // Create planet nodes arranged in a circle
+function rebuildGraphNodes() {
   const cx = 0, cy = 0, r = 180;
-  nodes = PLANETS_LIST.map((planet, i) => {
+  const baseNodes = PLANETS_LIST.map((planet, i) => {
     const angle = (i / PLANETS_LIST.length) * Math.PI * 2 - Math.PI / 2;
     return {
       id: planet,
@@ -3616,9 +3999,37 @@ function initGraph() {
       y: cy + Math.sin(angle) * r + (Math.random()-0.5)*40,
       vx: 0, vy: 0,
       radius: 28,
+      nodeType: 'planet',
     };
   });
 
+  const trainingNodes = trainingGraphNeurons.map((n, idx) => ({
+    id: n.id,
+    label: n.id.replace(/^training_/, ''),
+    color: '#4dd0c4',
+    x: cx + Math.cos((idx / Math.max(trainingGraphNeurons.length,1)) * Math.PI * 2) * (r + 120) + (Math.random()-0.5)*35,
+    y: cy + Math.sin((idx / Math.max(trainingGraphNeurons.length,1)) * Math.PI * 2) * (r + 120) + (Math.random()-0.5)*35,
+    vx: 0, vy: 0,
+    radius: 16,
+    nodeType: 'training',
+  }));
+
+  nodes = [...baseNodes, ...trainingNodes];
+}
+
+async function refreshGraphData() {
+  trainingGraphNeurons = await obtenerNeuronasTrainingGuardadas();
+}
+
+function initGraph() {
+  const canvas = document.getElementById('graph-canvas');
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width;
+  canvas.height = rect.height;
+  camX = rect.width / 2;
+  camY = rect.height / 2;
+
+  rebuildGraphNodes();
   buildEdges();
   bindCanvasEvents(canvas);
   startGraphLoop();
@@ -3629,7 +4040,7 @@ function buildEdges() {
     ? ALL_NEURONS
     : ALL_NEURONS.filter(n => n.aspect === currentFilter);
 
-  edges = neurons.map(n => ({
+  const baseEdges = neurons.map(n => ({
     source: n.planet,
     target: n.target,
     aspect: n.aspect,
@@ -3638,6 +4049,44 @@ function buildEdges() {
     focus: n.focus,
     label: ASPECT_LABELS[n.aspect],
   }));
+
+  const trainingEdges = [];
+  for (let i = 0; i < trainingGraphNeurons.length; i++) {
+    for (let j = i + 1; j < trainingGraphNeurons.length; j++) {
+      const a = trainingGraphNeurons[i];
+      const b = trainingGraphNeurons[j];
+      const comparteTrigger = (a.triggers || []).some(t => (b.triggers || []).includes(t));
+      const comparteCluster = (a.clusters || []).some(c => (b.clusters || []).includes(c));
+      if (comparteTrigger || comparteCluster) {
+        trainingEdges.push({
+          source: a.id,
+          target: b.id,
+          aspect: 'training',
+          color: '#4dd0c4',
+          avoid: a.output?.avoid || 'sin evitar definido',
+          focus: a.output?.focus || 'sin foco definido',
+          label: comparteTrigger ? 'trigger compartido' : 'cluster compartido',
+        });
+      }
+    }
+    const neuron = trainingGraphNeurons[i];
+    const text = `${(neuron.triggers || []).join(' ')} ${(neuron.match || '')}`.toLowerCase();
+    PLANETS_LIST.forEach(planet => {
+      if (text.includes(planet.toLowerCase()) || text.includes((PLANET_LABELS[planet] || '').toLowerCase())) {
+        trainingEdges.push({
+          source: neuron.id,
+          target: planet,
+          aspect: 'training',
+          color: '#4dd0c4',
+          avoid: neuron.output?.avoid || 'sin evitar definido',
+          focus: neuron.output?.focus || 'sin foco definido',
+          label: 'vínculo semántico',
+        });
+      }
+    });
+  }
+
+  edges = [...baseEdges, ...trainingEdges];
 }
 
 function startGraphLoop() {
@@ -3744,7 +4193,7 @@ function draw() {
       ctx.moveTo(s.x + nx*offset, s.y + ny*offset);
       ctx.lineTo(t.x + nx*offset, t.y + ny*offset);
 
-      const alpha = currentFilter === 'all' ? 0.18 : 0.5;
+      const alpha = currentFilter === 'all' || e.aspect === 'training' ? 0.28 : 0.5;
       ctx.strokeStyle = e.color + Math.round(alpha*255).toString(16).padStart(2,'0');
       ctx.lineWidth = currentFilter === 'all' ? 1 : 1.5;
       ctx.stroke();
