@@ -423,56 +423,190 @@
     border-radius: 100px;
   }
 
-  .narrative-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-  }
-
-  .narrative-card {
+  /* ─── NARRATIVE BODY (paragraph) ─────────────────── */
+  .narrative-body {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 26px 24px;
+    border-radius: 20px;
+    padding: 36px 40px;
     position: relative;
-    overflow: hidden;
-    transition: border-color 0.3s, transform 0.3s;
   }
-  .narrative-card:hover {
-    border-color: var(--border-hi);
-    transform: translateY(-2px);
-  }
-
-  .narrative-card .card-icon {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    display: block;
-  }
-
-  .narrative-card .card-label {
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.22em;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    margin-bottom: 10px;
+  .narrative-body::before {
+    content: '"';
+    position: absolute;
+    top: 16px;
+    left: 28px;
+    font-family: var(--font-display);
+    font-size: 5rem;
+    line-height: 1;
+    color: var(--violet);
+    opacity: 0.12;
+    pointer-events: none;
   }
 
-  .narrative-card .card-value {
+  .narrative-paragraph {
     font-family: var(--font-body);
-    font-size: 1.05rem;
+    font-size: 1.2rem;
+    line-height: 1.85;
     color: var(--text-primary);
-    line-height: 1.55;
+    letter-spacing: 0.01em;
+    margin: 0 0 20px;
   }
 
-  .card-energy { border-top: 2px solid var(--gold); }
-  .card-energy .card-label { color: var(--gold-dim); }
-  .card-avoid { border-top: 2px solid var(--rose); }
-  .card-avoid .card-label { color: rgba(229,115,115,0.7); }
-  .card-use { border-top: 2px solid var(--teal); }
-  .card-use .card-label { color: var(--teal-dim); }
-  .card-focus { border-top: 2px solid var(--violet); }
-  .card-focus .card-label { color: var(--violet-dim); }
+  .narrative-signals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .nsig-chip {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 100px;
+    border: 1px solid;
+  }
+  .nsig-energy { color: var(--gold-dim); border-color: var(--gold-dim); background: var(--gold-glow); }
+  .nsig-cluster { color: var(--violet-dim); border-color: var(--violet-glow); background: var(--violet-glow); }
+  .nsig-meta { color: var(--teal-dim); border-color: rgba(77,208,196,0.2); background: rgba(77,208,196,0.06); }
+
+  /* ─── CHAT SECTION ───────────────────────────────── */
+  .chat-section {
+    margin-bottom: 48px;
+  }
+
+  .chat-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-messages {
+    padding: 28px 28px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-height: 440px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .chat-msg {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+  }
+  .chat-msg.user { flex-direction: row-reverse; }
+
+  .chat-bubble {
+    max-width: 72%;
+    padding: 14px 18px;
+    border-radius: 16px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .chat-msg.assistant .chat-bubble {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-bottom-left-radius: 4px;
+    color: var(--text-primary);
+  }
+
+  .chat-msg.user .chat-bubble {
+    background: rgba(155, 114, 245, 0.15);
+    border: 1px solid rgba(155, 114, 245, 0.25);
+    border-bottom-right-radius: 4px;
+    color: var(--text-primary);
+  }
+
+  .chat-bubble p { margin: 0; }
+  .chat-bubble p + p { margin-top: 8px; }
+
+  .chat-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .chat-msg.assistant .chat-avatar {
+    background: rgba(155, 114, 245, 0.15);
+    border: 1px solid rgba(155, 114, 245, 0.3);
+    color: var(--violet);
+  }
+  .chat-msg.user .chat-avatar {
+    background: rgba(77, 208, 196, 0.12);
+    border: 1px solid rgba(77, 208, 196, 0.25);
+    color: var(--teal);
+  }
+
+  .chat-typing {
+    display: flex;
+    gap: 4px;
+    padding: 6px 0;
+    align-items: center;
+  }
+  .chat-typing span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    animation: chatDot 1.2s infinite ease-in-out;
+  }
+  .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes chatDot { 0%,80%,100% { opacity: 0.2; transform: scale(0.9); } 40% { opacity: 1; transform: scale(1); } }
+
+  .chat-input-row {
+    display: flex;
+    padding: 16px 20px;
+    gap: 12px;
+    border-top: 1px solid var(--border);
+    background: var(--deep);
+  }
+
+  .chat-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .chat-input:focus { border-color: var(--violet); }
+
+  .btn-chat-send {
+    background: var(--violet);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    width: 46px;
+    height: 46px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .btn-chat-send:hover { background: #8057e0; transform: translateY(-1px); }
+  .btn-chat-send:disabled { background: var(--border); cursor: default; transform: none; }
 
   /* ─── NEURAL ENGINE DASHBOARD ───────────────────── */
   .engine-section {
@@ -958,14 +1092,15 @@
   /* ─── RESPONSIVE ─────────────────────────────────── */
   @media (max-width: 1100px) {
     .hero { grid-template-columns: 1fr; }
-    .narrative-grid { grid-template-columns: repeat(2, 1fr); }
+    .narrative-body { padding: 28px 24px; }
     .engine-grid { grid-template-columns: 1fr 1fr; }
     .growth-card { grid-column: 1 / -1; }
     .transit-cards { grid-template-columns: 1fr 1fr; }
   }
 
   @media (max-width: 700px) {
-    .narrative-grid { grid-template-columns: 1fr; }
+    .narrative-body { padding: 22px 18px; }
+    .chat-bubble { max-width: 88%; }
     .engine-grid { grid-template-columns: 1fr; }
     .transit-cards { grid-template-columns: 1fr; }
     .memory-grid, .training-grid { grid-template-columns: 1fr; }
@@ -1435,7 +1570,33 @@
       <h2 class="section-title">Narrativa de Salida</h2>
       <span class="section-badge" id="narrative-tone-badge">—</span>
     </div>
-    <div class="narrative-grid" id="narrative-grid"></div>
+    <div class="narrative-body" id="narrative-body">
+      <p class="narrative-paragraph" id="narrative-paragraph"></p>
+      <div class="narrative-signals" id="narrative-signals"></div>
+    </div>
+  </section>
+
+  <hr class="divider" id="divider-chat" style="display:none">
+
+  <!-- ── CONVERSATIONAL LAYER ── -->
+  <section class="chat-section" id="chat-section" style="display:none">
+    <div class="section-header">
+      <h2 class="section-title">Capa Conversacional</h2>
+      <span class="section-badge">MEMORIA ACTIVA</span>
+    </div>
+    <div class="chat-container">
+      <div class="chat-messages" id="chat-messages">
+        <div class="chat-msg assistant">
+          <div class="chat-bubble">
+            <p>Hola. Acabo de leer los tránsitos activos. ¿Qué quieres explorar de este momento?</p>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chat-input" class="chat-input" placeholder="Pregunta sobre tu momento actual…" autocomplete="off" />
+        <button class="btn-chat-send" id="btn-chat-send" onclick="sendChatMessage()">↑</button>
+      </div>
+    </div>
   </section>
 
   <hr class="divider" id="divider-1" style="display:none">
@@ -1945,31 +2106,353 @@ async function runRawInterpretation() {
 }
 
 // ─────────────────────────────────────────────────────────────
+// ASTROLOGER VOICE — Browser port of astrologerVoice.js
+// Uses embedded astrologer base data to generate a flowing paragraph.
+// ─────────────────────────────────────────────────────────────
+
+const ASTRO_BASE = {
+  aperturas: {
+    intensa: [
+      "El cielo de hoy no invita a la levedad.",
+      "Hay una carga en el ambiente que conviene no ignorar.",
+      "La energía del día se siente densa, casi tangible.",
+      "Algo se mueve con fuerza hoy, y vale la pena prestarle atención.",
+      "No es un día para la superficie. Lo que emerge hoy tiene raíz.",
+      "El día trae consigo una presión que puede ser incómoda, pero también reveladora.",
+      "Hoy el cielo habla alto. Conviene escuchar antes de actuar.",
+      "Hay una tensión en el ambiente que, bien dirigida, puede volverse claridad."
+    ],
+    activa: [
+      "El día trae movimiento. No todo está resuelto, pero hay energía para avanzar.",
+      "Hay impulso en el ambiente. La pregunta es hacia dónde.",
+      "El momento invita a la acción, siempre que sea con conciencia.",
+      "Algo se activa hoy. Puede ser interno o externo, pero se siente.",
+      "El cielo de hoy es propicio para quienes están dispuestos a moverse.",
+      "Hay vida en este día. Las cosas pueden avanzar si se les da dirección.",
+      "El ambiente está cargado de posibilidad. Depende de ti qué haces con eso."
+    ],
+    suave: [
+      "El día invita a la calma, y eso no es poca cosa.",
+      "Hay una suavidad en el ambiente que merece ser aprovechada.",
+      "El cielo de hoy no exige. Invita.",
+      "Es un día para moverse despacio y notar lo que habitualmente se pasa por alto.",
+      "La energía de hoy es gentil. Un buen momento para el interior.",
+      "No todo tiene que ser urgente. Hoy el ritmo puede ser tuyo.",
+      "El ambiente sostiene hoy. Puedes apoyarte en él sin forzar nada."
+    ]
+  },
+  transiciones: [
+    "Lo que puede sentirse es",
+    "En el fondo, lo que emerge es",
+    "Debajo de la superficie hay",
+    "Lo que pide atención en este momento es",
+    "Si hay algo que el día hace visible, es",
+    "Lo que se mueve internamente tiene que ver con",
+    "En este contexto, lo que aparece es",
+    "El patrón que se activa hoy toca"
+  ],
+  emociones: {
+    frustración: [
+      "una frustración que busca salida. No siempre encontrará la puerta correcta si se empuja a ciegas.",
+      "algo que no avanza como querías. La resistencia es real, pero también lo es tu capacidad de rodearla.",
+      "el roce entre lo que quieres y lo que encuentra obstáculo. Vale detenerse antes de forzar.",
+      "una energía que empuja pero no halla dirección. El impulso existe; lo que falta es canal."
+    ],
+    reactividad: [
+      "una sensibilidad elevada. Lo que normalmente pasa desapercibido hoy puede aterrizar con más peso.",
+      "la tendencia a responder antes de procesar. Hay una fracción de segundo entre el estímulo y la palabra que puede cambiarlo todo.",
+      "un sistema nervioso más alerta de lo habitual. No es el momento para decisiones apresuradas.",
+      "cierta reactividad emocional que conviene reconocer antes de que hable por ti."
+    ],
+    pesadez: [
+      "un peso que no siempre tiene nombre. Puede ser viejo o reciente, pero se hace presente.",
+      "la sensación de cargar con demasiado. Tal vez no todo es tuyo.",
+      "algo que pesa. No siempre hay que resolverlo hoy, pero sí hay que nombrarlo.",
+      "una lentitud que puede confundirse con bloqueo. A veces el cuerpo sabe que necesita pausa."
+    ],
+    armonía: [
+      "una apertura hacia el otro que pocas veces se da con tanta naturalidad.",
+      "la posibilidad de conectar desde un lugar genuino. Hoy las palabras llegan más fácil.",
+      "fluidez en los intercambios. Lo que necesitabas decir puede encontrar su momento.",
+      "una calidez que puede extenderse. Aprovecha el puente mientras está tendido."
+    ],
+    expansión: [
+      "ganas de abarcar más. La ambición no es el problema; la dispersión, sí.",
+      "el impulso de crecer, de alcanzar algo más amplio. La pregunta es si los cimientos aguantan.",
+      "una apertura genuina al futuro. Úsala para proyectar con realismo, no solo con deseo.",
+      "optimismo que busca tierra. Cuando encuentra dónde aterrizar, se vuelve construcción."
+    ],
+    presión: [
+      "la presencia de una obligación que no puede ignorarse más.",
+      "una demanda externa o interna que pide respuesta. Cuanto más se evita, más ocupa.",
+      "el peso de lo pendiente. A veces la única salida es entrar.",
+      "algo que espera ser atendido. No con urgencia, sino con responsabilidad."
+    ],
+    claridad: [
+      "una lucidez que puede aprovecharse. Las ideas aterrizan bien hoy.",
+      "el momento para ver con más precisión lo que normalmente está nublado.",
+      "apertura mental. Es buen día para tomar decisiones que llevan tiempo pendientes.",
+      "transparencia interna. Lo que piensas y lo que sientes están más alineados de lo habitual."
+    ],
+    impulso: [
+      "ganas de actuar. El riesgo es hacerlo sin rumbo.",
+      "energía disponible. La clave es darle dirección antes de que se consuma sola.",
+      "la necesidad de moverse, de hacer, de iniciar. Bien usado, este impulso construye.",
+      "una fuerza que quiere salida. El desafío es elegir la puerta correcta."
+    ],
+    sensibilidad: [
+      "una permeabilidad emocional mayor de lo usual. Lo que entra, entra hondo.",
+      "la antena más afinada. Puedes captar cosas que normalmente pasan desapercibidas.",
+      "un estado receptivo. Útil para escuchar. Requiere cuidado para no absorber lo ajeno.",
+      "mayor profundidad emocional. No es fragilidad, es amplitud. Úsala con consciencia."
+    ]
+  },
+  puentes: [
+    "En este contexto,",
+    "Frente a esto,",
+    "Con este panorama,",
+    "Dado lo que se mueve hoy,",
+    "Considerando la energía del momento,",
+    "Ante este escenario,",
+    "Desde este lugar,",
+    "Teniendo en cuenta lo anterior,"
+  ],
+  consejoPatrones: {
+    evitar: [
+      "conviene evitar {avoid}, al menos por ahora.",
+      "lo que no ayuda en este momento es {avoid}.",
+      "mejor dejar de lado {avoid} mientras dure este tránsito.",
+      "hay que tener cuidado con {avoid}, que hoy tiene más peso del habitual.",
+      "{avoid} puede costar más de lo que parece. Mejor rodearlo."
+    ],
+    usar: [
+      "en cambio, es buen momento para {use}.",
+      "lo que sí puede ayudar es {use}.",
+      "la energía disponible sirve bien para {use}.",
+      "hay apertura para {use}, si se aprovecha con intención.",
+      "el momento invita a {use} de forma natural."
+    ],
+    enfocar: [
+      "y ayuda enfocarte en {focus}.",
+      "con especial atención a {focus}.",
+      "poniendo la mirada en {focus}.",
+      "sin perder de vista {focus}.",
+      "recordando que {focus} es lo que más puede sostenerte ahora."
+    ]
+  },
+  cierres: {
+    intensa: [
+      "No es un día fácil, pero sí es un día con información. Escucha lo que dice.",
+      "La intensidad de hoy tiene propósito. El reto es no gastarla en dirección equivocada.",
+      "Los días difíciles también dejan algo. Tal vez lo veas más adelante.",
+      "No todo tiene que resolverse hoy. Pero sí puede nombrarse.",
+      "La presión que sientes hoy es real. Y también es pasajera."
+    ],
+    activa: [
+      "El movimiento de hoy puede dejar algo construido si se le da dirección.",
+      "Hay energía disponible. Depende de ti dónde la pones.",
+      "Este tipo de días, bien aprovechados, marcan diferencia.",
+      "Lo que inicies hoy con conciencia tiene más probabilidad de sostenerse.",
+      "La acción de hoy puede ser pequeña y aun así importar."
+    ],
+    suave: [
+      "Los días suaves también construyen. Solo lo hacen en silencio.",
+      "Date permiso de no hacer demasiado. El descanso también es parte del camino.",
+      "Hoy el cielo te invita a soltar. Es suficiente.",
+      "No todo tiene que ser urgente. Hoy puede ser un día para ti.",
+      "La quietud de hoy puede prepararte para lo que viene después."
+    ]
+  },
+  metaSenales: {
+    alta_carga_emocional: [
+      "Hay una acumulación emocional que merece atención. No es el momento de ignorar lo que se siente.",
+      "El motor emocional está trabajando con más fuerza de lo habitual. Conviene darle espacio.",
+      "Varios planetas activan el registro emocional al mismo tiempo. Esto puede sentirse como saturación."
+    ],
+    patron_reactivo: [
+      "Se detecta un patrón de reactividad en este momento. Vale la pena notar cuándo reaccionas antes de elegir.",
+      "La combinación actual favorece las respuestas automáticas. El antídoto es la pausa consciente."
+    ],
+    expansion_sin_base: [
+      "Hay impulso de expansión, pero los cimientos pueden no estar listos. Mejor consolidar antes de ampliar.",
+      "La ambición está presente, pero necesita estructura. El entusiasmo sin plan suele quedarse a mitad de camino."
+    ]
+  },
+  anclajes: [
+    "No hay que apresurarse.",
+    "El ritmo importa tanto como la dirección.",
+    "A veces la pausa es la acción correcta.",
+    "Lo que se fuerza rara vez se sostiene.",
+    "El cuerpo suele saber antes que la mente.",
+    "No todo lo que se siente tiene que ser resuelto.",
+    "Hay sabiduría en esperar el momento justo.",
+    "La claridad llega cuando la urgencia se asienta.",
+    "Lo genuino no necesita forzarse.",
+    "Hay cosas que maduran solas si no se interrumpe el proceso."
+  ],
+  combinaciones: {
+    "Marte_Saturno": { tension: "La combinación de impulso y restricción puede sentirse como pisar el acelerador con el freno puesto.", consejo: "El camino no es forzar ni paralizarse, sino encontrar qué puede moverse dentro de lo que está fijo." },
+    "Venus_Marte":   { tension: "Deseo y acción se mezclan hoy. Lo que atraes puede ser lo que también te activa.", consejo: "Antes de perseguir, vale preguntarse si lo que se quiere es lo que de verdad se necesita." },
+    "Luna_Saturno":  { tension: "El mundo emocional choca con la estructura. Sentir puede parecer un lujo que el deber no permite.", consejo: "Ambas cosas pueden coexistir. La emoción no invalida la responsabilidad, y viceversa." },
+    "Luna_Marte":    { tension: "Emoción e impulso se mezclan de forma volátil. Lo que se siente quiere actuar de inmediato.", consejo: "La pausa de un momento puede evitar conversaciones que costarán días en reparar." },
+    "Sol_Saturno":   { tension: "La identidad y el peso de la obligación se encuentran. Puede sentirse como presión desde afuera o desde adentro.", consejo: "Cumplir con lo que se debe no tiene que costar quién eres. Es posible hacer ambas cosas." },
+    "Luna_Sol":      { tension: "Lo que sientes y lo que quieres mostrar no siempre van en la misma dirección hoy.", consejo: "No tienes que resolver esa tensión de inmediato. A veces convivir con ella ya es suficiente." },
+    "Júpiter_Saturno": { tension: "Expansión y contracción se enfrentan. La ambición encuentra sus límites.", consejo: "Lo que no puede crecer todo a la vez puede crecer por partes. La paciencia es estratégica." }
+  }
+};
+
+function pickBase(arr) {
+  if (!Array.isArray(arr) || arr.length === 0) return '';
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function endPeriod(s) {
+  if (!s) return '';
+  const t = s.trimEnd();
+  return /[.!?]$/.test(t) ? t : t + '.';
+}
+
+function cap(s) {
+  if (!s) return '';
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+const VOICE_EMOTION_MAP = [
+  { keys: ['frustración','frustrado','bloqueo','bloqueado','obstáculo'], emotion: 'frustración' },
+  { keys: ['reactiv','impulsiv','irritab','tenso','tensa'],              emotion: 'reactividad' },
+  { keys: ['pesadez','pesado','heaviness','peso','carga','lento'],       emotion: 'pesadez' },
+  { keys: ['armonía','harmony','fluido','fluida','conexión'],            emotion: 'armonía' },
+  { keys: ['expansión','expansivo','expansion','crecer','ampliar'],      emotion: 'expansión' },
+  { keys: ['presión','obligación','deber','responsabilidad'],            emotion: 'presión' },
+  { keys: ['claridad','claro','clara','lucidez','precis'],               emotion: 'claridad' },
+  { keys: ['impulso','acción','activo','activa','energía activa'],       emotion: 'impulso' },
+  { keys: ['sensibilidad','sensible','sensitiv','permeab'],              emotion: 'sensibilidad' },
+];
+
+const PLANET_ES_MAP = { Moon:'Luna', Mars:'Marte', Saturn:'Saturno', Sun:'Sol', Venus:'Venus', Mercury:'Mercurio', Jupiter:'Júpiter' };
+
+function detectVoiceEmotion(energy, avoid) {
+  const hay = (energy + ' ' + avoid).toLowerCase();
+  for (const { keys, emotion } of VOICE_EMOTION_MAP) {
+    if (keys.some(k => hay.includes(k))) return emotion;
+  }
+  return null;
+}
+
+function detectVoiceTone(signals) {
+  const t = (signals.tone||'').trim();
+  if (t === 'intense' || t === 'intensa') return 'intensa';
+  if (t === 'active'  || t === 'activa')  return 'activa';
+  if (t === 'soft'    || t === 'suave')   return 'suave';
+  const cl = (signals.dominantCluster||'').trim();
+  if (cl === 'emotional' && (signals.metaSignals||[]).length > 0) return 'intensa';
+  if (cl === 'actional' || cl === 'mental') return 'activa';
+  return 'suave';
+}
+
+function detectVoiceCombo(transits) {
+  if (!Array.isArray(transits) || transits.length < 2) return null;
+  const planets = [...new Set(transits.map(t => PLANET_ES_MAP[t.planet] || t.planet))];
+  for (let i = 0; i < planets.length; i++) {
+    for (let j = i+1; j < planets.length; j++) {
+      const k1 = planets[i]+'_'+planets[j];
+      const k2 = planets[j]+'_'+planets[i];
+      if (ASTRO_BASE.combinaciones[k1]) return ASTRO_BASE.combinaciones[k1];
+      if (ASTRO_BASE.combinaciones[k2]) return ASTRO_BASE.combinaciones[k2];
+    }
+  }
+  return null;
+}
+
+function buildMetaBlock(metaSignals) {
+  if (!Array.isArray(metaSignals) || !metaSignals.length) return '';
+  for (const sig of metaSignals) {
+    const id = typeof sig === 'object' ? sig.id : sig;
+    const frases = ASTRO_BASE.metaSenales[id];
+    if (frases) return pickBase(frases);
+  }
+  const raw = typeof metaSignals[0] === 'object' ? (metaSignals[0].then || metaSignals[0].id || '') : metaSignals[0];
+  const cl = (raw||'').trim();
+  if (!cl) return '';
+  return cl.charAt(0).toLowerCase() + cl.slice(1) + ' puede sentirse más fuerte de lo habitual';
+}
+
+function buildVoiceAdvice(avoid, use, focus) {
+  const p = ASTRO_BASE.consejoPatrones;
+  const evitar  = endPeriod(pickBase(p.evitar).replace('{avoid}', avoid));
+  const usar    = endPeriod(pickBase(p.usar).replace('{use}', use));
+  const enfocar = endPeriod(pickBase(p.enfocar).replace('{focus}', focus));
+  const puente = pickBase(ASTRO_BASE.puentes); // already ends with comma
+  return puente + ' ' + evitar + ' ' + cap(usar) + ' ' + cap(enfocar);
+}
+
+function generateVoiceParagraph(signals) {
+  // Strip tone prefix like "soft: " or "activa: " from energy field
+  const rawEnergy = (signals.energy || 'una energía sensible').trim();
+  const energy = rawEnergy.replace(/^(intense|active|soft|intensa|activa|suave):\s*/i, '').trim() || rawEnergy;
+  const avoid  = (signals.avoid||'las reacciones impulsivas').trim();
+  const use    = (signals.use||'las acciones conscientes').trim();
+  const focus  = (signals.focus||'lo que hoy necesita atención real').trim();
+
+  const tone    = detectVoiceTone(signals);
+  const emotion = detectVoiceEmotion(energy, avoid);
+  const combo   = detectVoiceCombo(signals.transits || signals.topTránsitos || []);
+  const meta    = buildMetaBlock(signals.metaSignals || []);
+
+  const apertura = endPeriod(pickBase(ASTRO_BASE.aperturas[tone] || ASTRO_BASE.aperturas.activa));
+
+  let bloqueEmocional;
+  if (emotion && ASTRO_BASE.emociones[emotion]) {
+    const trans = pickBase(ASTRO_BASE.transiciones);
+    const desc  = pickBase(ASTRO_BASE.emociones[emotion]);
+    bloqueEmocional = endPeriod(cap(trans) + ' ' + desc);
+  } else {
+    bloqueEmocional = endPeriod(cap(pickBase(ASTRO_BASE.transiciones)) + ' ' + energy);
+  }
+
+  const bloqueContexto = meta ? endPeriod(cap(meta)) : '';
+  const bloqueCombo    = combo ? endPeriod(combo.tension) + ' ' + endPeriod(combo.consejo) : '';
+  const bloqueConsejo  = buildVoiceAdvice(avoid, use, focus);
+  const cierre         = endPeriod(pickBase(ASTRO_BASE.cierres[tone] || ASTRO_BASE.cierres.activa));
+  const anclaje        = Math.random() < 0.33 ? endPeriod(pickBase(ASTRO_BASE.anclajes)) : '';
+
+  return [apertura, bloqueEmocional, bloqueContexto, bloqueCombo, anclaje, bloqueConsejo, cierre]
+    .filter(Boolean).map(p => p.trim()).join(' ');
+}
+
+// ─────────────────────────────────────────────────────────────
 // RENDER NARRATIVE
 // ─────────────────────────────────────────────────────────────
 function renderResult(result, isRaw=false) {
   const { narrative, tone, topTránsitos } = result;
   const section = document.getElementById('narrative-section');
   const badge = document.getElementById('narrative-tone-badge');
-  const toneLabels = { intense:'INTENSA', active:'ACTIVA', soft:'SUAVE' };
-  badge.textContent = (toneLabels[tone] || tone).toUpperCase();
+  const toneLabels = { intense:'INTENSA', active:'ACTIVA', soft:'SUAVE', intensa:'INTENSA', activa:'ACTIVA', suave:'SUAVE' };
+  badge.textContent = (toneLabels[tone] || (tone||'').toUpperCase());
 
-  const CARDS = [
-    { key:'energy', label:'Energía', icon:'☀', cls:'card-energy' },
-    { key:'avoid', label:'Evita', icon:'⚡', cls:'card-avoid' },
-    { key:'use', label:'Usa', icon:'🌊', cls:'card-use' },
-    { key:'focus', label:'Enfoque', icon:'✦', cls:'card-focus' },
-    { key:'use', label:'Use', icon:'🌊', cls:'card-use' },
-    { key:'focus', label:'Focus', icon:'✦', cls:'card-focus' },
-  ];
+  // Generate flowing narrative paragraph
+  const paragraph = generateVoiceParagraph({
+    ...narrative,
+    tone,
+    dominantCluster: result.dominantCluster,
+    metaSignals: result.metaSignals || [],
+    transits: topTránsitos || [],
+    topTránsitos: topTránsitos || [],
+  });
 
-  document.getElementById('narrative-grid').innerHTML = CARDS.map(c => `
-    <div class="narrative-card ${c.cls}">
-      <span class="card-icon">${c.icon}</span>
-      <div class="card-label">${c.label}</div>
-      <div class="card-value">${narrative[c.key]||'—'}</div>
-    </div>
-  `).join('');
+  document.getElementById('narrative-paragraph').textContent = paragraph;
+
+  // Signal chips — compact metadata below the paragraph
+  const toneLabel = { intense:'Intensa', active:'Activa', soft:'Suave', intensa:'Intensa', activa:'Activa', suave:'Suave' };
+  const clusterLabel = { emotional:'Emocional', mental:'Mental', relational:'Relacional', actional:'Accional' };
+  const chips = [];
+  if (tone) chips.push(`<span class="nsig-chip nsig-energy">${toneLabel[tone]||tone}</span>`);
+  if (result.dominantCluster) chips.push(`<span class="nsig-chip nsig-cluster">${clusterLabel[result.dominantCluster]||result.dominantCluster}</span>`);
+  (result.metaSignals||[]).forEach(s => {
+    const label = typeof s === 'object' ? (s.then || s.id || '') : s;
+    if (label) chips.push(`<span class="nsig-chip nsig-meta">${label}</span>`);
+  });
+  document.getElementById('narrative-signals').innerHTML = chips.join('');
 
   section.classList.add('visible');
 
@@ -1977,7 +2460,7 @@ function renderResult(result, isRaw=false) {
   const tsSection = document.getElementById('transits-section');
   const d1 = document.getElementById('divider-1');
 
-  if (!isRaw && topTránsitos.length) {
+  if (!isRaw && topTránsitos && topTránsitos.length) {
     d1.style.display = '';
     tsSection.style.display = '';
     renderTransitCards(topTránsitos);
@@ -1987,6 +2470,11 @@ function renderResult(result, isRaw=false) {
   }
 
   document.getElementById('divider-2').style.display = '';
+
+  // Show conversational layer
+  document.getElementById('divider-chat').style.display = '';
+  document.getElementById('chat-section').style.display = '';
+  initChatSession(result, paragraph);
 }
 
 function renderTransitCards(transits) {
@@ -2883,6 +3371,206 @@ function hideTooltip() {
 // Close modal on backdrop click
 document.getElementById('graph-modal').addEventListener('click', e => {
   if (e.target === document.getElementById('graph-modal')) closeGraphModal();
+});
+
+// ─────────────────────────────────────────────────────────────
+// CONVERSATIONAL LAYER
+// Manages the chat interface and generates contextual responses
+// using the current session data and IndexedDB memory.
+// ─────────────────────────────────────────────────────────────
+
+let chatSession = null; // Holds current session context for the chat
+
+function initChatSession(result, narrativeParagraph) {
+  chatSession = {
+    narrative: result.narrative || {},
+    tone: result.tone || 'activa',
+    dominantCluster: result.dominantCluster || 'emotional',
+    metaSignals: result.metaSignals || [],
+    topTránsitos: result.topTránsitos || [],
+    paragraph: narrativeParagraph || '',
+    history: [],
+  };
+
+  // Reset chat UI
+  const msgs = document.getElementById('chat-messages');
+  const toneLabel = { intense:'intensa', active:'activa', soft:'suave', intensa:'intensa', activa:'activa', suave:'suave' };
+  const tone = toneLabel[result.tone] || result.tone || 'activa';
+  msgs.innerHTML = '';
+  appendChatMsg('assistant', `La energía de hoy es <strong>${tone}</strong>. Ya leí los tránsitos activos y generé tu narrativa. ¿Qué quieres explorar de este momento?`);
+}
+
+function appendChatMsg(role, html) {
+  const msgs = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'chat-msg ' + role;
+
+  const avatar = document.createElement('div');
+  avatar.className = 'chat-avatar';
+  avatar.textContent = role === 'assistant' ? '✦' : '◯';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'chat-bubble';
+  const p = document.createElement('p');
+  p.innerHTML = html;
+  bubble.appendChild(p);
+
+  if (role === 'assistant') {
+    div.appendChild(avatar);
+    div.appendChild(bubble);
+  } else {
+    div.appendChild(bubble);
+    div.appendChild(avatar);
+  }
+
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+function showChatTyping() {
+  const msgs = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'chat-msg assistant';
+  div.id = 'chat-typing-indicator';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'chat-avatar';
+  avatar.textContent = '✦';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'chat-bubble';
+  bubble.innerHTML = '<div class="chat-typing"><span></span><span></span><span></span></div>';
+
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function hideChatTyping() {
+  const el = document.getElementById('chat-typing-indicator');
+  if (el) el.remove();
+}
+
+async function generateChatResponse(userText) {
+  if (!chatSession) return 'Corre primero una interpretación para activar el contexto de la sesión.';
+
+  const lower = userText.toLowerCase();
+  const { narrative, tone, dominantCluster, metaSignals, topTránsitos, paragraph } = chatSession;
+
+  // Load recent context memory from IndexedDB for enriched replies
+  const recentCtx = await dbGetAll('contextMemory')
+    .then(all => all.sort((a,b) => a.date > b.date ? -1 : 1).slice(0, 3))
+    .catch(() => []);
+
+  const prevEmotions = recentCtx.map(c => c.emotion).filter(Boolean);
+
+  // ── Intent matching ───────────────────────────────────────────────────────
+  const asks = (keys) => keys.some(k => lower.includes(k));
+
+  // Why / explanation intent
+  if (asks(['por qué','porque','qué significa','que significa','explica','explícame','explain'])) {
+    const planet = topTránsitos[0];
+    if (planet) {
+      return `Este momento está marcado por <strong>${PLANET_ES_MAP[planet.planet]||planet.planet} ${planet.aspect} ${PLANET_ES_MAP[planet.target]||planet.target}</strong> con un orbe de ${planet.orb}°. Eso activa ${planet.emotion||'una energía particular'} en tu sistema. Es lo que da color a la narrativa de hoy.`;
+    }
+    return `La narrativa de hoy refleja un clima de energía ${tone}. ${paragraph.split('.')[0]}.`;
+  }
+
+  // Energy / feeling intent
+  if (asks(['energía','energia','cómo me siento','como me siento','siento','feeling','feel'])) {
+    return endPeriod(cap(pickBase(ASTRO_BASE.transiciones)) + ' ' +
+      (narrative.energy || 'una energía compleja que vale observar')) + ' ' +
+      endPeriod(pickBase(ASTRO_BASE.aperturas[detectVoiceTone({tone})] || ASTRO_BASE.aperturas.activa));
+  }
+
+  // What to avoid intent
+  if (asks(['evitar','evita','avoid','no hacer','no debo','debo evitar','cuidado'])) {
+    return 'En este momento, ' + endPeriod(pickBase(ASTRO_BASE.consejoPatrones.evitar).replace('{avoid}', narrative.avoid||'la reactividad')) +
+      ' Vale revisarlo especialmente con los tránsitos activos de hoy.';
+  }
+
+  // What to use / do intent
+  if (asks(['usar','usa','qué hago','que hago','qué puedo','que puedo','acción','accion','action','use'])) {
+    return cap(pickBase(ASTRO_BASE.consejoPatrones.usar).replace('{use}', narrative.use||'acciones conscientes')) + ' ' +
+      'La clave es darle dirección clara a la energía disponible.';
+  }
+
+  // Focus / where to direct intent
+  if (asks(['enfoque','enfocar','donde','dónde','foco','focus','dirección','direccion'])) {
+    return cap(pickBase(ASTRO_BASE.consejoPatrones.enfocar).replace('{focus}', narrative.focus||'lo más importante ahora'));
+  }
+
+  // Memory / past sessions intent
+  if (asks(['antes','antes de','memoria','recuerdas','pasado','ayer','historial','últimas','ultimas','sesiones'])) {
+    if (prevEmotions.length) {
+      return `En sesiones recientes he notado: <strong>${prevEmotions.join(', ')}</strong>. Hoy el patrón dominante es <strong>${dominantCluster}</strong>. Hay un hilo que conecta estos momentos.`;
+    }
+    return 'Aún no hay suficiente historial para comparar patrones. Corre más interpretaciones para que pueda leer tu contexto acumulado.';
+  }
+
+  // Tone intent
+  if (asks(['tono','que tono','cómo es','como es','tipo de día','tipo de dia'])) {
+    const toneLabel = { intense:'intensa', active:'activa', soft:'suave', intensa:'intensa', activa:'activa', suave:'suave' };
+    return `La energía de hoy es <strong>${toneLabel[tone]||tone}</strong>. ` + endPeriod(pickBase(ASTRO_BASE.aperturas[detectVoiceTone({tone})] || ASTRO_BASE.aperturas.activa));
+  }
+
+  // Planets / transits intent
+  if (asks(['planeta','planetas','tránsito','transito','aspecto','qué planeta','que planeta'])) {
+    if (topTránsitos.length) {
+      const list = topTránsitos.map(t => `${PLANET_ES_MAP[t.planet]||t.planet} ${t.aspect} ${PLANET_ES_MAP[t.target]||t.target}`).join(', ');
+      return `Los tránsitos activos son: <strong>${list}</strong>. El de mayor prioridad es el que define el tono central de la narrativa.`;
+    }
+    return 'No hay tránsitos específicos en esta sesión (modo texto libre). La narrativa se generó desde el contenido que ingresaste.';
+  }
+
+  // Advice / general guidance intent
+  if (asks(['consejo','consejos','qué me recomiendas','que me recomiendas','recomendación','recomendacion','advice'])) {
+    return buildVoiceAdvice(narrative.avoid||'la reactividad', narrative.use||'acciones conscientes', narrative.focus||'lo más importante');
+  }
+
+  // General reflection — use the paragraph + a question
+  const closingQuestions = [
+    '¿Hay algo específico de este momento que quieras explorar más?',
+    '¿Te resuena algo de lo que describe la narrativa de hoy?',
+    '¿Qué parte de este clima energético sientes más presente en ti?',
+    '¿Quieres que profundice en algún planeta o aspecto en particular?',
+  ];
+
+  return endPeriod(paragraph.split('. ').slice(0, 2).join('. ')) + ' ' + pickBase(closingQuestions);
+}
+
+async function sendChatMessage() {
+  const input = document.getElementById('chat-input');
+  const btn = document.getElementById('btn-chat-send');
+  const text = (input.value || '').trim();
+  if (!text) return;
+
+  input.value = '';
+  btn.disabled = true;
+
+  appendChatMsg('user', text.replace(/</g,'&lt;').replace(/>/g,'&gt;'));
+  showChatTyping();
+
+  await new Promise(r => setTimeout(r, 600 + Math.random() * 400));
+
+  const response = await generateChatResponse(text);
+  hideChatTyping();
+  appendChatMsg('assistant', response);
+
+  if (chatSession) chatSession.history.push({ role:'user', text }, { role:'assistant', text: response });
+
+  btn.disabled = false;
+  input.focus();
+}
+
+// Allow sending with Enter key
+document.getElementById('chat-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChatMessage();
+  }
 });
 
 </script>
