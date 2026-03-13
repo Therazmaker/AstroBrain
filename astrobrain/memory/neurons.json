@@ -7,72 +7,14 @@
       "target": "Mars"
     },
     "output": {
-      "avoid": "emotional over-identification, combative escalation, and fusion and intensity",
-      "focus": "emotional honesty with disciplined movement; integrate both drives consciously"
+      "avoid": "acting from raw emotion without pause",
+      "focus": "channel the surge into movement, not reaction"
     },
     "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_mars_opposition",
-    "if": {
-      "planet": "Moon",
-      "aspect": "opposition",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "emotional over-identification, combative escalation, and polarizing extremes",
-      "focus": "emotional honesty with disciplined movement; balance both sides before deciding"
-    },
-    "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_mars_square",
-    "if": {
-      "planet": "Moon",
-      "aspect": "square",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "emotional over-identification, combative escalation, and friction-driven reactivity",
-      "focus": "emotional honesty with disciplined movement; channel tension into constructive effort"
-    },
-    "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_mars_trine",
-    "if": {
-      "planet": "Moon",
-      "aspect": "trine",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "emotional over-identification, combative escalation, and complacent ease",
-      "focus": "emotional honesty with disciplined movement; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_mars_sextile",
-    "if": {
-      "planet": "Moon",
-      "aspect": "sextile",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "emotional over-identification, combative escalation, and hesitating to act on opportunity",
-      "focus": "emotional honesty with disciplined movement; take the small opening and build"
-    },
-    "tags": [
-      "emotional"
-    ]
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "moon_saturn_conjunction",
@@ -82,72 +24,14 @@
       "target": "Saturn"
     },
     "output": {
-      "avoid": "emotional over-identification, fear-based shutdown, and fusion and intensity",
-      "focus": "emotional honesty with patient structure; integrate both drives consciously"
+      "avoid": "suppressing feelings out of duty",
+      "focus": "honor both the emotion and the responsibility"
     },
     "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_saturn_opposition",
-    "if": {
-      "planet": "Moon",
-      "aspect": "opposition",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "emotional over-identification, fear-based shutdown, and polarizing extremes",
-      "focus": "emotional honesty with patient structure; balance both sides before deciding"
-    },
-    "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_saturn_square",
-    "if": {
-      "planet": "Moon",
-      "aspect": "square",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "emotional over-identification, fear-based shutdown, and friction-driven reactivity",
-      "focus": "emotional honesty with patient structure; channel tension into constructive effort"
-    },
-    "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_saturn_trine",
-    "if": {
-      "planet": "Moon",
-      "aspect": "trine",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "emotional over-identification, fear-based shutdown, and complacent ease",
-      "focus": "emotional honesty with patient structure; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_saturn_sextile",
-    "if": {
-      "planet": "Moon",
-      "aspect": "sextile",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "emotional over-identification, fear-based shutdown, and hesitating to act on opportunity",
-      "focus": "emotional honesty with patient structure; take the small opening and build"
-    },
-    "tags": [
-      "emotional"
-    ]
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "moon_sun_conjunction",
@@ -157,72 +41,14 @@
       "target": "Sun"
     },
     "output": {
-      "avoid": "emotional over-identification, self-image battles, and fusion and intensity",
-      "focus": "emotional honesty with values-aligned confidence; integrate both drives consciously"
+      "avoid": "blurring ego needs with emotional needs",
+      "focus": "align what you feel with what you truly want"
     },
     "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_sun_opposition",
-    "if": {
-      "planet": "Moon",
-      "aspect": "opposition",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "emotional over-identification, self-image battles, and polarizing extremes",
-      "focus": "emotional honesty with values-aligned confidence; balance both sides before deciding"
-    },
-    "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_sun_square",
-    "if": {
-      "planet": "Moon",
-      "aspect": "square",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "emotional over-identification, self-image battles, and friction-driven reactivity",
-      "focus": "emotional honesty with values-aligned confidence; channel tension into constructive effort"
-    },
-    "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_sun_trine",
-    "if": {
-      "planet": "Moon",
-      "aspect": "trine",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "emotional over-identification, self-image battles, and complacent ease",
-      "focus": "emotional honesty with values-aligned confidence; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_sun_sextile",
-    "if": {
-      "planet": "Moon",
-      "aspect": "sextile",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "emotional over-identification, self-image battles, and hesitating to act on opportunity",
-      "focus": "emotional honesty with values-aligned confidence; take the small opening and build"
-    },
-    "tags": [
-      "emotional"
-    ]
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "moon_venus_conjunction",
@@ -232,72 +58,14 @@
       "target": "Venus"
     },
     "output": {
-      "avoid": "emotional over-identification, relationship projection, and fusion and intensity",
-      "focus": "emotional honesty with relational warmth; integrate both drives consciously"
+      "avoid": "seeking comfort over truth",
+      "focus": "let warmth guide without softening necessary words"
     },
     "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_venus_opposition",
-    "if": {
-      "planet": "Moon",
-      "aspect": "opposition",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "emotional over-identification, relationship projection, and polarizing extremes",
-      "focus": "emotional honesty with relational warmth; balance both sides before deciding"
-    },
-    "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_venus_square",
-    "if": {
-      "planet": "Moon",
-      "aspect": "square",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "emotional over-identification, relationship projection, and friction-driven reactivity",
-      "focus": "emotional honesty with relational warmth; channel tension into constructive effort"
-    },
-    "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_venus_trine",
-    "if": {
-      "planet": "Moon",
-      "aspect": "trine",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "emotional over-identification, relationship projection, and complacent ease",
-      "focus": "emotional honesty with relational warmth; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_venus_sextile",
-    "if": {
-      "planet": "Moon",
-      "aspect": "sextile",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "emotional over-identification, relationship projection, and hesitating to act on opportunity",
-      "focus": "emotional honesty with relational warmth; take the small opening and build"
-    },
-    "tags": [
-      "emotional"
-    ]
+      "emotional",
+      "relational"
+    ],
+    "weight": 0.4
   },
   {
     "id": "moon_mercury_conjunction",
@@ -307,72 +75,14 @@
       "target": "Mercury"
     },
     "output": {
-      "avoid": "emotional over-identification, argument loops, and fusion and intensity",
-      "focus": "emotional honesty with clear framing; integrate both drives consciously"
+      "avoid": "over-analyzing feelings instead of feeling them",
+      "focus": "name the emotion precisely before speaking"
     },
     "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_mercury_opposition",
-    "if": {
-      "planet": "Moon",
-      "aspect": "opposition",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "emotional over-identification, argument loops, and polarizing extremes",
-      "focus": "emotional honesty with clear framing; balance both sides before deciding"
-    },
-    "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_mercury_square",
-    "if": {
-      "planet": "Moon",
-      "aspect": "square",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "emotional over-identification, argument loops, and friction-driven reactivity",
-      "focus": "emotional honesty with clear framing; channel tension into constructive effort"
-    },
-    "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_mercury_trine",
-    "if": {
-      "planet": "Moon",
-      "aspect": "trine",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "emotional over-identification, argument loops, and complacent ease",
-      "focus": "emotional honesty with clear framing; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "emotional"
-    ]
-  },
-  {
-    "id": "moon_mercury_sextile",
-    "if": {
-      "planet": "Moon",
-      "aspect": "sextile",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "emotional over-identification, argument loops, and hesitating to act on opportunity",
-      "focus": "emotional honesty with clear framing; take the small opening and build"
-    },
-    "tags": [
-      "emotional"
-    ]
+      "emotional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "moon_jupiter_conjunction",
@@ -382,12 +92,99 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "emotional over-identification, excessive risk-taking, and fusion and intensity",
-      "focus": "emotional honesty with wise perspective; integrate both drives consciously"
+      "avoid": "emotional exaggeration and overdramatic responses",
+      "focus": "expand compassion without losing boundaries"
     },
     "tags": [
-      "emotional"
-    ]
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_mars_opposition",
+    "if": {
+      "planet": "Moon",
+      "aspect": "opposition",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "confrontation driven by unprocessed frustration",
+      "focus": "separate what triggered you from what truly matters"
+    },
+    "tags": [
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_saturn_opposition",
+    "if": {
+      "planet": "Moon",
+      "aspect": "opposition",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "emotional shutdown or cold withdrawal",
+      "focus": "stay present even when feelings feel heavy"
+    },
+    "tags": [
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_sun_opposition",
+    "if": {
+      "planet": "Moon",
+      "aspect": "opposition",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "internal conflict between needs and desires",
+      "focus": "find the middle ground between self and others"
+    },
+    "tags": [
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_venus_opposition",
+    "if": {
+      "planet": "Moon",
+      "aspect": "opposition",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "people-pleasing at the cost of your own needs",
+      "focus": "balance giving with receiving honestly"
+    },
+    "tags": [
+      "emotional",
+      "relational"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_mercury_opposition",
+    "if": {
+      "planet": "Moon",
+      "aspect": "opposition",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "saying what you think instead of what you feel",
+      "focus": "speak from the heart, not just the head"
+    },
+    "tags": [
+      "emotional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "moon_jupiter_opposition",
@@ -397,12 +194,99 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "emotional over-identification, excessive risk-taking, and polarizing extremes",
-      "focus": "emotional honesty with wise perspective; balance both sides before deciding"
+      "avoid": "emotional overwhelm from taking on too much",
+      "focus": "discern what truly deserves your emotional energy"
     },
     "tags": [
-      "emotional"
-    ]
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_mars_square",
+    "if": {
+      "planet": "Moon",
+      "aspect": "square",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "reactive discussions and impulsive words",
+      "focus": "emotional regulation before engagement"
+    },
+    "tags": [
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_saturn_square",
+    "if": {
+      "planet": "Moon",
+      "aspect": "square",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "self-criticism and emotional rigidity",
+      "focus": "be gentle with your own process and pace"
+    },
+    "tags": [
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_sun_square",
+    "if": {
+      "planet": "Moon",
+      "aspect": "square",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "tension between public face and private feeling",
+      "focus": "honor your inner world even in public roles"
+    },
+    "tags": [
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_venus_square",
+    "if": {
+      "planet": "Moon",
+      "aspect": "square",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "confusing love with comfort or avoidance",
+      "focus": "be honest about what you need in relationships"
+    },
+    "tags": [
+      "emotional",
+      "relational"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_mercury_square",
+    "if": {
+      "planet": "Moon",
+      "aspect": "square",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "intellectualizing pain instead of processing it",
+      "focus": "allow feeling before forming conclusions"
+    },
+    "tags": [
+      "emotional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "moon_jupiter_square",
@@ -412,12 +296,99 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "emotional over-identification, excessive risk-taking, and friction-driven reactivity",
-      "focus": "emotional honesty with wise perspective; channel tension into constructive effort"
+      "avoid": "emotional inflation and restless seeking",
+      "focus": "ground expansion in what is real and present"
     },
     "tags": [
-      "emotional"
-    ]
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_mars_trine",
+    "if": {
+      "planet": "Moon",
+      "aspect": "trine",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "mistaking ease for permission to act without thought",
+      "focus": "use emotional clarity to fuel purposeful action"
+    },
+    "tags": [
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_saturn_trine",
+    "if": {
+      "planet": "Moon",
+      "aspect": "trine",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "settling for stability when growth is needed",
+      "focus": "build emotional structure that supports long-term peace"
+    },
+    "tags": [
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_sun_trine",
+    "if": {
+      "planet": "Moon",
+      "aspect": "trine",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "complacency in emotional comfort zones",
+      "focus": "let inner harmony inspire outer expression"
+    },
+    "tags": [
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_venus_trine",
+    "if": {
+      "planet": "Moon",
+      "aspect": "trine",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "passive contentment that avoids necessary change",
+      "focus": "lean into genuine connection and creative flow"
+    },
+    "tags": [
+      "emotional",
+      "relational"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_mercury_trine",
+    "if": {
+      "planet": "Moon",
+      "aspect": "trine",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "over-communicating feelings without listening",
+      "focus": "express emotions with clarity and receive well"
+    },
+    "tags": [
+      "emotional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "moon_jupiter_trine",
@@ -427,12 +398,99 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "emotional over-identification, excessive risk-taking, and complacent ease",
-      "focus": "emotional honesty with wise perspective; use momentum with gratitude and purpose"
+      "avoid": "emotional idealism that loses touch with reality",
+      "focus": "expand your emotional world with gratitude and openness"
     },
     "tags": [
-      "emotional"
-    ]
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_mars_sextile",
+    "if": {
+      "planet": "Moon",
+      "aspect": "sextile",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "leaving emotional energy unused or unfocused",
+      "focus": "take one small courageous action aligned with your feelings"
+    },
+    "tags": [
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_saturn_sextile",
+    "if": {
+      "planet": "Moon",
+      "aspect": "sextile",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "ignoring the opportunity to build emotional resilience",
+      "focus": "use discipline to honor your emotional needs consistently"
+    },
+    "tags": [
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_sun_sextile",
+    "if": {
+      "planet": "Moon",
+      "aspect": "sextile",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "missing the window for authentic self-expression",
+      "focus": "align your daily actions with your inner emotional truth"
+    },
+    "tags": [
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_venus_sextile",
+    "if": {
+      "planet": "Moon",
+      "aspect": "sextile",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "overlooking small moments of genuine connection",
+      "focus": "nurture relationships through simple, present acts of care"
+    },
+    "tags": [
+      "emotional",
+      "relational"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "moon_mercury_sextile",
+    "if": {
+      "planet": "Moon",
+      "aspect": "sextile",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "missing the chance to articulate what you feel",
+      "focus": "put feelings into words while the clarity is available"
+    },
+    "tags": [
+      "emotional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "moon_jupiter_sextile",
@@ -442,12 +500,14 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "emotional over-identification, excessive risk-taking, and hesitating to act on opportunity",
-      "focus": "emotional honesty with wise perspective; take the small opening and build"
+      "avoid": "letting optimism stay in your head instead of your life",
+      "focus": "take one step toward emotional expansion today"
     },
     "tags": [
-      "emotional"
-    ]
+      "emotional",
+      "actional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mars_moon_conjunction",
@@ -457,72 +517,14 @@
       "target": "Moon"
     },
     "output": {
-      "avoid": "impulsive reactions, mood-driven assumptions, and fusion and intensity",
-      "focus": "intentional action with nervous-system grounding; integrate both drives consciously"
+      "avoid": "acting from emotional reactivity without grounding",
+      "focus": "respond, do not react in the moment"
     },
     "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_moon_opposition",
-    "if": {
-      "planet": "Mars",
-      "aspect": "opposition",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "impulsive reactions, mood-driven assumptions, and polarizing extremes",
-      "focus": "intentional action with nervous-system grounding; balance both sides before deciding"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_moon_square",
-    "if": {
-      "planet": "Mars",
-      "aspect": "square",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "impulsive reactions, mood-driven assumptions, and friction-driven reactivity",
-      "focus": "intentional action with nervous-system grounding; channel tension into constructive effort"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_moon_trine",
-    "if": {
-      "planet": "Mars",
-      "aspect": "trine",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "impulsive reactions, mood-driven assumptions, and complacent ease",
-      "focus": "intentional action with nervous-system grounding; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_moon_sextile",
-    "if": {
-      "planet": "Mars",
-      "aspect": "sextile",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "impulsive reactions, mood-driven assumptions, and hesitating to act on opportunity",
-      "focus": "intentional action with nervous-system grounding; take the small opening and build"
-    },
-    "tags": [
-      "actional"
-    ]
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mars_saturn_conjunction",
@@ -532,72 +534,13 @@
       "target": "Saturn"
     },
     "output": {
-      "avoid": "impulsive reactions, fear-based shutdown, and fusion and intensity",
-      "focus": "intentional action with patient structure; integrate both drives consciously"
+      "avoid": "forcing progress against hard structural limits",
+      "focus": "apply sustained effort to what can actually move"
     },
     "tags": [
       "actional"
-    ]
-  },
-  {
-    "id": "mars_saturn_opposition",
-    "if": {
-      "planet": "Mars",
-      "aspect": "opposition",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "impulsive reactions, fear-based shutdown, and polarizing extremes",
-      "focus": "intentional action with patient structure; balance both sides before deciding"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_saturn_square",
-    "if": {
-      "planet": "Mars",
-      "aspect": "square",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "impulsive reactions, fear-based shutdown, and friction-driven reactivity",
-      "focus": "intentional action with patient structure; channel tension into constructive effort"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_saturn_trine",
-    "if": {
-      "planet": "Mars",
-      "aspect": "trine",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "impulsive reactions, fear-based shutdown, and complacent ease",
-      "focus": "intentional action with patient structure; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_saturn_sextile",
-    "if": {
-      "planet": "Mars",
-      "aspect": "sextile",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "impulsive reactions, fear-based shutdown, and hesitating to act on opportunity",
-      "focus": "intentional action with patient structure; take the small opening and build"
-    },
-    "tags": [
-      "actional"
-    ]
+    ],
+    "weight": 0.4
   },
   {
     "id": "mars_sun_conjunction",
@@ -607,72 +550,13 @@
       "target": "Sun"
     },
     "output": {
-      "avoid": "impulsive reactions, self-image battles, and fusion and intensity",
-      "focus": "intentional action with values-aligned confidence; integrate both drives consciously"
+      "avoid": "ego-driven aggression disguised as confidence",
+      "focus": "direct your will toward what truly matters"
     },
     "tags": [
       "actional"
-    ]
-  },
-  {
-    "id": "mars_sun_opposition",
-    "if": {
-      "planet": "Mars",
-      "aspect": "opposition",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "impulsive reactions, self-image battles, and polarizing extremes",
-      "focus": "intentional action with values-aligned confidence; balance both sides before deciding"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_sun_square",
-    "if": {
-      "planet": "Mars",
-      "aspect": "square",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "impulsive reactions, self-image battles, and friction-driven reactivity",
-      "focus": "intentional action with values-aligned confidence; channel tension into constructive effort"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_sun_trine",
-    "if": {
-      "planet": "Mars",
-      "aspect": "trine",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "impulsive reactions, self-image battles, and complacent ease",
-      "focus": "intentional action with values-aligned confidence; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_sun_sextile",
-    "if": {
-      "planet": "Mars",
-      "aspect": "sextile",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "impulsive reactions, self-image battles, and hesitating to act on opportunity",
-      "focus": "intentional action with values-aligned confidence; take the small opening and build"
-    },
-    "tags": [
-      "actional"
-    ]
+    ],
+    "weight": 0.4
   },
   {
     "id": "mars_venus_conjunction",
@@ -682,72 +566,14 @@
       "target": "Venus"
     },
     "output": {
-      "avoid": "impulsive reactions, relationship projection, and fusion and intensity",
-      "focus": "intentional action with relational warmth; integrate both drives consciously"
+      "avoid": "pursuing desire without considering impact on others",
+      "focus": "balance assertion with genuine care"
     },
     "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_venus_opposition",
-    "if": {
-      "planet": "Mars",
-      "aspect": "opposition",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "impulsive reactions, relationship projection, and polarizing extremes",
-      "focus": "intentional action with relational warmth; balance both sides before deciding"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_venus_square",
-    "if": {
-      "planet": "Mars",
-      "aspect": "square",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "impulsive reactions, relationship projection, and friction-driven reactivity",
-      "focus": "intentional action with relational warmth; channel tension into constructive effort"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_venus_trine",
-    "if": {
-      "planet": "Mars",
-      "aspect": "trine",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "impulsive reactions, relationship projection, and complacent ease",
-      "focus": "intentional action with relational warmth; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_venus_sextile",
-    "if": {
-      "planet": "Mars",
-      "aspect": "sextile",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "impulsive reactions, relationship projection, and hesitating to act on opportunity",
-      "focus": "intentional action with relational warmth; take the small opening and build"
-    },
-    "tags": [
-      "actional"
-    ]
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mars_mercury_conjunction",
@@ -757,72 +583,14 @@
       "target": "Mercury"
     },
     "output": {
-      "avoid": "impulsive reactions, argument loops, and fusion and intensity",
-      "focus": "intentional action with clear framing; integrate both drives consciously"
+      "avoid": "sharp or impatient communication",
+      "focus": "think before speaking, especially in conflict"
     },
     "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_mercury_opposition",
-    "if": {
-      "planet": "Mars",
-      "aspect": "opposition",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "impulsive reactions, argument loops, and polarizing extremes",
-      "focus": "intentional action with clear framing; balance both sides before deciding"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_mercury_square",
-    "if": {
-      "planet": "Mars",
-      "aspect": "square",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "impulsive reactions, argument loops, and friction-driven reactivity",
-      "focus": "intentional action with clear framing; channel tension into constructive effort"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_mercury_trine",
-    "if": {
-      "planet": "Mars",
-      "aspect": "trine",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "impulsive reactions, argument loops, and complacent ease",
-      "focus": "intentional action with clear framing; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "mars_mercury_sextile",
-    "if": {
-      "planet": "Mars",
-      "aspect": "sextile",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "impulsive reactions, argument loops, and hesitating to act on opportunity",
-      "focus": "intentional action with clear framing; take the small opening and build"
-    },
-    "tags": [
-      "actional"
-    ]
+      "actional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mars_jupiter_conjunction",
@@ -832,12 +600,96 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "impulsive reactions, excessive risk-taking, and fusion and intensity",
-      "focus": "intentional action with wise perspective; integrate both drives consciously"
+      "avoid": "reckless overextension and scattered energy",
+      "focus": "focus intensity on one meaningful goal"
     },
     "tags": [
       "actional"
-    ]
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_moon_opposition",
+    "if": {
+      "planet": "Mars",
+      "aspect": "opposition",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "conflict driven by unacknowledged emotional need",
+      "focus": "name what you feel before naming what others did"
+    },
+    "tags": [
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_saturn_opposition",
+    "if": {
+      "planet": "Mars",
+      "aspect": "opposition",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "pushing hard against immovable obstacles",
+      "focus": "choose strategic patience over direct force"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_sun_opposition",
+    "if": {
+      "planet": "Mars",
+      "aspect": "opposition",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "power struggles and defensive assertion",
+      "focus": "collaborate instead of compete"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_venus_opposition",
+    "if": {
+      "planet": "Mars",
+      "aspect": "opposition",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "tension between want and love, desire and relationship",
+      "focus": "find the bridge between your needs and others"
+    },
+    "tags": [
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_mercury_opposition",
+    "if": {
+      "planet": "Mars",
+      "aspect": "opposition",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "argumentative energy that closes rather than opens",
+      "focus": "listen as actively as you speak"
+    },
+    "tags": [
+      "actional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mars_jupiter_opposition",
@@ -847,12 +699,96 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "impulsive reactions, excessive risk-taking, and polarizing extremes",
-      "focus": "intentional action with wise perspective; balance both sides before deciding"
+      "avoid": "overblown ambition that wastes real momentum",
+      "focus": "scale your effort to what is actually achievable today"
     },
     "tags": [
       "actional"
-    ]
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_moon_square",
+    "if": {
+      "planet": "Mars",
+      "aspect": "square",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "reactive discussions and impulsive emotional strikes",
+      "focus": "pause, breathe, then respond with intention"
+    },
+    "tags": [
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_saturn_square",
+    "if": {
+      "planet": "Mars",
+      "aspect": "square",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "frustration from banging against walls that need time",
+      "focus": "identify what you can move and move that"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_sun_square",
+    "if": {
+      "planet": "Mars",
+      "aspect": "square",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "aggression masquerading as drive or ambition",
+      "focus": "channel competitive energy into self-improvement"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_venus_square",
+    "if": {
+      "planet": "Mars",
+      "aspect": "square",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "forcing outcomes in love or creative work",
+      "focus": "allow desire to breathe without demanding resolution"
+    },
+    "tags": [
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_mercury_square",
+    "if": {
+      "planet": "Mars",
+      "aspect": "square",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "combative speech and hasty conclusions",
+      "focus": "slow communication down, precision over speed"
+    },
+    "tags": [
+      "actional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mars_jupiter_square",
@@ -862,12 +798,96 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "impulsive reactions, excessive risk-taking, and friction-driven reactivity",
-      "focus": "intentional action with wise perspective; channel tension into constructive effort"
+      "avoid": "taking on more than current capacity allows",
+      "focus": "commit to depth over breadth right now"
     },
     "tags": [
       "actional"
-    ]
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_moon_trine",
+    "if": {
+      "planet": "Mars",
+      "aspect": "trine",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "burning through emotional energy without replenishing",
+      "focus": "use the flow of feeling and action together"
+    },
+    "tags": [
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_saturn_trine",
+    "if": {
+      "planet": "Mars",
+      "aspect": "trine",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "mistaking smooth progress for permission to skip steps",
+      "focus": "apply consistent discipline while momentum is strong"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_sun_trine",
+    "if": {
+      "planet": "Mars",
+      "aspect": "trine",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "overconfidence in ability to push through anything",
+      "focus": "act with clarity and purpose, not just energy"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_venus_trine",
+    "if": {
+      "planet": "Mars",
+      "aspect": "trine",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "acting on desire without checking deeper alignment",
+      "focus": "pursue what you want with heart and intention"
+    },
+    "tags": [
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_mercury_trine",
+    "if": {
+      "planet": "Mars",
+      "aspect": "trine",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "fast thinking that skips necessary nuance",
+      "focus": "use mental sharpness to communicate decisively"
+    },
+    "tags": [
+      "actional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mars_jupiter_trine",
@@ -877,12 +897,96 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "impulsive reactions, excessive risk-taking, and complacent ease",
-      "focus": "intentional action with wise perspective; use momentum with gratitude and purpose"
+      "avoid": "expanding so fast that foundations are skipped",
+      "focus": "move boldly and build as you go"
     },
     "tags": [
       "actional"
-    ]
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_moon_sextile",
+    "if": {
+      "planet": "Mars",
+      "aspect": "sextile",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "leaving emotional momentum unused",
+      "focus": "take action that honors both feeling and direction"
+    },
+    "tags": [
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_saturn_sextile",
+    "if": {
+      "planet": "Mars",
+      "aspect": "sextile",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "missing the window to build something lasting",
+      "focus": "put disciplined effort into one tangible thing today"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_sun_sextile",
+    "if": {
+      "planet": "Mars",
+      "aspect": "sextile",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "waiting for perfect conditions before starting",
+      "focus": "begin with what you have and refine in motion"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_venus_sextile",
+    "if": {
+      "planet": "Mars",
+      "aspect": "sextile",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "hesitating to pursue what genuinely attracts you",
+      "focus": "take a small step toward what you desire"
+    },
+    "tags": [
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mars_mercury_sextile",
+    "if": {
+      "planet": "Mars",
+      "aspect": "sextile",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "thinking about action instead of taking it",
+      "focus": "move on the clearest idea available right now"
+    },
+    "tags": [
+      "actional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mars_jupiter_sextile",
@@ -892,12 +996,13 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "impulsive reactions, excessive risk-taking, and hesitating to act on opportunity",
-      "focus": "intentional action with wise perspective; take the small opening and build"
+      "avoid": "letting opportunity pass without engaging it",
+      "focus": "say yes to one expansive possibility today"
     },
     "tags": [
       "actional"
-    ]
+    ],
+    "weight": 0.4
   },
   {
     "id": "saturn_moon_conjunction",
@@ -907,72 +1012,14 @@
       "target": "Moon"
     },
     "output": {
-      "avoid": "rigid self-criticism, mood-driven assumptions, and fusion and intensity",
-      "focus": "steady discipline with nervous-system grounding; integrate both drives consciously"
+      "avoid": "emotional suppression disguised as self-control",
+      "focus": "structure your feelings without erasing them"
     },
     "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_moon_opposition",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "opposition",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, mood-driven assumptions, and polarizing extremes",
-      "focus": "steady discipline with nervous-system grounding; balance both sides before deciding"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_moon_square",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "square",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, mood-driven assumptions, and friction-driven reactivity",
-      "focus": "steady discipline with nervous-system grounding; channel tension into constructive effort"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_moon_trine",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "trine",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, mood-driven assumptions, and complacent ease",
-      "focus": "steady discipline with nervous-system grounding; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_moon_sextile",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "sextile",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, mood-driven assumptions, and hesitating to act on opportunity",
-      "focus": "steady discipline with nervous-system grounding; take the small opening and build"
-    },
-    "tags": [
-      "actional"
-    ]
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "saturn_mars_conjunction",
@@ -982,72 +1029,13 @@
       "target": "Mars"
     },
     "output": {
-      "avoid": "rigid self-criticism, combative escalation, and fusion and intensity",
-      "focus": "steady discipline with disciplined movement; integrate both drives consciously"
+      "avoid": "blocked action creating internal frustration",
+      "focus": "work methodically within real constraints"
     },
     "tags": [
       "actional"
-    ]
-  },
-  {
-    "id": "saturn_mars_opposition",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "opposition",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, combative escalation, and polarizing extremes",
-      "focus": "steady discipline with disciplined movement; balance both sides before deciding"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_mars_square",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "square",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, combative escalation, and friction-driven reactivity",
-      "focus": "steady discipline with disciplined movement; channel tension into constructive effort"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_mars_trine",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "trine",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, combative escalation, and complacent ease",
-      "focus": "steady discipline with disciplined movement; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_mars_sextile",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "sextile",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, combative escalation, and hesitating to act on opportunity",
-      "focus": "steady discipline with disciplined movement; take the small opening and build"
-    },
-    "tags": [
-      "actional"
-    ]
+    ],
+    "weight": 0.4
   },
   {
     "id": "saturn_sun_conjunction",
@@ -1057,72 +1045,13 @@
       "target": "Sun"
     },
     "output": {
-      "avoid": "rigid self-criticism, self-image battles, and fusion and intensity",
-      "focus": "steady discipline with values-aligned confidence; integrate both drives consciously"
+      "avoid": "excessive self-criticism and imposed limitation",
+      "focus": "do one responsible thing at a time"
     },
     "tags": [
       "actional"
-    ]
-  },
-  {
-    "id": "saturn_sun_opposition",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "opposition",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, self-image battles, and polarizing extremes",
-      "focus": "steady discipline with values-aligned confidence; balance both sides before deciding"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_sun_square",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "square",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, self-image battles, and friction-driven reactivity",
-      "focus": "steady discipline with values-aligned confidence; channel tension into constructive effort"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_sun_trine",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "trine",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, self-image battles, and complacent ease",
-      "focus": "steady discipline with values-aligned confidence; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_sun_sextile",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "sextile",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, self-image battles, and hesitating to act on opportunity",
-      "focus": "steady discipline with values-aligned confidence; take the small opening and build"
-    },
-    "tags": [
-      "actional"
-    ]
+    ],
+    "weight": 0.4
   },
   {
     "id": "saturn_venus_conjunction",
@@ -1132,72 +1061,14 @@
       "target": "Venus"
     },
     "output": {
-      "avoid": "rigid self-criticism, relationship projection, and fusion and intensity",
-      "focus": "steady discipline with relational warmth; integrate both drives consciously"
+      "avoid": "withholding love or affection out of fear",
+      "focus": "commit to what you value even when it feels hard"
     },
     "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_venus_opposition",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "opposition",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, relationship projection, and polarizing extremes",
-      "focus": "steady discipline with relational warmth; balance both sides before deciding"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_venus_square",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "square",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, relationship projection, and friction-driven reactivity",
-      "focus": "steady discipline with relational warmth; channel tension into constructive effort"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_venus_trine",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "trine",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, relationship projection, and complacent ease",
-      "focus": "steady discipline with relational warmth; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_venus_sextile",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "sextile",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, relationship projection, and hesitating to act on opportunity",
-      "focus": "steady discipline with relational warmth; take the small opening and build"
-    },
-    "tags": [
-      "actional"
-    ]
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
   },
   {
     "id": "saturn_mercury_conjunction",
@@ -1207,72 +1078,14 @@
       "target": "Mercury"
     },
     "output": {
-      "avoid": "rigid self-criticism, argument loops, and fusion and intensity",
-      "focus": "steady discipline with clear framing; integrate both drives consciously"
+      "avoid": "rigid thinking and pessimistic inner dialogue",
+      "focus": "speak with precision and structural clarity"
     },
     "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_mercury_opposition",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "opposition",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, argument loops, and polarizing extremes",
-      "focus": "steady discipline with clear framing; balance both sides before deciding"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_mercury_square",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "square",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, argument loops, and friction-driven reactivity",
-      "focus": "steady discipline with clear framing; channel tension into constructive effort"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_mercury_trine",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "trine",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, argument loops, and complacent ease",
-      "focus": "steady discipline with clear framing; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "saturn_mercury_sextile",
-    "if": {
-      "planet": "Saturn",
-      "aspect": "sextile",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "rigid self-criticism, argument loops, and hesitating to act on opportunity",
-      "focus": "steady discipline with clear framing; take the small opening and build"
-    },
-    "tags": [
-      "actional"
-    ]
+      "actional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "saturn_jupiter_conjunction",
@@ -1282,12 +1095,96 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "rigid self-criticism, excessive risk-taking, and fusion and intensity",
-      "focus": "steady discipline with wise perspective; integrate both drives consciously"
+      "avoid": "contraction blocking necessary expansion",
+      "focus": "build the foundation before adding more floors"
     },
     "tags": [
       "actional"
-    ]
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_moon_opposition",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "opposition",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "emotional detachment as a defense mechanism",
+      "focus": "stay in contact with feeling even under pressure"
+    },
+    "tags": [
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_mars_opposition",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "opposition",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "grinding against limits until exhausted",
+      "focus": "identify the one thing that can actually move today"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_sun_opposition",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "opposition",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "external pressure eroding self-worth",
+      "focus": "anchor identity in what you know is true about yourself"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_venus_opposition",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "opposition",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "withholding warmth due to past disappointment",
+      "focus": "open to love while keeping your own ground"
+    },
+    "tags": [
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_mercury_opposition",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "opposition",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "mental heaviness and catastrophic thinking",
+      "focus": "question the pessimistic story before accepting it"
+    },
+    "tags": [
+      "actional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "saturn_jupiter_opposition",
@@ -1297,12 +1194,96 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "rigid self-criticism, excessive risk-taking, and polarizing extremes",
-      "focus": "steady discipline with wise perspective; balance both sides before deciding"
+      "avoid": "fear of growth masquerading as practicality",
+      "focus": "take the realistic risk that is actually available"
     },
     "tags": [
       "actional"
-    ]
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_moon_square",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "square",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "self-criticism and emotional rigidity",
+      "focus": "be patient with your own emotional process"
+    },
+    "tags": [
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_mars_square",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "square",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "exhausting effort against immovable obstacles",
+      "focus": "conserve energy and choose battles wisely"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_sun_square",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "square",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "letting obligation eclipse authentic expression",
+      "focus": "fulfill responsibility without losing yourself in it"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_venus_square",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "square",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "love blocked by fear of inadequacy or rejection",
+      "focus": "show up imperfectly rather than not at all"
+    },
+    "tags": [
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_mercury_square",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "square",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "negative mental loops and defeatist thinking",
+      "focus": "replace criticism with one constructive next step"
+    },
+    "tags": [
+      "actional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "saturn_jupiter_square",
@@ -1312,12 +1293,96 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "rigid self-criticism, excessive risk-taking, and friction-driven reactivity",
-      "focus": "steady discipline with wise perspective; channel tension into constructive effort"
+      "avoid": "paralysis between ambition and fear of failure",
+      "focus": "take the smallest possible step forward today"
     },
     "tags": [
       "actional"
-    ]
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_moon_trine",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "trine",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "using emotional stability as an excuse to avoid growth",
+      "focus": "build lasting emotional structures from current steadiness"
+    },
+    "tags": [
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_mars_trine",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "trine",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "complacency with current pace of progress",
+      "focus": "apply disciplined effort while conditions support it"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_sun_trine",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "trine",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "settling for less than what you are capable of",
+      "focus": "step into greater responsibility with confidence"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_venus_trine",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "trine",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "taking relational stability for granted",
+      "focus": "invest in what you love with consistent presence"
+    },
+    "tags": [
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_mercury_trine",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "trine",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "overthinking without acting on clear conclusions",
+      "focus": "communicate with authority and structured clarity"
+    },
+    "tags": [
+      "actional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "saturn_jupiter_trine",
@@ -1327,12 +1392,96 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "rigid self-criticism, excessive risk-taking, and complacent ease",
-      "focus": "steady discipline with wise perspective; use momentum with gratitude and purpose"
+      "avoid": "planning without committing to execution",
+      "focus": "turn vision into a structured, realistic plan"
     },
     "tags": [
       "actional"
-    ]
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_moon_sextile",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "sextile",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "ignoring the opportunity to stabilize emotional patterns",
+      "focus": "create one healthy emotional habit or boundary"
+    },
+    "tags": [
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_mars_sextile",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "sextile",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "letting useful momentum go to waste",
+      "focus": "channel energy into something with lasting structure"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_sun_sextile",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "sextile",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "missing the window for disciplined self-development",
+      "focus": "do the work that future-you will thank you for"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_venus_sextile",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "sextile",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "neglecting to invest in important relationships",
+      "focus": "show love through consistent, reliable presence"
+    },
+    "tags": [
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "saturn_mercury_sextile",
+    "if": {
+      "planet": "Saturn",
+      "aspect": "sextile",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "scattered thinking when focused planning is available",
+      "focus": "organize your thoughts into a clear written structure"
+    },
+    "tags": [
+      "actional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "saturn_jupiter_sextile",
@@ -1342,12 +1491,13 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "rigid self-criticism, excessive risk-taking, and hesitating to act on opportunity",
-      "focus": "steady discipline with wise perspective; take the small opening and build"
+      "avoid": "letting practical opportunity pass without acting",
+      "focus": "take one concrete step toward your larger vision"
     },
     "tags": [
       "actional"
-    ]
+    ],
+    "weight": 0.4
   },
   {
     "id": "sun_moon_conjunction",
@@ -1357,72 +1507,14 @@
       "target": "Moon"
     },
     "output": {
-      "avoid": "ego defensiveness, mood-driven assumptions, and fusion and intensity",
-      "focus": "clear self-leadership with nervous-system grounding; integrate both drives consciously"
+      "avoid": "blurring inner needs with outer identity",
+      "focus": "integrate what you feel with what you present"
     },
     "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_moon_opposition",
-    "if": {
-      "planet": "Sun",
-      "aspect": "opposition",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "ego defensiveness, mood-driven assumptions, and polarizing extremes",
-      "focus": "clear self-leadership with nervous-system grounding; balance both sides before deciding"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_moon_square",
-    "if": {
-      "planet": "Sun",
-      "aspect": "square",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "ego defensiveness, mood-driven assumptions, and friction-driven reactivity",
-      "focus": "clear self-leadership with nervous-system grounding; channel tension into constructive effort"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_moon_trine",
-    "if": {
-      "planet": "Sun",
-      "aspect": "trine",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "ego defensiveness, mood-driven assumptions, and complacent ease",
-      "focus": "clear self-leadership with nervous-system grounding; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_moon_sextile",
-    "if": {
-      "planet": "Sun",
-      "aspect": "sextile",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "ego defensiveness, mood-driven assumptions, and hesitating to act on opportunity",
-      "focus": "clear self-leadership with nervous-system grounding; take the small opening and build"
-    },
-    "tags": [
-      "actional"
-    ]
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "sun_mars_conjunction",
@@ -1432,72 +1524,13 @@
       "target": "Mars"
     },
     "output": {
-      "avoid": "ego defensiveness, combative escalation, and fusion and intensity",
-      "focus": "clear self-leadership with disciplined movement; integrate both drives consciously"
+      "avoid": "ego-driven force that burns bridges",
+      "focus": "act from authentic will, not wounded pride"
     },
     "tags": [
       "actional"
-    ]
-  },
-  {
-    "id": "sun_mars_opposition",
-    "if": {
-      "planet": "Sun",
-      "aspect": "opposition",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "ego defensiveness, combative escalation, and polarizing extremes",
-      "focus": "clear self-leadership with disciplined movement; balance both sides before deciding"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_mars_square",
-    "if": {
-      "planet": "Sun",
-      "aspect": "square",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "ego defensiveness, combative escalation, and friction-driven reactivity",
-      "focus": "clear self-leadership with disciplined movement; channel tension into constructive effort"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_mars_trine",
-    "if": {
-      "planet": "Sun",
-      "aspect": "trine",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "ego defensiveness, combative escalation, and complacent ease",
-      "focus": "clear self-leadership with disciplined movement; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_mars_sextile",
-    "if": {
-      "planet": "Sun",
-      "aspect": "sextile",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "ego defensiveness, combative escalation, and hesitating to act on opportunity",
-      "focus": "clear self-leadership with disciplined movement; take the small opening and build"
-    },
-    "tags": [
-      "actional"
-    ]
+    ],
+    "weight": 0.4
   },
   {
     "id": "sun_saturn_conjunction",
@@ -1507,72 +1540,13 @@
       "target": "Saturn"
     },
     "output": {
-      "avoid": "ego defensiveness, fear-based shutdown, and fusion and intensity",
-      "focus": "clear self-leadership with patient structure; integrate both drives consciously"
+      "avoid": "taking on more weight than is truly yours to carry",
+      "focus": "own your authority with humility"
     },
     "tags": [
       "actional"
-    ]
-  },
-  {
-    "id": "sun_saturn_opposition",
-    "if": {
-      "planet": "Sun",
-      "aspect": "opposition",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "ego defensiveness, fear-based shutdown, and polarizing extremes",
-      "focus": "clear self-leadership with patient structure; balance both sides before deciding"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_saturn_square",
-    "if": {
-      "planet": "Sun",
-      "aspect": "square",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "ego defensiveness, fear-based shutdown, and friction-driven reactivity",
-      "focus": "clear self-leadership with patient structure; channel tension into constructive effort"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_saturn_trine",
-    "if": {
-      "planet": "Sun",
-      "aspect": "trine",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "ego defensiveness, fear-based shutdown, and complacent ease",
-      "focus": "clear self-leadership with patient structure; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_saturn_sextile",
-    "if": {
-      "planet": "Sun",
-      "aspect": "sextile",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "ego defensiveness, fear-based shutdown, and hesitating to act on opportunity",
-      "focus": "clear self-leadership with patient structure; take the small opening and build"
-    },
-    "tags": [
-      "actional"
-    ]
+    ],
+    "weight": 0.4
   },
   {
     "id": "sun_venus_conjunction",
@@ -1582,72 +1556,14 @@
       "target": "Venus"
     },
     "output": {
-      "avoid": "ego defensiveness, relationship projection, and fusion and intensity",
-      "focus": "clear self-leadership with relational warmth; integrate both drives consciously"
+      "avoid": "self-absorption in relationships and creative work",
+      "focus": "shine generously without needing to be the center"
     },
     "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_venus_opposition",
-    "if": {
-      "planet": "Sun",
-      "aspect": "opposition",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "ego defensiveness, relationship projection, and polarizing extremes",
-      "focus": "clear self-leadership with relational warmth; balance both sides before deciding"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_venus_square",
-    "if": {
-      "planet": "Sun",
-      "aspect": "square",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "ego defensiveness, relationship projection, and friction-driven reactivity",
-      "focus": "clear self-leadership with relational warmth; channel tension into constructive effort"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_venus_trine",
-    "if": {
-      "planet": "Sun",
-      "aspect": "trine",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "ego defensiveness, relationship projection, and complacent ease",
-      "focus": "clear self-leadership with relational warmth; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_venus_sextile",
-    "if": {
-      "planet": "Sun",
-      "aspect": "sextile",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "ego defensiveness, relationship projection, and hesitating to act on opportunity",
-      "focus": "clear self-leadership with relational warmth; take the small opening and build"
-    },
-    "tags": [
-      "actional"
-    ]
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
   },
   {
     "id": "sun_mercury_conjunction",
@@ -1657,72 +1573,14 @@
       "target": "Mercury"
     },
     "output": {
-      "avoid": "ego defensiveness, argument loops, and fusion and intensity",
-      "focus": "clear self-leadership with clear framing; integrate both drives consciously"
+      "avoid": "speaking before truly listening to yourself",
+      "focus": "let authentic thought lead before expression follows"
     },
     "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_mercury_opposition",
-    "if": {
-      "planet": "Sun",
-      "aspect": "opposition",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "ego defensiveness, argument loops, and polarizing extremes",
-      "focus": "clear self-leadership with clear framing; balance both sides before deciding"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_mercury_square",
-    "if": {
-      "planet": "Sun",
-      "aspect": "square",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "ego defensiveness, argument loops, and friction-driven reactivity",
-      "focus": "clear self-leadership with clear framing; channel tension into constructive effort"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_mercury_trine",
-    "if": {
-      "planet": "Sun",
-      "aspect": "trine",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "ego defensiveness, argument loops, and complacent ease",
-      "focus": "clear self-leadership with clear framing; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "actional"
-    ]
-  },
-  {
-    "id": "sun_mercury_sextile",
-    "if": {
-      "planet": "Sun",
-      "aspect": "sextile",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "ego defensiveness, argument loops, and hesitating to act on opportunity",
-      "focus": "clear self-leadership with clear framing; take the small opening and build"
-    },
-    "tags": [
-      "actional"
-    ]
+      "actional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "sun_jupiter_conjunction",
@@ -1732,12 +1590,96 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "ego defensiveness, excessive risk-taking, and fusion and intensity",
-      "focus": "clear self-leadership with wise perspective; integrate both drives consciously"
+      "avoid": "grandiose self-image disconnected from reality",
+      "focus": "expand from a genuine center, not an inflated one"
     },
     "tags": [
       "actional"
-    ]
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_moon_opposition",
+    "if": {
+      "planet": "Sun",
+      "aspect": "opposition",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "conflict between public role and private need",
+      "focus": "find harmony between who you are and what you show"
+    },
+    "tags": [
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_mars_opposition",
+    "if": {
+      "planet": "Sun",
+      "aspect": "opposition",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "power conflicts and ego clashes with others",
+      "focus": "lead by example rather than by force"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_saturn_opposition",
+    "if": {
+      "planet": "Sun",
+      "aspect": "opposition",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "external authority undermining self-trust",
+      "focus": "hold your ground without becoming rigid"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_venus_opposition",
+    "if": {
+      "planet": "Sun",
+      "aspect": "opposition",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "tension between self-expression and relational harmony",
+      "focus": "be yourself fully while remaining genuinely open"
+    },
+    "tags": [
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_mercury_opposition",
+    "if": {
+      "planet": "Sun",
+      "aspect": "opposition",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "intellectualizing at the expense of authentic feeling",
+      "focus": "let clarity of mind serve, not override, the heart"
+    },
+    "tags": [
+      "actional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "sun_jupiter_opposition",
@@ -1747,12 +1689,96 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "ego defensiveness, excessive risk-taking, and polarizing extremes",
-      "focus": "clear self-leadership with wise perspective; balance both sides before deciding"
+      "avoid": "overestimating capacity or resources available",
+      "focus": "be honest about what is truly possible right now"
     },
     "tags": [
       "actional"
-    ]
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_moon_square",
+    "if": {
+      "planet": "Sun",
+      "aspect": "square",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "internal tension between want and need",
+      "focus": "honor the emotional truth beneath the surface goal"
+    },
+    "tags": [
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_mars_square",
+    "if": {
+      "planet": "Sun",
+      "aspect": "square",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "aggression disguised as leadership or drive",
+      "focus": "direct force toward creation, not destruction"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_saturn_square",
+    "if": {
+      "planet": "Sun",
+      "aspect": "square",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "obligation crushing authentic self-expression",
+      "focus": "complete what must be done without losing your center"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_venus_square",
+    "if": {
+      "planet": "Sun",
+      "aspect": "square",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "forcing creative or relational outcomes",
+      "focus": "allow beauty and connection to emerge naturally"
+    },
+    "tags": [
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_mercury_square",
+    "if": {
+      "planet": "Sun",
+      "aspect": "square",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "mental noise drowning out authentic insight",
+      "focus": "simplify: one clear thought, one clear action"
+    },
+    "tags": [
+      "actional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "sun_jupiter_square",
@@ -1762,12 +1788,96 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "ego defensiveness, excessive risk-taking, and friction-driven reactivity",
-      "focus": "clear self-leadership with wise perspective; channel tension into constructive effort"
+      "avoid": "overreach and scattered ambition",
+      "focus": "choose one direction and commit fully to it"
     },
     "tags": [
       "actional"
-    ]
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_moon_trine",
+    "if": {
+      "planet": "Sun",
+      "aspect": "trine",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "comfortable alignment breeding complacency",
+      "focus": "use inner harmony to take meaningful outer action"
+    },
+    "tags": [
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_mars_trine",
+    "if": {
+      "planet": "Sun",
+      "aspect": "trine",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "expending energy without meaningful intention",
+      "focus": "act boldly from a grounded and authentic place"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_saturn_trine",
+    "if": {
+      "planet": "Sun",
+      "aspect": "trine",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "mistaking ease for a reason to skip the work",
+      "focus": "build something real while conditions support it"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_venus_trine",
+    "if": {
+      "planet": "Sun",
+      "aspect": "trine",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "passive enjoyment that avoids necessary engagement",
+      "focus": "create and connect from a place of genuine joy"
+    },
+    "tags": [
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_mercury_trine",
+    "if": {
+      "planet": "Sun",
+      "aspect": "trine",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "fluent speech that stays at the surface",
+      "focus": "use clarity of expression to go deeper than usual"
+    },
+    "tags": [
+      "actional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "sun_jupiter_trine",
@@ -1777,12 +1887,96 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "ego defensiveness, excessive risk-taking, and complacent ease",
-      "focus": "clear self-leadership with wise perspective; use momentum with gratitude and purpose"
+      "avoid": "optimism that floats without landing anywhere",
+      "focus": "expand into something concrete and meaningful"
     },
     "tags": [
       "actional"
-    ]
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_moon_sextile",
+    "if": {
+      "planet": "Sun",
+      "aspect": "sextile",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "missing the window for authentic self-expression",
+      "focus": "let inner truth guide one visible action today"
+    },
+    "tags": [
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_mars_sextile",
+    "if": {
+      "planet": "Sun",
+      "aspect": "sextile",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "passive energy when initiative is available",
+      "focus": "begin something that matters to you right now"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_saturn_sextile",
+    "if": {
+      "planet": "Sun",
+      "aspect": "sextile",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "leaving structure and discipline unused",
+      "focus": "apply focused effort to one important commitment"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_venus_sextile",
+    "if": {
+      "planet": "Sun",
+      "aspect": "sextile",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "neglecting beauty, pleasure, or connection today",
+      "focus": "invest in what genuinely brings you alive"
+    },
+    "tags": [
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "sun_mercury_sextile",
+    "if": {
+      "planet": "Sun",
+      "aspect": "sextile",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "clarity going to waste without expression",
+      "focus": "speak or write what you have been holding back"
+    },
+    "tags": [
+      "actional",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "sun_jupiter_sextile",
@@ -1792,12 +1986,13 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "ego defensiveness, excessive risk-taking, and hesitating to act on opportunity",
-      "focus": "clear self-leadership with wise perspective; take the small opening and build"
+      "avoid": "opportunity going unrecognized or unused",
+      "focus": "say yes to the thing that could expand your world"
     },
     "tags": [
       "actional"
-    ]
+    ],
+    "weight": 0.4
   },
   {
     "id": "venus_moon_conjunction",
@@ -1807,72 +2002,14 @@
       "target": "Moon"
     },
     "output": {
-      "avoid": "approval-seeking, mood-driven assumptions, and fusion and intensity",
-      "focus": "mutual reciprocity with nervous-system grounding; integrate both drives consciously"
+      "avoid": "emotional dependency dressed as love",
+      "focus": "nurture from fullness, not from need"
     },
     "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_moon_opposition",
-    "if": {
-      "planet": "Venus",
-      "aspect": "opposition",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "approval-seeking, mood-driven assumptions, and polarizing extremes",
-      "focus": "mutual reciprocity with nervous-system grounding; balance both sides before deciding"
-    },
-    "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_moon_square",
-    "if": {
-      "planet": "Venus",
-      "aspect": "square",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "approval-seeking, mood-driven assumptions, and friction-driven reactivity",
-      "focus": "mutual reciprocity with nervous-system grounding; channel tension into constructive effort"
-    },
-    "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_moon_trine",
-    "if": {
-      "planet": "Venus",
-      "aspect": "trine",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "approval-seeking, mood-driven assumptions, and complacent ease",
-      "focus": "mutual reciprocity with nervous-system grounding; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_moon_sextile",
-    "if": {
-      "planet": "Venus",
-      "aspect": "sextile",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "approval-seeking, mood-driven assumptions, and hesitating to act on opportunity",
-      "focus": "mutual reciprocity with nervous-system grounding; take the small opening and build"
-    },
-    "tags": [
-      "relational"
-    ]
+      "relational",
+      "emotional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "venus_mars_conjunction",
@@ -1882,72 +2019,14 @@
       "target": "Mars"
     },
     "output": {
-      "avoid": "approval-seeking, combative escalation, and fusion and intensity",
-      "focus": "mutual reciprocity with disciplined movement; integrate both drives consciously"
+      "avoid": "desire creating pressure in close relationships",
+      "focus": "pursue what you want with care for the other"
     },
     "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_mars_opposition",
-    "if": {
-      "planet": "Venus",
-      "aspect": "opposition",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "approval-seeking, combative escalation, and polarizing extremes",
-      "focus": "mutual reciprocity with disciplined movement; balance both sides before deciding"
-    },
-    "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_mars_square",
-    "if": {
-      "planet": "Venus",
-      "aspect": "square",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "approval-seeking, combative escalation, and friction-driven reactivity",
-      "focus": "mutual reciprocity with disciplined movement; channel tension into constructive effort"
-    },
-    "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_mars_trine",
-    "if": {
-      "planet": "Venus",
-      "aspect": "trine",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "approval-seeking, combative escalation, and complacent ease",
-      "focus": "mutual reciprocity with disciplined movement; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_mars_sextile",
-    "if": {
-      "planet": "Venus",
-      "aspect": "sextile",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "approval-seeking, combative escalation, and hesitating to act on opportunity",
-      "focus": "mutual reciprocity with disciplined movement; take the small opening and build"
-    },
-    "tags": [
-      "relational"
-    ]
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "venus_saturn_conjunction",
@@ -1957,72 +2036,14 @@
       "target": "Saturn"
     },
     "output": {
-      "avoid": "approval-seeking, fear-based shutdown, and fusion and intensity",
-      "focus": "mutual reciprocity with patient structure; integrate both drives consciously"
+      "avoid": "withholding affection out of fear of loss",
+      "focus": "love with commitment, not condition"
     },
     "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_saturn_opposition",
-    "if": {
-      "planet": "Venus",
-      "aspect": "opposition",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "approval-seeking, fear-based shutdown, and polarizing extremes",
-      "focus": "mutual reciprocity with patient structure; balance both sides before deciding"
-    },
-    "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_saturn_square",
-    "if": {
-      "planet": "Venus",
-      "aspect": "square",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "approval-seeking, fear-based shutdown, and friction-driven reactivity",
-      "focus": "mutual reciprocity with patient structure; channel tension into constructive effort"
-    },
-    "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_saturn_trine",
-    "if": {
-      "planet": "Venus",
-      "aspect": "trine",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "approval-seeking, fear-based shutdown, and complacent ease",
-      "focus": "mutual reciprocity with patient structure; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_saturn_sextile",
-    "if": {
-      "planet": "Venus",
-      "aspect": "sextile",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "approval-seeking, fear-based shutdown, and hesitating to act on opportunity",
-      "focus": "mutual reciprocity with patient structure; take the small opening and build"
-    },
-    "tags": [
-      "relational"
-    ]
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "venus_sun_conjunction",
@@ -2032,72 +2053,14 @@
       "target": "Sun"
     },
     "output": {
-      "avoid": "approval-seeking, self-image battles, and fusion and intensity",
-      "focus": "mutual reciprocity with values-aligned confidence; integrate both drives consciously"
+      "avoid": "vanity or self-indulgence in creative expression",
+      "focus": "create and connect from genuine heart-center"
     },
     "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_sun_opposition",
-    "if": {
-      "planet": "Venus",
-      "aspect": "opposition",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "approval-seeking, self-image battles, and polarizing extremes",
-      "focus": "mutual reciprocity with values-aligned confidence; balance both sides before deciding"
-    },
-    "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_sun_square",
-    "if": {
-      "planet": "Venus",
-      "aspect": "square",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "approval-seeking, self-image battles, and friction-driven reactivity",
-      "focus": "mutual reciprocity with values-aligned confidence; channel tension into constructive effort"
-    },
-    "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_sun_trine",
-    "if": {
-      "planet": "Venus",
-      "aspect": "trine",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "approval-seeking, self-image battles, and complacent ease",
-      "focus": "mutual reciprocity with values-aligned confidence; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_sun_sextile",
-    "if": {
-      "planet": "Venus",
-      "aspect": "sextile",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "approval-seeking, self-image battles, and hesitating to act on opportunity",
-      "focus": "mutual reciprocity with values-aligned confidence; take the small opening and build"
-    },
-    "tags": [
-      "relational"
-    ]
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "venus_mercury_conjunction",
@@ -2107,72 +2070,14 @@
       "target": "Mercury"
     },
     "output": {
-      "avoid": "approval-seeking, argument loops, and fusion and intensity",
-      "focus": "mutual reciprocity with clear framing; integrate both drives consciously"
+      "avoid": "saying pleasing things instead of true things",
+      "focus": "speak lovingly and honestly at the same time"
     },
     "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_mercury_opposition",
-    "if": {
-      "planet": "Venus",
-      "aspect": "opposition",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "approval-seeking, argument loops, and polarizing extremes",
-      "focus": "mutual reciprocity with clear framing; balance both sides before deciding"
-    },
-    "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_mercury_square",
-    "if": {
-      "planet": "Venus",
-      "aspect": "square",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "approval-seeking, argument loops, and friction-driven reactivity",
-      "focus": "mutual reciprocity with clear framing; channel tension into constructive effort"
-    },
-    "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_mercury_trine",
-    "if": {
-      "planet": "Venus",
-      "aspect": "trine",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "approval-seeking, argument loops, and complacent ease",
-      "focus": "mutual reciprocity with clear framing; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "relational"
-    ]
-  },
-  {
-    "id": "venus_mercury_sextile",
-    "if": {
-      "planet": "Venus",
-      "aspect": "sextile",
-      "target": "Mercury"
-    },
-    "output": {
-      "avoid": "approval-seeking, argument loops, and hesitating to act on opportunity",
-      "focus": "mutual reciprocity with clear framing; take the small opening and build"
-    },
-    "tags": [
-      "relational"
-    ]
+      "relational",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "venus_jupiter_conjunction",
@@ -2182,12 +2087,99 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "approval-seeking, excessive risk-taking, and fusion and intensity",
-      "focus": "mutual reciprocity with wise perspective; integrate both drives consciously"
+      "avoid": "overindulgence and excess in pleasure or spending",
+      "focus": "enjoy generously without losing discernment"
     },
     "tags": [
-      "relational"
-    ]
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_moon_opposition",
+    "if": {
+      "planet": "Venus",
+      "aspect": "opposition",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "giving love to others before giving it to yourself",
+      "focus": "fill your own cup before pouring into others"
+    },
+    "tags": [
+      "relational",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_mars_opposition",
+    "if": {
+      "planet": "Venus",
+      "aspect": "opposition",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "attraction-repulsion cycles in close relationships",
+      "focus": "name the tension honestly before it becomes conflict"
+    },
+    "tags": [
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_saturn_opposition",
+    "if": {
+      "planet": "Venus",
+      "aspect": "opposition",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "love blocked by old wounds or self-protection",
+      "focus": "open to connection while maintaining healthy limits"
+    },
+    "tags": [
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_sun_opposition",
+    "if": {
+      "planet": "Venus",
+      "aspect": "opposition",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "losing yourself in relationships or others approval",
+      "focus": "stay grounded in your own value while connecting"
+    },
+    "tags": [
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_mercury_opposition",
+    "if": {
+      "planet": "Venus",
+      "aspect": "opposition",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "choosing comfortable words over honest ones",
+      "focus": "be kind and true, not just one or the other"
+    },
+    "tags": [
+      "relational",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "venus_jupiter_opposition",
@@ -2197,12 +2189,99 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "approval-seeking, excessive risk-taking, and polarizing extremes",
-      "focus": "mutual reciprocity with wise perspective; balance both sides before deciding"
+      "avoid": "romantic or financial idealism without grounding",
+      "focus": "appreciate what is real before reaching for more"
     },
     "tags": [
-      "relational"
-    ]
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_moon_square",
+    "if": {
+      "planet": "Venus",
+      "aspect": "square",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "confusing emotional need with genuine love",
+      "focus": "distinguish between comfort-seeking and real connection"
+    },
+    "tags": [
+      "relational",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_mars_square",
+    "if": {
+      "planet": "Venus",
+      "aspect": "square",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "friction in relationships from unspoken desire",
+      "focus": "express what you want clearly and with care"
+    },
+    "tags": [
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_saturn_square",
+    "if": {
+      "planet": "Venus",
+      "aspect": "square",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "relational coldness or emotional unavailability",
+      "focus": "take one small risk in love or creative expression"
+    },
+    "tags": [
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_sun_square",
+    "if": {
+      "planet": "Venus",
+      "aspect": "square",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "people-pleasing at the expense of authentic self",
+      "focus": "be likeable without being untrue to yourself"
+    },
+    "tags": [
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_mercury_square",
+    "if": {
+      "planet": "Venus",
+      "aspect": "square",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "social charm bypassing honest communication",
+      "focus": "say the real thing, not just the easy thing"
+    },
+    "tags": [
+      "relational",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "venus_jupiter_square",
@@ -2212,12 +2291,99 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "approval-seeking, excessive risk-taking, and friction-driven reactivity",
-      "focus": "mutual reciprocity with wise perspective; channel tension into constructive effort"
+      "avoid": "excess in love, spending, or indulgence",
+      "focus": "enjoy within limits that support your actual wellbeing"
     },
     "tags": [
-      "relational"
-    ]
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_moon_trine",
+    "if": {
+      "planet": "Venus",
+      "aspect": "trine",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "passive emotional contentment that avoids growth",
+      "focus": "use relational ease to go deeper, not just smoother"
+    },
+    "tags": [
+      "relational",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_mars_trine",
+    "if": {
+      "planet": "Venus",
+      "aspect": "trine",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "comfortable desire that never becomes action",
+      "focus": "pursue what you love with grounded, joyful momentum"
+    },
+    "tags": [
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_saturn_trine",
+    "if": {
+      "planet": "Venus",
+      "aspect": "trine",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "taking stable relationships or creative work for granted",
+      "focus": "invest consistently in what and who you love"
+    },
+    "tags": [
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_sun_trine",
+    "if": {
+      "planet": "Venus",
+      "aspect": "trine",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "self-satisfaction that closes to new experience",
+      "focus": "shine your genuine self and let it attract what belongs"
+    },
+    "tags": [
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_mercury_trine",
+    "if": {
+      "planet": "Venus",
+      "aspect": "trine",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "pleasant conversation that skips necessary depth",
+      "focus": "combine warmth with honesty for real intimacy"
+    },
+    "tags": [
+      "relational",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "venus_jupiter_trine",
@@ -2227,12 +2393,99 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "approval-seeking, excessive risk-taking, and complacent ease",
-      "focus": "mutual reciprocity with wise perspective; use momentum with gratitude and purpose"
+      "avoid": "abundance mindset that skips the work of gratitude",
+      "focus": "receive beauty and joy with genuine presence"
     },
     "tags": [
-      "relational"
-    ]
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_moon_sextile",
+    "if": {
+      "planet": "Venus",
+      "aspect": "sextile",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "missing small opportunities for genuine connection",
+      "focus": "reach out to someone who matters to you today"
+    },
+    "tags": [
+      "relational",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_mars_sextile",
+    "if": {
+      "planet": "Venus",
+      "aspect": "sextile",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "desire without expression or action",
+      "focus": "take one step toward what genuinely attracts you"
+    },
+    "tags": [
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_saturn_sextile",
+    "if": {
+      "planet": "Venus",
+      "aspect": "sextile",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "neglecting to show love through consistent action",
+      "focus": "demonstrate care through reliable, tangible presence"
+    },
+    "tags": [
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_sun_sextile",
+    "if": {
+      "planet": "Venus",
+      "aspect": "sextile",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "self-expression remaining unexpressed",
+      "focus": "share something beautiful or true with someone today"
+    },
+    "tags": [
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "venus_mercury_sextile",
+    "if": {
+      "planet": "Venus",
+      "aspect": "sextile",
+      "target": "Mercury"
+    },
+    "output": {
+      "avoid": "kind thoughts that never become kind words",
+      "focus": "tell someone something real and loving today"
+    },
+    "tags": [
+      "relational",
+      "mental"
+    ],
+    "weight": 0.4
   },
   {
     "id": "venus_jupiter_sextile",
@@ -2242,12 +2495,14 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "approval-seeking, excessive risk-taking, and hesitating to act on opportunity",
-      "focus": "mutual reciprocity with wise perspective; take the small opening and build"
+      "avoid": "gratitude remaining internal and unexpressed",
+      "focus": "share your appreciation openly and generously"
     },
     "tags": [
-      "relational"
-    ]
+      "relational",
+      "actional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mercury_moon_conjunction",
@@ -2257,72 +2512,14 @@
       "target": "Moon"
     },
     "output": {
-      "avoid": "overthinking spirals, mood-driven assumptions, and fusion and intensity",
-      "focus": "precise communication with nervous-system grounding; integrate both drives consciously"
+      "avoid": "mental chatter drowning out emotional signal",
+      "focus": "listen to what you feel before forming an opinion"
     },
     "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_moon_opposition",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "opposition",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "overthinking spirals, mood-driven assumptions, and polarizing extremes",
-      "focus": "precise communication with nervous-system grounding; balance both sides before deciding"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_moon_square",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "square",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "overthinking spirals, mood-driven assumptions, and friction-driven reactivity",
-      "focus": "precise communication with nervous-system grounding; channel tension into constructive effort"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_moon_trine",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "trine",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "overthinking spirals, mood-driven assumptions, and complacent ease",
-      "focus": "precise communication with nervous-system grounding; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_moon_sextile",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "sextile",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "overthinking spirals, mood-driven assumptions, and hesitating to act on opportunity",
-      "focus": "precise communication with nervous-system grounding; take the small opening and build"
-    },
-    "tags": [
-      "mental"
-    ]
+      "mental",
+      "emotional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mercury_mars_conjunction",
@@ -2332,72 +2529,14 @@
       "target": "Mars"
     },
     "output": {
-      "avoid": "overthinking spirals, combative escalation, and fusion and intensity",
-      "focus": "precise communication with disciplined movement; integrate both drives consciously"
+      "avoid": "sharp, impatient communication in sensitive moments",
+      "focus": "think twice, speak once, with precision"
     },
     "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_mars_opposition",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "opposition",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "overthinking spirals, combative escalation, and polarizing extremes",
-      "focus": "precise communication with disciplined movement; balance both sides before deciding"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_mars_square",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "square",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "overthinking spirals, combative escalation, and friction-driven reactivity",
-      "focus": "precise communication with disciplined movement; channel tension into constructive effort"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_mars_trine",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "trine",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "overthinking spirals, combative escalation, and complacent ease",
-      "focus": "precise communication with disciplined movement; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_mars_sextile",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "sextile",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "overthinking spirals, combative escalation, and hesitating to act on opportunity",
-      "focus": "precise communication with disciplined movement; take the small opening and build"
-    },
-    "tags": [
-      "mental"
-    ]
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mercury_saturn_conjunction",
@@ -2407,72 +2546,14 @@
       "target": "Saturn"
     },
     "output": {
-      "avoid": "overthinking spirals, fear-based shutdown, and fusion and intensity",
-      "focus": "precise communication with patient structure; integrate both drives consciously"
+      "avoid": "mental rigidity and overly critical inner voice",
+      "focus": "structure your thinking without imprisoning it"
     },
     "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_saturn_opposition",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "opposition",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "overthinking spirals, fear-based shutdown, and polarizing extremes",
-      "focus": "precise communication with patient structure; balance both sides before deciding"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_saturn_square",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "square",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "overthinking spirals, fear-based shutdown, and friction-driven reactivity",
-      "focus": "precise communication with patient structure; channel tension into constructive effort"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_saturn_trine",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "trine",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "overthinking spirals, fear-based shutdown, and complacent ease",
-      "focus": "precise communication with patient structure; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_saturn_sextile",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "sextile",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "overthinking spirals, fear-based shutdown, and hesitating to act on opportunity",
-      "focus": "precise communication with patient structure; take the small opening and build"
-    },
-    "tags": [
-      "mental"
-    ]
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mercury_sun_conjunction",
@@ -2482,72 +2563,14 @@
       "target": "Sun"
     },
     "output": {
-      "avoid": "overthinking spirals, self-image battles, and fusion and intensity",
-      "focus": "precise communication with values-aligned confidence; integrate both drives consciously"
+      "avoid": "talking over others to assert your perspective",
+      "focus": "express authentically, then listen fully"
     },
     "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_sun_opposition",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "opposition",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "overthinking spirals, self-image battles, and polarizing extremes",
-      "focus": "precise communication with values-aligned confidence; balance both sides before deciding"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_sun_square",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "square",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "overthinking spirals, self-image battles, and friction-driven reactivity",
-      "focus": "precise communication with values-aligned confidence; channel tension into constructive effort"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_sun_trine",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "trine",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "overthinking spirals, self-image battles, and complacent ease",
-      "focus": "precise communication with values-aligned confidence; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_sun_sextile",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "sextile",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "overthinking spirals, self-image battles, and hesitating to act on opportunity",
-      "focus": "precise communication with values-aligned confidence; take the small opening and build"
-    },
-    "tags": [
-      "mental"
-    ]
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mercury_venus_conjunction",
@@ -2557,72 +2580,14 @@
       "target": "Venus"
     },
     "output": {
-      "avoid": "overthinking spirals, relationship projection, and fusion and intensity",
-      "focus": "precise communication with relational warmth; integrate both drives consciously"
+      "avoid": "saying what sounds good instead of what is true",
+      "focus": "let your words be both kind and honest"
     },
     "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_venus_opposition",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "opposition",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "overthinking spirals, relationship projection, and polarizing extremes",
-      "focus": "precise communication with relational warmth; balance both sides before deciding"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_venus_square",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "square",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "overthinking spirals, relationship projection, and friction-driven reactivity",
-      "focus": "precise communication with relational warmth; channel tension into constructive effort"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_venus_trine",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "trine",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "overthinking spirals, relationship projection, and complacent ease",
-      "focus": "precise communication with relational warmth; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "mercury_venus_sextile",
-    "if": {
-      "planet": "Mercury",
-      "aspect": "sextile",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "overthinking spirals, relationship projection, and hesitating to act on opportunity",
-      "focus": "precise communication with relational warmth; take the small opening and build"
-    },
-    "tags": [
-      "mental"
-    ]
+      "mental",
+      "relational"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mercury_jupiter_conjunction",
@@ -2632,12 +2597,99 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "overthinking spirals, excessive risk-taking, and fusion and intensity",
-      "focus": "precise communication with wise perspective; integrate both drives consciously"
+      "avoid": "verbal excess and promising more than you can deliver",
+      "focus": "think big but communicate with precision"
     },
     "tags": [
-      "mental"
-    ]
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_moon_opposition",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "opposition",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "logic used to dismiss or override emotional truth",
+      "focus": "let the mind serve the heart, not silence it"
+    },
+    "tags": [
+      "mental",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_mars_opposition",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "opposition",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "debate mode activating when dialogue is needed",
+      "focus": "seek to understand before seeking to be understood"
+    },
+    "tags": [
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_saturn_opposition",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "opposition",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "mental heaviness and catastrophic storytelling",
+      "focus": "challenge the pessimistic narrative with one real fact"
+    },
+    "tags": [
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_sun_opposition",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "opposition",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "overthinking authentic self-expression",
+      "focus": "trust what you know without needing to justify it"
+    },
+    "tags": [
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_venus_opposition",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "opposition",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "analysis paralysis in matters of love or creativity",
+      "focus": "let feeling lead and let mind refine, not decide"
+    },
+    "tags": [
+      "mental",
+      "relational"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mercury_jupiter_opposition",
@@ -2647,12 +2699,99 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "overthinking spirals, excessive risk-taking, and polarizing extremes",
-      "focus": "precise communication with wise perspective; balance both sides before deciding"
+      "avoid": "grand ideas that never get refined into action",
+      "focus": "take the biggest idea and make it specific and small"
     },
     "tags": [
-      "mental"
-    ]
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_moon_square",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "square",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "thinking about feelings instead of feeling them",
+      "focus": "sit with the emotion before reaching for explanation"
+    },
+    "tags": [
+      "mental",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_mars_square",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "square",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "reactive speech and combative tone in disagreement",
+      "focus": "pause between thought and word in tense moments"
+    },
+    "tags": [
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_saturn_square",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "square",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "mental loops reinforcing limitations and defeat",
+      "focus": "identify one thought pattern to interrupt today"
+    },
+    "tags": [
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_sun_square",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "square",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "mental noise undermining authentic self-knowledge",
+      "focus": "simplify your inner dialogue to what is actually true"
+    },
+    "tags": [
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_venus_square",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "square",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "clever words bypassing emotional honesty",
+      "focus": "say the real thing even when the easy thing is available"
+    },
+    "tags": [
+      "mental",
+      "relational"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mercury_jupiter_square",
@@ -2662,12 +2801,99 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "overthinking spirals, excessive risk-taking, and friction-driven reactivity",
-      "focus": "precise communication with wise perspective; channel tension into constructive effort"
+      "avoid": "overcomplicating what could be simple and direct",
+      "focus": "distill the idea to its clearest, simplest form"
     },
     "tags": [
-      "mental"
-    ]
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_moon_trine",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "trine",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "fluid communication skipping emotional depth",
+      "focus": "use clarity of expression to articulate what is real"
+    },
+    "tags": [
+      "mental",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_mars_trine",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "trine",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "quick thinking that skips important nuance",
+      "focus": "communicate decisively while remaining open to revision"
+    },
+    "tags": [
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_saturn_trine",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "trine",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "structured thinking becoming inflexible doctrine",
+      "focus": "use mental discipline to solve one real problem today"
+    },
+    "tags": [
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_sun_trine",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "trine",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "confident expression that stops listening",
+      "focus": "share clearly and remain genuinely curious about others"
+    },
+    "tags": [
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_venus_trine",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "trine",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "charming speech that avoids necessary honesty",
+      "focus": "combine eloquence with truth for lasting impact"
+    },
+    "tags": [
+      "mental",
+      "relational"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mercury_jupiter_trine",
@@ -2677,12 +2903,99 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "overthinking spirals, excessive risk-taking, and complacent ease",
-      "focus": "precise communication with wise perspective; use momentum with gratitude and purpose"
+      "avoid": "expansive thinking without practical application",
+      "focus": "map the big idea into three concrete next steps"
     },
     "tags": [
-      "mental"
-    ]
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_moon_sextile",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "sextile",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "emotional clarity going unexpressed",
+      "focus": "articulate one feeling that has been hard to name"
+    },
+    "tags": [
+      "mental",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_mars_sextile",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "sextile",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "clear thinking without decisive action",
+      "focus": "convert your clearest insight into one immediate step"
+    },
+    "tags": [
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_saturn_sextile",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "sextile",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "good thinking leaving no lasting record or structure",
+      "focus": "write down, organize, or commit the key insight"
+    },
+    "tags": [
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_sun_sextile",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "sextile",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "authentic thought remaining unshared",
+      "focus": "express what you genuinely think to someone who matters"
+    },
+    "tags": [
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "mercury_venus_sextile",
+    "if": {
+      "planet": "Mercury",
+      "aspect": "sextile",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "kind thoughts that stay internal",
+      "focus": "say something true and beautiful to someone today"
+    },
+    "tags": [
+      "mental",
+      "relational"
+    ],
+    "weight": 0.4
   },
   {
     "id": "mercury_jupiter_sextile",
@@ -2692,12 +3005,14 @@
       "target": "Jupiter"
     },
     "output": {
-      "avoid": "overthinking spirals, excessive risk-taking, and hesitating to act on opportunity",
-      "focus": "precise communication with wise perspective; take the small opening and build"
+      "avoid": "insight without expansion or application",
+      "focus": "share the idea with someone who can help it grow"
     },
     "tags": [
-      "mental"
-    ]
+      "mental",
+      "actional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "jupiter_moon_conjunction",
@@ -2707,72 +3022,14 @@
       "target": "Moon"
     },
     "output": {
-      "avoid": "overpromising, mood-driven assumptions, and fusion and intensity",
-      "focus": "meaningful growth with nervous-system grounding; integrate both drives consciously"
+      "avoid": "emotional excess and amplified reactivity",
+      "focus": "expand compassion while staying emotionally grounded"
     },
     "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_moon_opposition",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "opposition",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "overpromising, mood-driven assumptions, and polarizing extremes",
-      "focus": "meaningful growth with nervous-system grounding; balance both sides before deciding"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_moon_square",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "square",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "overpromising, mood-driven assumptions, and friction-driven reactivity",
-      "focus": "meaningful growth with nervous-system grounding; channel tension into constructive effort"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_moon_trine",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "trine",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "overpromising, mood-driven assumptions, and complacent ease",
-      "focus": "meaningful growth with nervous-system grounding; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_moon_sextile",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "sextile",
-      "target": "Moon"
-    },
-    "output": {
-      "avoid": "overpromising, mood-driven assumptions, and hesitating to act on opportunity",
-      "focus": "meaningful growth with nervous-system grounding; take the small opening and build"
-    },
-    "tags": [
-      "mental"
-    ]
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "jupiter_mars_conjunction",
@@ -2782,72 +3039,13 @@
       "target": "Mars"
     },
     "output": {
-      "avoid": "overpromising, combative escalation, and fusion and intensity",
-      "focus": "meaningful growth with disciplined movement; integrate both drives consciously"
+      "avoid": "overextension and reckless expenditure of energy",
+      "focus": "focus expanded drive on one meaningful pursuit"
     },
     "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_mars_opposition",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "opposition",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "overpromising, combative escalation, and polarizing extremes",
-      "focus": "meaningful growth with disciplined movement; balance both sides before deciding"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_mars_square",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "square",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "overpromising, combative escalation, and friction-driven reactivity",
-      "focus": "meaningful growth with disciplined movement; channel tension into constructive effort"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_mars_trine",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "trine",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "overpromising, combative escalation, and complacent ease",
-      "focus": "meaningful growth with disciplined movement; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_mars_sextile",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "sextile",
-      "target": "Mars"
-    },
-    "output": {
-      "avoid": "overpromising, combative escalation, and hesitating to act on opportunity",
-      "focus": "meaningful growth with disciplined movement; take the small opening and build"
-    },
-    "tags": [
-      "mental"
-    ]
+      "actional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "jupiter_saturn_conjunction",
@@ -2857,72 +3055,13 @@
       "target": "Saturn"
     },
     "output": {
-      "avoid": "overpromising, fear-based shutdown, and fusion and intensity",
-      "focus": "meaningful growth with patient structure; integrate both drives consciously"
+      "avoid": "tension between growth impulse and structural fear",
+      "focus": "build one layer of the larger vision today"
     },
     "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_saturn_opposition",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "opposition",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "overpromising, fear-based shutdown, and polarizing extremes",
-      "focus": "meaningful growth with patient structure; balance both sides before deciding"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_saturn_square",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "square",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "overpromising, fear-based shutdown, and friction-driven reactivity",
-      "focus": "meaningful growth with patient structure; channel tension into constructive effort"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_saturn_trine",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "trine",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "overpromising, fear-based shutdown, and complacent ease",
-      "focus": "meaningful growth with patient structure; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_saturn_sextile",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "sextile",
-      "target": "Saturn"
-    },
-    "output": {
-      "avoid": "overpromising, fear-based shutdown, and hesitating to act on opportunity",
-      "focus": "meaningful growth with patient structure; take the small opening and build"
-    },
-    "tags": [
-      "mental"
-    ]
+      "actional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "jupiter_sun_conjunction",
@@ -2932,72 +3071,13 @@
       "target": "Sun"
     },
     "output": {
-      "avoid": "overpromising, self-image battles, and fusion and intensity",
-      "focus": "meaningful growth with values-aligned confidence; integrate both drives consciously"
+      "avoid": "inflation of ego or unrealistic self-image",
+      "focus": "grow from your genuine center, not from performance"
     },
     "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_sun_opposition",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "opposition",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "overpromising, self-image battles, and polarizing extremes",
-      "focus": "meaningful growth with values-aligned confidence; balance both sides before deciding"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_sun_square",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "square",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "overpromising, self-image battles, and friction-driven reactivity",
-      "focus": "meaningful growth with values-aligned confidence; channel tension into constructive effort"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_sun_trine",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "trine",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "overpromising, self-image battles, and complacent ease",
-      "focus": "meaningful growth with values-aligned confidence; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_sun_sextile",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "sextile",
-      "target": "Sun"
-    },
-    "output": {
-      "avoid": "overpromising, self-image battles, and hesitating to act on opportunity",
-      "focus": "meaningful growth with values-aligned confidence; take the small opening and build"
-    },
-    "tags": [
-      "mental"
-    ]
+      "actional"
+    ],
+    "weight": 0.4
   },
   {
     "id": "jupiter_venus_conjunction",
@@ -3007,72 +3087,14 @@
       "target": "Venus"
     },
     "output": {
-      "avoid": "overpromising, relationship projection, and fusion and intensity",
-      "focus": "meaningful growth with relational warmth; integrate both drives consciously"
+      "avoid": "excess in pleasure, spending, or idealized love",
+      "focus": "receive abundance with presence and real gratitude"
     },
     "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_venus_opposition",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "opposition",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "overpromising, relationship projection, and polarizing extremes",
-      "focus": "meaningful growth with relational warmth; balance both sides before deciding"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_venus_square",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "square",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "overpromising, relationship projection, and friction-driven reactivity",
-      "focus": "meaningful growth with relational warmth; channel tension into constructive effort"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_venus_trine",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "trine",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "overpromising, relationship projection, and complacent ease",
-      "focus": "meaningful growth with relational warmth; use momentum with gratitude and purpose"
-    },
-    "tags": [
-      "mental"
-    ]
-  },
-  {
-    "id": "jupiter_venus_sextile",
-    "if": {
-      "planet": "Jupiter",
-      "aspect": "sextile",
-      "target": "Venus"
-    },
-    "output": {
-      "avoid": "overpromising, relationship projection, and hesitating to act on opportunity",
-      "focus": "meaningful growth with relational warmth; take the small opening and build"
-    },
-    "tags": [
-      "mental"
-    ]
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
   },
   {
     "id": "jupiter_mercury_conjunction",
@@ -3082,12 +3104,96 @@
       "target": "Mercury"
     },
     "output": {
-      "avoid": "overpromising, argument loops, and fusion and intensity",
-      "focus": "meaningful growth with clear framing; integrate both drives consciously"
+      "avoid": "verbose thinking that loses the essential point",
+      "focus": "let expansive vision be refined into precise language"
     },
     "tags": [
+      "actional",
       "mental"
-    ]
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_moon_opposition",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "opposition",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "emotional restlessness seeking more without settling",
+      "focus": "find the abundance already present in today"
+    },
+    "tags": [
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_mars_opposition",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "opposition",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "scattered ambition burning through real resources",
+      "focus": "channel momentum into the one most meaningful thing"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_saturn_opposition",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "opposition",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "paralysis between expansive vision and limiting fear",
+      "focus": "take the most realistic step toward the bigger picture"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_sun_opposition",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "opposition",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "external validation inflating or deflating self-worth",
+      "focus": "root identity in what you know, not what others reflect"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_venus_opposition",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "opposition",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "idealized love or beauty disconnected from reality",
+      "focus": "appreciate genuine connection over perfect connection"
+    },
+    "tags": [
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
   },
   {
     "id": "jupiter_mercury_opposition",
@@ -3097,12 +3203,96 @@
       "target": "Mercury"
     },
     "output": {
-      "avoid": "overpromising, argument loops, and polarizing extremes",
-      "focus": "meaningful growth with clear framing; balance both sides before deciding"
+      "avoid": "grand thinking that never becomes grounded action",
+      "focus": "pick the most important idea and make it concrete"
     },
     "tags": [
+      "actional",
       "mental"
-    ]
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_moon_square",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "square",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "emotional overwhelm from absorbing too much at once",
+      "focus": "limit input and deepen with what is already present"
+    },
+    "tags": [
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_mars_square",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "square",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "reckless action fueled by unchecked optimism",
+      "focus": "assess capacity honestly before committing to more"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_saturn_square",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "square",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "expansion blocked by real or imagined scarcity",
+      "focus": "identify one genuine resource and use it fully"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_sun_square",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "square",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "overconfidence in ability or timing",
+      "focus": "test the vision against real conditions before committing"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_venus_square",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "square",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "romantic or financial overreach",
+      "focus": "enjoy what is available without reaching past your means"
+    },
+    "tags": [
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
   },
   {
     "id": "jupiter_mercury_square",
@@ -3112,12 +3302,96 @@
       "target": "Mercury"
     },
     "output": {
-      "avoid": "overpromising, argument loops, and friction-driven reactivity",
-      "focus": "meaningful growth with clear framing; channel tension into constructive effort"
+      "avoid": "thinking too big to take any real step",
+      "focus": "reduce the vision to the next three actionable words"
     },
     "tags": [
+      "actional",
       "mental"
-    ]
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_moon_trine",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "trine",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "emotional generosity that depletes your own reserves",
+      "focus": "give from genuine fullness and receive with equal grace"
+    },
+    "tags": [
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_mars_trine",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "trine",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "momentum without direction or meaningful goal",
+      "focus": "ride the energy toward something that genuinely matters"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_saturn_trine",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "trine",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "comfortable growth that avoids necessary challenge",
+      "focus": "push just past your current edge while conditions support it"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_sun_trine",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "trine",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "easy confidence breeding complacency",
+      "focus": "use favorable conditions to attempt what usually feels risky"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_venus_trine",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "trine",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "passive enjoyment that takes beauty for granted",
+      "focus": "actively cultivate joy and share it with others"
+    },
+    "tags": [
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
   },
   {
     "id": "jupiter_mercury_trine",
@@ -3127,12 +3401,96 @@
       "target": "Mercury"
     },
     "output": {
-      "avoid": "overpromising, argument loops, and complacent ease",
-      "focus": "meaningful growth with clear framing; use momentum with gratitude and purpose"
+      "avoid": "expansive thinking that never gets written or shared",
+      "focus": "record, express, or teach the insight while it flows"
     },
     "tags": [
+      "actional",
       "mental"
-    ]
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_moon_sextile",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "sextile",
+      "target": "Moon"
+    },
+    "output": {
+      "avoid": "emotional expansion staying only in imagination",
+      "focus": "take one step that brings your inner world outward"
+    },
+    "tags": [
+      "actional",
+      "emotional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_mars_sextile",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "sextile",
+      "target": "Mars"
+    },
+    "output": {
+      "avoid": "available energy going to low-priority activity",
+      "focus": "direct the drive toward the highest-value goal today"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_saturn_sextile",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "sextile",
+      "target": "Saturn"
+    },
+    "output": {
+      "avoid": "practical opportunity passing without engagement",
+      "focus": "build one real thing from the vision in your mind"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_sun_sextile",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "sextile",
+      "target": "Sun"
+    },
+    "output": {
+      "avoid": "expansive potential remaining unrealized",
+      "focus": "begin the project, conversation, or step you have been deferring"
+    },
+    "tags": [
+      "actional"
+    ],
+    "weight": 0.4
+  },
+  {
+    "id": "jupiter_venus_sextile",
+    "if": {
+      "planet": "Jupiter",
+      "aspect": "sextile",
+      "target": "Venus"
+    },
+    "output": {
+      "avoid": "appreciation remaining unexpressed or unacted on",
+      "focus": "invest in beauty, love, or joy in one concrete way"
+    },
+    "tags": [
+      "actional",
+      "relational"
+    ],
+    "weight": 0.4
   },
   {
     "id": "jupiter_mercury_sextile",
@@ -3142,11 +3500,13 @@
       "target": "Mercury"
     },
     "output": {
-      "avoid": "overpromising, argument loops, and hesitating to act on opportunity",
-      "focus": "meaningful growth with clear framing; take the small opening and build"
+      "avoid": "insight remaining private when it could multiply",
+      "focus": "share the idea, write it down, or teach it to someone"
     },
     "tags": [
+      "actional",
       "mental"
-    ]
+    ],
+    "weight": 0.4
   }
 ]
