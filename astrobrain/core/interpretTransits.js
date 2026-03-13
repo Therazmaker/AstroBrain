@@ -11,6 +11,7 @@ const { anticipateOutcome } = require('./anticipation');
 const { applyPersonalityTone, softenStatements } = require('./personalityTone');
 const { recordFeedback, adjustWeightsFromFeedback } = require('./feedbackLoop');
 const { loadProfile, personalizeNarrative } = require('./natalProfile');
+const { enrichTransits } = require('./enrichTransitContext');
 
 const BASE_MEANINGS = {
   Mars: 'impulse / anger',
@@ -39,30 +40,48 @@ function emotionalTranslation(transit) {
   const planet = transit.planet;
   const aspect = transit.aspect;
   const target = transit.target;
+  const context = transit.context || {};
+  const tags = transit.derivedTags || [];
+
+  if (planet === 'Moon' && aspect === 'square' && target === 'Venus') {
+    if (tags.includes('tono_afectivo_impulsivo')) {
+      return {
+        emotion: 'reactivity',
+        action: 'podrías notar impulso afectivo y poca paciencia emocional; conviene pausar antes de responder',
+      };
+    }
+
+    if ((context.targetElement || '').toLowerCase() === 'agua') {
+      return {
+        emotion: 'sensitivity',
+        action: 'puede sentirse una necesidad fuerte de conexión; tal vez ayude hablar desde la vulnerabilidad',
+      };
+    }
+  }
 
   if (planet === 'Mars' && aspect === 'square') {
-    return { emotion: 'frustration', action: 'channel heat into movement before hard talks' };
+    return { emotion: 'frustration', action: 'conviene canalizar el calor en movimiento antes de conversaciones tensas' };
   }
 
   if (planet === 'Moon' && target === 'Mars') {
-    return { emotion: 'reactivity', action: 'slow down and name what you feel first' };
+    return { emotion: 'reactivity', action: 'puedes bajar el ritmo y nombrar lo que sientes primero' };
   }
 
   if (planet === 'Mars' && target === 'Moon') {
-    return { emotion: 'reactivity', action: 'respond, do not react in the moment' };
+    return { emotion: 'reactivity', action: 'quizás ayude responder con pausa en lugar de reaccionar al instante' };
   }
 
   if (planet === 'Venus' && aspect === 'trine') {
-    return { emotion: 'harmony', action: 'lean into connection and support' };
+    return { emotion: 'harmony', action: 'puede sentirse más fácil abrirte al vínculo y al apoyo mutuo' };
   }
 
   if (planet === 'Saturn' && aspect === 'conjunction') {
-    return { emotion: 'heaviness', action: 'do one responsible thing at a time' };
+    return { emotion: 'heaviness', action: 'conviene ir paso a paso con lo responsable sin exigirte de más' };
   }
 
   return {
     emotion: BASE_MEANINGS[planet] || 'emotional movement',
-    action: 'keep your pace intentional and simple',
+    action: 'quizás convenga sostener un ritmo intencional y simple',
   };
 }
 
@@ -123,7 +142,8 @@ function interpretTransits(transits = []) {
   const sessionId = Date.now().toString();
   const hippocampus = loadJson('hippocampus.json');
 
-  const prioritized = filterTransits(transits, 3);
+  const enrichedTransits = enrichTransits(transits);
+  const prioritized = filterTransits(enrichedTransits, 3);
   const interpretedTransits = prioritized.map((transit) => ({
     ...transit,
     ...emotionalTranslation(transit),
