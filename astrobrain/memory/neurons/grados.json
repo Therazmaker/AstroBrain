@@ -1,15 +1,338 @@
 [
   {
+    "id": "grado_temprano",
+    "triggers": [
+      "grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.58,
+    "clusters": [
+      "fase_inicio"
+    ],
+    "output": {
+      "energy": "la experiencia está naciendo y todavía se está definiendo",
+      "avoid": "querer conclusiones demasiado rápido",
+      "use": "explorar sin exigir resultados inmediatos",
+      "focus": "inicio, prueba y descubrimiento"
+    }
+  },
+  {
+    "id": "grado_medio",
+    "triggers": [
+      "grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.58,
+    "clusters": [
+      "fase_desarrollo"
+    ],
+    "output": {
+      "energy": "la experiencia está en pleno desarrollo y pide presencia activa",
+      "avoid": "distraerte o perder consistencia",
+      "use": "sostener atención y continuidad",
+      "focus": "proceso, ajuste y maduración"
+    }
+  },
+  {
+    "id": "grado_tardio",
+    "triggers": [
+      "grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.58,
+    "clusters": [
+      "fase_cierre"
+    ],
+    "output": {
+      "energy": "la experiencia se acerca a una conclusión o integración",
+      "avoid": "aferrarte cuando algo ya pide cierre",
+      "use": "integrar lo aprendido con conciencia",
+      "focus": "cierre, síntesis e integración"
+    }
+  },
+  {
     "id": "venus_grado_temprano",
-    "triggers": ["venus_grado_temprano"],
+    "triggers": [
+      "venus_grado_temprano"
+    ],
     "match": "all",
     "peso": 0.75,
-    "clusters": ["relational"],
+    "clusters": [
+      "relacional",
+      "venus",
+      "temprano"
+    ],
     "output": {
-      "energy": "la experiencia afectiva está en fase inicial",
-      "avoid": "forzar definiciones prematuras",
-      "use": "probar, observar y ajustar",
-      "focus": "aprendizaje vincular en desarrollo"
+      "energy": "lo afectivo empieza a tomar forma y todavía se está descubriendo",
+      "avoid": "forzar definiciones emocionales demasiado pronto",
+      "use": "explorar el deseo con curiosidad",
+      "focus": "deseo en construcción"
+    }
+  },
+  {
+    "id": "venus_grado_medio",
+    "triggers": [
+      "venus_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "venus",
+      "medio"
+    ],
+    "output": {
+      "energy": "el vínculo entra en zona activa y visible",
+      "avoid": "perder claridad emocional en medio del movimiento",
+      "use": "sostener coherencia afectiva",
+      "focus": "movimiento vincular"
+    }
+  },
+  {
+    "id": "venus_grado_tardio",
+    "triggers": [
+      "venus_grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "venus",
+      "tardio"
+    ],
+    "output": {
+      "energy": "lo afectivo pide balance, cierre o redefinición",
+      "avoid": "repetir dinámicas por costumbre",
+      "use": "mirar con honestidad lo vivido",
+      "focus": "cierre afectivo"
+    }
+  },
+  {
+    "id": "luna_grado_temprano",
+    "triggers": [
+      "luna_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "luna",
+      "temprano"
+    ],
+    "output": {
+      "energy": "la emoción está emergiendo y todavía es difícil de nombrar",
+      "avoid": "reaccionar antes de entender lo que sientes",
+      "use": "observar sin actuar enseguida",
+      "focus": "emoción emergente"
+    }
+  },
+  {
+    "id": "luna_grado_medio",
+    "triggers": [
+      "luna_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "luna",
+      "medio"
+    ],
+    "output": {
+      "energy": "lo emocional está activo y pide respuesta consciente",
+      "avoid": "actuar desde intensidad sin pausa",
+      "use": "regularte antes de reaccionar",
+      "focus": "gestión emocional"
+    }
+  },
+  {
+    "id": "luna_grado_tardio",
+    "triggers": [
+      "luna_grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "luna",
+      "tardio"
+    ],
+    "output": {
+      "energy": "la emoción busca resolución y descanso",
+      "avoid": "arrastrar lo que ya pide cierre",
+      "use": "soltar y procesar",
+      "focus": "cierre emocional"
+    }
+  },
+  {
+    "id": "sol_grado_temprano",
+    "triggers": [
+      "sol_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": [
+      "identidad",
+      "sol",
+      "temprano"
+    ],
+    "output": {
+      "energy": "la identidad se está activando con fuerza inicial",
+      "avoid": "actuar sin conciencia del impacto",
+      "use": "afirmarte con observación",
+      "focus": "presencia emergente"
+    }
+  },
+  {
+    "id": "sol_grado_medio",
+    "triggers": [
+      "sol_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": [
+      "identidad",
+      "sol",
+      "medio"
+    ],
+    "output": {
+      "energy": "tu identidad se expresa con claridad y movimiento",
+      "avoid": "sobreactuar para sostener imagen",
+      "use": "mostrar coherencia interna",
+      "focus": "expresión consciente"
+    }
+  },
+  {
+    "id": "sol_grado_tardio",
+    "triggers": [
+      "sol_grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": [
+      "identidad",
+      "sol",
+      "tardio"
+    ],
+    "output": {
+      "energy": "tu identidad entra en fase de evaluación y ajuste",
+      "avoid": "aferrarte a formas viejas",
+      "use": "reflexionar y redefinir",
+      "focus": "integración del yo"
+    }
+  },
+  {
+    "id": "marte_grado_temprano",
+    "triggers": [
+      "marte_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.76,
+    "clusters": [
+      "accion",
+      "marte",
+      "temprano"
+    ],
+    "output": {
+      "energy": "la energía arranca con impulso directo",
+      "avoid": "actuar sin medir consecuencias",
+      "use": "canalizar fuerza con conciencia",
+      "focus": "acción inicial"
+    }
+  },
+  {
+    "id": "marte_grado_medio",
+    "triggers": [
+      "marte_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.76,
+    "clusters": [
+      "accion",
+      "marte",
+      "medio"
+    ],
+    "output": {
+      "energy": "la acción está en pleno movimiento",
+      "avoid": "quemarte por exceso de intensidad",
+      "use": "dosificar energía",
+      "focus": "acción sostenida"
+    }
+  },
+  {
+    "id": "marte_grado_tardio",
+    "triggers": [
+      "marte_grado_tardio"
+    ],
+    "match": "all",
+    "peso": 0.76,
+    "clusters": [
+      "accion",
+      "marte",
+      "tardio"
+    ],
+    "output": {
+      "energy": "la energía pide evaluación y redirección",
+      "avoid": "seguir luchando por inercia",
+      "use": "cerrar procesos con estrategia",
+      "focus": "acción consciente"
+    }
+  },
+  {
+    "id": "luna_grado_temprano__venus_grado_medio",
+    "triggers": [
+      "luna_grado_temprano",
+      "venus_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.86,
+    "clusters": [
+      "emocional",
+      "relacional"
+    ],
+    "output": {
+      "energy": "lo emocional aún se está formando mientras el vínculo ya está activo",
+      "avoid": "reaccionar sin claridad afectiva",
+      "use": "darte tiempo antes de decidir",
+      "focus": "regulación y conciencia"
+    }
+  },
+  {
+    "id": "sol_grado_tardio__saturno_grado_medio",
+    "triggers": [
+      "sol_grado_tardio",
+      "saturno_grado_medio"
+    ],
+    "match": "all",
+    "peso": 0.89,
+    "clusters": [
+      "identidad",
+      "estructura"
+    ],
+    "output": {
+      "energy": "se combinan cierre personal y exigencia estructural",
+      "avoid": "forzarte a cumplir sin integrar",
+      "use": "reordenar desde conciencia",
+      "focus": "estructura y madurez"
+    }
+  },
+  {
+    "id": "marte_grado_medio__jupiter_grado_temprano",
+    "triggers": [
+      "marte_grado_medio",
+      "jupiter_grado_temprano"
+    ],
+    "match": "all",
+    "peso": 0.83,
+    "clusters": [
+      "accion",
+      "expansion"
+    ],
+    "output": {
+      "energy": "la acción avanza mientras la visión recién se abre",
+      "avoid": "moverte sin dirección clara",
+      "use": "alinear acción con sentido",
+      "focus": "dirección consciente"
     }
   }
 ]
