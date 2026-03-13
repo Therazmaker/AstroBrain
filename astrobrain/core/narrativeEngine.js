@@ -1,5 +1,7 @@
-function joinUnique(values) {
-  return [...new Set((values || []).filter(Boolean))].join(', ');
+function clamp01(value, fallback = 0.5) {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return fallback;
+  return Math.max(0, Math.min(1, num));
 }
 
 function toneFromScore(score) {
@@ -8,212 +10,288 @@ function toneFromScore(score) {
   return 'soft';
 }
 
-function detectDominantCluster(activatedNeurons = []) {
-  const counts = {
-    emotional: 0,
-    mental: 0,
-    relational: 0,
-    actional: 0,
+function normalizeToken(value = '') {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function detectNeuronCategory(neuron = {}) {
+  if (neuron.category) return neuron.category;
+  const id = normalizeToken(neuron.id || neuron.match);
+  if (/luna|eclipse|transito|tr[aá]nsito|evento|conjunc|cuadratura|oposici/.test(id)) return 'event';
+  if (/sentir|emoc|incomod|pausa|intern|reactiv/.test(id)) return 'sensation';
+  if (/regul|bajar|respira|escucha|silencio|ritmo/.test(id)) return 'regulation';
+  if (/antes|despu[eé]s|proceso|invisible|claridad|inicio/.test(id)) return 'abstraction';
+  return 'abstraction';
+}
+
+function neuronConfidence(neuron = {}) {
+  const confidence = Number(neuron.confidence);
+  if (Number.isFinite(confidence)) return confidence;
+  const score = Number(neuron.score);
+  if (Number.isFinite(score)) return Math.max(0.3, Math.min(0.99, score / 10));
+  return 0.62;
+}
+
+function toNarrativeLabel(neuron = {}) {
+  const base = normalizeToken(neuron.match || neuron.id || 'movimiento interno');
+  const cleaned = base
+    .replace(/\bsemantic\b/g, '')
+    .replace(/\bpattern\b/g, '')
+    .replace(/\bneuron\b/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return cleaned || 'movimiento interno';
+}
+
+function uniqueById(items = []) {
+  const map = new Map();
+  items.forEach((item) => {
+    const key = item.id || item.match || JSON.stringify(item);
+    if (!map.has(key)) map.set(key, item);
+  });
+  return [...map.values()];
+}
+
+function prioritizeNeurons(neurons = []) {
+  const normalized = uniqueById(neurons)
+    .map((neuron) => ({
+      ...neuron,
+      category: detectNeuronCategory(neuron),
+      confidence: neuronConfidence(neuron),
+      narrativeLabel: toNarrativeLabel(neuron),
+    }))
+    .sort((a, b) => b.confidence - a.confidence);
+
+  const pick = (categoryList, max) => normalized
+    .filter((item) => categoryList.includes(item.category))
+    .slice(0, max);
+
+  const core = [
+    ...pick(['event'], 1),
+    ...pick(['abstraction'], 1),
+  ];
+
+  if (!core.length) core.push(...normalized.slice(0, 2));
+
+  const used = new Set(core.map((item) => item.id || item.match));
+  const supportPool = normalized.filter((item) => !used.has(item.id || item.match));
+
+  const support = [
+    ...supportPool.filter((item) => item.category === 'sensation').slice(0, 1),
+    ...supportPool.filter((item) => item.category === 'abstraction').slice(0, 1),
+  ];
+
+  const context = supportPool.filter((item) => item.category === 'regulation').slice(0, 1);
+
+  return {
+    core: core.slice(0, 2),
+    support: support.slice(0, 2),
+    context: context.slice(0, 1),
   };
+}
 
-  activatedNeurons.forEach((neuron) => {
-    const tag = neuron.tags?.[0] || 'actional';
-    counts[tag] = (counts[tag] || 0) + 1;
+function openingFromNeurons(core = [], support = []) {
+  const event = core.find((item) => item.category === 'event') || core[0] || support[0];
+  const sensation = support.find((item) => item.category === 'sensation') || support[0];
+  const eventLabel = event?.narrativeLabel || 'este tránsito';
+  const sensationLabel = sensation?.narrativeLabel || 'una sensación difícil de nombrar';
+  return `Hoy ${eventLabel} puede sentirse menos evidente de lo esperado, con ${sensationLabel} abriendo espacio para mirar hacia adentro.`;
+}
+
+function translationFromNeurons(core = [], support = []) {
+  const abstraction = core.find((item) => item.category === 'abstraction')
+    || support.find((item) => item.category === 'abstraction')
+    || core[0]
+    || support[0];
+  const abstractionLabel = abstraction?.narrativeLabel || 'un proceso interno en marcha';
+  return `Muchas veces primero se siente y después se entiende: ${abstractionLabel} puede estar acomodándose en silencio antes de mostrarse con claridad.`;
+}
+
+function regulationFromNeurons(context = [], patterns = []) {
+  const regulator = context[0];
+  const regulationLabel = regulator?.narrativeLabel || 'bajar un poco el ritmo para escuchar mejor';
+  const normalizedLabel = /^conviene\s+/i.test(regulationLabel)
+    ? regulationLabel.replace(/^conviene\s+/i, '')
+    : regulationLabel;
+  const finalLabel = /^(conviene|regular)$/i.test(normalizedLabel)
+    ? 'bajar un poco el ritmo para escuchar mejor'
+    : normalizedLabel;
+  const patternHint = patterns.includes('cierre_regulacion')
+    ? 'Un cierre suave ayuda a sostener lo importante sin forzarlo.'
+    : 'Tomarlo con calma puede traer más claridad que insistir.';
+  return `Por ahora conviene ${finalLabel}. ${patternHint}`;
+}
+
+function buildNarrativeStructure(prioritizedNeurons = {}, patterns = []) {
+  const { core = [], support = [], context = [] } = prioritizedNeurons;
+  return {
+    opening: openingFromNeurons(core, support),
+    translation: translationFromNeurons(core, support),
+    regulation: regulationFromNeurons(context, patterns),
+  };
+}
+
+function breakLongSentence(text = '', maxWords = 22) {
+  const words = text.split(/\s+/).filter(Boolean);
+  if (words.length <= maxWords) return text;
+
+  const first = words.slice(0, maxWords).join(' ');
+  const second = words.slice(maxWords).join(' ');
+  return `${first}. ${second}`;
+}
+
+function applyVoiceProfile(text = '', voiceProfile = {}) {
+  const softness = clamp01(voiceProfile.softness, 0.65);
+  const emotionality = clamp01(voiceProfile.emotionality, 0.62);
+  const symbolism = clamp01(voiceProfile.symbolism, 0.45);
+  const directness = clamp01(voiceProfile.directness, 0.35);
+
+  let output = text
+    .replace(/\bdebes\b/gi, 'conviene')
+    .replace(/\btienes que\b/gi, 'puede ayudarte')
+    .replace(/\bsignifica que\b/gi, 'puede sentirse como');
+
+  if (softness > 0.65) {
+    output = output
+      .replace(/\./g, '. ')
+      .replace(/\s{2,}/g, ' ')
+      .replace(/\bhay\b/gi, 'a veces hay');
+  }
+
+  if (emotionality > 0.65 && !/por dentro|internamente/.test(output)) {
+    output = `${output} Por dentro, esto puede tocar fibras sensibles.`;
+  }
+
+  if (symbolism >= 0.4 && symbolism <= 0.75 && !/como si|marea|semilla/.test(output)) {
+    output = output.replace(/antes de mostrarse con claridad\./, 'antes de mostrarse con claridad, como una semilla bajo tierra.');
+  }
+
+  if (directness < 0.45) {
+    output = output
+      .replace(/\bhaz\b/gi, 'quizás notes que ayuda')
+      .replace(/\belige\b/gi, 'puede servir elegir');
+  }
+
+  return output.replace(/\s+/g, ' ').trim();
+}
+
+function applyLearnedRules(text = '', learnedRules = []) {
+  let output = text;
+  const joined = learnedRules.join(' · ').toLowerCase();
+
+  if (joined.includes('modales suaves')) {
+    output = output
+      .replace(/\bdebe\b/gi, 'puede')
+      .replace(/\bes necesario\b/gi, 'conviene');
+  }
+
+  if (joined.includes('tensión con sentido personal')) {
+    output = `${output} Lo que incomoda también puede revelar qué parte de ti necesita más cuidado.`;
+  }
+
+  if (joined.includes('cerrar con regulación')) {
+    output = output.replace(/Por ahora conviene/gi, 'Al final, conviene');
+  }
+
+  return output;
+}
+
+function refineNarrative(text = '') {
+  const paragraphs = text
+    .split(/\n{2,}/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(0, 3)
+    .map((line) => line.replace(/\s+/g, ' '));
+
+  const cleaned = paragraphs.map((paragraph) => {
+    const sentences = paragraph
+      .split(/(?<=[.!?])\s+/)
+      .map((sentence) => sentence.trim())
+      .filter(Boolean)
+      .map((sentence) => breakLongSentence(sentence, 22));
+
+    const uniqueSentences = [];
+    const seen = new Set();
+    sentences.forEach((sentence) => {
+      const key = sentence.toLowerCase();
+      if (!seen.has(key)) {
+        seen.add(key);
+        uniqueSentences.push(sentence);
+      }
+    });
+
+    return uniqueSentences.join(' ');
   });
 
-  return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
+  return cleaned.join('\n\n');
 }
 
+function synthesizeNarrative({
+  activeNeurons = [],
+  narrativePatterns = [],
+  voiceProfile = {},
+  learnedRules = [],
+} = {}) {
+  const prioritized = prioritizeNeurons(activeNeurons);
+  const structure = buildNarrativeStructure(prioritized, narrativePatterns);
 
-function construirMatizContextual(transit = {}) {
-  const tags = transit.derivedTags || [];
-  const contexto = transit.context || {};
+  const draft = [
+    structure.opening,
+    structure.translation,
+    structure.regulation,
+  ].join('\n\n');
 
-  if (tags.includes('tono_afectivo_impulsivo')) {
-    return 'puede sentirse un impulso afectivo rápido, con deseo de cercanía y fricción inmediata';
-  }
+  const voiced = applyVoiceProfile(draft, voiceProfile);
+  const learned = applyLearnedRules(voiced, learnedRules);
+  const narrative = refineNarrative(learned);
 
-  if (
-    transit.planet === 'Saturn' &&
-    transit.aspect === 'conjunction' &&
-    transit.target === 'Sun' &&
-    contexto.strengthLabel === 'fuerte'
-  ) {
-    return 'quizás notes un llamado serio a ordenar prioridades con disciplina y paciencia';
-  }
+  const parts = narrative.split(/\n\n/);
 
-  if (
-    transit.planet === 'Mars' &&
-    transit.aspect === 'conjunction' &&
-    contexto.targetElement === 'fuego'
-  ) {
-    return 'la energía puede expresarse con iniciativa directa; conviene actuar sin atropellar los tiempos';
-  }
-
-  return '';
+  return {
+    text: narrative,
+    prioritizedNeurons: prioritized,
+    structure,
+    energy: parts[0] || structure.opening,
+    focus: parts[1] || structure.translation,
+    use: parts[2] || structure.regulation,
+    avoid: 'Evita forzar definiciones antes de que el proceso madure.',
+  };
 }
 
+function buildNarrative({
+  interpretedTransits = [],
+  activatedNeurons = [],
+  narrativePatterns = [],
+  voiceProfile = {},
+  learnedRules = [],
+} = {}) {
+  const transitNeurons = interpretedTransits.map((transit) => ({
+    id: transit.neuronId || `${transit.planet}_${transit.aspect}_${transit.target}`,
+    match: `${transit.planet} ${transit.aspect} ${transit.target}`,
+    category: 'event',
+    confidence: Math.max(0.6, (Number(transit.score) || 5) / 10),
+  }));
 
-function applyLearnedMemoryAdjustments(baseNarrative, learnedMemory = {}) {
-  const voice = learnedMemory.voiceMemory || {};
-  const quality = learnedMemory.qualityMemory || {};
-
-  const narrative = { ...baseNarrative };
-  if ((voice.warmth || 0) > 0.65) {
-    narrative.energy = `${narrative.energy} Mantén calidez explícita y cercanía humana en el tono.`;
-  }
-  if ((voice.directness || 0) > 0.65) {
-    narrative.focus = `${narrative.focus} Prioriza una instrucción concreta y accionable.`;
-  }
-  if ((quality.clarity || 0) < 0.45) {
-    narrative.avoid = `${narrative.avoid} Evita frases largas o ambiguas.`;
-  }
-  return narrative;
-}
-
-function dayOfYear(date = new Date()) {
-  const start = new Date(date.getFullYear(), 0, 0);
-  const diff = date - start;
-  return Math.floor(diff / 86400000);
-}
-
-const TEMPLATE_BANK = {
-  intense: [
-    ({ emotions, actions, memoryPhrases, situations }) => ({
-      energy: `Voltage is high: ${joinUnique(emotions) || 'storm intensity'} is running loud through the system.`,
-      avoid: `Avoid ${joinUnique(memoryPhrases) || 'knee-jerk escalation'} while the signal peaks.`,
-      use: `Use ${joinUnique(actions) || 'decisive, grounded movement'} to direct the surge.`,
-      focus: `Focus on ${joinUnique(situations) || 'one clear conversation and one clear task'} before the next wave.`,
-    }),
-    ({ emotions, actions, memoryPhrases, situations }) => ({
-      energy: `This is fire-weather: ${joinUnique(emotions) || 'strong feeling states'} are sharpened and immediate.`,
-      avoid: `Avoid turning pressure into conflict; skip ${joinUnique(memoryPhrases) || 'old narratives on repeat'}.`,
-      use: `Use ${joinUnique(actions) || 'deliberate effort'} like a controlled burn, not an explosion.`,
-      focus: `Focus your force toward ${joinUnique(situations) || 'a single priority window'} and protect your bandwidth.`,
-    }),
-    ({ emotions, actions, memoryPhrases, situations }) => ({
-      energy: `Intensity is concentrated now, with ${joinUnique(emotions) || 'deep emotional activation'} at the center.`,
-      avoid: `Avoid overextension and ${joinUnique(memoryPhrases) || 'performative certainty'}.`,
-      use: `Use ${joinUnique(actions) || 'intentional pacing'} to keep momentum aligned with values.`,
-      focus: `Focus on ${joinUnique(situations) || 'what is urgent and truly yours to hold'} first.`,
-    }),
-    ({ emotions, actions, memoryPhrases, situations }) => ({
-      energy: `The atmosphere is loud and catalytic: ${joinUnique(emotions) || 'charged emotional signals'} demand skillful handling.`,
-      avoid: `Avoid drama loops, especially ${joinUnique(memoryPhrases) || 'reactive interpretation of events'}.`,
-      use: `Use ${joinUnique(actions) || 'body-first regulation and brave honesty'} to convert friction into traction.`,
-      focus: `Focus on ${joinUnique(situations) || 'direct, time-bounded action'} and leave the rest for later.`,
-    }),
-    ({ emotions, actions, memoryPhrases, situations }) => ({
-      energy: `You are in a pressure chamber; ${joinUnique(emotions) || 'active inner weather'} amplifies quickly.`,
-      avoid: `Avoid scattering power through ${joinUnique(memoryPhrases) || 'too many simultaneous battles'}.`,
-      use: `Use ${joinUnique(actions) || 'clear boundaries and tactical effort'} to keep signal coherent.`,
-      focus: `Focus where stakes are real: ${joinUnique(situations) || 'repair, leadership, and essential decisions'}.`,
-    }),
-  ],
-  active: [
-    ({ emotions, actions, memoryPhrases, situations }) => ({
-      energy: `Momentum is building with ${joinUnique(emotions) || 'mixed but workable energy'}.`,
-      avoid: `Avoid ${joinUnique(memoryPhrases) || 'rushing without checking intention'}.`,
-      use: `Use ${joinUnique(actions) || 'consistent forward movement'} to make progress visible.`,
-      focus: `Focus on ${joinUnique(situations) || 'practical wins that restore confidence'}.`,
-    }),
-    ({ emotions, actions, memoryPhrases, situations }) => ({
-      energy: `This cycle favors engaged effort; ${joinUnique(emotions) || 'daily emotional signals'} can fuel output.`,
-      avoid: `Avoid split focus and ${joinUnique(memoryPhrases) || 'trying to solve every problem at once'}.`,
-      use: `Use ${joinUnique(actions) || 'structured action blocks'} to stay effective.`,
-      focus: `Focus on ${joinUnique(situations) || 'communication and strategic execution'}.`,
-    }),
-    ({ emotions, actions, memoryPhrases, situations }) => ({
-      energy: `The tone is kinetic: ${joinUnique(emotions) || 'alive, responsive energy'} can be directed well.`,
-      avoid: `Avoid friction habits such as ${joinUnique(memoryPhrases) || 'defending before listening'}.`,
-      use: `Use ${joinUnique(actions) || 'small courageous actions'} and iterate.`,
-      focus: `Focus on ${joinUnique(situations) || 'where collaboration and timing matter most'}.`,
-    }),
-    ({ emotions, actions, memoryPhrases, situations }) => ({
-      energy: `Your field is active and adaptive, colored by ${joinUnique(emotions) || 'current emotional data'}.`,
-      avoid: `Avoid unnecessary complexity and ${joinUnique(memoryPhrases) || 'mental looping'}.`,
-      use: `Use ${joinUnique(actions) || 'clear sequencing'} to keep momentum stable.`,
-      focus: `Focus on ${joinUnique(situations) || 'decisions that unlock next steps'}.`,
-    }),
-    ({ emotions, actions, memoryPhrases, situations }) => ({
-      energy: `There is workable traction today; ${joinUnique(emotions) || 'inner movement'} supports practical change.`,
-      avoid: `Avoid energy leaks, especially ${joinUnique(memoryPhrases) || 'habitual detours'}.`,
-      use: `Use ${joinUnique(actions) || 'disciplined responsiveness'} to shape outcomes.`,
-      focus: `Focus on ${joinUnique(situations) || 'the few actions with highest return'}.`,
-    }),
-  ],
-  soft: [
-    ({ emotions, actions, memoryPhrases, situations }) => ({
-      energy: `The atmosphere is gentler, with ${joinUnique(emotions) || 'subtle emotional movement'} asking for care.`,
-      avoid: `Avoid ${joinUnique(memoryPhrases) || 'forcing clarity before it is ready'}.`,
-      use: `Use ${joinUnique(actions) || 'slow attunement and patient choices'} as your rhythm.`,
-      focus: `Focus on ${joinUnique(situations) || 'restorative connection and quiet progress'}.`,
-    }),
-    ({ emotions, actions, memoryPhrases, situations }) => ({
-      energy: `This feels like low tide: ${joinUnique(emotions) || 'quiet tides of feeling'} reveal what matters.`,
-      avoid: `Avoid hard edges and ${joinUnique(memoryPhrases) || 'self-pressure scripts'}.`,
-      use: `Use ${joinUnique(actions) || 'compassionate pacing'} to rebuild trust with yourself.`,
-      focus: `Focus on ${joinUnique(situations) || 'gentle conversations and nervous-system repair'}.`,
-    }),
-    ({ emotions, actions, memoryPhrases, situations }) => ({
-      energy: `Energy is soft but meaningful; ${joinUnique(emotions) || 'inner signals'} are easier to hear now.`,
-      avoid: `Avoid numbing patterns and ${joinUnique(memoryPhrases) || 'avoidance disguised as patience'}.`,
-      use: `Use ${joinUnique(actions) || 'presence, breath, and simple honesty'}.`,
-      focus: `Focus on ${joinUnique(situations) || 'small acts that restore emotional coherence'}.`,
-    }),
-    ({ emotions, actions, memoryPhrases, situations }) => ({
-      energy: `A quieter current is moving through: ${joinUnique(emotions) || 'sensitive states'} deserve room.`,
-      avoid: `Avoid overcommitting and ${joinUnique(memoryPhrases) || 'performing certainty for others'}.`,
-      use: `Use ${joinUnique(actions) || 'steady, minimal actions'} and let them compound.`,
-      focus: `Focus on ${joinUnique(situations) || 'healing pacing and clear emotional boundaries'}.`,
-    }),
-    ({ emotions, actions, memoryPhrases, situations }) => ({
-      energy: `The signal is tender; ${joinUnique(emotions) || 'gentle emotional weather'} can still guide wise movement.`,
-      avoid: `Avoid harsh self-talk and ${joinUnique(memoryPhrases) || 'old fear narratives'}.`,
-      use: `Use ${joinUnique(actions) || 'ritual, reflection, and honest check-ins'} to stay anchored.`,
-      focus: `Focus on ${joinUnique(situations) || 'what nourishes trust, stability, and warmth'}.`,
-    }),
-  ],
-};
-
-function buildNarrative({ interpretedTransits = [], activatedNeurons = [], memoryPhrases = [], learnedMemory = {} }) {
-  const topScore = interpretedTransits[0]?.score || 0;
-  const tone = toneFromScore(topScore);
-
-  const emotions = interpretedTransits.map((t) => t.emotion).filter(Boolean);
-  const actions = interpretedTransits.map((t) => t.action).filter(Boolean);
-  const situations = memoryPhrases
-    .filter((phrase) => typeof phrase === 'string' && phrase.includes('likely human situations:'))
-    .flatMap((phrase) => phrase.replace('likely human situations:', '').split(','))
-    .map((item) => item.trim())
-    .filter(Boolean);
-
-  const dominantCluster = detectDominantCluster(activatedNeurons);
-  const templates = TEMPLATE_BANK[tone];
-  const selector = (dayOfYear() + dominantCluster.length) % templates.length;
-  const contextualLines = interpretedTransits
-    .map((transit) => construirMatizContextual(transit))
-    .filter(Boolean);
-
-  const base = templates[selector]({
-    emotions,
-    actions,
-    memoryPhrases,
-    situations,
+  return synthesizeNarrative({
+    activeNeurons: [...activatedNeurons, ...transitNeurons],
+    narrativePatterns,
+    voiceProfile,
+    learnedRules,
   });
-
-  const narrativeBase = contextualLines.length
-    ? {
-      ...base,
-      energy: `${base.energy} ${contextualLines.join('. ')}.`,
-    }
-    : base;
-
-  return applyLearnedMemoryAdjustments(narrativeBase, learnedMemory);
 }
 
 module.exports = {
-  buildNarrative,
   toneFromScore,
-  applyLearnedMemoryAdjustments,
+  prioritizeNeurons,
+  buildNarrativeStructure,
+  applyVoiceProfile,
+  applyLearnedRules,
+  refineNarrative,
+  synthesizeNarrative,
+  buildNarrative,
 };
