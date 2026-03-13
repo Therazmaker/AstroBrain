@@ -5,10 +5,12 @@ const { buildNarrative, toneFromScore } = require('./narrativeEngine');
 const { refineNarrative } = require('./cerebellum');
 const neuralNet = require('./neuralNet');
 const { mapEmotionToSituations } = require('./worldModel');
-const { getRecentContext, updateContextMemory } = require('./contextMemory');
+const { getRecentContext, updateContextMemory, buildContextSummary } = require('./contextMemory');
 const { counterbalance } = require('./counterbalance');
 const { anticipateOutcome } = require('./anticipation');
 const { applyPersonalityTone, softenStatements } = require('./personalityTone');
+const { recordFeedback, adjustWeightsFromFeedback } = require('./feedbackLoop');
+const { loadProfile, personalizeNarrative } = require('./natalProfile');
 
 const BASE_MEANINGS = {
   Mars: 'impulse / anger',
@@ -22,7 +24,11 @@ const BASE_MEANINGS = {
 
 function loadJson(fileName) {
   const filePath = path.join(__dirname, '..', 'memory', fileName);
-  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch (_error) {
+    return {};
+  }
 }
 
 function keyForTransit(transit) {
@@ -114,6 +120,7 @@ function applyHumanLayer(narrative, tone, recentContext) {
 }
 
 function interpretTransits(transits = []) {
+  const sessionId = Date.now().toString();
   const hippocampus = loadJson('hippocampus.json');
 
   const prioritized = filterTransits(transits, 3);
@@ -160,10 +167,30 @@ function interpretTransits(transits = []) {
   const dominantCluster = dominantClusterFromScores(clusterScores);
   const recentContext = getRecentContext();
 
-  const narrative = applyHumanLayer(balancedNarrative, tone, recentContext);
+  const contextualSummary = buildContextSummary();
+  const withContextSummary = contextualSummary
+    ? { ...balancedNarrative, focus: `${balancedNarrative.focus} ${contextualSummary}` }
+    : balancedNarrative;
+
+  const narrative = applyHumanLayer(withContextSummary, tone, recentContext);
+
+  const profile = loadProfile();
+  const personalizedNarrative = profile
+    ? personalizeNarrative(
+      {
+        ...narrative,
+        activeTransit: interpretedTransits[0],
+      },
+      profile,
+    )
+    : narrative;
+
+  delete personalizedNarrative.activeTransit;
 
   const improvedNarrative = neuralNet.assessNarrativeRelevance({ clusterScores, metaSignals });
   const learnedWeights = neuralNet.updateWeights(activatedNeurons, { improvedNarrative });
+  const feedbackAdjustedWeights = adjustWeightsFromFeedback();
+  const prunedWeights = neuralNet.pruneWeakNeurons();
 
   const updatedContext = updateContextMemory({
     date: new Date().toISOString().slice(0, 10),
@@ -172,17 +199,30 @@ function interpretTransits(transits = []) {
     dominantCluster,
   });
 
+  const submitFeedback = (rating) => recordFeedback({
+    sessionId,
+    rating,
+    narrative: {
+      ...personalizedNarrative,
+      activeNeuronIds: activatedNeurons.map((neuron) => neuron.id),
+    },
+  });
+
   return {
+    sessionId,
     topTransits: interpretedTransits,
     activatedNeurons,
     memoryPhrases,
-    narrative,
+    narrative: personalizedNarrative,
     clusterScores,
     dominantCluster,
     metaSignals,
     generatedNeurons,
     learnedWeights,
+    feedbackAdjustedWeights,
+    prunedWeights,
     contextMemory: updatedContext,
+    recordFeedback: submitFeedback,
   };
 }
 
