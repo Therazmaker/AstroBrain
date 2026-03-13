@@ -1,30 +1,2749 @@
 [
   {
-    "id": "venus_en_aries_deseo_directo",
-    "triggers": ["venus_en_aries", "venus_fuego"],
-    "match": "flex",
-    "minimum": 1,
-    "peso": 0.71,
-    "clusters": ["relational", "actional"],
+    "id": "contexto_elemento_fuego",
+    "triggers": [
+      "signo_fuego"
+    ],
+    "match": "all",
+    "peso": 0.55,
+    "clusters": [
+      "fuego",
+      "contextual"
+    ],
     "output": {
-      "energy": "afecto directo y deseo de respuesta rápida",
-      "avoid": "tomar la urgencia como única verdad",
-      "use": "expresar lo que quieres sin atropellar",
-      "focus": "iniciativa afectiva"
+      "energy": "hay impulso, movimiento y deseo de actuar",
+      "avoid": "actuar desde urgencia",
+      "use": "canalizar energía con dirección",
+      "focus": "acción consciente"
     }
   },
   {
-    "id": "moon_en_cancer_marea_sensible",
-    "triggers": ["moon_en_cancer", "moon_agua"],
-    "match": "flex",
-    "minimum": 1,
-    "peso": 0.69,
-    "clusters": ["emotional"],
+    "id": "contexto_elemento_tierra",
+    "triggers": [
+      "signo_tierra"
+    ],
+    "match": "all",
+    "peso": 0.55,
+    "clusters": [
+      "tierra",
+      "contextual"
+    ],
     "output": {
-      "energy": "emociones más receptivas y permeables",
-      "avoid": "absorber lo de todos sin filtro",
-      "use": "poner límites suaves y claros",
-      "focus": "nutrición emocional"
+      "energy": "la experiencia pide forma, estabilidad y concreción",
+      "avoid": "cerrarte solo a lo seguro",
+      "use": "construir con paciencia",
+      "focus": "estructura y realidad"
+    }
+  },
+  {
+    "id": "contexto_elemento_aire",
+    "triggers": [
+      "signo_aire"
+    ],
+    "match": "all",
+    "peso": 0.55,
+    "clusters": [
+      "aire",
+      "contextual"
+    ],
+    "output": {
+      "energy": "la experiencia se vuelve mental y relacional",
+      "avoid": "quedarte solo en ideas",
+      "use": "dialogar con apertura",
+      "focus": "pensamiento y vínculo"
+    }
+  },
+  {
+    "id": "contexto_elemento_agua",
+    "triggers": [
+      "signo_agua"
+    ],
+    "match": "all",
+    "peso": 0.55,
+    "clusters": [
+      "agua",
+      "contextual"
+    ],
+    "output": {
+      "energy": "la sensibilidad emocional aumenta",
+      "avoid": "absorberlo todo sin filtrar",
+      "use": "cuidar tu energía emocional",
+      "focus": "emoción y contención"
+    }
+  },
+  {
+    "id": "contexto_signo_aries",
+    "triggers": [
+      "signo_aries"
+    ],
+    "match": "all",
+    "peso": 0.6,
+    "clusters": [
+      "aries",
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas asociados a aries se vuelven más visibles",
+      "avoid": "quedarte solo en reacción automática",
+      "use": "observar el tono del proceso",
+      "focus": "experiencia en aries"
+    }
+  },
+  {
+    "id": "contexto_signo_tauro",
+    "triggers": [
+      "signo_tauro"
+    ],
+    "match": "all",
+    "peso": 0.6,
+    "clusters": [
+      "tauro",
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas asociados a tauro se vuelven más visibles",
+      "avoid": "quedarte solo en reacción automática",
+      "use": "observar el tono del proceso",
+      "focus": "experiencia en tauro"
+    }
+  },
+  {
+    "id": "contexto_signo_geminis",
+    "triggers": [
+      "signo_geminis"
+    ],
+    "match": "all",
+    "peso": 0.6,
+    "clusters": [
+      "geminis",
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas asociados a geminis se vuelven más visibles",
+      "avoid": "quedarte solo en reacción automática",
+      "use": "observar el tono del proceso",
+      "focus": "experiencia en geminis"
+    }
+  },
+  {
+    "id": "contexto_signo_cancer",
+    "triggers": [
+      "signo_cancer"
+    ],
+    "match": "all",
+    "peso": 0.6,
+    "clusters": [
+      "cancer",
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas asociados a cancer se vuelven más visibles",
+      "avoid": "quedarte solo en reacción automática",
+      "use": "observar el tono del proceso",
+      "focus": "experiencia en cancer"
+    }
+  },
+  {
+    "id": "contexto_signo_leo",
+    "triggers": [
+      "signo_leo"
+    ],
+    "match": "all",
+    "peso": 0.6,
+    "clusters": [
+      "leo",
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas asociados a leo se vuelven más visibles",
+      "avoid": "quedarte solo en reacción automática",
+      "use": "observar el tono del proceso",
+      "focus": "experiencia en leo"
+    }
+  },
+  {
+    "id": "contexto_signo_virgo",
+    "triggers": [
+      "signo_virgo"
+    ],
+    "match": "all",
+    "peso": 0.6,
+    "clusters": [
+      "virgo",
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas asociados a virgo se vuelven más visibles",
+      "avoid": "quedarte solo en reacción automática",
+      "use": "observar el tono del proceso",
+      "focus": "experiencia en virgo"
+    }
+  },
+  {
+    "id": "contexto_signo_libra",
+    "triggers": [
+      "signo_libra"
+    ],
+    "match": "all",
+    "peso": 0.6,
+    "clusters": [
+      "libra",
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas asociados a libra se vuelven más visibles",
+      "avoid": "quedarte solo en reacción automática",
+      "use": "observar el tono del proceso",
+      "focus": "experiencia en libra"
+    }
+  },
+  {
+    "id": "contexto_signo_escorpio",
+    "triggers": [
+      "signo_escorpio"
+    ],
+    "match": "all",
+    "peso": 0.6,
+    "clusters": [
+      "escorpio",
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas asociados a escorpio se vuelven más visibles",
+      "avoid": "quedarte solo en reacción automática",
+      "use": "observar el tono del proceso",
+      "focus": "experiencia en escorpio"
+    }
+  },
+  {
+    "id": "contexto_signo_sagitario",
+    "triggers": [
+      "signo_sagitario"
+    ],
+    "match": "all",
+    "peso": 0.6,
+    "clusters": [
+      "sagitario",
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas asociados a sagitario se vuelven más visibles",
+      "avoid": "quedarte solo en reacción automática",
+      "use": "observar el tono del proceso",
+      "focus": "experiencia en sagitario"
+    }
+  },
+  {
+    "id": "contexto_signo_capricornio",
+    "triggers": [
+      "signo_capricornio"
+    ],
+    "match": "all",
+    "peso": 0.6,
+    "clusters": [
+      "capricornio",
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas asociados a capricornio se vuelven más visibles",
+      "avoid": "quedarte solo en reacción automática",
+      "use": "observar el tono del proceso",
+      "focus": "experiencia en capricornio"
+    }
+  },
+  {
+    "id": "contexto_signo_acuario",
+    "triggers": [
+      "signo_acuario"
+    ],
+    "match": "all",
+    "peso": 0.6,
+    "clusters": [
+      "acuario",
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas asociados a acuario se vuelven más visibles",
+      "avoid": "quedarte solo en reacción automática",
+      "use": "observar el tono del proceso",
+      "focus": "experiencia en acuario"
+    }
+  },
+  {
+    "id": "contexto_signo_piscis",
+    "triggers": [
+      "signo_piscis"
+    ],
+    "match": "all",
+    "peso": 0.6,
+    "clusters": [
+      "piscis",
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas asociados a piscis se vuelven más visibles",
+      "avoid": "quedarte solo en reacción automática",
+      "use": "observar el tono del proceso",
+      "focus": "experiencia en piscis"
+    }
+  },
+  {
+    "id": "contexto_sun_en_aries",
+    "triggers": [
+      "sun_en_aries",
+      "sun_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "sun",
+      "aries"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a sun toma el tono de aries",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de sun en aries"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_sun_en_tauro",
+    "triggers": [
+      "sun_en_tauro",
+      "sun_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "sun",
+      "tauro"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a sun toma el tono de tauro",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de sun en tauro"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_sun_en_geminis",
+    "triggers": [
+      "sun_en_geminis",
+      "sun_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "sun",
+      "geminis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a sun toma el tono de geminis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de sun en geminis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_sun_en_cancer",
+    "triggers": [
+      "sun_en_cancer",
+      "sun_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "sun",
+      "cancer"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a sun toma el tono de cancer",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de sun en cancer"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_sun_en_leo",
+    "triggers": [
+      "sun_en_leo",
+      "sun_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "sun",
+      "leo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a sun toma el tono de leo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de sun en leo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_sun_en_virgo",
+    "triggers": [
+      "sun_en_virgo",
+      "sun_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "sun",
+      "virgo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a sun toma el tono de virgo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de sun en virgo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_sun_en_libra",
+    "triggers": [
+      "sun_en_libra",
+      "sun_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "sun",
+      "libra"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a sun toma el tono de libra",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de sun en libra"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_sun_en_escorpio",
+    "triggers": [
+      "sun_en_escorpio",
+      "sun_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "sun",
+      "escorpio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a sun toma el tono de escorpio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de sun en escorpio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_sun_en_sagitario",
+    "triggers": [
+      "sun_en_sagitario",
+      "sun_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "sun",
+      "sagitario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a sun toma el tono de sagitario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de sun en sagitario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_sun_en_capricornio",
+    "triggers": [
+      "sun_en_capricornio",
+      "sun_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "sun",
+      "capricornio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a sun toma el tono de capricornio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de sun en capricornio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_sun_en_acuario",
+    "triggers": [
+      "sun_en_acuario",
+      "sun_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "sun",
+      "acuario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a sun toma el tono de acuario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de sun en acuario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_sun_en_piscis",
+    "triggers": [
+      "sun_en_piscis",
+      "sun_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "sun",
+      "piscis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a sun toma el tono de piscis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de sun en piscis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_moon_en_aries",
+    "triggers": [
+      "moon_en_aries",
+      "moon_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "moon",
+      "aries"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a moon toma el tono de aries",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de moon en aries"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_moon_en_tauro",
+    "triggers": [
+      "moon_en_tauro",
+      "moon_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "moon",
+      "tauro"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a moon toma el tono de tauro",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de moon en tauro"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_moon_en_geminis",
+    "triggers": [
+      "moon_en_geminis",
+      "moon_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "moon",
+      "geminis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a moon toma el tono de geminis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de moon en geminis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_moon_en_cancer",
+    "triggers": [
+      "moon_en_cancer",
+      "moon_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "moon",
+      "cancer"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a moon toma el tono de cancer",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de moon en cancer"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_moon_en_leo",
+    "triggers": [
+      "moon_en_leo",
+      "moon_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "moon",
+      "leo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a moon toma el tono de leo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de moon en leo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_moon_en_virgo",
+    "triggers": [
+      "moon_en_virgo",
+      "moon_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "moon",
+      "virgo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a moon toma el tono de virgo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de moon en virgo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_moon_en_libra",
+    "triggers": [
+      "moon_en_libra",
+      "moon_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "moon",
+      "libra"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a moon toma el tono de libra",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de moon en libra"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_moon_en_escorpio",
+    "triggers": [
+      "moon_en_escorpio",
+      "moon_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "moon",
+      "escorpio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a moon toma el tono de escorpio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de moon en escorpio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_moon_en_sagitario",
+    "triggers": [
+      "moon_en_sagitario",
+      "moon_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "moon",
+      "sagitario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a moon toma el tono de sagitario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de moon en sagitario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_moon_en_capricornio",
+    "triggers": [
+      "moon_en_capricornio",
+      "moon_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "moon",
+      "capricornio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a moon toma el tono de capricornio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de moon en capricornio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_moon_en_acuario",
+    "triggers": [
+      "moon_en_acuario",
+      "moon_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "moon",
+      "acuario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a moon toma el tono de acuario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de moon en acuario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_moon_en_piscis",
+    "triggers": [
+      "moon_en_piscis",
+      "moon_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "moon",
+      "piscis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a moon toma el tono de piscis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de moon en piscis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mercury_en_aries",
+    "triggers": [
+      "mercury_en_aries",
+      "mercury_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mercury",
+      "aries"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mercury toma el tono de aries",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mercury en aries"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mercury_en_tauro",
+    "triggers": [
+      "mercury_en_tauro",
+      "mercury_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mercury",
+      "tauro"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mercury toma el tono de tauro",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mercury en tauro"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mercury_en_geminis",
+    "triggers": [
+      "mercury_en_geminis",
+      "mercury_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mercury",
+      "geminis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mercury toma el tono de geminis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mercury en geminis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mercury_en_cancer",
+    "triggers": [
+      "mercury_en_cancer",
+      "mercury_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mercury",
+      "cancer"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mercury toma el tono de cancer",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mercury en cancer"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mercury_en_leo",
+    "triggers": [
+      "mercury_en_leo",
+      "mercury_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mercury",
+      "leo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mercury toma el tono de leo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mercury en leo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mercury_en_virgo",
+    "triggers": [
+      "mercury_en_virgo",
+      "mercury_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mercury",
+      "virgo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mercury toma el tono de virgo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mercury en virgo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mercury_en_libra",
+    "triggers": [
+      "mercury_en_libra",
+      "mercury_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mercury",
+      "libra"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mercury toma el tono de libra",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mercury en libra"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mercury_en_escorpio",
+    "triggers": [
+      "mercury_en_escorpio",
+      "mercury_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mercury",
+      "escorpio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mercury toma el tono de escorpio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mercury en escorpio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mercury_en_sagitario",
+    "triggers": [
+      "mercury_en_sagitario",
+      "mercury_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mercury",
+      "sagitario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mercury toma el tono de sagitario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mercury en sagitario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mercury_en_capricornio",
+    "triggers": [
+      "mercury_en_capricornio",
+      "mercury_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mercury",
+      "capricornio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mercury toma el tono de capricornio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mercury en capricornio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mercury_en_acuario",
+    "triggers": [
+      "mercury_en_acuario",
+      "mercury_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mercury",
+      "acuario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mercury toma el tono de acuario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mercury en acuario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mercury_en_piscis",
+    "triggers": [
+      "mercury_en_piscis",
+      "mercury_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mercury",
+      "piscis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mercury toma el tono de piscis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mercury en piscis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_venus_en_aries",
+    "triggers": [
+      "venus_en_aries",
+      "venus_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "venus",
+      "aries"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a venus toma el tono de aries",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de venus en aries"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_venus_en_tauro",
+    "triggers": [
+      "venus_en_tauro",
+      "venus_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "venus",
+      "tauro"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a venus toma el tono de tauro",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de venus en tauro"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_venus_en_geminis",
+    "triggers": [
+      "venus_en_geminis",
+      "venus_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "venus",
+      "geminis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a venus toma el tono de geminis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de venus en geminis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_venus_en_cancer",
+    "triggers": [
+      "venus_en_cancer",
+      "venus_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "venus",
+      "cancer"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a venus toma el tono de cancer",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de venus en cancer"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_venus_en_leo",
+    "triggers": [
+      "venus_en_leo",
+      "venus_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "venus",
+      "leo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a venus toma el tono de leo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de venus en leo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_venus_en_virgo",
+    "triggers": [
+      "venus_en_virgo",
+      "venus_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "venus",
+      "virgo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a venus toma el tono de virgo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de venus en virgo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_venus_en_libra",
+    "triggers": [
+      "venus_en_libra",
+      "venus_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "venus",
+      "libra"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a venus toma el tono de libra",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de venus en libra"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_venus_en_escorpio",
+    "triggers": [
+      "venus_en_escorpio",
+      "venus_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "venus",
+      "escorpio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a venus toma el tono de escorpio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de venus en escorpio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_venus_en_sagitario",
+    "triggers": [
+      "venus_en_sagitario",
+      "venus_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "venus",
+      "sagitario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a venus toma el tono de sagitario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de venus en sagitario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_venus_en_capricornio",
+    "triggers": [
+      "venus_en_capricornio",
+      "venus_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "venus",
+      "capricornio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a venus toma el tono de capricornio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de venus en capricornio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_venus_en_acuario",
+    "triggers": [
+      "venus_en_acuario",
+      "venus_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "venus",
+      "acuario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a venus toma el tono de acuario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de venus en acuario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_venus_en_piscis",
+    "triggers": [
+      "venus_en_piscis",
+      "venus_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "venus",
+      "piscis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a venus toma el tono de piscis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de venus en piscis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mars_en_aries",
+    "triggers": [
+      "mars_en_aries",
+      "mars_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mars",
+      "aries"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mars toma el tono de aries",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mars en aries"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mars_en_tauro",
+    "triggers": [
+      "mars_en_tauro",
+      "mars_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mars",
+      "tauro"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mars toma el tono de tauro",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mars en tauro"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mars_en_geminis",
+    "triggers": [
+      "mars_en_geminis",
+      "mars_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mars",
+      "geminis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mars toma el tono de geminis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mars en geminis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mars_en_cancer",
+    "triggers": [
+      "mars_en_cancer",
+      "mars_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mars",
+      "cancer"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mars toma el tono de cancer",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mars en cancer"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mars_en_leo",
+    "triggers": [
+      "mars_en_leo",
+      "mars_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mars",
+      "leo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mars toma el tono de leo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mars en leo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mars_en_virgo",
+    "triggers": [
+      "mars_en_virgo",
+      "mars_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mars",
+      "virgo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mars toma el tono de virgo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mars en virgo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mars_en_libra",
+    "triggers": [
+      "mars_en_libra",
+      "mars_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mars",
+      "libra"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mars toma el tono de libra",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mars en libra"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mars_en_escorpio",
+    "triggers": [
+      "mars_en_escorpio",
+      "mars_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mars",
+      "escorpio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mars toma el tono de escorpio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mars en escorpio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mars_en_sagitario",
+    "triggers": [
+      "mars_en_sagitario",
+      "mars_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mars",
+      "sagitario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mars toma el tono de sagitario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mars en sagitario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mars_en_capricornio",
+    "triggers": [
+      "mars_en_capricornio",
+      "mars_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mars",
+      "capricornio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mars toma el tono de capricornio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mars en capricornio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mars_en_acuario",
+    "triggers": [
+      "mars_en_acuario",
+      "mars_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mars",
+      "acuario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mars toma el tono de acuario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mars en acuario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_mars_en_piscis",
+    "triggers": [
+      "mars_en_piscis",
+      "mars_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "mars",
+      "piscis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a mars toma el tono de piscis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de mars en piscis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_jupiter_en_aries",
+    "triggers": [
+      "jupiter_en_aries",
+      "jupiter_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "jupiter",
+      "aries"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a jupiter toma el tono de aries",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de jupiter en aries"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_jupiter_en_tauro",
+    "triggers": [
+      "jupiter_en_tauro",
+      "jupiter_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "jupiter",
+      "tauro"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a jupiter toma el tono de tauro",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de jupiter en tauro"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_jupiter_en_geminis",
+    "triggers": [
+      "jupiter_en_geminis",
+      "jupiter_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "jupiter",
+      "geminis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a jupiter toma el tono de geminis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de jupiter en geminis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_jupiter_en_cancer",
+    "triggers": [
+      "jupiter_en_cancer",
+      "jupiter_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "jupiter",
+      "cancer"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a jupiter toma el tono de cancer",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de jupiter en cancer"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_jupiter_en_leo",
+    "triggers": [
+      "jupiter_en_leo",
+      "jupiter_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "jupiter",
+      "leo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a jupiter toma el tono de leo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de jupiter en leo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_jupiter_en_virgo",
+    "triggers": [
+      "jupiter_en_virgo",
+      "jupiter_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "jupiter",
+      "virgo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a jupiter toma el tono de virgo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de jupiter en virgo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_jupiter_en_libra",
+    "triggers": [
+      "jupiter_en_libra",
+      "jupiter_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "jupiter",
+      "libra"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a jupiter toma el tono de libra",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de jupiter en libra"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_jupiter_en_escorpio",
+    "triggers": [
+      "jupiter_en_escorpio",
+      "jupiter_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "jupiter",
+      "escorpio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a jupiter toma el tono de escorpio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de jupiter en escorpio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_jupiter_en_sagitario",
+    "triggers": [
+      "jupiter_en_sagitario",
+      "jupiter_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "jupiter",
+      "sagitario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a jupiter toma el tono de sagitario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de jupiter en sagitario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_jupiter_en_capricornio",
+    "triggers": [
+      "jupiter_en_capricornio",
+      "jupiter_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "jupiter",
+      "capricornio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a jupiter toma el tono de capricornio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de jupiter en capricornio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_jupiter_en_acuario",
+    "triggers": [
+      "jupiter_en_acuario",
+      "jupiter_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "jupiter",
+      "acuario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a jupiter toma el tono de acuario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de jupiter en acuario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_jupiter_en_piscis",
+    "triggers": [
+      "jupiter_en_piscis",
+      "jupiter_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "jupiter",
+      "piscis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a jupiter toma el tono de piscis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de jupiter en piscis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_saturn_en_aries",
+    "triggers": [
+      "saturn_en_aries",
+      "saturn_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "saturn",
+      "aries"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a saturn toma el tono de aries",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de saturn en aries"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_saturn_en_tauro",
+    "triggers": [
+      "saturn_en_tauro",
+      "saturn_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "saturn",
+      "tauro"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a saturn toma el tono de tauro",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de saturn en tauro"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_saturn_en_geminis",
+    "triggers": [
+      "saturn_en_geminis",
+      "saturn_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "saturn",
+      "geminis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a saturn toma el tono de geminis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de saturn en geminis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_saturn_en_cancer",
+    "triggers": [
+      "saturn_en_cancer",
+      "saturn_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "saturn",
+      "cancer"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a saturn toma el tono de cancer",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de saturn en cancer"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_saturn_en_leo",
+    "triggers": [
+      "saturn_en_leo",
+      "saturn_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "saturn",
+      "leo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a saturn toma el tono de leo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de saturn en leo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_saturn_en_virgo",
+    "triggers": [
+      "saturn_en_virgo",
+      "saturn_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "saturn",
+      "virgo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a saturn toma el tono de virgo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de saturn en virgo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_saturn_en_libra",
+    "triggers": [
+      "saturn_en_libra",
+      "saturn_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "saturn",
+      "libra"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a saturn toma el tono de libra",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de saturn en libra"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_saturn_en_escorpio",
+    "triggers": [
+      "saturn_en_escorpio",
+      "saturn_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "saturn",
+      "escorpio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a saturn toma el tono de escorpio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de saturn en escorpio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_saturn_en_sagitario",
+    "triggers": [
+      "saturn_en_sagitario",
+      "saturn_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "saturn",
+      "sagitario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a saturn toma el tono de sagitario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de saturn en sagitario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_saturn_en_capricornio",
+    "triggers": [
+      "saturn_en_capricornio",
+      "saturn_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "saturn",
+      "capricornio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a saturn toma el tono de capricornio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de saturn en capricornio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_saturn_en_acuario",
+    "triggers": [
+      "saturn_en_acuario",
+      "saturn_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "saturn",
+      "acuario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a saturn toma el tono de acuario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de saturn en acuario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_saturn_en_piscis",
+    "triggers": [
+      "saturn_en_piscis",
+      "saturn_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "saturn",
+      "piscis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a saturn toma el tono de piscis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de saturn en piscis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_uranus_en_aries",
+    "triggers": [
+      "uranus_en_aries",
+      "uranus_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "uranus",
+      "aries"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a uranus toma el tono de aries",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de uranus en aries"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_uranus_en_tauro",
+    "triggers": [
+      "uranus_en_tauro",
+      "uranus_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "uranus",
+      "tauro"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a uranus toma el tono de tauro",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de uranus en tauro"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_uranus_en_geminis",
+    "triggers": [
+      "uranus_en_geminis",
+      "uranus_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "uranus",
+      "geminis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a uranus toma el tono de geminis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de uranus en geminis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_uranus_en_cancer",
+    "triggers": [
+      "uranus_en_cancer",
+      "uranus_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "uranus",
+      "cancer"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a uranus toma el tono de cancer",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de uranus en cancer"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_uranus_en_leo",
+    "triggers": [
+      "uranus_en_leo",
+      "uranus_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "uranus",
+      "leo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a uranus toma el tono de leo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de uranus en leo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_uranus_en_virgo",
+    "triggers": [
+      "uranus_en_virgo",
+      "uranus_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "uranus",
+      "virgo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a uranus toma el tono de virgo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de uranus en virgo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_uranus_en_libra",
+    "triggers": [
+      "uranus_en_libra",
+      "uranus_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "uranus",
+      "libra"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a uranus toma el tono de libra",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de uranus en libra"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_uranus_en_escorpio",
+    "triggers": [
+      "uranus_en_escorpio",
+      "uranus_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "uranus",
+      "escorpio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a uranus toma el tono de escorpio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de uranus en escorpio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_uranus_en_sagitario",
+    "triggers": [
+      "uranus_en_sagitario",
+      "uranus_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "uranus",
+      "sagitario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a uranus toma el tono de sagitario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de uranus en sagitario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_uranus_en_capricornio",
+    "triggers": [
+      "uranus_en_capricornio",
+      "uranus_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "uranus",
+      "capricornio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a uranus toma el tono de capricornio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de uranus en capricornio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_uranus_en_acuario",
+    "triggers": [
+      "uranus_en_acuario",
+      "uranus_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "uranus",
+      "acuario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a uranus toma el tono de acuario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de uranus en acuario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_uranus_en_piscis",
+    "triggers": [
+      "uranus_en_piscis",
+      "uranus_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "uranus",
+      "piscis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a uranus toma el tono de piscis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de uranus en piscis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_neptune_en_aries",
+    "triggers": [
+      "neptune_en_aries",
+      "neptune_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "neptune",
+      "aries"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a neptune toma el tono de aries",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de neptune en aries"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_neptune_en_tauro",
+    "triggers": [
+      "neptune_en_tauro",
+      "neptune_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "neptune",
+      "tauro"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a neptune toma el tono de tauro",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de neptune en tauro"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_neptune_en_geminis",
+    "triggers": [
+      "neptune_en_geminis",
+      "neptune_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "neptune",
+      "geminis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a neptune toma el tono de geminis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de neptune en geminis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_neptune_en_cancer",
+    "triggers": [
+      "neptune_en_cancer",
+      "neptune_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "neptune",
+      "cancer"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a neptune toma el tono de cancer",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de neptune en cancer"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_neptune_en_leo",
+    "triggers": [
+      "neptune_en_leo",
+      "neptune_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "neptune",
+      "leo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a neptune toma el tono de leo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de neptune en leo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_neptune_en_virgo",
+    "triggers": [
+      "neptune_en_virgo",
+      "neptune_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "neptune",
+      "virgo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a neptune toma el tono de virgo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de neptune en virgo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_neptune_en_libra",
+    "triggers": [
+      "neptune_en_libra",
+      "neptune_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "neptune",
+      "libra"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a neptune toma el tono de libra",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de neptune en libra"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_neptune_en_escorpio",
+    "triggers": [
+      "neptune_en_escorpio",
+      "neptune_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "neptune",
+      "escorpio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a neptune toma el tono de escorpio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de neptune en escorpio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_neptune_en_sagitario",
+    "triggers": [
+      "neptune_en_sagitario",
+      "neptune_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "neptune",
+      "sagitario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a neptune toma el tono de sagitario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de neptune en sagitario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_neptune_en_capricornio",
+    "triggers": [
+      "neptune_en_capricornio",
+      "neptune_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "neptune",
+      "capricornio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a neptune toma el tono de capricornio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de neptune en capricornio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_neptune_en_acuario",
+    "triggers": [
+      "neptune_en_acuario",
+      "neptune_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "neptune",
+      "acuario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a neptune toma el tono de acuario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de neptune en acuario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_neptune_en_piscis",
+    "triggers": [
+      "neptune_en_piscis",
+      "neptune_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "neptune",
+      "piscis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a neptune toma el tono de piscis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de neptune en piscis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_pluto_en_aries",
+    "triggers": [
+      "pluto_en_aries",
+      "pluto_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "pluto",
+      "aries"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a pluto toma el tono de aries",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de pluto en aries"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_pluto_en_tauro",
+    "triggers": [
+      "pluto_en_tauro",
+      "pluto_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "pluto",
+      "tauro"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a pluto toma el tono de tauro",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de pluto en tauro"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_pluto_en_geminis",
+    "triggers": [
+      "pluto_en_geminis",
+      "pluto_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "pluto",
+      "geminis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a pluto toma el tono de geminis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de pluto en geminis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_pluto_en_cancer",
+    "triggers": [
+      "pluto_en_cancer",
+      "pluto_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "pluto",
+      "cancer"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a pluto toma el tono de cancer",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de pluto en cancer"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_pluto_en_leo",
+    "triggers": [
+      "pluto_en_leo",
+      "pluto_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "pluto",
+      "leo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a pluto toma el tono de leo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de pluto en leo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_pluto_en_virgo",
+    "triggers": [
+      "pluto_en_virgo",
+      "pluto_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "pluto",
+      "virgo"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a pluto toma el tono de virgo",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de pluto en virgo"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_pluto_en_libra",
+    "triggers": [
+      "pluto_en_libra",
+      "pluto_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "pluto",
+      "libra"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a pluto toma el tono de libra",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de pluto en libra"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_pluto_en_escorpio",
+    "triggers": [
+      "pluto_en_escorpio",
+      "pluto_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "pluto",
+      "escorpio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a pluto toma el tono de escorpio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de pluto en escorpio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_pluto_en_sagitario",
+    "triggers": [
+      "pluto_en_sagitario",
+      "pluto_fuego"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "pluto",
+      "sagitario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a pluto toma el tono de sagitario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de pluto en sagitario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_pluto_en_capricornio",
+    "triggers": [
+      "pluto_en_capricornio",
+      "pluto_tierra"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "pluto",
+      "capricornio"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a pluto toma el tono de capricornio",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de pluto en capricornio"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_pluto_en_acuario",
+    "triggers": [
+      "pluto_en_acuario",
+      "pluto_aire"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "pluto",
+      "acuario"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a pluto toma el tono de acuario",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de pluto en acuario"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_pluto_en_piscis",
+    "triggers": [
+      "pluto_en_piscis",
+      "pluto_agua"
+    ],
+    "match": "flex",
+    "peso": 0.7,
+    "clusters": [
+      "pluto",
+      "piscis"
+    ],
+    "output": {
+      "energy": "la experiencia asociada a pluto toma el tono de piscis",
+      "avoid": "forzar respuestas automáticas",
+      "use": "escuchar cómo se expresa",
+      "focus": "proceso de pluto en piscis"
+    },
+    "minimum": 1
+  },
+  {
+    "id": "contexto_venus_aries__marte_aries",
+    "triggers": [
+      "venus_en_aries",
+      "mars_en_aries"
+    ],
+    "match": "all",
+    "peso": 0.8,
+    "clusters": [
+      "fuego",
+      "relacional",
+      "accion"
+    ],
+    "output": {
+      "energy": "hay intensidad, deseo y urgencia por actuar",
+      "avoid": "responder sin pausa",
+      "use": "canalizar energía con conciencia",
+      "focus": "impulso y dirección"
+    }
+  },
+  {
+    "id": "contexto_luna_cancer__venus_piscis",
+    "triggers": [
+      "moon_en_cancer",
+      "venus_en_piscis"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "agua",
+      "emocional",
+      "relacional"
+    ],
+    "output": {
+      "energy": "la sensibilidad se vuelve profunda y receptiva",
+      "avoid": "perder límites",
+      "use": "cuidar tu mundo emocional",
+      "focus": "sensibilidad y vínculo"
+    }
+  },
+  {
+    "id": "contexto_sol_capricornio__saturno_capricornio",
+    "triggers": [
+      "sun_en_capricornio",
+      "saturn_en_capricornio"
+    ],
+    "match": "all",
+    "peso": 0.83,
+    "clusters": [
+      "tierra",
+      "estructura"
+    ],
+    "output": {
+      "energy": "la energía se concentra en construir algo sólido",
+      "avoid": "medirte solo por resultados",
+      "use": "sostener coherencia",
+      "focus": "estructura y propósito"
     }
   }
 ]
