@@ -1,41 +1,1124 @@
 [
   {
-    "id": "venus_casa_7_espejo_relacional",
-    "triggers": ["venus_casa_7"],
+    "id": "contexto_casa_1_general",
+    "triggers": [
+      "casa_1_activa"
+    ],
+    "match": "all",
+    "peso": 0.55,
+    "clusters": [
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas de la casa 1 se vuelven más visibles y piden atención consciente",
+      "avoid": "dispersarte o ignorar lo que se está activando",
+      "use": "observar con calma qué área de vida pide movimiento",
+      "focus": "temas de casa 1"
+    }
+  },
+  {
+    "id": "contexto_casa_2_general",
+    "triggers": [
+      "casa_2_activa"
+    ],
+    "match": "all",
+    "peso": 0.55,
+    "clusters": [
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas de la casa 2 se vuelven más visibles y piden atención consciente",
+      "avoid": "dispersarte o ignorar lo que se está activando",
+      "use": "observar con calma qué área de vida pide movimiento",
+      "focus": "temas de casa 2"
+    }
+  },
+  {
+    "id": "contexto_casa_3_general",
+    "triggers": [
+      "casa_3_activa"
+    ],
+    "match": "all",
+    "peso": 0.55,
+    "clusters": [
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas de la casa 3 se vuelven más visibles y piden atención consciente",
+      "avoid": "dispersarte o ignorar lo que se está activando",
+      "use": "observar con calma qué área de vida pide movimiento",
+      "focus": "temas de casa 3"
+    }
+  },
+  {
+    "id": "contexto_casa_4_general",
+    "triggers": [
+      "casa_4_activa"
+    ],
+    "match": "all",
+    "peso": 0.55,
+    "clusters": [
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas de la casa 4 se vuelven más visibles y piden atención consciente",
+      "avoid": "dispersarte o ignorar lo que se está activando",
+      "use": "observar con calma qué área de vida pide movimiento",
+      "focus": "temas de casa 4"
+    }
+  },
+  {
+    "id": "contexto_casa_5_general",
+    "triggers": [
+      "casa_5_activa"
+    ],
+    "match": "all",
+    "peso": 0.55,
+    "clusters": [
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas de la casa 5 se vuelven más visibles y piden atención consciente",
+      "avoid": "dispersarte o ignorar lo que se está activando",
+      "use": "observar con calma qué área de vida pide movimiento",
+      "focus": "temas de casa 5"
+    }
+  },
+  {
+    "id": "contexto_casa_6_general",
+    "triggers": [
+      "casa_6_activa"
+    ],
+    "match": "all",
+    "peso": 0.55,
+    "clusters": [
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas de la casa 6 se vuelven más visibles y piden atención consciente",
+      "avoid": "dispersarte o ignorar lo que se está activando",
+      "use": "observar con calma qué área de vida pide movimiento",
+      "focus": "temas de casa 6"
+    }
+  },
+  {
+    "id": "contexto_casa_7_general",
+    "triggers": [
+      "casa_7_activa"
+    ],
+    "match": "all",
+    "peso": 0.55,
+    "clusters": [
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas de la casa 7 se vuelven más visibles y piden atención consciente",
+      "avoid": "dispersarte o ignorar lo que se está activando",
+      "use": "observar con calma qué área de vida pide movimiento",
+      "focus": "temas de casa 7"
+    }
+  },
+  {
+    "id": "contexto_casa_8_general",
+    "triggers": [
+      "casa_8_activa"
+    ],
+    "match": "all",
+    "peso": 0.55,
+    "clusters": [
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas de la casa 8 se vuelven más visibles y piden atención consciente",
+      "avoid": "dispersarte o ignorar lo que se está activando",
+      "use": "observar con calma qué área de vida pide movimiento",
+      "focus": "temas de casa 8"
+    }
+  },
+  {
+    "id": "contexto_casa_9_general",
+    "triggers": [
+      "casa_9_activa"
+    ],
+    "match": "all",
+    "peso": 0.55,
+    "clusters": [
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas de la casa 9 se vuelven más visibles y piden atención consciente",
+      "avoid": "dispersarte o ignorar lo que se está activando",
+      "use": "observar con calma qué área de vida pide movimiento",
+      "focus": "temas de casa 9"
+    }
+  },
+  {
+    "id": "contexto_casa_10_general",
+    "triggers": [
+      "casa_10_activa"
+    ],
+    "match": "all",
+    "peso": 0.55,
+    "clusters": [
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas de la casa 10 se vuelven más visibles y piden atención consciente",
+      "avoid": "dispersarte o ignorar lo que se está activando",
+      "use": "observar con calma qué área de vida pide movimiento",
+      "focus": "temas de casa 10"
+    }
+  },
+  {
+    "id": "contexto_casa_11_general",
+    "triggers": [
+      "casa_11_activa"
+    ],
+    "match": "all",
+    "peso": 0.55,
+    "clusters": [
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas de la casa 11 se vuelven más visibles y piden atención consciente",
+      "avoid": "dispersarte o ignorar lo que se está activando",
+      "use": "observar con calma qué área de vida pide movimiento",
+      "focus": "temas de casa 11"
+    }
+  },
+  {
+    "id": "contexto_casa_12_general",
+    "triggers": [
+      "casa_12_activa"
+    ],
+    "match": "all",
+    "peso": 0.55,
+    "clusters": [
+      "contextual"
+    ],
+    "output": {
+      "energy": "los temas de la casa 12 se vuelven más visibles y piden atención consciente",
+      "avoid": "dispersarte o ignorar lo que se está activando",
+      "use": "observar con calma qué área de vida pide movimiento",
+      "focus": "temas de casa 12"
+    }
+  },
+  {
+    "id": "contexto_venus_casa_1",
+    "triggers": [
+      "venus_casa_1"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "relacional",
+      "venus"
+    ],
+    "output": {
+      "energy": "lo afectivo se mueve alrededor de los temas de la casa 1",
+      "avoid": "buscar validación externa sin escuchar lo que sientes",
+      "use": "observar cómo deseas vincularte en esta área",
+      "focus": "vínculos en casa 1"
+    }
+  },
+  {
+    "id": "contexto_venus_casa_2",
+    "triggers": [
+      "venus_casa_2"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "relacional",
+      "venus"
+    ],
+    "output": {
+      "energy": "lo afectivo se mueve alrededor de los temas de la casa 2",
+      "avoid": "buscar validación externa sin escuchar lo que sientes",
+      "use": "observar cómo deseas vincularte en esta área",
+      "focus": "vínculos en casa 2"
+    }
+  },
+  {
+    "id": "contexto_venus_casa_3",
+    "triggers": [
+      "venus_casa_3"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "relacional",
+      "venus"
+    ],
+    "output": {
+      "energy": "lo afectivo se mueve alrededor de los temas de la casa 3",
+      "avoid": "buscar validación externa sin escuchar lo que sientes",
+      "use": "observar cómo deseas vincularte en esta área",
+      "focus": "vínculos en casa 3"
+    }
+  },
+  {
+    "id": "contexto_venus_casa_4",
+    "triggers": [
+      "venus_casa_4"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "relacional",
+      "venus"
+    ],
+    "output": {
+      "energy": "lo afectivo se mueve alrededor de los temas de la casa 4",
+      "avoid": "buscar validación externa sin escuchar lo que sientes",
+      "use": "observar cómo deseas vincularte en esta área",
+      "focus": "vínculos en casa 4"
+    }
+  },
+  {
+    "id": "contexto_venus_casa_5",
+    "triggers": [
+      "venus_casa_5"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "relacional",
+      "venus"
+    ],
+    "output": {
+      "energy": "lo afectivo se mueve alrededor de los temas de la casa 5",
+      "avoid": "buscar validación externa sin escuchar lo que sientes",
+      "use": "observar cómo deseas vincularte en esta área",
+      "focus": "vínculos en casa 5"
+    }
+  },
+  {
+    "id": "contexto_venus_casa_6",
+    "triggers": [
+      "venus_casa_6"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "relacional",
+      "venus"
+    ],
+    "output": {
+      "energy": "lo afectivo se mueve alrededor de los temas de la casa 6",
+      "avoid": "buscar validación externa sin escuchar lo que sientes",
+      "use": "observar cómo deseas vincularte en esta área",
+      "focus": "vínculos en casa 6"
+    }
+  },
+  {
+    "id": "contexto_venus_casa_7",
+    "triggers": [
+      "venus_casa_7"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "relacional",
+      "venus"
+    ],
+    "output": {
+      "energy": "lo afectivo se mueve alrededor de los temas de la casa 7",
+      "avoid": "buscar validación externa sin escuchar lo que sientes",
+      "use": "observar cómo deseas vincularte en esta área",
+      "focus": "vínculos en casa 7"
+    }
+  },
+  {
+    "id": "contexto_venus_casa_8",
+    "triggers": [
+      "venus_casa_8"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "relacional",
+      "venus"
+    ],
+    "output": {
+      "energy": "lo afectivo se mueve alrededor de los temas de la casa 8",
+      "avoid": "buscar validación externa sin escuchar lo que sientes",
+      "use": "observar cómo deseas vincularte en esta área",
+      "focus": "vínculos en casa 8"
+    }
+  },
+  {
+    "id": "contexto_venus_casa_9",
+    "triggers": [
+      "venus_casa_9"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "relacional",
+      "venus"
+    ],
+    "output": {
+      "energy": "lo afectivo se mueve alrededor de los temas de la casa 9",
+      "avoid": "buscar validación externa sin escuchar lo que sientes",
+      "use": "observar cómo deseas vincularte en esta área",
+      "focus": "vínculos en casa 9"
+    }
+  },
+  {
+    "id": "contexto_venus_casa_10",
+    "triggers": [
+      "venus_casa_10"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "relacional",
+      "venus"
+    ],
+    "output": {
+      "energy": "lo afectivo se mueve alrededor de los temas de la casa 10",
+      "avoid": "buscar validación externa sin escuchar lo que sientes",
+      "use": "observar cómo deseas vincularte en esta área",
+      "focus": "vínculos en casa 10"
+    }
+  },
+  {
+    "id": "contexto_venus_casa_11",
+    "triggers": [
+      "venus_casa_11"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "relacional",
+      "venus"
+    ],
+    "output": {
+      "energy": "lo afectivo se mueve alrededor de los temas de la casa 11",
+      "avoid": "buscar validación externa sin escuchar lo que sientes",
+      "use": "observar cómo deseas vincularte en esta área",
+      "focus": "vínculos en casa 11"
+    }
+  },
+  {
+    "id": "contexto_venus_casa_12",
+    "triggers": [
+      "venus_casa_12"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "relacional",
+      "venus"
+    ],
+    "output": {
+      "energy": "lo afectivo se mueve alrededor de los temas de la casa 12",
+      "avoid": "buscar validación externa sin escuchar lo que sientes",
+      "use": "observar cómo deseas vincularte en esta área",
+      "focus": "vínculos en casa 12"
+    }
+  },
+  {
+    "id": "contexto_luna_casa_1",
+    "triggers": [
+      "moon_casa_1"
+    ],
     "match": "all",
     "peso": 0.74,
-    "clusters": ["relational"],
+    "clusters": [
+      "emocional",
+      "luna"
+    ],
     "output": {
-      "energy": "más sensibilidad en la dinámica con otros",
-      "avoid": "poner todo el peso emocional en la respuesta ajena",
-      "use": "mirar qué te está mostrando el vínculo",
-      "focus": "relaciones y espejos"
+      "energy": "la emoción se sensibiliza en los temas de la casa 1",
+      "avoid": "reaccionar desde intensidad sin procesar",
+      "use": "dar espacio a lo que sientes",
+      "focus": "emoción en casa 1"
     }
   },
   {
-    "id": "moon_casa_4_registro_intimo",
-    "triggers": ["moon_casa_4"],
+    "id": "contexto_luna_casa_2",
+    "triggers": [
+      "moon_casa_2"
+    ],
     "match": "all",
-    "peso": 0.63,
-    "clusters": ["emotional"],
+    "peso": 0.74,
+    "clusters": [
+      "emocional",
+      "luna"
+    ],
     "output": {
-      "energy": "la emoción vuelve al territorio íntimo",
-      "avoid": "cerrarte por completo por sentirte expuesto",
-      "use": "dar nombre a la necesidad de cuidado",
-      "focus": "hogar emocional y contención"
+      "energy": "la emoción se sensibiliza en los temas de la casa 2",
+      "avoid": "reaccionar desde intensidad sin procesar",
+      "use": "dar espacio a lo que sientes",
+      "focus": "emoción en casa 2"
     }
   },
   {
-    "id": "sun_casa_10_enfoque_publico",
-    "triggers": ["sun_casa_10"],
+    "id": "contexto_luna_casa_3",
+    "triggers": [
+      "moon_casa_3"
+    ],
     "match": "all",
-    "peso": 0.68,
-    "clusters": ["actional"],
+    "peso": 0.74,
+    "clusters": [
+      "emocional",
+      "luna"
+    ],
     "output": {
-      "energy": "se ilumina la responsabilidad visible",
-      "avoid": "hacerlo todo desde la exigencia",
-      "use": "priorizar una meta profesional concreta",
-      "focus": "dirección y reputación"
+      "energy": "la emoción se sensibiliza en los temas de la casa 3",
+      "avoid": "reaccionar desde intensidad sin procesar",
+      "use": "dar espacio a lo que sientes",
+      "focus": "emoción en casa 3"
+    }
+  },
+  {
+    "id": "contexto_luna_casa_4",
+    "triggers": [
+      "moon_casa_4"
+    ],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": [
+      "emocional",
+      "luna"
+    ],
+    "output": {
+      "energy": "la emoción se sensibiliza en los temas de la casa 4",
+      "avoid": "reaccionar desde intensidad sin procesar",
+      "use": "dar espacio a lo que sientes",
+      "focus": "emoción en casa 4"
+    }
+  },
+  {
+    "id": "contexto_luna_casa_5",
+    "triggers": [
+      "moon_casa_5"
+    ],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": [
+      "emocional",
+      "luna"
+    ],
+    "output": {
+      "energy": "la emoción se sensibiliza en los temas de la casa 5",
+      "avoid": "reaccionar desde intensidad sin procesar",
+      "use": "dar espacio a lo que sientes",
+      "focus": "emoción en casa 5"
+    }
+  },
+  {
+    "id": "contexto_luna_casa_6",
+    "triggers": [
+      "moon_casa_6"
+    ],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": [
+      "emocional",
+      "luna"
+    ],
+    "output": {
+      "energy": "la emoción se sensibiliza en los temas de la casa 6",
+      "avoid": "reaccionar desde intensidad sin procesar",
+      "use": "dar espacio a lo que sientes",
+      "focus": "emoción en casa 6"
+    }
+  },
+  {
+    "id": "contexto_luna_casa_7",
+    "triggers": [
+      "moon_casa_7"
+    ],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": [
+      "emocional",
+      "luna"
+    ],
+    "output": {
+      "energy": "la emoción se sensibiliza en los temas de la casa 7",
+      "avoid": "reaccionar desde intensidad sin procesar",
+      "use": "dar espacio a lo que sientes",
+      "focus": "emoción en casa 7"
+    }
+  },
+  {
+    "id": "contexto_luna_casa_8",
+    "triggers": [
+      "moon_casa_8"
+    ],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": [
+      "emocional",
+      "luna"
+    ],
+    "output": {
+      "energy": "la emoción se sensibiliza en los temas de la casa 8",
+      "avoid": "reaccionar desde intensidad sin procesar",
+      "use": "dar espacio a lo que sientes",
+      "focus": "emoción en casa 8"
+    }
+  },
+  {
+    "id": "contexto_luna_casa_9",
+    "triggers": [
+      "moon_casa_9"
+    ],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": [
+      "emocional",
+      "luna"
+    ],
+    "output": {
+      "energy": "la emoción se sensibiliza en los temas de la casa 9",
+      "avoid": "reaccionar desde intensidad sin procesar",
+      "use": "dar espacio a lo que sientes",
+      "focus": "emoción en casa 9"
+    }
+  },
+  {
+    "id": "contexto_luna_casa_10",
+    "triggers": [
+      "moon_casa_10"
+    ],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": [
+      "emocional",
+      "luna"
+    ],
+    "output": {
+      "energy": "la emoción se sensibiliza en los temas de la casa 10",
+      "avoid": "reaccionar desde intensidad sin procesar",
+      "use": "dar espacio a lo que sientes",
+      "focus": "emoción en casa 10"
+    }
+  },
+  {
+    "id": "contexto_luna_casa_11",
+    "triggers": [
+      "moon_casa_11"
+    ],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": [
+      "emocional",
+      "luna"
+    ],
+    "output": {
+      "energy": "la emoción se sensibiliza en los temas de la casa 11",
+      "avoid": "reaccionar desde intensidad sin procesar",
+      "use": "dar espacio a lo que sientes",
+      "focus": "emoción en casa 11"
+    }
+  },
+  {
+    "id": "contexto_luna_casa_12",
+    "triggers": [
+      "moon_casa_12"
+    ],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": [
+      "emocional",
+      "luna"
+    ],
+    "output": {
+      "energy": "la emoción se sensibiliza en los temas de la casa 12",
+      "avoid": "reaccionar desde intensidad sin procesar",
+      "use": "dar espacio a lo que sientes",
+      "focus": "emoción en casa 12"
+    }
+  },
+  {
+    "id": "contexto_sol_casa_1",
+    "triggers": [
+      "sun_casa_1"
+    ],
+    "match": "all",
+    "peso": 0.7,
+    "clusters": [
+      "identidad",
+      "sol"
+    ],
+    "output": {
+      "energy": "tu identidad se enfoca en los temas de la casa 1",
+      "avoid": "sobrecargarte tratando de sostenerlo todo",
+      "use": "actuar con claridad y dirección",
+      "focus": "dirección personal en casa 1"
+    }
+  },
+  {
+    "id": "contexto_sol_casa_2",
+    "triggers": [
+      "sun_casa_2"
+    ],
+    "match": "all",
+    "peso": 0.7,
+    "clusters": [
+      "identidad",
+      "sol"
+    ],
+    "output": {
+      "energy": "tu identidad se enfoca en los temas de la casa 2",
+      "avoid": "sobrecargarte tratando de sostenerlo todo",
+      "use": "actuar con claridad y dirección",
+      "focus": "dirección personal en casa 2"
+    }
+  },
+  {
+    "id": "contexto_sol_casa_3",
+    "triggers": [
+      "sun_casa_3"
+    ],
+    "match": "all",
+    "peso": 0.7,
+    "clusters": [
+      "identidad",
+      "sol"
+    ],
+    "output": {
+      "energy": "tu identidad se enfoca en los temas de la casa 3",
+      "avoid": "sobrecargarte tratando de sostenerlo todo",
+      "use": "actuar con claridad y dirección",
+      "focus": "dirección personal en casa 3"
+    }
+  },
+  {
+    "id": "contexto_sol_casa_4",
+    "triggers": [
+      "sun_casa_4"
+    ],
+    "match": "all",
+    "peso": 0.7,
+    "clusters": [
+      "identidad",
+      "sol"
+    ],
+    "output": {
+      "energy": "tu identidad se enfoca en los temas de la casa 4",
+      "avoid": "sobrecargarte tratando de sostenerlo todo",
+      "use": "actuar con claridad y dirección",
+      "focus": "dirección personal en casa 4"
+    }
+  },
+  {
+    "id": "contexto_sol_casa_5",
+    "triggers": [
+      "sun_casa_5"
+    ],
+    "match": "all",
+    "peso": 0.7,
+    "clusters": [
+      "identidad",
+      "sol"
+    ],
+    "output": {
+      "energy": "tu identidad se enfoca en los temas de la casa 5",
+      "avoid": "sobrecargarte tratando de sostenerlo todo",
+      "use": "actuar con claridad y dirección",
+      "focus": "dirección personal en casa 5"
+    }
+  },
+  {
+    "id": "contexto_sol_casa_6",
+    "triggers": [
+      "sun_casa_6"
+    ],
+    "match": "all",
+    "peso": 0.7,
+    "clusters": [
+      "identidad",
+      "sol"
+    ],
+    "output": {
+      "energy": "tu identidad se enfoca en los temas de la casa 6",
+      "avoid": "sobrecargarte tratando de sostenerlo todo",
+      "use": "actuar con claridad y dirección",
+      "focus": "dirección personal en casa 6"
+    }
+  },
+  {
+    "id": "contexto_sol_casa_7",
+    "triggers": [
+      "sun_casa_7"
+    ],
+    "match": "all",
+    "peso": 0.7,
+    "clusters": [
+      "identidad",
+      "sol"
+    ],
+    "output": {
+      "energy": "tu identidad se enfoca en los temas de la casa 7",
+      "avoid": "sobrecargarte tratando de sostenerlo todo",
+      "use": "actuar con claridad y dirección",
+      "focus": "dirección personal en casa 7"
+    }
+  },
+  {
+    "id": "contexto_sol_casa_8",
+    "triggers": [
+      "sun_casa_8"
+    ],
+    "match": "all",
+    "peso": 0.7,
+    "clusters": [
+      "identidad",
+      "sol"
+    ],
+    "output": {
+      "energy": "tu identidad se enfoca en los temas de la casa 8",
+      "avoid": "sobrecargarte tratando de sostenerlo todo",
+      "use": "actuar con claridad y dirección",
+      "focus": "dirección personal en casa 8"
+    }
+  },
+  {
+    "id": "contexto_sol_casa_9",
+    "triggers": [
+      "sun_casa_9"
+    ],
+    "match": "all",
+    "peso": 0.7,
+    "clusters": [
+      "identidad",
+      "sol"
+    ],
+    "output": {
+      "energy": "tu identidad se enfoca en los temas de la casa 9",
+      "avoid": "sobrecargarte tratando de sostenerlo todo",
+      "use": "actuar con claridad y dirección",
+      "focus": "dirección personal en casa 9"
+    }
+  },
+  {
+    "id": "contexto_sol_casa_10",
+    "triggers": [
+      "sun_casa_10"
+    ],
+    "match": "all",
+    "peso": 0.7,
+    "clusters": [
+      "identidad",
+      "sol"
+    ],
+    "output": {
+      "energy": "tu identidad se enfoca en los temas de la casa 10",
+      "avoid": "sobrecargarte tratando de sostenerlo todo",
+      "use": "actuar con claridad y dirección",
+      "focus": "dirección personal en casa 10"
+    }
+  },
+  {
+    "id": "contexto_sol_casa_11",
+    "triggers": [
+      "sun_casa_11"
+    ],
+    "match": "all",
+    "peso": 0.7,
+    "clusters": [
+      "identidad",
+      "sol"
+    ],
+    "output": {
+      "energy": "tu identidad se enfoca en los temas de la casa 11",
+      "avoid": "sobrecargarte tratando de sostenerlo todo",
+      "use": "actuar con claridad y dirección",
+      "focus": "dirección personal en casa 11"
+    }
+  },
+  {
+    "id": "contexto_sol_casa_12",
+    "triggers": [
+      "sun_casa_12"
+    ],
+    "match": "all",
+    "peso": 0.7,
+    "clusters": [
+      "identidad",
+      "sol"
+    ],
+    "output": {
+      "energy": "tu identidad se enfoca en los temas de la casa 12",
+      "avoid": "sobrecargarte tratando de sostenerlo todo",
+      "use": "actuar con claridad y dirección",
+      "focus": "dirección personal en casa 12"
+    }
+  },
+  {
+    "id": "contexto_marte_casa_1",
+    "triggers": [
+      "marte_casa_1"
+    ],
+    "match": "all",
+    "peso": 0.73,
+    "clusters": [
+      "accion",
+      "marte"
+    ],
+    "output": {
+      "energy": "la acción se activa en los temas de la casa 1",
+      "avoid": "actuar por impulso sin medir el contexto",
+      "use": "canalizar energía con intención",
+      "focus": "acción en casa 1"
+    }
+  },
+  {
+    "id": "contexto_marte_casa_2",
+    "triggers": [
+      "marte_casa_2"
+    ],
+    "match": "all",
+    "peso": 0.73,
+    "clusters": [
+      "accion",
+      "marte"
+    ],
+    "output": {
+      "energy": "la acción se activa en los temas de la casa 2",
+      "avoid": "actuar por impulso sin medir el contexto",
+      "use": "canalizar energía con intención",
+      "focus": "acción en casa 2"
+    }
+  },
+  {
+    "id": "contexto_marte_casa_3",
+    "triggers": [
+      "marte_casa_3"
+    ],
+    "match": "all",
+    "peso": 0.73,
+    "clusters": [
+      "accion",
+      "marte"
+    ],
+    "output": {
+      "energy": "la acción se activa en los temas de la casa 3",
+      "avoid": "actuar por impulso sin medir el contexto",
+      "use": "canalizar energía con intención",
+      "focus": "acción en casa 3"
+    }
+  },
+  {
+    "id": "contexto_marte_casa_4",
+    "triggers": [
+      "marte_casa_4"
+    ],
+    "match": "all",
+    "peso": 0.73,
+    "clusters": [
+      "accion",
+      "marte"
+    ],
+    "output": {
+      "energy": "la acción se activa en los temas de la casa 4",
+      "avoid": "actuar por impulso sin medir el contexto",
+      "use": "canalizar energía con intención",
+      "focus": "acción en casa 4"
+    }
+  },
+  {
+    "id": "contexto_marte_casa_5",
+    "triggers": [
+      "marte_casa_5"
+    ],
+    "match": "all",
+    "peso": 0.73,
+    "clusters": [
+      "accion",
+      "marte"
+    ],
+    "output": {
+      "energy": "la acción se activa en los temas de la casa 5",
+      "avoid": "actuar por impulso sin medir el contexto",
+      "use": "canalizar energía con intención",
+      "focus": "acción en casa 5"
+    }
+  },
+  {
+    "id": "contexto_marte_casa_6",
+    "triggers": [
+      "marte_casa_6"
+    ],
+    "match": "all",
+    "peso": 0.73,
+    "clusters": [
+      "accion",
+      "marte"
+    ],
+    "output": {
+      "energy": "la acción se activa en los temas de la casa 6",
+      "avoid": "actuar por impulso sin medir el contexto",
+      "use": "canalizar energía con intención",
+      "focus": "acción en casa 6"
+    }
+  },
+  {
+    "id": "contexto_marte_casa_7",
+    "triggers": [
+      "marte_casa_7"
+    ],
+    "match": "all",
+    "peso": 0.73,
+    "clusters": [
+      "accion",
+      "marte"
+    ],
+    "output": {
+      "energy": "la acción se activa en los temas de la casa 7",
+      "avoid": "actuar por impulso sin medir el contexto",
+      "use": "canalizar energía con intención",
+      "focus": "acción en casa 7"
+    }
+  },
+  {
+    "id": "contexto_marte_casa_8",
+    "triggers": [
+      "marte_casa_8"
+    ],
+    "match": "all",
+    "peso": 0.73,
+    "clusters": [
+      "accion",
+      "marte"
+    ],
+    "output": {
+      "energy": "la acción se activa en los temas de la casa 8",
+      "avoid": "actuar por impulso sin medir el contexto",
+      "use": "canalizar energía con intención",
+      "focus": "acción en casa 8"
+    }
+  },
+  {
+    "id": "contexto_marte_casa_9",
+    "triggers": [
+      "marte_casa_9"
+    ],
+    "match": "all",
+    "peso": 0.73,
+    "clusters": [
+      "accion",
+      "marte"
+    ],
+    "output": {
+      "energy": "la acción se activa en los temas de la casa 9",
+      "avoid": "actuar por impulso sin medir el contexto",
+      "use": "canalizar energía con intención",
+      "focus": "acción en casa 9"
+    }
+  },
+  {
+    "id": "contexto_marte_casa_10",
+    "triggers": [
+      "marte_casa_10"
+    ],
+    "match": "all",
+    "peso": 0.73,
+    "clusters": [
+      "accion",
+      "marte"
+    ],
+    "output": {
+      "energy": "la acción se activa en los temas de la casa 10",
+      "avoid": "actuar por impulso sin medir el contexto",
+      "use": "canalizar energía con intención",
+      "focus": "acción en casa 10"
+    }
+  },
+  {
+    "id": "contexto_marte_casa_11",
+    "triggers": [
+      "marte_casa_11"
+    ],
+    "match": "all",
+    "peso": 0.73,
+    "clusters": [
+      "accion",
+      "marte"
+    ],
+    "output": {
+      "energy": "la acción se activa en los temas de la casa 11",
+      "avoid": "actuar por impulso sin medir el contexto",
+      "use": "canalizar energía con intención",
+      "focus": "acción en casa 11"
+    }
+  },
+  {
+    "id": "contexto_marte_casa_12",
+    "triggers": [
+      "marte_casa_12"
+    ],
+    "match": "all",
+    "peso": 0.73,
+    "clusters": [
+      "accion",
+      "marte"
+    ],
+    "output": {
+      "energy": "la acción se activa en los temas de la casa 12",
+      "avoid": "actuar por impulso sin medir el contexto",
+      "use": "canalizar energía con intención",
+      "focus": "acción en casa 12"
+    }
+  },
+  {
+    "id": "contexto_jupiter_casa_9",
+    "triggers": [
+      "jupiter_casa_9"
+    ],
+    "match": "all",
+    "peso": 0.77,
+    "clusters": [
+      "expansion",
+      "sentido"
+    ],
+    "output": {
+      "energy": "se amplía la búsqueda de sentido, visión y aprendizaje",
+      "avoid": "creer que todo tiene respuesta inmediata",
+      "use": "abrirte a nuevas perspectivas",
+      "focus": "sentido y expansión"
+    }
+  },
+  {
+    "id": "contexto_saturno_casa_10",
+    "triggers": [
+      "saturno_casa_10"
+    ],
+    "match": "all",
+    "peso": 0.82,
+    "clusters": [
+      "estructura",
+      "vocacion"
+    ],
+    "output": {
+      "energy": "la responsabilidad profesional pide orden y madurez",
+      "avoid": "medirte solo por exigencia",
+      "use": "construir paso a paso",
+      "focus": "vocación y estructura"
+    }
+  },
+  {
+    "id": "contexto_quiron_casa_6",
+    "triggers": [
+      "quiron_casa_6"
+    ],
+    "match": "all",
+    "peso": 0.76,
+    "clusters": [
+      "sanacion",
+      "rutina"
+    ],
+    "output": {
+      "energy": "se activa conciencia sobre hábitos, cuerpo y mejora personal",
+      "avoid": "exigirte sin compasión",
+      "use": "escuchar lo que el cuerpo muestra",
+      "focus": "sanación cotidiana"
     }
   }
 ]
