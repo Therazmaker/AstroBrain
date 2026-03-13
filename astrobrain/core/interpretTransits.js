@@ -48,41 +48,44 @@ function emotionalTranslation(transit) {
     if (tags.includes('tono_afectivo_impulsivo')) {
       return {
         emotion: 'reactividad',
-        action: 'podrías notar impulso afectivo y poca paciencia emocional; conviene pausar antes de responder',
+        action: 'pausar antes de responder desde el impulso afectivo',
+        avoid: 'actuar desde la impaciencia emocional sin reflexión previa',
       };
     }
 
     if ((context.targetElement || '').toLowerCase() === 'agua') {
       return {
         emotion: 'sensibilidad',
-        action: 'puede sentirse una necesidad fuerte de conexión; tal vez ayude hablar desde la vulnerabilidad',
+        action: 'hablar desde la vulnerabilidad cuando se sienta la necesidad de conexión',
+        avoid: 'reprimir lo que se siente o desconectarse del vínculo',
       };
     }
   }
 
   if (planet === 'Mars' && aspect === 'square') {
-    return { emotion: 'frustración', action: 'conviene canalizar el calor en movimiento antes de conversaciones tensas' };
+    return { emotion: 'frustración', action: 'canalizar el impulso en movimiento antes de conversaciones tensas', avoid: 'actuar desde la frustración sin pausa previa' };
   }
 
   if (planet === 'Moon' && target === 'Mars') {
-    return { emotion: 'reactividad', action: 'puedes bajar el ritmo y nombrar lo que sientes primero' };
+    return { emotion: 'reactividad', action: 'bajar el ritmo y nombrar lo que se siente primero', avoid: 'responder antes de procesar lo que se siente' };
   }
 
   if (planet === 'Mars' && target === 'Moon') {
-    return { emotion: 'reactividad', action: 'quizás ayude responder con pausa en lugar de reaccionar al instante' };
+    return { emotion: 'reactividad', action: 'responder con pausa en lugar de reaccionar al instante', avoid: 'las reacciones automáticas sin reflexión' };
   }
 
   if (planet === 'Venus' && aspect === 'trine') {
-    return { emotion: 'armonía', action: 'puede sentirse más fácil abrirte al vínculo y al apoyo mutuo' };
+    return { emotion: 'armonía', action: 'abrirte al vínculo y al apoyo mutuo', avoid: 'la desconexión o el aislamiento innecesario' };
   }
 
   if (planet === 'Saturn' && aspect === 'conjunction') {
-    return { emotion: 'pesadez', action: 'conviene ir paso a paso con lo responsable sin exigirte de más' };
+    return { emotion: 'pesadez', action: 'ir paso a paso con lo responsable sin exigirte de más', avoid: 'la autoexigencia excesiva o la sobrecarga' };
   }
 
   return {
     emotion: BASE_MEANINGS[planet] || 'movimiento emocional',
-    action: 'quizás convenga sostener un ritmo intencional y simple',
+    action: 'sostener un ritmo intencional y simple',
+    avoid: 'las decisiones apresuradas o el exceso de urgencia',
   };
 }
 

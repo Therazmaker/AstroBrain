@@ -29,5 +29,12 @@
       "mars_moon_square",
       "venus_sun_trine"
     ]
+  },
+  {
+    "timestamp": "2026-03-13T21:59:56.398Z",
+    "neurons": [
+      "moon_venus_sextile",
+      "venus_sun_trine"
+    ]
   }
 ]
