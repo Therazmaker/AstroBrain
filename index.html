@@ -1204,7 +1204,15 @@
   .training-neuron-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
   .training-neuron-grid label { font-family: var(--font-mono); font-size: 0.58rem; color: var(--text-muted); display:block; margin-bottom:3px; letter-spacing:0.04em; }
   .faltantes-lista { margin-top:8px; font-size:0.82rem; color: var(--rose); }
+  .training-neuron-tools { display:flex; flex-wrap: wrap; gap:8px; margin-top:10px; }
+  .training-room-status-row { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; }
+  .training-room-warning { color: var(--gold); font-size: 0.75rem; }
   .training-room-msg { margin-top: 10px; font-family: var(--font-mono); font-size:0.62rem; color: var(--teal); }
+  .training-import-overlay { position: fixed; inset: 0; background: rgba(3, 2, 10, 0.75); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+  .training-import-overlay.open { display: flex; }
+  .training-import-modal { width: min(760px, 96vw); background: var(--card); border: 1px solid var(--border-hi); border-radius: 14px; padding: 16px; }
+  .training-import-modal textarea { min-height: 220px; }
+  .training-import-feedback { margin-top: 10px; font-size: 0.8rem; color: var(--text-secondary); white-space: pre-line; }
   .btn-training-shortcut {
     background: rgba(77,208,196,0.08);
     border:1px solid rgba(77,208,196,0.25);
@@ -2176,6 +2184,7 @@
           <button class="btn-training-room" onclick="analizarTextoTraining()">Analizar texto</button>
           <button class="btn-training-room" onclick="generarNeuronasTraining()">Generar neuronas</button>
           <button class="btn-training-room" onclick="completarFaltantesTraining()">Completar faltantes</button>
+          <button class="btn-training-room" onclick="abrirImportadorTraining()">Importar JSON</button>
           <button class="btn-training-room" onclick="guardarNeuronasTraining()">Guardar neuronas</button>
           <button class="btn-training-room" onclick="enviarNeuronasAlGrafo()">Enviar al grafo</button>
         </div>
@@ -2213,12 +2222,27 @@
 
 </div>
 
+<div class="training-import-overlay" id="training-import-overlay">
+  <div class="training-import-modal">
+    <div class="panel-title">Importar JSON de neurona</div>
+    <div class="panel-sub" style="margin-bottom:10px">VALIDA Y CARGA UNA NEURONA EN EL FORMULARIO</div>
+    <textarea id="training-import-json" placeholder='{"id":"training_custom_1","match":"...","triggers":["..."],"clusters":["emotional"],"weight":0.6,"narrativeCategory":"...","eventType":"...","context":"...","output":{"energy":"...","avoid":"...","use":"...","focus":"..."}}'></textarea>
+    <div class="training-room-actions" style="margin-top:10px">
+      <button class="btn-training-room" onclick="validarJSONTrainingImport()">Validar</button>
+      <button class="btn-training-room" onclick="cargarJSONTrainingEnFormulario()">Cargar en formulario</button>
+      <button class="btn-training-room" onclick="cerrarImportadorTraining()">Cerrar</button>
+    </div>
+    <div class="training-import-feedback" id="training-import-feedback">Pega JSON y valida para ver errores o advertencias.</div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <!-- FAB -->
 <button class="fab" id="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
+<script src="./astrobrain/training/trainingRoomHelpers.js"></script>
 <script>
 // ─────────────────────────────────────────────────────────────
 // STAR CANVAS
@@ -3421,10 +3445,21 @@ function irATrainingRoom() {
 const trainingRoomState = {
   analysis: null,
   drafts: [],
+  importValidation: null,
 };
+
+const trainingHelpers = window.TrainingRoomHelpers;
 
 function extraerListaPorComas(texto) {
   return (texto || '').split(',').map(x => x.trim()).filter(Boolean);
+}
+
+function evaluarEstadoDraftTraining(draft) {
+  if (!trainingHelpers) return draft;
+  const validation = trainingHelpers.validateTrainingNeuron(trainingHelpers.serializeTrainingNeuron(draft));
+  draft.faltantes = validation.missingFields;
+  draft.estado = validation.missingFields.length ? 'incompleta' : 'completa';
+  return draft;
 }
 
 function detectarCategoriasTraining(texto) {
@@ -3509,18 +3544,7 @@ function construirDraftsDesdeRaw(analysis, rawText) {
       estado: 'completa',
       faltantes: [],
     };
-
-    const faltantes = [];
-    if (!draft.triggers.length) faltantes.push('falta trigger');
-    if (!draft.clusters.length) faltantes.push('falta cluster');
-    if (!draft.peso && draft.peso !== 0) faltantes.push('falta peso');
-    if (!draft.contexto) faltantes.push('falta contexto');
-    if (!draft.categoriaNarrativa) faltantes.push('falta categoría narrativa');
-    if (!draft.tipoEvento) faltantes.push('falta tipo de evento');
-    if (!draft.output.energy || !draft.output.avoid || !draft.output.use || !draft.output.focus) faltantes.push('output parcial');
-    draft.faltantes = faltantes;
-    draft.estado = faltantes.length ? 'incompleta' : 'completa';
-    return draft;
+    return evaluarEstadoDraftTraining(draft);
   });
 }
 
@@ -3554,17 +3578,25 @@ function actualizarDraftDesdeUI(index) {
   d.categoriaNarrativa = document.getElementById(pref+'categoria').value.trim();
   d.tipoEvento = document.getElementById(pref+'evento').value.trim();
   d.contexto = document.getElementById(pref+'contexto').value.trim();
+  evaluarEstadoDraftTraining(d);
+}
 
-  const faltantes = [];
-  if (!d.triggers.length) faltantes.push('falta trigger');
-  if (!d.clusters.length) faltantes.push('falta cluster');
-  if (!d.peso && d.peso !== 0) faltantes.push('falta peso');
-  if (!d.contexto) faltantes.push('falta contexto');
-  if (!d.categoriaNarrativa) faltantes.push('falta categoría narrativa');
-  if (!d.tipoEvento) faltantes.push('falta tipo de evento');
-  if (!d.output.energy || !d.output.avoid || !d.output.use || !d.output.focus) faltantes.push('output parcial');
-  d.faltantes = faltantes;
-  d.estado = faltantes.length ? 'incompleta' : 'completa';
+function exportarJSONNeuronTraining(index) {
+  const draft = trainingRoomState.drafts[index];
+  if (!draft || !trainingHelpers) return;
+  actualizarDraftDesdeUI(index);
+  const neuronJSON = trainingHelpers.serializeTrainingNeuron(draft);
+  const idOrDate = neuronJSON.id || Date.now();
+  trainingHelpers.downloadTextFile(JSON.stringify(neuronJSON, null, 2), `training-neuron-${idOrDate}.json`);
+  showToast('JSON de neurona exportado', 'success');
+}
+
+function descargarPackTraining(index) {
+  const draft = trainingRoomState.drafts[index];
+  if (!draft || !trainingHelpers) return;
+  actualizarDraftDesdeUI(index);
+  const pack = trainingHelpers.downloadNeuronTrainingPack(draft);
+  showToast(`Pack de entrenamiento descargado (${pack.meta.status})`, 'success');
 }
 
 function renderizarDraftsTraining() {
@@ -3594,8 +3626,93 @@ function renderizarDraftsTraining() {
         <div><label>output.focus</label><input id="draft-${idx}-focus" value="${d.output.focus || ''}"></div>
       </div>
       ${d.faltantes.length ? `<div class="faltantes-lista">Campos faltantes: ${d.faltantes.join(', ')}</div>` : '<div class="faltantes-lista" style="color:var(--teal)">Neurona lista para guardar.</div>'}
-      <div class="training-room-actions" style="margin-top:8px"><button class="btn-training-room" onclick="actualizarYRenderizarDraft(${idx})">Actualizar tarjeta</button></div>
+      <div class="training-neuron-tools">
+        <button class="btn-training-room" onclick="actualizarYRenderizarDraft(${idx})">Actualizar tarjeta</button>
+        <button class="btn-training-room" onclick="exportarJSONNeuronTraining(${idx})">Exportar JSON</button>
+        <button class="btn-training-room" onclick="descargarPackTraining(${idx})">Descargar pack de entrenamiento</button>
+      </div>
     </div>`).join('');
+}
+
+function abrirImportadorTraining() {
+  const overlay = document.getElementById('training-import-overlay');
+  overlay.classList.add('open');
+}
+
+function cerrarImportadorTraining() {
+  const overlay = document.getElementById('training-import-overlay');
+  overlay.classList.remove('open');
+}
+
+function validarJSONTrainingImport() {
+  if (!trainingHelpers) return;
+  const feedback = document.getElementById('training-import-feedback');
+  const raw = document.getElementById('training-import-json').value.trim();
+  if (!raw) {
+    feedback.textContent = 'Pega un JSON antes de validar.';
+    feedback.style.color = 'var(--rose)';
+    return;
+  }
+
+  try {
+    const parsed = JSON.parse(raw);
+    const validation = trainingHelpers.validateTrainingNeuron(parsed);
+    trainingRoomState.importValidation = validation;
+    if (!validation.valid) {
+      const missingBlock = validation.missingFields.length
+        ? `
+Campos faltantes:
+- ${validation.missingFields.join('\n- ')}`
+        : '';
+      feedback.style.color = 'var(--rose)';
+      feedback.textContent = `Errores de validación:
+- ${validation.errors.join('\n- ')}${missingBlock}`;
+      return;
+    }
+
+    feedback.style.color = 'var(--teal)';
+    const warningText = validation.warnings.length
+      ? `
+Advertencias:
+- ${validation.warnings.join('\n- ')}`
+      : '';
+    const missingText = validation.missingFields.length
+      ? `
+Campos faltantes detectados:
+- ${validation.missingFields.join('\n- ')}`
+      : `\nNo hay campos faltantes.`;
+    feedback.textContent = `JSON válido.${missingText}${warningText}`;
+  } catch (error) {
+    trainingRoomState.importValidation = null;
+    feedback.style.color = 'var(--rose)';
+    feedback.textContent = `JSON mal formado: ${error.message}`;
+  }
+}
+
+function cargarJSONTrainingEnFormulario() {
+  if (!trainingHelpers) return;
+  if (!trainingRoomState.importValidation) {
+    showToast('Valida el JSON antes de cargar.', 'error');
+    return;
+  }
+  const validation = trainingRoomState.importValidation;
+  if (!validation.valid) {
+    showToast('El JSON tiene errores de validación.', 'error');
+    return;
+  }
+
+  const draft = trainingHelpers.deserializeTrainingNeuron(validation.canonical, {
+    source: 'training_room',
+    sourceTextType: 'imported_json',
+    createdAt: new Date().toISOString(),
+    validationStatus: 'imported',
+    output: { energy: '', avoid: '', use: '', focus: '' },
+  });
+  evaluarEstadoDraftTraining(draft);
+  trainingRoomState.drafts.unshift(draft);
+  renderizarDraftsTraining();
+  cerrarImportadorTraining();
+  showToast('JSON importado y cargado en formulario', 'success');
 }
 
 async function actualizarYRenderizarDraft(index) {
