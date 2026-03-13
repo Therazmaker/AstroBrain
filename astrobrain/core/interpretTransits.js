@@ -161,12 +161,17 @@ function interpretTransits(transits = []) {
   const emotionStates = interpretedTransits.map((transit) => transit.emotion).filter(Boolean);
   const situationSummary = buildSituationSummary(emotionStates);
 
+  const frasesNeuronales = activatedNeurons
+    .flatMap((neuron) => [neuron.output?.energy, neuron.output?.focus])
+    .filter(Boolean);
+
   const baseNarrative = buildNarrative({
     interpretedTransits,
     activatedNeurons,
     memoryPhrases: [
       ...memoryPhrases,
       ...metaSignals.map((signal) => signal.then),
+      ...frasesNeuronales,
       situationSummary,
     ],
   });

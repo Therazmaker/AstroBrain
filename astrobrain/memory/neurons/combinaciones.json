@@ -1,0 +1,41 @@
+[
+  {
+    "id": "moon_square_venus_con_venus_en_aries",
+    "triggers": ["moon_square_venus", "venus_en_aries"],
+    "match": "all",
+    "peso": 0.91,
+    "clusters": ["emotional", "relational"],
+    "output": {
+      "energy": "afecto reactivo y sensibilidad rápida",
+      "avoid": "responder antes de procesar",
+      "use": "nombrar lo que sientes antes de actuar",
+      "focus": "deseo, cercanía y fricción"
+    }
+  },
+  {
+    "id": "moon_square_venus__venus_casa_7_espejo_activo",
+    "triggers": ["moon_square_venus__venus_casa_7"],
+    "match": "all",
+    "peso": 0.87,
+    "clusters": ["emotional", "relational"],
+    "output": {
+      "energy": "la tensión emocional aparece dentro del vínculo espejo",
+      "avoid": "culpar al otro por todo el movimiento interno",
+      "use": "pedir claridad sin dejar de escucharte",
+      "focus": "dinámica vincular consciente"
+    }
+  },
+  {
+    "id": "saturn_conjunction_sun__orbe_muy_fuerte",
+    "triggers": ["saturn_conjunction_sun", "orbe_muy_fuerte"],
+    "match": "all",
+    "peso": 0.94,
+    "clusters": ["actional", "mental"],
+    "output": {
+      "energy": "la presión se vuelve concreta y muy enfocada",
+      "avoid": "interpretar la exigencia como castigo",
+      "use": "priorizar estructura, descanso y constancia",
+      "focus": "responsabilidad esencial"
+    }
+  }
+]
