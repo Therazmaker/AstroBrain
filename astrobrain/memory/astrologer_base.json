@@ -1,0 +1,350 @@
+{
+  "aperturas": {
+    "intensa": [
+      "El cielo de hoy no invita a la levedad.",
+      "Hay una carga en el ambiente que conviene no ignorar.",
+      "La energía del día se siente densa, casi tangible.",
+      "Algo se mueve con fuerza hoy, y vale la pena prestarle atención.",
+      "No es un día para la superficie. Lo que emerge hoy tiene raíz.",
+      "El día trae consigo una presión que puede ser incómoda, pero también reveladora.",
+      "Hoy el cielo habla alto. Conviene escuchar antes de actuar.",
+      "Hay una tensión en el ambiente que, bien dirigida, puede volverse claridad."
+    ],
+    "activa": [
+      "El día trae movimiento. No todo está resuelto, pero hay energía para avanzar.",
+      "Hay impulso en el ambiente. La pregunta es hacia dónde.",
+      "El momento invita a la acción, siempre que sea con conciencia.",
+      "Algo se activa hoy. Puede ser interno o externo, pero se siente.",
+      "El cielo de hoy es propicio para quienes están dispuestos a moverse.",
+      "Hay vida en este día. Las cosas pueden avanzar si se les da dirección.",
+      "El ambiente está cargado de posibilidad. Depende de ti qué haces con eso."
+    ],
+    "suave": [
+      "El día invita a la calma, y eso no es poca cosa.",
+      "Hay una suavidad en el ambiente que merece ser aprovechada.",
+      "El cielo de hoy no exige. Invita.",
+      "Es un día para moverse despacio y notar lo que habitualmente se pasa por alto.",
+      "La energía de hoy es gentil. Un buen momento para el interior.",
+      "No todo tiene que ser urgente. Hoy el ritmo puede ser tuyo.",
+      "El ambiente sostiene hoy. Puedes apoyarte en él sin forzar nada."
+    ]
+  },
+  "transiciones": [
+    "Lo que puede sentirse es",
+    "En el fondo, lo que emerge es",
+    "Debajo de la superficie hay",
+    "Lo que pide atención en este momento es",
+    "Si hay algo que el día hace visible, es",
+    "Lo que se mueve internamente tiene que ver con",
+    "En este contexto, lo que aparece es",
+    "El patrón que se activa hoy toca"
+  ],
+  "emociones": {
+    "frustración": [
+      "una frustración que busca salida. No siempre encontrará la puerta correcta si se empuja a ciegas.",
+      "algo que no avanza como querías. La resistencia es real, pero también lo es tu capacidad de rodearla.",
+      "el roce entre lo que quieres y lo que encuentra obstáculo. Vale detenerse antes de forzar.",
+      "una energía que empuja pero no halla dirección. El impulso existe; lo que falta es canal."
+    ],
+    "reactividad": [
+      "una sensibilidad elevada. Lo que normalmente pasa desapercibido hoy puede aterrizar con más peso.",
+      "la tendencia a responder antes de procesar. Hay una fracción de segundo entre el estímulo y la palabra que puede cambiarlo todo.",
+      "un sistema nervioso más alerta de lo habitual. No es el momento para decisiones apresuradas.",
+      "cierta reactividad emocional que conviene reconocer antes de que hable por ti."
+    ],
+    "pesadez": [
+      "un peso que no siempre tiene nombre. Puede ser viejo o reciente, pero se hace presente.",
+      "la sensación de cargar con demasiado. Tal vez no todo es tuyo.",
+      "algo que pesa. No siempre hay que resolverlo hoy, pero sí hay que nombrarlo.",
+      "una lentitud que puede confundirse con bloqueo. A veces el cuerpo sabe que necesita pausa."
+    ],
+    "armonía": [
+      "una apertura hacia el otro que pocas veces se da con tanta naturalidad.",
+      "la posibilidad de conectar desde un lugar genuino. Hoy las palabras llegan más fácil.",
+      "fluidez en los intercambios. Lo que necesitabas decir puede encontrar su momento.",
+      "una calidez que puede extenderse. Aprovecha el puente mientras está tendido."
+    ],
+    "expansión": [
+      "ganas de abarcar más. La ambición no es el problema; la dispersión, sí.",
+      "el impulso de crecer, de alcanzar algo más amplio. La pregunta es si los cimientos aguantan.",
+      "una apertura genuina al futuro. Úsala para proyectar con realismo, no solo con deseo.",
+      "optimismo que busca tierra. Cuando encuentra dónde aterrizar, se vuelve construcción."
+    ],
+    "presión": [
+      "la presencia de una obligación que no puede ignorarse más.",
+      "una demanda externa o interna que pide respuesta. Cuanto más se evita, más ocupa.",
+      "el peso de lo pendiente. A veces la única salida es entrar.",
+      "algo que espera ser atendido. No con urgencia, sino con responsabilidad."
+    ],
+    "claridad": [
+      "una lucidez que puede aprovecharse. Las ideas aterrizan bien hoy.",
+      "el momento para ver con más precisión lo que normalmente está nublado.",
+      "apertura mental. Es buen día para tomar decisiones que llevan tiempo pendientes.",
+      "transparencia interna. Lo que piensas y lo que sientes están más alineados de lo habitual."
+    ],
+    "impulso": [
+      "ganas de actuar. El riesgo es hacerlo sin rumbo.",
+      "energía disponible. La clave es darle dirección antes de que se consuma sola.",
+      "la necesidad de moverse, de hacer, de iniciar. Bien usado, este impulso construye.",
+      "una fuerza que quiere salida. El desafío es elegir la puerta correcta."
+    ],
+    "sensibilidad": [
+      "una permeabilidad emocional mayor de lo usual. Lo que entra, entra hondo.",
+      "la antena más afinada. Puedes captar cosas que normalmente pasan desapercibidas.",
+      "un estado receptivo. Útil para escuchar. Requiere cuidado para no absorber lo ajeno.",
+      "mayor profundidad emocional. No es fragilidad, es amplitud. Úsala con consciencia."
+    ]
+  },
+  "puentes": [
+    "En este contexto,",
+    "Frente a esto,",
+    "Con este panorama,",
+    "Dado lo que se mueve hoy,",
+    "Considerando la energía del momento,",
+    "Ante este escenario,",
+    "Desde este lugar,",
+    "Teniendo en cuenta lo anterior,"
+  ],
+  "consejoPatrones": {
+    "evitar": [
+      "conviene evitar {avoid}, al menos por ahora.",
+      "lo que no ayuda en este momento es {avoid}.",
+      "mejor dejar de lado {avoid} mientras dure este tránsito.",
+      "hay que tener cuidado con {avoid}, que hoy tiene más peso del habitual.",
+      "{avoid} puede costar más de lo que parece. Mejor rodearlo."
+    ],
+    "usar": [
+      "en cambio, es buen momento para {use}.",
+      "lo que sí puede ayudar es {use}.",
+      "la energía disponible sirve bien para {use}.",
+      "hay apertura para {use}, si se aprovecha con intención.",
+      "el momento invita a {use} de forma natural."
+    ],
+    "enfocar": [
+      "y ayuda enfocarte en {focus}.",
+      "con especial atención a {focus}.",
+      "poniendo la mirada en {focus}.",
+      "sin perder de vista {focus}.",
+      "recordando que {focus} es lo que más puede sostenerte ahora."
+    ]
+  },
+  "cierres": {
+    "intensa": [
+      "No es un día fácil, pero sí es un día con información. Escucha lo que dice.",
+      "La intensidad de hoy tiene propósito. El reto es no gastarla en dirección equivocada.",
+      "Los días difíciles también dejan algo. Tal vez lo veas más adelante.",
+      "No todo tiene que resolverse hoy. Pero sí puede nombrarse.",
+      "La presión que sientes hoy es real. Y también es pasajera."
+    ],
+    "activa": [
+      "El movimiento de hoy puede dejar algo construido si se le da dirección.",
+      "Hay energía disponible. Depende de ti dónde la pones.",
+      "Este tipo de días, bien aprovechados, marcan diferencia.",
+      "Lo que inicies hoy con conciencia tiene más probabilidad de sostenerse.",
+      "La acción de hoy puede ser pequeña y aun así importar."
+    ],
+    "suave": [
+      "Los días suaves también construyen. Solo lo hacen en silencio.",
+      "Date permiso de no hacer demasiado. El descanso también es parte del camino.",
+      "Hoy el cielo te invita a soltar. Es suficiente.",
+      "No todo tiene que ser urgente. Hoy puede ser un día para ti.",
+      "La quietud de hoy puede prepararte para lo que viene después."
+    ]
+  },
+  "metaSenales": {
+    "alta_carga_emocional": [
+      "Hay una acumulación emocional que merece atención. No es el momento de ignorar lo que se siente.",
+      "El motor emocional está trabajando con más fuerza de lo habitual. Conviene darle espacio.",
+      "Varios planetas activan el registro emocional al mismo tiempo. Esto puede sentirse como saturación."
+    ],
+    "patron_reactivo": [
+      "Se detecta un patrón de reactividad en este momento. Vale la pena notar cuándo reaccionas antes de elegir.",
+      "La combinación actual favorece las respuestas automáticas. El antídoto es la pausa consciente."
+    ],
+    "expansion_sin_base": [
+      "Hay impulso de expansión, pero los cimientos pueden no estar listos. Mejor consolidar antes de ampliar.",
+      "La ambición está presente, pero necesita estructura. El entusiasmo sin plan suele quedarse a mitad de camino."
+    ]
+  },
+  "anclajes": [
+    "No hay que apresurarse.",
+    "El ritmo importa tanto como la dirección.",
+    "A veces la pausa es la acción correcta.",
+    "Lo que se fuerza rara vez se sostiene.",
+    "El cuerpo suele saber antes que la mente.",
+    "No todo lo que se siente tiene que ser resuelto.",
+    "Hay sabiduría en esperar el momento justo.",
+    "La claridad llega cuando la urgencia se asienta.",
+    "Lo genuino no necesita forzarse.",
+    "Hay cosas que maduran solas si no se interrumpe el proceso."
+  ],
+  "combinaciones": {
+    "Marte_Saturno": {
+      "tension": "La combinación de impulso y restricción puede sentirse como pisar el acelerador con el freno puesto.",
+      "consejo": "El camino no es forzar ni paralizarse, sino encontrar qué puede moverse dentro de lo que está fijo."
+    },
+    "Venus_Marte": {
+      "tension": "Deseo y acción se mezclan hoy. Lo que atraes puede ser lo que también te activa.",
+      "consejo": "Antes de perseguir, vale preguntarse si lo que se quiere es lo que de verdad se necesita."
+    },
+    "Luna_Saturno": {
+      "tension": "El mundo emocional choca con la estructura. Sentir puede parecer un lujo que el deber no permite.",
+      "consejo": "Ambas cosas pueden coexistir. La emoción no invalida la responsabilidad, y viceversa."
+    },
+    "Luna_Marte": {
+      "tension": "Emoción e impulso se mezclan de forma volátil. Lo que se siente quiere actuar de inmediato.",
+      "consejo": "La pausa de un momento puede evitar conversaciones que costarán días en reparar."
+    },
+    "Sol_Saturno": {
+      "tension": "La identidad y el peso de la obligación se encuentran. Puede sentirse como presión desde afuera o desde adentro.",
+      "consejo": "Cumplir con lo que se debe no tiene que costar quién eres. Es posible hacer ambas cosas."
+    },
+    "Júpiter_Saturno": {
+      "tension": "Expansión y contracción en tensión. El querer más y el miedo a no tener suficiente base.",
+      "consejo": "El equilibrio está en crecer un paso a la vez, sin perder de vista lo que ya está construido."
+    },
+    "Mercurio_Marte": {
+      "tension": "La mente y la acción se aceleran mutuamente. El pensamiento puede volverse combativo.",
+      "consejo": "Verifica dos veces antes de enviar, decir o decidir. La velocidad no siempre es precisión."
+    },
+    "Venus_Saturno": {
+      "tension": "El amor y el miedo al compromiso coexisten. La calidez puede sentirse bloqueada por la cautela.",
+      "consejo": "No todo lo que protege también nutre. Hay momentos en que hay que elegir."
+    },
+    "Sol_Marte": {
+      "tension": "Voluntad y fuerza se amplifican. Puede ser poderoso o excesivo dependiendo de la dirección.",
+      "consejo": "El liderazgo genuino no necesita imponerse. La fuerza bien dirigida no necesita demostración."
+    },
+    "Luna_Venus": {
+      "tension": "Emoción y deseo de conexión se fusionan. Puede ser hermoso o puede confundir necesidad con amor.",
+      "consejo": "Distinguir qué parte de lo que buscas en el otro es realmente tuyo es el trabajo de hoy."
+    },
+    "Júpiter_Marte": {
+      "tension": "Mucha energía disponible, muchas direcciones posibles. El riesgo es la dispersión.",
+      "consejo": "Elige una sola dirección y dale todo. La concentración multiplica lo que la dispersión dilapida."
+    },
+    "Mercurio_Saturno": {
+      "tension": "La mente puede volverse su propio crítico más severo. El pensamiento tiende al límite, no a la apertura.",
+      "consejo": "Cuestiona la voz que dice que no se puede. A veces es sabiduría. A veces es miedo disfrazado."
+    }
+  },
+  "signos": {
+    "Aries": {
+      "calidad": "pionero",
+      "elemento": "fuego",
+      "frase": "necesita movimiento y claridad de propósito"
+    },
+    "Tauro": {
+      "calidad": "constante",
+      "elemento": "tierra",
+      "frase": "necesita estabilidad y contacto con lo concreto"
+    },
+    "Géminis": {
+      "calidad": "adaptable",
+      "elemento": "aire",
+      "frase": "necesita variedad y expresión del pensamiento"
+    },
+    "Cáncer": {
+      "calidad": "receptivo",
+      "elemento": "agua",
+      "frase": "necesita seguridad emocional y sentido de pertenencia"
+    },
+    "Leo": {
+      "calidad": "expresivo",
+      "elemento": "fuego",
+      "frase": "necesita reconocimiento y espacio para brillar"
+    },
+    "Virgo": {
+      "calidad": "analítico",
+      "elemento": "tierra",
+      "frase": "necesita orden, utilidad y sentido práctico"
+    },
+    "Libra": {
+      "calidad": "equilibrador",
+      "elemento": "aire",
+      "frase": "necesita armonía y conexión genuina con el otro"
+    },
+    "Escorpio": {
+      "calidad": "transformador",
+      "elemento": "agua",
+      "frase": "necesita profundidad y verdad sin ornamento"
+    },
+    "Sagitario": {
+      "calidad": "expansivo",
+      "elemento": "fuego",
+      "frase": "necesita horizonte, sentido y libertad de movimiento"
+    },
+    "Capricornio": {
+      "calidad": "estructurado",
+      "elemento": "tierra",
+      "frase": "necesita propósito claro y construcción sostenida"
+    },
+    "Acuario": {
+      "calidad": "visionario",
+      "elemento": "aire",
+      "frase": "necesita originalidad y contribución al colectivo"
+    },
+    "Piscis": {
+      "calidad": "permeable",
+      "elemento": "agua",
+      "frase": "necesita espacio interior y conexión con lo trascendente"
+    }
+  },
+  "planetas": {
+    "Moon": {
+      "nombre": "la Luna",
+      "dominio": "las emociones, los hábitos y la memoria"
+    },
+    "Mars": {
+      "nombre": "Marte",
+      "dominio": "el impulso, la acción y el deseo de avanzar"
+    },
+    "Saturn": {
+      "nombre": "Saturno",
+      "dominio": "la estructura, la responsabilidad y el tiempo"
+    },
+    "Sun": {
+      "nombre": "el Sol",
+      "dominio": "la identidad, la vitalidad y el propósito central"
+    },
+    "Venus": {
+      "nombre": "Venus",
+      "dominio": "el amor, el valor y lo que nos atrae"
+    },
+    "Mercury": {
+      "nombre": "Mercurio",
+      "dominio": "la mente, la comunicación y los intercambios"
+    },
+    "Jupiter": {
+      "nombre": "Júpiter",
+      "dominio": "la expansión, la fe y el crecimiento"
+    }
+  },
+  "aspectos": {
+    "conjunction": {
+      "nombre": "conjunción",
+      "cualidad": "fusión e intensificación",
+      "tension": "alta"
+    },
+    "opposition": {
+      "nombre": "oposición",
+      "cualidad": "tensión entre dos fuerzas opuestas",
+      "tension": "alta"
+    },
+    "square": {
+      "nombre": "cuadratura",
+      "cualidad": "fricción que busca resolución",
+      "tension": "media-alta"
+    },
+    "trine": {
+      "nombre": "trígono",
+      "cualidad": "fluidez y oportunidad natural",
+      "tension": "baja"
+    },
+    "sextile": {
+      "nombre": "sextil",
+      "cualidad": "apertura sutil hacia lo posible",
+      "tension": "baja"
+    }
+  }
+}
