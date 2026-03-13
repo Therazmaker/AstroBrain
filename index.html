@@ -612,6 +612,7 @@
     color: var(--text-primary);
     letter-spacing: 0.01em;
     margin: 0 0 20px;
+    white-space: pre-line;
   }
 
   .narrative-signals {
@@ -2614,6 +2615,33 @@ function matchTransitToRelevantNeuronsPreview(transit) {
   };
 }
 
+function tagToReadableLabel(tag) {
+  if (!tag) return '';
+  const PLANET_ES = {
+    moon: 'luna', sun: 'sol', mars: 'marte', mercury: 'mercurio',
+    venus: 'venus', jupiter: 'júpiter', saturn: 'saturno',
+    uranus: 'urano', neptune: 'neptuno', pluto: 'plutón',
+  };
+  const SIGN_ES = {
+    aries: 'aries', taurus: 'tauro', gemini: 'géminis', cancer: 'cáncer',
+    leo: 'leo', virgo: 'virgo', libra: 'libra', scorpio: 'escorpio',
+    sagittarius: 'sagitario', capricorn: 'capricornio', aquarius: 'acuario', pisces: 'piscis',
+  };
+  const GRADO_ES = { temprano: 'temprano', medio: 'medio', tardio: 'tardío' };
+  const enMatch = tag.match(/^(\w+)_en_(\w+)$/);
+  if (enMatch) {
+    const planet = PLANET_ES[enMatch[1]] || enMatch[1];
+    const sign = SIGN_ES[enMatch[2]] || enMatch[2];
+    return `${planet} en ${sign}`;
+  }
+  const gradoMatch = tag.match(/^(\w+)_grado_(\w+)$/);
+  if (gradoMatch) {
+    const planet = PLANET_ES[gradoMatch[1]] || gradoMatch[1];
+    return `${planet} en grado ${GRADO_ES[gradoMatch[2]] || gradoMatch[2]}`;
+  }
+  return '';
+}
+
 // Main interpret function
 function interpretTránsitos(transits) {
   const prioritized = filterTránsitos(transits, 3);
@@ -2641,14 +2669,19 @@ function interpretTránsitos(transits) {
   });
 
   const firstActivation = interpreted[0]?.activation || {};
-  const primaryFocus = firstActivation.primaryNeuron?.match || 'pausa, regula y responde con intención';
-  const secondaryFocus = (firstActivation.secondaryNeurons || []).map(item => item.match).slice(0, 3).join(', ');
+  const primaryFocusLabel = tagToReadableLabel(firstActivation.primaryNeuron?.match);
+  const secondaryFocusLabels = (firstActivation.secondaryNeurons || [])
+    .map(item => tagToReadableLabel(item.match))
+    .filter(Boolean)
+    .slice(0, 3);
+  const allFocusLabels = [primaryFocusLabel, ...secondaryFocusLabels].filter(Boolean);
+  const focusValue = allFocusLabels.length ? allFocusLabels.join(', ') : 'pausa, regula y responde con intención';
 
   const narrative = {
     energy: `${tone}: ${[...new Set(emotions)].join(', ')||'clima emocional mixto'}`,
     avoid: interpreted[0]?.action || 'evitar reacción automática en el vínculo',
     use: actions[0]||'prioridades claras y acciones simples',
-    focus: secondaryFocus ? `${primaryFocus} + matices: ${secondaryFocus}` : primaryFocus,
+    focus: focusValue,
   };
 
   const metaSignals = [];
@@ -3297,8 +3330,11 @@ function generateVoiceParagraph(signals) {
   const cierre         = endPeriod(pickBase(ASTRO_BASE.cierres[tone] || ASTRO_BASE.cierres.activa));
   const anclaje        = Math.random() < 0.33 ? endPeriod(pickBase(ASTRO_BASE.anclajes)) : '';
 
-  return [apertura, bloqueEmocional, bloqueContexto, bloqueCombo, anclaje, bloqueConsejo, cierre]
-    .filter(Boolean).map(p => p.trim()).join(' ');
+  const para1 = [apertura, bloqueEmocional].filter(Boolean).map(p => p.trim()).join(' ');
+  const para2 = [bloqueContexto, bloqueCombo, anclaje].filter(Boolean).map(p => p.trim()).join(' ');
+  const para3 = [bloqueConsejo, cierre].filter(Boolean).map(p => p.trim()).join(' ');
+
+  return [para1, para2, para3].filter(Boolean).join('\n\n');
 }
 
 // ─────────────────────────────────────────────────────────────
