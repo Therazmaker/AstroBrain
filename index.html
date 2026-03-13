@@ -53,7 +53,7 @@
     position: fixed;
     inset: 0;
     z-index: 0;
-    pointer-events: ninguno;
+    pointer-events: none;
   }
 
   /* ─── LAYOUT ─────────────────────────────────────── */
@@ -232,8 +232,8 @@
     font-size: 0.75rem;
     padding: 8px 10px;
     transition: border-color 0.2s;
-    -webkit-appearance: ninguno;
-    outline: ninguno;
+    -webkit-appearance: none;
+    outline: none;
     width: 100%;
   }
 
@@ -245,7 +245,7 @@
   .transit-row select option { background: var(--deep); }
 
   .btn-remove {
-    background: ninguno;
+    background: none;
     border: 1px solid rgba(229, 115, 115, 0.2);
     border-radius: 6px;
     color: var(--rose);
@@ -275,7 +275,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background: ninguno;
+    background: none;
     border: 1px dashed var(--border);
     border-radius: 8px;
     color: var(--text-muted);
@@ -298,7 +298,7 @@
     margin-top: 16px;
     padding: 15px;
     background: linear-gradient(135deg, #7c52e8, #d4a843);
-    border: ninguno;
+    border: none;
     border-radius: 12px;
     color: white;
     cursor: pointer;
@@ -357,7 +357,7 @@
     padding: 14px 16px;
     resize: vertical;
     min-height: 110px;
-    outline: ninguno;
+    outline: none;
     transition: border-color 0.2s;
     margin-top: 12px;
   }
@@ -570,7 +570,7 @@
     vertical-align: top;
   }
 
-  .data-table tr:last-child td { border-bottom: ninguno; }
+  .data-table tr:last-child td { border-bottom: none; }
 
   .weight-bar {
     display: inline-block;
@@ -603,7 +603,7 @@
   }
 
   .growth-log {
-    list-style: ninguno;
+    list-style: none;
     margin-top: 16px;
     max-height: 280px;
     overflow-y: auto;
@@ -622,7 +622,7 @@
     align-items: flex-start;
   }
 
-  .growth-log li:last-child { border-bottom: ninguno; }
+  .growth-log li:last-child { border-bottom: none; }
 
   .log-time {
     color: var(--gold-dim);
@@ -752,7 +752,7 @@
     font-family: var(--font-mono);
     font-size: 0.65rem;
   }
-  .context-entry:last-child { border-bottom: ninguno; }
+  .context-entry:last-child { border-bottom: none; }
 
   .ctx-date { color: var(--gold-dim); }
   .ctx-emotion { color: var(--text-secondary); }
@@ -805,7 +805,7 @@
     padding: 14px;
     resize: vertical;
     min-height: 140px;
-    outline: ninguno;
+    outline: none;
     transition: border-color 0.2s;
     margin-top: 12px;
   }
@@ -821,7 +821,7 @@
     font-family: var(--font-mono);
     font-size: 0.75rem;
     padding: 10px 14px;
-    outline: ninguno;
+    outline: none;
     transition: border-color 0.2s;
     margin-top: 8px;
     margin-bottom: 12px;
@@ -892,13 +892,13 @@
     white-space: nowrap;
   }
 
-  .he-tone.intensa { border-color: rgba(229,115,115,0.3); color: var(--rose); }
-  .he-tone.activa { border-color: rgba(155,114,245,0.3); color: var(--violet); }
-  .he-tone.suave { border-color: rgba(77,208,196,0.3); color: var(--teal); }
+  .he-tone.intense { border-color: rgba(229,115,115,0.3); color: var(--rose); }
+  .he-tone.active { border-color: rgba(155,114,245,0.3); color: var(--violet); }
+  .he-tone.soft { border-color: rgba(77,208,196,0.3); color: var(--teal); }
 
   /* ─── LOADER ─────────────────────────────────────── */
   .loader {
-    display: ninguno;
+    display: none;
     align-items: center;
     justify-content: center;
     gap: 8px;
@@ -908,7 +908,7 @@
     color: var(--text-muted);
     letter-spacing: 0.1em;
   }
-  .loader.activa { display: flex; }
+  .loader.active { display: flex; }
 
   .spinner {
     width: 18px; height: 18px;
@@ -935,7 +935,7 @@
     transform: translateY(20px);
     opacity: 0;
     transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-    pointer-events: ninguno;
+    pointer-events: none;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -994,7 +994,7 @@
     border-radius: 50%;
     background: radial-gradient(circle, rgba(155,114,245,0.06) 0%, transparent 70%);
     top: -100px; right: -200px;
-    pointer-events: ninguno;
+    pointer-events: none;
     z-index: 0;
   }
   .glow-gold {
@@ -1003,13 +1003,13 @@
     border-radius: 50%;
     background: radial-gradient(circle, rgba(212,168,67,0.05) 0%, transparent 70%);
     bottom: -100px; left: -150px;
-    pointer-events: ninguno;
+    pointer-events: none;
     z-index: 0;
   }
 
   /* section hr */
   .divider {
-    border: ninguno;
+    border: none;
     border-top: 1px solid var(--border);
     margin: 48px 0;
   }
@@ -1028,9 +1028,9 @@
 
   .mode-tab {
     padding: 8px 18px;
-    border: ninguno;
+    border: none;
     border-radius: 7px;
-    background: ninguno;
+    background: none;
     color: var(--text-muted);
     cursor: pointer;
     font-family: var(--font-mono);
@@ -1038,14 +1038,14 @@
     letter-spacing: 0.1em;
     transition: all 0.2s;
   }
-  .mode-tab.activa {
+  .mode-tab.active {
     background: var(--card);
     color: var(--text-primary);
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   }
 
-  .mode-panel { display: ninguno; }
-  .mode-panel.activa { display: block; }
+  .mode-panel { display: none; }
+  .mode-panel.active { display: block; }
 
   /* scroll to top fab */
   .fab {
@@ -1065,7 +1065,7 @@
     transition: all 0.2s;
     z-index: 50;
     opacity: 0;
-    pointer-events: ninguno;
+    pointer-events: none;
   }
   .fab.visible { opacity: 1; pointer-events: all; }
   .fab:hover { border-color: var(--violet-dim); color: var(--violet); }
@@ -1114,12 +1114,12 @@
       <div class="panel-sub">ENTRADA / PIPELINE DE TRÁNSITOS</div>
 
       <div class="mode-tabs">
-        <button class="mode-tab activa" onclick="setMode('transits')">Tránsitos</button>
-        <button class="mode-tab" onclick="setMode('libre')">Texto Libre</button>
+        <button class="mode-tab active" onclick="setMode('transits')">Tránsitos</button>
+        <button class="mode-tab" onclick="setMode('raw')">Texto Libre</button>
       </div>
 
       <!-- TRANSIT MODE -->
-      <div class="mode-panel activa" id="mode-transits">
+      <div class="mode-panel active" id="mode-transits">
         <div class="col-labels">
           <div class="row-label">PLANETA</div>
           <div class="row-label">ASPECTO</div>
@@ -1130,13 +1130,13 @@
         <div class="transit-rows" id="transit-rows"></div>
         <button class="btn-add" onclick="addTransitRow()">+ agregar tránsito</button>
         <button class="btn-run" onclick="runInterpretation()">
-          <span>✦ Interpret Tránsitos</span>
+          <span>✦ Interpretar Tránsitos</span>
         </button>
       </div>
 
       <!-- RAW TEXT MODE -->
       <div class="mode-panel" id="mode-raw">
-        <textarea id="raw-text" placeholder="Describe un sentimiento, una situación, un día... AstroBrain extraerá patrones emocionales y generará una narrativa desde tus palabras.&#10;&#10;E.g.: 'I've been feeling overwhelmed and anxious. There's too much going on at work and my relationships feel strained…'" rows="6"></textarea>
+        <textarea id="raw-text" placeholder="Describe un sentimiento, una situación, un día... AstroBrain extraerá patrones emocionales y generará una narrativa desde tus palabras.&#10;&#10;Ej.: 'Me he sentido abrumado y ansioso. Hay demasiado en el trabajo y mis relaciones se sienten tensas…'" rows="6"></textarea>
         <button class="btn-run-raw" onclick="runRawInterpretation()">
           ▶ CORRER PIPELINE LIBRE
         </button>
@@ -1159,10 +1159,10 @@
     <div class="narrative-grid" id="narrative-grid"></div>
   </section>
 
-  <hr class="divider" id="divider-1" style="display:ninguno">
+  <hr class="divider" id="divider-1" style="display:none">
 
   <!-- ── TRANSIT BREAKDOWN ── -->
-  <section class="transits-section" id="transits-section" style="display:ninguno">
+  <section class="transits-section" id="transits-section" style="display:none">
     <div class="section-header">
       <h2 class="section-title">Desglose de Tránsitos</h2>
       <span class="section-badge">PUNTUADO Y PRIORIZADO</span>
@@ -1170,7 +1170,7 @@
     <div class="transit-cards" id="transit-cards-output"></div>
   </section>
 
-  <hr class="divider" id="divider-2" style="display:ninguno">
+  <hr class="divider" id="divider-2" style="display:none">
 
   <!-- ── NEURAL ENGINE ── -->
   <section class="engine-section reveal" id="engine-section">
@@ -1209,7 +1209,7 @@
       <div class="growth-card">
         <div class="panel-sub">REGISTRO DE CRECIMIENTO</div>
         <ul class="growth-log" id="growth-log">
-          <li style="border:ninguno;padding-top:16px"><span class="log-text" style="color:var(--text-muted)">Esperando primera ejecución…</span></li>
+          <li style="border:none;padding-top:16px"><span class="log-text" style="color:var(--text-muted)">Esperando primera ejecución…</span></li>
         </ul>
       </div>
 
@@ -1445,27 +1445,27 @@ function filterTránsitos(transits, limit=3) {
 }
 
 // Emotional translation
-function emocionalTranslation(t) {
+function emotionalTranslation(t) {
   if (t.planet==='Mars' && t.aspect==='square') return { emotion:'frustration', action:'channel heat into movement before hard talks' };
   if (t.planet==='Moon' && t.target==='Mars') return { emotion:'reactivity', action:'slow down and name what you feel first' };
   if (t.planet==='Mars' && t.target==='Moon') return { emotion:'reactivity', action:'respond, do not react in the moment' };
   if (t.planet==='Venus' && t.aspect==='trine') return { emotion:'harmony', action:'lean into connection and support' };
   if (t.planet==='Saturn' && t.aspect==='conjunction') return { emotion:'heaviness', action:'do one responsible thing at a time' };
   const BASE = { Mars:'impulse / anger', Saturn:'pressure / block', Moon:'sensitivity', Mercury:'mind', Venus:'desire', Jupiter:'expansion', Sun:'clarity' };
-  return { emotion: BASE[t.planet]||'emocional movement', action:'keep your pace intentional and simple' };
+  return { emotion: BASE[t.planet]||'movimiento emocional', action:'keep your pace intentional and simple' };
 }
 
 function toneFromScore(score) {
-  if (score > 9) return 'intensa';
-  if (score >= 6) return 'activa';
-  return 'suave';
+  if (score > 9) return 'intense';
+  if (score >= 6) return 'active';
+  return 'soft';
 }
 
 function clusterFromId(id) {
-  if (/moon|emotion|reactiva|frustration|saturn/.test(id)) return 'emocional';
+  if (/moon|emotion|reactive|frustration|saturn/.test(id)) return 'emotional';
   if (/mercury|mind/.test(id)) return 'mental';
-  if (/venus|partnership|relationship/.test(id)) return 'relacional';
-  return 'accional';
+  if (/venus|partnership|relationship/.test(id)) return 'relational';
+  return 'actional';
 }
 
 // Raw Parser (browser)
@@ -1497,7 +1497,7 @@ function parseRaw(rawText) {
 // Main interpret function
 function interpretTránsitos(transits) {
   const prioritized = filterTránsitos(transits, 3);
-  const interpreted = prioritized.map(t => ({ ...t, ...emocionalTranslation(t), neuronId: `${t.planet}_${t.target}_${t.aspect}`.toLowerCase() }));
+  const interpreted = prioritized.map(t => ({ ...t, ...emotionalTranslation(t), neuronId: `${t.planet}_${t.target}_${t.aspect}`.toLowerCase() }));
 
   const emotions = interpreted.map(t=>t.emotion).filter(Boolean);
   const actions = interpreted.map(t=>t.action).filter(Boolean);
@@ -1505,7 +1505,7 @@ function interpretTránsitos(transits) {
   const tone = toneFromScore(topScore);
 
   // Cluster from interpreted transits
-  const clusterScores = { emocional:0, mental:0, relacional:0, accional:0 };
+  const clusterScores = { emotional:0, mental:0, relational:0, actional:0 };
   interpreted.forEach(t => {
     const cluster = clusterFromId(t.neuronId);
     clusterScores[cluster] += 0.4;
@@ -1518,7 +1518,7 @@ function interpretTránsitos(transits) {
     heaviness:'prolonged obligations without rest',
   };
   const focusMap = {
-    frustration:'emocional regulation and grounding',
+    frustration:'regulación emocional y anclaje',
     reactivity:'pause, name what you feel, then respond',
     harmony:'heart-led clarity and shared rituals',
     heaviness:'one responsible thing at a time',
@@ -1532,7 +1532,7 @@ function interpretTránsitos(transits) {
   };
 
   const metaSignals = [];
-  if (clusterScores.emocional >= 1.0) metaSignals.push({ id:'high_emocional_load', then:'day emocionally intensa' });
+  if (clusterScores.emotional >= 1.0) metaSignals.push({ id:'alta_carga_emocional', then:'día emocionalmente intenso' });
 
   const dominantCluster = Object.entries(clusterScores).sort((a,b)=>b[1]-a[1])[0][0];
 
@@ -1554,9 +1554,9 @@ function interpretRaw(rawText) {
     focus: signals.situations[0]||'nombra el patrón y elige una acción limpia',
   };
 
-  const clusterScores = { emocional:signals.emotions.length*0.3, mental:0, relacional:0, accional:signals.advice.length*0.2 };
+  const clusterScores = { emotional:signals.emotions.length*0.3, mental:0, relational:0, actional:signals.advice.length*0.2 };
   const dominantCluster = Object.entries(clusterScores).sort((a,b)=>b[1]-a[1])[0][0];
-  const metaSignals = signals.emotions.length>=3 ? [{ id:'high_emocional_load', then:'day emocionally intensa' }] : [];
+  const metaSignals = signals.emotions.length>=3 ? [{ id:'alta_carga_emocional', then:'día emocionalmente intenso' }] : [];
 
   return { topTránsitos: [], narrative, clusterScores, dominantCluster, metaSignals, tone: signals.tone, signals };
 }
@@ -1614,10 +1614,10 @@ addTransitRow('Saturn','conjunction','Sun',1.7);
 function setMode(mode) {
   currentMode = mode;
   document.querySelectorAll('.mode-tab').forEach((tab, i) => {
-    tab.classList.toggle('activa', (i===0&&mode==='transits')||(i===1&&mode==='libre'));
+    tab.classList.toggle('active', (i===0&&mode==='transits')||(i===1&&mode==='raw'));
   });
-  document.getElementById('mode-transits').classList.toggle('activa', mode==='transits');
-  document.getElementById('mode-raw').classList.toggle('activa', mode==='libre');
+  document.getElementById('mode-transits').classList.toggle('active', mode==='transits');
+  document.getElementById('mode-raw').classList.toggle('active', mode==='raw');
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -1631,7 +1631,7 @@ async function runInterpretation() {
   try {
     const result = interpretTránsitos(transits);
     currentResult = result;
-    await saveSession(result, transits, 'transito');
+    await saveSession(result, transits, 'transit');
     renderResult(result);
     updateEnginePanel(result);
     await renderContextMemory(result);
@@ -1652,7 +1652,7 @@ async function runRawInterpretation() {
   try {
     const result = interpretRaw(text);
     currentResult = result;
-    await saveSession(result, [], 'libre', text);
+    await saveSession(result, [], 'raw', text);
     renderResult(result, true);
     updateEnginePanel(result);
     await renderContextMemory(result);
@@ -1672,7 +1672,8 @@ function renderResult(result, isRaw=false) {
   const { narrative, tone, topTránsitos } = result;
   const section = document.getElementById('narrative-section');
   const badge = document.getElementById('narrative-tone-badge');
-  badge.textContent = tone.toUpperCase();
+  const toneLabels = { intense:'INTENSA', active:'ACTIVA', soft:'SUAVE' };
+  badge.textContent = (toneLabels[tone] || tone).toUpperCase();
 
   const CARDS = [
     { key:'energy', label:'Energía', icon:'☀', cls:'card-energy' },
@@ -1702,8 +1703,8 @@ function renderResult(result, isRaw=false) {
     tsSection.style.display = '';
     renderTransitCards(topTránsitos);
   } else {
-    d1.style.display = 'ninguno';
-    tsSection.style.display = 'ninguno';
+    d1.style.display = 'none';
+    tsSection.style.display = 'none';
   }
 
   document.getElementById('divider-2').style.display = '';
@@ -1735,7 +1736,7 @@ function updateEnginePanel(result) {
   const { clusterScores, dominantCluster, topTránsitos, metaSignals } = result;
 
   // Cluster bars
-  const clusters = ['emocional','mental','relacional','accional'];
+  const clusters = ['emotional','mental','relational','actional'];
   const max = Math.max(...Object.values(clusterScores), 0.01);
   const bars = document.querySelectorAll('#cluster-bars .bar-row');
   clusters.forEach((cl, i) => {
@@ -1769,7 +1770,8 @@ function updateEnginePanel(result) {
   }
 
   // Dominant cluster
-  document.getElementById('dominant-cluster').textContent = dominantCluster;
+  const clusterLabels = { emotional:'Emocional', mental:'Mental', relational:'Relacional', actional:'Accional' };
+  document.getElementById('dominant-cluster').textContent = clusterLabels[dominantCluster] || dominantCluster;
 
   // Meta signals
   const msList = document.getElementById('meta-signals-list');
@@ -1877,7 +1879,7 @@ async function renderHistory() {
       <div class="history-entry" onclick="loadSession(${s.id})">
         <span class="he-time">${time}</span>
         <span class="he-preview">${preview}</span>
-        <span class="he-tone ${s.tone}">${s.tone}</span>
+        <span class="he-tone ${s.tone}">${{intense:"Intensa",active:"Activa",soft:"Suave"}[s.tone]||s.tone}</span>
       </div>
     `;
   }).join('');
@@ -1887,7 +1889,7 @@ async function loadSession(id) {
   const all = await dbGetAll('sessions');
   const s = all.find(x=>x.id===id);
   if (!s) return;
-  renderResult(s, s.type==='libre');
+  renderResult(s, s.type==='raw');
   updateEnginePanel(s);
   window.scrollTo({ top:0, behavior:'smooth' });
 }
@@ -1947,7 +1949,7 @@ async function renderHippocampus() {
 // UTILS
 // ─────────────────────────────────────────────────────────────
 function setLoading(on) {
-  document.getElementById('main-loader').classList.toggle('activa', on);
+  document.getElementById('main-loader').classList.toggle('active', on);
   if (!on) document.getElementById('status-text').textContent = 'LISTO';
   else document.getElementById('status-text').textContent = 'PROCESANDO';
 }
