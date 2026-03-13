@@ -2,6 +2,7 @@
 
 const path = require('path');
 const BASE = require(path.join(__dirname, '../memory/astrologer_base.json'));
+const { detectEventType } = require('./eventClassifier');
 
 // ─── UTILS ───────────────────────────────────────────────────────────────────
 
@@ -189,6 +190,56 @@ function buildAdvice(avoid, use, focus) {
   return `${puente} ${evitar} ${capitalize(usar)} ${capitalize(enfocar)}`;
 }
 
+// ─── NARRATIVA DE EVENTOS COLECTIVOS ─────────────────────────────────────────
+// Estructura de 5 partes: contexto, explicación, significado, integración, acción
+
+/**
+ * generateEventNarrative(eventType, params)
+ *
+ * Builds a 5-part narrative for collective astrological events.
+ *
+ * @param {string} eventType - "luna_nueva" | "luna_llena" | "stellium"
+ * @param {object} params    - { avoid, use, focus, emotion }
+ * @returns {{ paragraph: string }}
+ */
+function generateEventNarrative(eventType, params) {
+  const { avoid, use, focus, emotion } = params;
+  const eventData = BASE.eventos && BASE.eventos[eventType];
+
+  if (!eventData) {
+    // Fallback: should not happen in practice
+    return null;
+  }
+
+  // ── 1. Contexto ──────────────────────────────────────────────────────────────
+  const contexto = endWithPeriod(pick(eventData.contexto));
+
+  // ── 2. Explicación ───────────────────────────────────────────────────────────
+  const explicacion = endWithPeriod(pick(eventData.explicacion));
+
+  // ── 3. Significado ───────────────────────────────────────────────────────────
+  let significado = endWithPeriod(pick(eventData.significado));
+
+  // Enrich significance with detected emotion if available
+  if (emotion && BASE.emociones[emotion]) {
+    const transicion = pick(BASE.transiciones);
+    const emocDesc   = pick(BASE.emociones[emotion]);
+    significado += ` ${capitalize(transicion)} ${endWithPeriod(emocDesc)}`;
+  }
+
+  // ── 4. Integración ───────────────────────────────────────────────────────────
+  const integracion = endWithPeriod(pick(eventData.integracion));
+
+  // ── 5. Acción (acción + consejo evitar/usar/enfocar) ────────────────────────
+  const accionBase = endWithPeriod(pick(eventData.accion));
+  const consejo    = buildAdvice(avoid, use, focus);
+  const accion     = `${accionBase} ${consejo}`;
+
+  const partes = [contexto, explicacion, significado, integracion, accion].filter(Boolean);
+  const paragraph = partes.map((p) => p.trim()).join(' ');
+  return { paragraph };
+}
+
 // ─── FUNCIÓN PRINCIPAL ────────────────────────────────────────────────────────
 
 /**
@@ -223,6 +274,13 @@ function generateAstrologerVoice(signals = {}) {
     })
     : (signals.metaSignals || []);
   const metaBlock = buildMetaBlock(metaSignals);
+
+  // ── Capa de clasificación de eventos colectivos ──────────────────────────────
+  const eventType = detectEventType(signals.transits || []);
+  if (eventType) {
+    const eventNarrative = generateEventNarrative(eventType, { avoid, use, focus, emotion });
+    if (eventNarrative) return eventNarrative;
+  }
 
   // ── 1. Apertura ─────────────────────────────────────────────────────────────
   const apertura = endWithPeriod(pick(BASE.aperturas[tone] || BASE.aperturas.activa));

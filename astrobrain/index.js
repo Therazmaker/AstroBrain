@@ -6,6 +6,7 @@ const feedbackLoop = require('./core/feedbackLoop');
 const natalProfile = require('./core/natalProfile');
 const { generateAstrologerVoice } = require('./core/astrologerVoice');
 const { enrichTransitContext, enrichTransits } = require('./core/enrichTransitContext');
+const { detectEventType } = require('./core/eventClassifier');
 
 function runAstroBrain(transits) {
   return interpretTransits(transits).narrative;
@@ -22,6 +23,7 @@ module.exports = {
   generateAstrologerVoice,
   enrichTransitContext,
   enrichTransits,
+  detectEventType,
 };
 
 if (require.main === module) {
