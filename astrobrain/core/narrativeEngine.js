@@ -24,6 +24,35 @@ function detectDominantCluster(activatedNeurons = []) {
   return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
 }
 
+
+function construirMatizContextual(transit = {}) {
+  const tags = transit.derivedTags || [];
+  const contexto = transit.context || {};
+
+  if (tags.includes('tono_afectivo_impulsivo')) {
+    return 'puede sentirse un impulso afectivo rápido, con deseo de cercanía y fricción inmediata';
+  }
+
+  if (
+    transit.planet === 'Saturn' &&
+    transit.aspect === 'conjunction' &&
+    transit.target === 'Sun' &&
+    contexto.strengthLabel === 'fuerte'
+  ) {
+    return 'quizás notes un llamado serio a ordenar prioridades con disciplina y paciencia';
+  }
+
+  if (
+    transit.planet === 'Mars' &&
+    transit.aspect === 'conjunction' &&
+    contexto.targetElement === 'fuego'
+  ) {
+    return 'la energía puede expresarse con iniciativa directa; conviene actuar sin atropellar los tiempos';
+  }
+
+  return '';
+}
+
 function dayOfYear(date = new Date()) {
   const start = new Date(date.getFullYear(), 0, 0);
   const diff = date - start;
@@ -144,13 +173,25 @@ function buildNarrative({ interpretedTransits = [], activatedNeurons = [], memor
   const dominantCluster = detectDominantCluster(activatedNeurons);
   const templates = TEMPLATE_BANK[tone];
   const selector = (dayOfYear() + dominantCluster.length) % templates.length;
+  const contextualLines = interpretedTransits
+    .map((transit) => construirMatizContextual(transit))
+    .filter(Boolean);
 
-  return templates[selector]({
+  const base = templates[selector]({
     emotions,
     actions,
     memoryPhrases,
     situations,
   });
+
+  if (contextualLines.length) {
+    return {
+      ...base,
+      energy: `${base.energy} ${contextualLines.join('. ')}.`,
+    };
+  }
+
+  return base;
 }
 
 module.exports = {
