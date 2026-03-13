@@ -103,7 +103,7 @@ function isWeakSensationCandidate(candidate) {
   if (!compact.length) return true;
   if (compact.length === 1 && WEAK_SENSATION_TERMS.has(compact[0])) return true;
   const nonStop = compact.filter((token) => !STOPWORDS.has(token));
-  if (nonStop.length <= 1 && nonStop.every((token) => WEAK_SENSATION_TERMS.has(token))) return true;
+  if (nonStop.length >= 1 && nonStop.every((token) => WEAK_SENSATION_TERMS.has(token))) return true;
   return !hasMeaningfulQualifier(normalized) && nonStop.some((token) => WEAK_SENSATION_TERMS.has(token));
 }
 
@@ -162,7 +162,7 @@ function normalizeCandidateMatch(candidate) {
 function applySensationSpecificityPolicy(candidate, chunks = [], text = '') {
   if (!candidate || candidate.category !== 'sensation') return candidate;
   const normalizedMatch = normalizeCandidateMatch(candidate);
-  if (!GENERIC_SENSATION_MATCHES.has(normalizedMatch)) return candidate;
+  if (!GENERIC_SENSATION_MATCHES.has(normalizedMatch) && !isWeakSensationCandidate(candidate)) return candidate;
   return extractNearbySensationDescriptor(chunks, text);
 }
 
@@ -185,6 +185,13 @@ function extractAbstractionNeurons(text = '', chunks = [], candidates = []) {
   }
   if (/capa\s+m[aá]s\s+sutil|antes\s+de\s+tomar\s+forma/.test(lower)) {
     abstractions.push(buildNeuron('proceso_sutil_en_formacion', 'proceso sutil en formación', ['sutil', 'formación'], 'cambio en capas internas todavía en formación', 'abstraction', 0.74));
+  }
+
+  if (!abstractions.some((a) => a.id === 'inicio_no_evidente') && /no\s+siempre|a\s+veces/.test(lower)) {
+    abstractions.push(buildNeuron('inicio_no_evidente', 'inicio no evidente', ['no siempre', 'inicio'], 'inicio interno previo a evidencia externa', 'abstraction', 0.74));
+  }
+  if (!abstractions.some((a) => a.id === 'claridad_no_inmediata') && /aunque\b|todav[ií]a\s+no/.test(lower)) {
+    abstractions.push(buildNeuron('claridad_no_inmediata', 'claridad no inmediata', ['aunque', 'claridad'], 'claridad que emerge después de integración', 'abstraction', 0.72));
   }
 
   if (!abstractions.length && hasStrongEvidence) {
@@ -349,10 +356,10 @@ function buildVoiceProfileFromRaw(text = '') {
 
   return {
     proximity: clamp01(score(['puede sentirse', 'te puede', 'conviene', 'te acompaña', 'quizás', 'date espacio', 'hoy'], 0.3, 0.13) + contemplativeBoost - technicalPressure * 0.4),
-    softness: clamp01(score(['puede', 'conviene', 'quizás', 'suave', 'gentil', 'respira', 'a veces', 'no siempre', 'baja el ruido'], 0.34, 0.11) + contemplativeBoost - technicalPressure * 0.45 + (multiSignalBoost ? 0.15 : 0)),
+    softness: clamp01(score(['puede', 'conviene', 'quizás', 'suave', 'gentil', 'respira', 'a veces', 'no siempre', 'baja el ruido', 'observa', 'escuchar', 'internamente'], 0.34, 0.11) + contemplativeBoost - technicalPressure * 0.45 + (multiSignalBoost ? 0.15 : 0)),
     emotionality: clamp01(score(['sentir', 'emoc', 'corazón', 'miedo', 'deseo', 'alma', 'incomodidad', 'por dentro', 'internamente'], 0.3, 0.11) + contemplativeBoost * 0.9 + (multiSignalBoost ? 0.12 : 0)),
     technicality: score(['tránsito', 'orbe', 'casa', 'grado', 'aspecto', 'conjunción'], 0.02, 0.11),
-    warmth: clamp01(score(['acompaña', 'cuidado', 'con cariño', 'humano', 'nos sostiene', 'respira', 'escuchar', 'date espacio', 'sin presión'], 0.28, 0.1) + contemplativeBoost * 0.8 + (multiSignalBoost ? 0.1 : 0)),
+    warmth: clamp01(score(['acompaña', 'cuidado', 'con cariño', 'humano', 'nos sostiene', 'respira', 'escuchar', 'date espacio', 'sin presión', 'observa'], 0.28, 0.1) + contemplativeBoost * 0.8 + (multiSignalBoost ? 0.1 : 0)),
     directness: score(['haz', 'define', 'elige', 'evita', 'enfoca', 'actúa', 'conviene', 'toca'], 0.14, 0.12),
     symbolism: clamp01(score(['luz', 'sombra', 'portal', 'ritmo', 'ciclo', 'marea', 'arquetipo', 'capa sutil', 'tomar forma', 'movimiento invisible', 'lo invisible'], 0.24, 0.1) + contemplativeBoost * 0.7 + (multiSignalBoost ? 0.18 : 0)),
     collectiveness: clamp01(score(['hoy', 'muchos', 'nos', 'colectivo', 'comunidad', 'todos', 'humana', 'nos pasa'], 0.24, 0.09) + contemplativeBoost * 0.35),
@@ -400,7 +407,12 @@ function evaluateTrainingExampleQuality(text = '') {
       clamp01(lexicalScore(['traducir', 'aterrizar', 'llevar', 'paso', 'guía', 'práctica', 'cómo', 'regular', 'observar', 'conviene'], 0.24, 0.1) + appliedGuidanceSignals * 0.65 + translationSignals * 0.4 + qualityBoost),
     ),
     coherence: clamp01(sentences.length >= 3 ? 0.86 : 0.62),
-    emotionalResonance: clamp01(lexicalScore(['sentir', 'miedo', 'amor', 'deseo', 'incomodidad', 'alivio', 'por dentro', 'internamente', 'sin presión'], 0.24, 0.11) + contemplativeSignals * 0.8 + qualityBoost * 0.85),
+    // Floor of 0.5 when regulation is present with human language and no cold technicalism,
+    // reflecting that emotionally-grounded regulatory guidance resonates at least moderately.
+    emotionalResonance: Math.max(
+      regulationNeuronPresent && coldTechnicalAbsence && clearHumanLanguage ? 0.5 : 0,
+      clamp01(lexicalScore(['sentir', 'miedo', 'amor', 'deseo', 'incomodidad', 'alivio', 'por dentro', 'internamente', 'sin presión'], 0.24, 0.11) + contemplativeSignals * 0.8 + qualityBoost * 0.85),
+    ),
   };
 }
 
