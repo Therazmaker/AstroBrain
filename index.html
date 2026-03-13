@@ -3765,6 +3765,26 @@ function analizarRawTraining(texto) {
 
 const LEARNING_PROFILE_KEYS = ['proximity','softness','emotionality','technicality','warmth','directness','symbolism','collectiveness'];
 const QUALITY_KEYS = ['clarity','naturalness','warmth','usefulness','coherence','emotionalResonance'];
+const SEMANTIC_STOPWORDS = new Set(['a','al','algo','algunas','algunos','ante','antes','así','aun','aunque','bajo','bien','cada','casi','como','con','contra','cual','cuales','cuando','de','del','desde','donde','dos','el','ella','ellas','ellos','en','entre','era','eres','es','esa','esas','ese','eso','esos','esta','están','estar','este','esto','estos','fue','fueron','ha','han','hasta','hay','hoy','la','las','le','les','lo','los','más','me','mi','mis','mientras','muy','ni','no','nos','nosotras','nosotros','nuestra','nuestro','o','otra','otro','para','pero','poco','por','porque','que','quien','se','según','ser','si','sin','sobre','solo','son','su','sus','también','te','tiene','todo','tu','tus','un','una','uno','unos','veces','y','ya','yo','siempre']);
+
+const SEMANTIC_PATTERNS = [
+  { id: 'luna_nueva_piscis', category: 'event', patterns: [/luna\s+nueva\s+en\s+piscis/, /luna\s+nueva\s+piscis/], context: 'evento astrológico de inicio sensible', signals: ['luna nueva', 'piscis'] },
+  { id: 'evento_lunar', category: 'event', patterns: [/luna\s+nueva/, /luna\s+llena/, /eclipse/, /tr[aá]nsito/], context: 'evento o contexto astrológico activo', signals: ['ciclo lunar', 'tránsito'] },
+  { id: 'friccion_emocional', category: 'tension', patterns: [/fricci[oó]n\s+emocional/, /tensi[oó]n\s+(interna|emocional)/, /choque\s+interno/], context: 'tensión psíquica o emocional del proceso', signals: ['fricción', 'tensión'] },
+  { id: 'incomodidad_interna', category: 'sensation', patterns: [/incomodidad\s+interna/, /nudo\s+interno/, /sensaci[oó]n\s+de\s+inquietud/, /se\s+puede\s+sentir\s+intenso/], context: 'sensación somática o emocional percibida', signals: ['incomodidad', 'inquietud'] },
+  { id: 'bajar_ritmo', category: 'regulation', patterns: [/bajar\s+el\s+ritmo/, /pausa\s+consciente/, /respira\s+(profundo|hondo)?/, /regular\s+el\s+sistema/], context: 'guía de regulación emocional y nerviosa', signals: ['pausa', 'respira'] },
+  { id: 'sentir_antes_de_entender', category: 'abstraction', patterns: [/sentir\s+antes\s+de\s+entender/, /primero\s+sentir\s+y\s+luego\s+comprender/, /escuchar\s+antes\s+de\s+explicar/], context: 'abstracción interpretativa sobre el proceso humano', signals: ['sentir', 'comprender'] },
+  { id: 'inicio_no_evidente', category: 'abstraction', patterns: [/inicio\s+no\s+evidente/, /inicio\s+sutil/, /comienzo\s+interno/, /nueva\s+etapa\s+interior/], context: 'inicio interno de ciclo aún no visible', signals: ['inicio', 'sutil'] },
+  { id: 'bajar_ruido_para_escuchar', category: 'regulation', patterns: [/bajar\s+ruido\s+para\s+escuchar/, /menos\s+ruido\s+mental/, /escucha\s+interna\s+antes\s+de\s+actuar/], context: 'regulación por reducción de sobreestimulación', signals: ['silencio', 'escucha'] },
+];
+
+const CATEGORY_KEYWORDS = {
+  event: ['luna nueva', 'luna llena', 'eclipse', 'tránsito', 'conjunción', 'cuadratura', 'piscis', 'casa', 'grado'],
+  tension: ['tensión', 'fricción', 'presión', 'choque', 'ansiedad', 'duda', 'resistencia'],
+  sensation: ['sentir', 'sensación', 'cuerpo', 'incomodidad', 'inquietud', 'miedo', 'tristeza', 'emoción'],
+  regulation: ['respira', 'pausa', 'bajar el ritmo', 'regular', 'conviene', 'guía', 'observa', 'escribe'],
+  abstraction: ['proceso', 'aprendizaje', 'integrar', 'sentir antes de entender', 'interpretar', 'significado'],
+};
 
 function clamp01(value) {
   const n = Number(value);
@@ -3772,34 +3792,88 @@ function clamp01(value) {
   return Math.min(1, Math.max(0, n));
 }
 
-function scoreFromHits(text, words, divisor = 5) {
+function normalizeSemanticText(text = '') {
+  return `${text}`.toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+function splitSentences(text = '') {
+  return `${text}`.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);
+}
+
+function hasStopwordOnlyContent(match = '') {
+  const tokens = match.split(/\s+/).filter(Boolean);
+  return !tokens.length || tokens.every((token) => SEMANTIC_STOPWORDS.has(token));
+}
+
+function scoreFromHits(text, words, base = 0.16, step = 0.15) {
   const hits = words.reduce((acc, w) => acc + (text.includes(w) ? 1 : 0), 0);
-  return clamp01(hits / divisor);
+  return clamp01(base + hits * step);
+}
+
+function extractSemanticChunks(text = '') {
+  const lower = normalizeSemanticText(text);
+  const cleaned = lower.replace(/[^a-záéíóúñü0-9\s]/gi, ' ');
+  const tokens = cleaned.split(/\s+/).filter(Boolean);
+  const ngrams = [];
+  for (let size = 2; size <= 5; size += 1) {
+    for (let i = 0; i <= tokens.length - size; i += 1) {
+      const gram = tokens.slice(i, i + size).join(' ');
+      if (!hasStopwordOnlyContent(gram)) ngrams.push(gram);
+    }
+  }
+  return Array.from(new Set([...splitSentences(lower), ...ngrams]));
+}
+
+function buildSemanticNeuron(id, match, signals, semanticContext, category, confidence) {
+  return { id, match, signals, semanticContext, category, abstractionLevel: 'semantic', confidence: clamp01(Math.max(0.6, confidence)) };
+}
+
+function inferFallbackNeurons(chunks) {
+  const neurons = [];
+  Object.entries(CATEGORY_KEYWORDS).forEach(([category, keywords]) => {
+    const matched = keywords.filter((kw) => chunks.some((chunk) => chunk.includes(kw)));
+    if (!matched.length) return;
+    neurons.push(buildSemanticNeuron(`semantic_${category}_${matched[0].replace(/\s+/g, '_')}`, matched.slice(0, 2).join(' · '), matched.slice(0, 3), `señales ${category} detectadas en narrativa humana`, category, 0.66 + matched.length * 0.06));
+  });
+  return neurons;
+}
+
+function ensureNeuronCoverage(neurons, chunks) {
+  const required = ['event', 'sensation', 'regulation'];
+  const fallback = inferFallbackNeurons(chunks);
+  required.forEach((category) => {
+    if (!neurons.some((neuron) => neuron.category === category)) {
+      const candidate = fallback.find((neuron) => neuron.category === category);
+      if (candidate) neurons.push(candidate);
+    }
+  });
+  if (!neurons.some((n) => n.category === 'tension' || n.category === 'sensation')) {
+    const candidate = fallback.find((n) => n.category === 'tension') || fallback.find((n) => n.category === 'sensation');
+    if (candidate) neurons.push(candidate);
+  }
+  if (!neurons.some((n) => n.category === 'abstraction')) {
+    const candidate = fallback.find((n) => n.category === 'abstraction');
+    if (candidate) neurons.push(candidate);
+  }
+  return neurons;
 }
 
 function extractContentNeuronsFromRaw(text) {
-  const normalized = text.toLowerCase().replace(/[^a-záéíóúñü0-9\s]/gi, ' ');
-  const words = normalized.split(/\s+/).filter(Boolean);
-  const counts = words.reduce((acc, word) => {
-    if (word.length < 4) return acc;
-    acc[word] = (acc[word] || 0) + 1;
-    return acc;
-  }, {});
+  const chunks = extractSemanticChunks(text);
+  const lower = normalizeSemanticText(text);
+  const neurons = [];
 
-  const semanticNeurons = Object.entries(counts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 10)
-    .map(([term, freq], idx) => ({
-      id: `semantic_${term}_${idx + 1}`,
-      match: term,
-      signals: [term],
-      combinations: [],
-      semanticContext: detectarCategoriasTraining(text).join(', ') || 'general',
-      abstractionLevel: 'semantic',
-      confidence: clamp01(freq / 4),
-    }));
+  SEMANTIC_PATTERNS.forEach((pattern) => {
+    if (!pattern.patterns.some((regex) => regex.test(lower))) return;
+    const hitCount = pattern.signals.reduce((acc, signal) => acc + chunks.filter((chunk) => chunk.includes(signal)).length, 0);
+    neurons.push(buildSemanticNeuron(pattern.id, pattern.id, pattern.signals, pattern.context, pattern.category, 0.6 + Math.min(0.35, hitCount * 0.08)));
+  });
 
-  return semanticNeurons;
+  return ensureNeuronCoverage(neurons, chunks)
+    .filter((neuron, index, list) => list.findIndex((item) => item.id === neuron.id) === index)
+    .filter((neuron) => !hasStopwordOnlyContent(neuron.match))
+    .filter((neuron) => neuron.confidence >= 0.6)
+    .slice(0, 12);
 }
 
 function detectNarrativePatterns(text) {
@@ -3808,50 +3882,57 @@ function detectNarrativePatterns(text) {
   if (/hoy|ahora|momento|esta semana|este ciclo/.test(lower)) patterns.push('apertura_contextual');
   if (/signo|casa|tránsito|aspecto|grado|conjunción|cuadratura/.test(lower)) patterns.push('explicacion_tecnica_suave');
   if (/sientes|sentir|te pasa|es normal|válido|acompaña/.test(lower)) patterns.push('validacion_emocional');
-  if (/respira|paso|haz|observa|escribe|intención|práctica/.test(lower)) patterns.push('cierre_regulador');
+  if (/respira|paso|haz|observa|escribe|intención|práctica|conviene/.test(lower)) patterns.push('cierre_regulador');
   if (/impulso|acción|calma|equilibrio|regular|pausa/.test(lower)) patterns.push('contraste_energia_accion');
   return patterns;
 }
 
 function buildVoiceProfileFromRaw(text) {
-  const lower = text.toLowerCase();
+  const lower = normalizeSemanticText(text);
   return {
-    proximity: scoreFromHits(lower, ['tú', 'te', 'contigo', 'nosotros', 'acompaño'], 4),
-    softness: scoreFromHits(lower, ['suave', 'gentil', 'pausa', 'respira', 'calma'], 4),
-    emotionality: scoreFromHits(lower, ['emoc', 'sentir', 'corazón', 'miedo', 'deseo', 'alma'], 4),
-    technicality: scoreFromHits(lower, ['tránsito', 'orbe', 'casa', 'grado', 'aspecto', 'conjunción'], 5),
-    warmth: scoreFromHits(lower, ['cariño', 'cuidado', 'acompaño', 'comprensión', 'humano'], 4),
-    directness: scoreFromHits(lower, ['haz', 'define', 'elige', 'evita', 'enfoca', 'actúa'], 4),
-    symbolism: scoreFromHits(lower, ['luz', 'sombra', 'portal', 'ritmo', 'ciclo', 'marea'], 4),
-    collectiveness: scoreFromHits(lower, ['colectivo', 'sociedad', 'equipo', 'comunidad', 'todos'], 4),
+    proximity: scoreFromHits(lower, ['puede sentirse', 'te puede', 'conviene', 'te acompaña', 'quizás', 'hoy'], 0.26, 0.14),
+    softness: scoreFromHits(lower, ['puede', 'conviene', 'quizás', 'suave', 'gentil', 'respira'], 0.28, 0.13),
+    emotionality: scoreFromHits(lower, ['sentir', 'emoc', 'corazón', 'miedo', 'deseo', 'alma', 'incomodidad'], 0.24, 0.12),
+    technicality: scoreFromHits(lower, ['tránsito', 'orbe', 'casa', 'grado', 'aspecto', 'conjunción'], 0.02, 0.11),
+    warmth: scoreFromHits(lower, ['acompaña', 'cuidado', 'con cariño', 'humano', 'nos sostiene', 'respira', 'escuchar'], 0.24, 0.12),
+    directness: scoreFromHits(lower, ['haz', 'define', 'elige', 'evita', 'enfoca', 'actúa', 'conviene', 'toca'], 0.14, 0.12),
+    symbolism: scoreFromHits(lower, ['luz', 'sombra', 'portal', 'ritmo', 'ciclo', 'marea', 'arquetipo'], 0.2, 0.14),
+    collectiveness: scoreFromHits(lower, ['hoy', 'muchos', 'nos', 'colectivo', 'comunidad', 'todos', 'humana'], 0.22, 0.1),
   };
 }
 
 function evaluateTrainingExampleQuality(text) {
-  const lower = text.toLowerCase();
-  const sentences = text.split(/(?<=[.!?])\s+/).filter(Boolean);
-  const avgSentenceLength = sentences.length
-    ? sentences.reduce((acc, s) => acc + s.split(/\s+/).length, 0) / sentences.length
-    : 0;
-
+  const lower = normalizeSemanticText(text);
+  const sentences = splitSentences(text);
+  const avgSentenceLength = sentences.length ? sentences.reduce((acc, s) => acc + s.split(/\s+/).length, 0) / sentences.length : 0;
+  const roboticPenalty = /(?:\b\w+\b)(?:\s+\1){2,}/.test(lower) ? 0.2 : 0;
   return {
-    clarity: clamp01(1 - Math.abs(avgSentenceLength - 18) / 18),
-    naturalness: scoreFromHits(lower, ['hoy', 'ahora', 'sientes', 'puede', 'quizás', 'cuando'], 5),
-    warmth: scoreFromHits(lower, ['cuidado', 'acompaña', 'respira', 'gentil', 'humano'], 4),
-    usefulness: scoreFromHits(lower, ['paso', 'acción', 'práctica', 'evita', 'usa', 'foco'], 4),
-    coherence: clamp01(sentences.length >= 3 ? 0.85 : 0.45),
-    emotionalResonance: scoreFromHits(lower, ['emoc', 'sentir', 'miedo', 'amor', 'deseo', 'confianza'], 4),
+    clarity: clamp01(0.25 + (1 - Math.abs(avgSentenceLength - 18) / 18) * 0.75),
+    naturalness: clamp01(scoreFromHits(lower, ['hoy', 'puede', 'quizás', 'sentir', 'conviene', 'a veces']) - roboticPenalty),
+    warmth: scoreFromHits(lower, ['acompaña', 'cuidado', 'respira', 'gentil', 'humano', 'contención'], 0.2, 0.14),
+    usefulness: scoreFromHits(lower, ['traducir', 'aterrizar', 'llevar', 'paso', 'guía', 'práctica', 'cómo'], 0.18, 0.14),
+    coherence: clamp01(sentences.length >= 3 ? 0.86 : 0.62),
+    emotionalResonance: scoreFromHits(lower, ['sentir', 'miedo', 'amor', 'deseo', 'incomodidad', 'alivio'], 0.16, 0.15),
   };
 }
 
 function deriveLearnedRules(example) {
   const rules = [];
-  if (example.narrativeLearning.patterns.includes('apertura_contextual')) rules.push('iniciar con contexto temporal y emocional antes de interpretar');
-  if (example.narrativeLearning.patterns.includes('explicacion_tecnica_suave')) rules.push('traducir términos técnicos a lenguaje cotidiano');
-  if (example.qualityAssessment.usefulness > 0.55) rules.push('cerrar con una acción concreta y reguladora');
-  if (example.voiceLearning.warmth > 0.45 && example.voiceLearning.proximity > 0.45) rules.push('mantener cercanía sin perder claridad estructural');
-  if (!rules.length) rules.push('priorizar claridad, coherencia y tono humano antes de detalle técnico');
+  if (example.narrativeLearning.patterns.includes('apertura_contextual')) rules.push('abrir eventos lunares desde lo emocional y contextual');
+  if (example.narrativeLearning.patterns.includes('explicacion_tecnica_suave')) rules.push('traducir técnica astrológica a experiencia humana comprensible');
+  if (example.contentLearning.neurons.some((neuron) => neuron.category === 'regulation')) rules.push('cerrar con regulación concreta para bajar activación interna');
+  if (example.voiceLearning.softness > 0.7) rules.push('sostener modales suaves para acompañar sin imponer');
+  if (example.qualityAssessment.emotionalResonance > 0.68) rules.push('priorizar interpretación que conecte tensión con sentido personal');
+  if (!rules.length) rules.push('usar contexto, emoción y guía práctica en una secuencia coherente y reusable');
   return rules;
+}
+
+function validateLearningResult(result) {
+  const neurons = result?.contentLearning?.neurons || [];
+  const validNeurons = neurons.filter((neuron) => neuron.confidence >= 0.6 && !hasStopwordOnlyContent(neuron.match));
+  const categories = new Set(validNeurons.map((n) => n.category));
+  const hasCoherence = categories.has('event') && (categories.has('sensation') || categories.has('tension')) && categories.has('regulation');
+  return { valid: validNeurons.length >= 4 && hasCoherence, validNeurons, hasCoherence };
 }
 
 function mergeWeightedScore(current, next, qualityFactor) {
@@ -3862,6 +3943,9 @@ function mergeWeightedScore(current, next, qualityFactor) {
 }
 
 async function consolidateLearningIntoMemory(result) {
+  const validation = validateLearningResult(result);
+  if (!validation.valid) throw new Error('El aprendizaje no cumple validaciones: mínimo 4 neuronas semánticas coherentes y sin stopwords.');
+
   const contentMemory = (await dbGetAll('contentMemory')) || [];
   const narrativeMemory = (await dbGetAll('narrativeMemory')) || [];
   const voiceMemory = (await dbGetAll('voiceMemory')) || [];
@@ -3869,7 +3953,7 @@ async function consolidateLearningIntoMemory(result) {
 
   const qualityFactor = (Object.values(result.qualityAssessment).reduce((acc, n) => acc + n, 0) / QUALITY_KEYS.length) || 0.5;
 
-  for (const neuron of result.contentLearning.neurons) {
+  for (const neuron of validation.validNeurons) {
     const existing = contentMemory.find((item) => item.match === neuron.match);
     if (existing) {
       const merged = {
@@ -3899,97 +3983,57 @@ async function consolidateLearningIntoMemory(result) {
     const nextScore = result.qualityAssessment.coherence;
     if (existing) {
       const merged = mergeWeightedScore(existing, nextScore, qualityFactor);
-      await dbPut('narrativeMemory', {
-        ...existing,
-        id,
-        pattern,
-        score: merged.score,
-        count: merged.count,
-        lastSource: result.source,
-        updatedAt: new Date().toISOString(),
-      });
+      await dbPut('narrativeMemory', { ...existing, id, pattern, score: merged.score, count: merged.count, lastSource: result.source, updatedAt: new Date().toISOString() });
     } else {
-      await dbPut('narrativeMemory', {
-        id,
-        pattern,
-        score: nextScore,
-        count: 1,
-        firstSource: result.source,
-        lastSource: result.source,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      });
+      await dbPut('narrativeMemory', { id, pattern, score: nextScore, count: 1, firstSource: result.source, lastSource: result.source, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
     }
   }
 
   const voiceState = voiceMemory.find((item) => item.id === 'global_voice_profile') || { id: 'global_voice_profile', count: 0 };
   const voiceCount = (voiceState.count || 0) + 1;
   const mergedVoice = { id: 'global_voice_profile', count: voiceCount, updatedAt: new Date().toISOString(), source: result.source };
-  LEARNING_PROFILE_KEYS.forEach((key) => {
-    mergedVoice[key] = clamp01((((voiceState[key] || 0) * (voiceCount - 1)) + (result.voiceLearning[key] * qualityFactor)) / voiceCount);
-  });
+  LEARNING_PROFILE_KEYS.forEach((key) => { mergedVoice[key] = clamp01((((voiceState[key] || 0) * (voiceCount - 1)) + (result.voiceLearning[key] * qualityFactor)) / voiceCount); });
   await dbPut('voiceMemory', mergedVoice);
 
   const qualityState = qualityMemory.find((item) => item.id === 'global_quality_profile') || { id: 'global_quality_profile', count: 0 };
   const qualityCount = (qualityState.count || 0) + 1;
   const mergedQuality = { id: 'global_quality_profile', count: qualityCount, updatedAt: new Date().toISOString(), source: result.source };
-  QUALITY_KEYS.forEach((key) => {
-    mergedQuality[key] = clamp01((((qualityState[key] || 0) * (qualityCount - 1)) + result.qualityAssessment[key]) / qualityCount);
-  });
+  QUALITY_KEYS.forEach((key) => { mergedQuality[key] = clamp01((((qualityState[key] || 0) * (qualityCount - 1)) + result.qualityAssessment[key]) / qualityCount); });
   await dbPut('qualityMemory', mergedQuality);
 
-  await dbAdd('learningHistory', {
-    timestamp: Date.now(),
-    source: result.source,
-    learnedRules: result.learnedRules,
-    narrativePatterns: result.narrativeLearning.patterns,
-    qualityAssessment: result.qualityAssessment,
-  });
+  await dbAdd('learningHistory', { timestamp: Date.now(), source: result.source, learnedRules: result.learnedRules, narrativePatterns: result.narrativeLearning.patterns, qualityAssessment: result.qualityAssessment });
 
-  return {
-    contentCount: (await dbGetAll('contentMemory')).length,
-    narrativeCount: (await dbGetAll('narrativeMemory')).length,
-    voiceProfile: mergedVoice,
-    qualityProfile: mergedQuality,
-  };
+  return { contentCount: (await dbGetAll('contentMemory')).length, narrativeCount: (await dbGetAll('narrativeMemory')).length, voiceProfile: mergedVoice, qualityProfile: mergedQuality };
 }
 
 function buildLearningExample(text) {
-  const contentNeurons = extractContentNeuronsFromRaw(text);
-  const narrativePatterns = detectNarrativePatterns(text);
-  const voiceLearning = buildVoiceProfileFromRaw(text);
-  const qualityAssessment = evaluateTrainingExampleQuality(text);
-
   const result = {
-    source: {
-      type: 'human_text',
-      author: '',
-      origin: 'training_room',
-    },
-    contentLearning: {
-      neurons: contentNeurons,
-    },
-    narrativeLearning: {
-      patterns: narrativePatterns,
-    },
-    voiceLearning,
-    qualityAssessment,
+    source: { type: 'human_text', author: '', origin: 'training_room' },
+    contentLearning: { neurons: extractContentNeuronsFromRaw(text) },
+    narrativeLearning: { patterns: detectNarrativePatterns(text) },
+    voiceLearning: buildVoiceProfileFromRaw(text),
+    qualityAssessment: evaluateTrainingExampleQuality(text),
     learnedRules: [],
   };
 
   result.learnedRules = deriveLearnedRules(result);
+  const validation = validateLearningResult(result);
+  if (!validation.valid) {
+    result.contentLearning.neurons = ensureNeuronCoverage(result.contentLearning.neurons, extractSemanticChunks(text)).filter((n) => n.confidence >= 0.6).slice(0, 12);
+  }
   return result;
 }
 
-function renderLearningMetricGrid(containerId, metrics) {
+function renderLearningMetricGrid(containerId, metrics, mode = 'cards') {
   const node = document.getElementById(containerId);
   if (!node) return;
-  node.innerHTML = Object.entries(metrics).map(([key, value]) => `
-    <div class="learning-metric">
-      <label>${key}</label>
-      <input type="text" readonly value="${Number(value).toFixed(2)}">
-    </div>
-  `).join('');
+  node.innerHTML = Object.entries(metrics).map(([key, value]) => {
+    const safe = clamp01(value);
+    if (mode === 'chart') {
+      return `<div class="learning-metric"><label>${key}</label><div class="bar-track"><div class="bar-fill" style="width:${Math.round(safe * 100)}%"></div></div><input type="text" readonly value="${safe.toFixed(2)}"></div>`;
+    }
+    return `<div class="learning-metric"><label>${key}</label><input type="text" readonly value="${safe.toFixed(2)}"></div>`;
+  }).join('');
 }
 
 function renderLearningLabResult(result, memorySummary = null) {
@@ -4000,27 +4044,24 @@ function renderLearningLabResult(result, memorySummary = null) {
   const memoryNode = document.getElementById('learning-memory-summary');
 
   if (!result) return;
-  neuronsNode.innerHTML = result.contentLearning.neurons.length
-    ? result.contentLearning.neurons.slice(0, 8).map((n) => `<li>${n.match} · confianza ${n.confidence.toFixed(2)} · contexto ${n.semanticContext}</li>`).join('')
-    : '<li>Sin neuronas detectadas.</li>';
-  patternsNode.innerHTML = result.narrativeLearning.patterns.length
-    ? result.narrativeLearning.patterns.map((p) => `<li>${p}</li>`).join('')
-    : '<li>No se detectaron patrones narrativos fuertes.</li>';
-  rulesNode.innerHTML = result.learnedRules.length
-    ? result.learnedRules.map((r) => `<li>${r}</li>`).join('')
-    : '<li>Sin reglas derivadas.</li>';
+  const grouped = result.contentLearning.neurons.reduce((acc, neuron) => {
+    if (!acc[neuron.category]) acc[neuron.category] = [];
+    acc[neuron.category].push(neuron);
+    return acc;
+  }, {});
 
-  renderLearningMetricGrid('learning-voice-grid', result.voiceLearning);
-  renderLearningMetricGrid('learning-quality-grid', result.qualityAssessment);
+  neuronsNode.innerHTML = Object.keys(grouped).length
+    ? Object.entries(grouped).map(([category, neurons]) => `<li><strong>${category}</strong><ul class="learning-list">${neurons.map((n) => `<li>${n.match} · confianza ${n.confidence.toFixed(2)} · ${n.semanticContext}</li>`).join('')}</ul></li>`).join('')
+    : '<li>Sin neuronas detectadas.</li>';
+  patternsNode.innerHTML = result.narrativeLearning.patterns.length ? result.narrativeLearning.patterns.map((p) => `<li>${p}</li>`).join('') : '<li>No se detectaron patrones narrativos fuertes.</li>';
+  rulesNode.innerHTML = result.learnedRules.length ? result.learnedRules.map((r) => `<li>${r}</li>`).join('') : '<li>Sin reglas derivadas.</li>';
+
+  renderLearningMetricGrid('learning-voice-grid', result.voiceLearning, 'chart');
+  renderLearningMetricGrid('learning-quality-grid', result.qualityAssessment, 'cards');
   jsonNode.textContent = JSON.stringify(result, null, 2);
 
   if (memorySummary) {
-    memoryNode.innerHTML = `
-      <div class="learning-memory-card"><h5>contentMemory</h5><p>${memorySummary.contentCount} neuronas semánticas consolidadas.</p></div>
-      <div class="learning-memory-card"><h5>narrativeMemory</h5><p>${memorySummary.narrativeCount} patrones narrativos acumulados.</p></div>
-      <div class="learning-memory-card"><h5>voiceMemory</h5><p>Perfil global actualizado con ${memorySummary.voiceProfile.count} ejemplos.</p></div>
-      <div class="learning-memory-card"><h5>qualityMemory</h5><p>Calidad global actualizada con ${memorySummary.qualityProfile.count} ejemplos.</p></div>
-    `;
+    memoryNode.innerHTML = `<div class="learning-memory-card"><h5>contentMemory</h5><p>${memorySummary.contentCount} neuronas semánticas consolidadas.</p></div><div class="learning-memory-card"><h5>narrativeMemory</h5><p>${memorySummary.narrativeCount} patrones narrativos acumulados.</p></div><div class="learning-memory-card"><h5>voiceMemory</h5><p>Perfil global actualizado con ${memorySummary.voiceProfile.count} ejemplos.</p></div><div class="learning-memory-card"><h5>qualityMemory</h5><p>Calidad global actualizada con ${memorySummary.qualityProfile.count} ejemplos.</p></div>`;
   } else {
     memoryNode.innerHTML = '<div class="learning-memory-card"><h5>Memoria</h5><p>Procesa y guarda aprendizaje para ver consolidación acumulativa.</p></div>';
   }
