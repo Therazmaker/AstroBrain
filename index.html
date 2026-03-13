@@ -1195,6 +1195,26 @@
   .training-analysis-item h5 { font-family: var(--font-mono); font-size: 0.62rem; color: var(--gold); margin-bottom: 6px; }
   .training-analysis-item p, .training-analysis-item li { font-size: 0.9rem; color: var(--text-secondary); }
   .training-neuron-list { display:grid; gap:12px; margin-top: 14px; }
+  .training-pattern-list { display:grid; gap:10px; margin-top: 14px; }
+  .training-pattern-item {
+    border:1px solid rgba(155,114,245,0.28);
+    border-radius:12px;
+    padding:12px;
+    background: rgba(26, 16, 52, 0.28);
+  }
+  .pattern-meta { display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:6px; }
+  .pattern-type { font-family: var(--font-mono); font-size: 0.64rem; color: var(--gold); letter-spacing: 0.08em; }
+  .pattern-confidence { font-family: var(--font-mono); font-size: 0.6rem; color: var(--teal); }
+  .voice-profile-grid { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:10px; margin-top:14px; }
+  .voice-metric {
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:10px;
+    padding:10px;
+    background: rgba(0,0,0,0.2);
+  }
+  .voice-metric .label { display:flex; justify-content:space-between; font-family: var(--font-mono); font-size:0.62rem; color: var(--text-secondary); margin-bottom:6px; }
+  .voice-meter { height:8px; background: rgba(255,255,255,0.08); border-radius:999px; overflow:hidden; }
+  .voice-meter span { display:block; height:100%; background: linear-gradient(90deg, var(--violet), var(--teal)); }
   .training-neuron-card { border:1px solid var(--border); border-radius:12px; padding:14px; background: rgba(0,0,0,0.18); }
   .training-neuron-head { display:flex; justify-content:space-between; gap:10px; margin-bottom:10px; align-items:center; }
   .training-neuron-id { font-family: var(--font-mono); font-size: 0.66rem; color: var(--gold-dim); }
@@ -2246,6 +2266,22 @@
         <div class="empty-state"><span class="es-icon">🧠</span><p>ANALIZA TEXTO Y GENERA PROPUESTAS PARA EMPEZAR</p></div>
       </div>
     </div>
+    <div class="training-room-grid" style="margin-top:20px">
+      <div class="training-room-card">
+        <div class="panel-title">Patrones narrativos detectados</div>
+        <div class="panel-sub" style="margin-bottom:10px">CAPAS REUTILIZABLES DE APERTURA, TRANSICIÓN Y CIERRE</div>
+        <div id="training-patterns-output" class="training-pattern-list">
+          <div class="empty-state"><span class="es-icon">🧭</span><p>SIN PATRONES NARRATIVOS TODAVÍA</p></div>
+        </div>
+      </div>
+      <div class="training-room-card">
+        <div class="panel-title">Perfil de voz aprendido</div>
+        <div class="panel-sub" style="margin-bottom:10px">TONO ESTIMADO PARA GUIAR LA NARRATIVA FINAL</div>
+        <div id="training-voice-output" class="voice-profile-grid">
+          <div class="empty-state" style="grid-column:1/-1"><span class="es-icon">🎙️</span><p>ANALIZA TEXTO PARA APRENDER EL PERFIL DE VOZ</p></div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <hr class="divider">
@@ -2364,6 +2400,7 @@ function openDB() {
       if (!d.objectStoreNames.contains('trainingNeurons')) {
         d.createObjectStore('trainingNeurons', { keyPath: 'id' });
       }
+<<<<<<< codex/evolve-astrobrain-for-human-training
       if (!d.objectStoreNames.contains('contentMemory')) {
         d.createObjectStore('contentMemory', { keyPath: 'id' });
       }
@@ -2379,6 +2416,13 @@ function openDB() {
       if (!d.objectStoreNames.contains('learningHistory')) {
         const l = d.createObjectStore('learningHistory', { keyPath: 'id', autoIncrement: true });
         l.createIndex('timestamp', 'timestamp');
+=======
+      if (!d.objectStoreNames.contains('trainingNarrativePatterns')) {
+        d.createObjectStore('trainingNarrativePatterns', { keyPath: 'id' });
+      }
+      if (!d.objectStoreNames.contains('trainingVoiceProfiles')) {
+        d.createObjectStore('trainingVoiceProfiles', { keyPath: 'id' });
+>>>>>>> main
       }
     };
     req.onsuccess = e => { db = e.target.result; resolve(db); };
@@ -3585,8 +3629,14 @@ function irATrainingRoom() {
 
 const trainingRoomState = {
   analysis: null,
+<<<<<<< codex/evolve-astrobrain-for-human-training
   learningResult: null,
+=======
+  learningPack: null,
+>>>>>>> main
   drafts: [],
+  detectedNarrativePatterns: [],
+  learnedVoiceProfile: null,
   importValidation: null,
 };
 
@@ -3615,6 +3665,65 @@ function detectarCategoriasTraining(texto) {
     ['estructura conversacional', ['tú', 'te', 'pregunta', 'hoy', 'ahora']],
   ];
   return reglas.filter(([, claves]) => claves.some(k => t.includes(k))).map(([cat]) => cat);
+}
+
+function sanitizeEvidence(text) {
+  return (text || '')
+    .toLowerCase()
+    .replace(/[^a-záéíóúñü0-9\s]/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function detectNarrativePatterns(text) {
+  const clean = (text || '').trim();
+  if (!clean) return [];
+  const lower = clean.toLowerCase();
+  const register = [
+    { type: 'apertura_conversacional', keys: ['hoy', 'te cuento', 'te quiero contar', 'vamos a'], description: 'Abre como charla cercana y acompañada.' },
+    { type: 'apertura_contextual', keys: ['momento', 'contexto', 'clima', 'semana'], description: 'Sitúa la interpretación en un marco temporal o emocional.' },
+    { type: 'explicacion_tecnica_suave', keys: ['signo', 'casa', 'tránsito', 'aspecto', 'grado'], description: 'Traduce técnica astrológica a un lenguaje accesible.' },
+    { type: 'transicion_interpretativa', keys: ['esto significa', 'por eso', 'en otras palabras', 'se traduce'], description: 'Conecta dato astrológico con significado humano.' },
+    { type: 'contraste_energia_accion', keys: ['pero', 'aunque', 'sin embargo', 'aun así'], description: 'Contrasta tensión interna con dirección práctica.' },
+    { type: 'cierre_regulador', keys: ['respira', 'pausa', 'despacio', 'regula'], description: 'Cierra bajando intensidad y proponiendo regulación emocional.' },
+    { type: 'cierre_accionable_suave', keys: ['puedes', 'intenta', 'te sugiero', 'haz'], description: 'Termina con acción sugerida sin rigidez imperativa.' },
+    { type: 'narrativa_colectiva', keys: ['nos', 'colectivo', 'comunidad', 'sociedad'], description: 'Amplía la lectura desde lo personal hacia lo colectivo.' },
+    { type: 'traduccion_simbolica', keys: ['símbolo', 'metáfora', 'imagen', 'arquetipo'], description: 'Usa traducción simbólica para facilitar comprensión emocional.' },
+    { type: 'validacion_emocional', keys: ['es normal', 'está bien', 'es válido', 'no estás solo'], description: 'Valida la experiencia emocional antes de orientar.' },
+  ];
+
+  return register.reduce((acc, rule) => {
+    const hits = rule.keys.filter((key) => lower.includes(key));
+    if (!hits.length) return acc;
+    const confidence = Math.min(0.96, 0.55 + (hits.length * 0.11));
+    acc.push({
+      id: `pattern_${rule.type}`,
+      type: rule.type,
+      confidence: Number(confidence.toFixed(2)),
+      evidence: hits.map((key) => `uso de marcador narrativo: ${sanitizeEvidence(key)}`),
+      description: rule.description,
+    });
+    return acc;
+  }, []);
+}
+
+function buildVoiceProfileFromRaw(text) {
+  const lower = (text || '').toLowerCase();
+  const score = (keywords, base = 0.2, factor = 0.12) => {
+    const hits = keywords.reduce((count, word) => count + (lower.includes(word) ? 1 : 0), 0);
+    return Math.max(0, Math.min(1, Number((base + (hits * factor)).toFixed(2))));
+  };
+
+  return {
+    proximity: score(['tú', 'te', 'contigo', 'hoy'], 0.35),
+    softness: score(['puedes', 'quizá', 'suave', 'despacio', 'te invito'], 0.3),
+    emotionality: score(['sientes', 'emoción', 'corazón', 'miedo', 'ansiedad'], 0.28),
+    symbolism: score(['símbolo', 'metáfora', 'imagen', 'arquetipo'], 0.2),
+    technicality: score(['tránsito', 'cuadratura', 'orbe', 'casa', 'grado'], 0.12),
+    directness: score(['haz', 'define', 'escribe', 'decide', 'ahora'], 0.22),
+    warmth: score(['acompaño', 'cariño', 'confía', 'respira', 'calma'], 0.3),
+    collectiveness: score(['nosotros', 'nos', 'colectivo', 'comunidad', 'todos'], 0.24),
+  };
 }
 
 function analizarRawTraining(texto) {
@@ -3651,12 +3760,13 @@ function analizarRawTraining(texto) {
       estructura.includes('acción') ? 'cierre con acción concreta' : 'sin cierre explícito',
       estructura.includes('contexto') ? 'apertura contextual' : 'apertura difusa',
     ],
-    frasesRelevantes: oraciones.slice(0,4),
+    frasesRelevantes: oraciones.slice(0,4).map((_, idx) => `oración_relevante_${idx + 1}`),
     posiblesTriggers: triggers,
     tipoContenido: detectarCategoriasTraining(limpio),
   };
 }
 
+<<<<<<< codex/evolve-astrobrain-for-human-training
 
 const LEARNING_PROFILE_KEYS = ['proximity','softness','emotionality','technicality','warmth','directness','symbolism','collectiveness'];
 const QUALITY_KEYS = ['clarity','naturalness','warmth','usefulness','coherence','emotionalResonance'];
@@ -3922,6 +4032,10 @@ function renderLearningLabResult(result, memorySummary = null) {
 }
 
 function construirDraftsDesdeRaw(analysis, rawText) {
+=======
+function extractContentNeuronsFromRaw(text) {
+  const analysis = analizarRawTraining(text);
+>>>>>>> main
   const baseCategorias = analysis.tipoContenido.length ? analysis.tipoContenido : ['tono narrativo'];
   return baseCategorias.slice(0,4).map((categoria, idx) => {
     const baseId = `training_${Date.now()}_${idx + 1}`;
@@ -3942,7 +4056,7 @@ function construirDraftsDesdeRaw(analysis, rawText) {
       },
       categoriaNarrativa: categoria,
       tipoEvento: categoria.includes('evento') ? 'colectivo' : '',
-      contexto: rawText.slice(0, 160),
+      contexto: `contexto_resumido_${analysis.estructuraNarrativa.replace(/\s+/g, '_').slice(0, 60)}`,
       source: 'training_room',
       sourceTextType: categoria,
       createdAt: new Date().toISOString(),
@@ -3951,6 +4065,40 @@ function construirDraftsDesdeRaw(analysis, rawText) {
       faltantes: [],
     };
     return evaluarEstadoDraftTraining(draft);
+  });
+}
+
+function buildTrainingLearningPack(text) {
+  const analysis = analizarRawTraining(text);
+  return {
+    proposedNeurons: extractContentNeuronsFromRaw(text),
+    detectedNarrativePatterns: detectNarrativePatterns(text),
+    learnedVoiceProfile: buildVoiceProfileFromRaw(text),
+    analysis,
+    integration: {
+      readyFor: ['rewriteCompositeNarrative'],
+      narrativeInputs: ['activatedNeurons', 'detectedNarrativePatterns', 'learnedVoiceProfile'],
+    },
+  };
+}
+
+async function saveNarrativePatterns(patterns) {
+  for (const pattern of patterns || []) {
+    await dbPut('trainingNarrativePatterns', {
+      ...pattern,
+      source: 'training_room',
+      savedAt: new Date().toISOString(),
+    });
+  }
+}
+
+async function saveVoiceLearning(profile) {
+  if (!profile) return;
+  await dbPut('trainingVoiceProfiles', {
+    id: `voice_${Date.now()}`,
+    ...profile,
+    source: 'training_room',
+    savedAt: new Date().toISOString(),
   });
 }
 
@@ -3966,6 +4114,43 @@ function renderizarAnalisisTraining(analysis) {
     <div class="training-analysis-item"><h5>Posibles triggers</h5><p>${analysis.posiblesTriggers.join(', ') || 'sin detectar'}</p></div>
     <div class="training-analysis-item"><h5>Tipo de contenido</h5><p>${analysis.tipoContenido.join(', ') || 'por clasificar'}</p></div>
   `;
+}
+
+function renderizarPatronesNarrativos(patterns) {
+  const el = document.getElementById('training-patterns-output');
+  if (!patterns?.length) {
+    el.innerHTML = '<div class="empty-state"><span class="es-icon">🧭</span><p>SIN PATRONES NARRATIVOS TODAVÍA</p></div>';
+    return;
+  }
+  el.innerHTML = patterns.map((pattern) => `
+    <div class="training-pattern-item">
+      <div class="pattern-meta">
+        <span class="pattern-type">${pattern.type}</span>
+        <span class="pattern-confidence">confianza ${(pattern.confidence * 100).toFixed(0)}%</span>
+      </div>
+      <p style="color:var(--text-secondary);font-size:0.9rem">${pattern.description}</p>
+      <ul style="margin-top:6px;padding-left:16px;color:var(--text-muted);font-size:0.82rem">
+        ${pattern.evidence.map((e) => `<li>${e}</li>`).join('')}
+      </ul>
+    </div>
+  `).join('');
+}
+
+function renderizarPerfilVoz(profile) {
+  const el = document.getElementById('training-voice-output');
+  if (!profile) {
+    el.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><span class="es-icon">🎙️</span><p>ANALIZA TEXTO PARA APRENDER EL PERFIL DE VOZ</p></div>';
+    return;
+  }
+  el.innerHTML = Object.entries(profile).map(([key, value]) => {
+    const percentage = Math.round((value || 0) * 100);
+    return `
+      <div class="voice-metric">
+        <div class="label"><span>${key}</span><span>${percentage}%</span></div>
+        <div class="voice-meter"><span style="width:${percentage}%"></span></div>
+      </div>
+    `;
+  }).join('');
 }
 
 function actualizarDraftDesdeUI(index) {
@@ -4134,10 +4319,15 @@ async function actualizarYRenderizarDraft(index) {
 function analizarTextoTraining() {
   const raw = document.getElementById('training-raw-text').value.trim();
   if (!raw) { showToast('Pega texto RAW para analizar.', 'error'); return; }
-  const analysis = analizarRawTraining(raw);
-  trainingRoomState.analysis = analysis;
-  renderizarAnalisisTraining(analysis);
-  document.getElementById('training-room-msg').textContent = 'Análisis completado. Ya puedes generar neuronas propuestas.';
+  const learningPack = buildTrainingLearningPack(raw);
+  trainingRoomState.learningPack = learningPack;
+  trainingRoomState.analysis = learningPack.analysis;
+  trainingRoomState.detectedNarrativePatterns = learningPack.detectedNarrativePatterns;
+  trainingRoomState.learnedVoiceProfile = learningPack.learnedVoiceProfile;
+  renderizarAnalisisTraining(learningPack.analysis);
+  renderizarPatronesNarrativos(learningPack.detectedNarrativePatterns);
+  renderizarPerfilVoz(learningPack.learnedVoiceProfile);
+  document.getElementById('training-room-msg').textContent = 'Análisis dual completado: contenido + patrones narrativos + perfil de voz.';
   showToast('Texto analizado con éxito', 'success');
 }
 
@@ -4165,10 +4355,15 @@ async function guardarLearningLabTraining() {
 function generarNeuronasTraining() {
   const raw = document.getElementById('training-raw-text').value.trim();
   if (!raw) { showToast('No hay texto RAW para generar neuronas.', 'error'); return; }
-  if (!trainingRoomState.analysis) trainingRoomState.analysis = analizarRawTraining(raw);
-  trainingRoomState.drafts = construirDraftsDesdeRaw(trainingRoomState.analysis, raw);
+  if (!trainingRoomState.learningPack) trainingRoomState.learningPack = buildTrainingLearningPack(raw);
+  trainingRoomState.analysis = trainingRoomState.learningPack.analysis;
+  trainingRoomState.detectedNarrativePatterns = trainingRoomState.learningPack.detectedNarrativePatterns;
+  trainingRoomState.learnedVoiceProfile = trainingRoomState.learningPack.learnedVoiceProfile;
+  trainingRoomState.drafts = trainingRoomState.learningPack.proposedNeurons;
   renderizarDraftsTraining();
-  document.getElementById('training-room-msg').textContent = 'Neuronas propuestas generadas. Revisa y edita los faltantes.';
+  renderizarPatronesNarrativos(trainingRoomState.detectedNarrativePatterns);
+  renderizarPerfilVoz(trainingRoomState.learnedVoiceProfile);
+  document.getElementById('training-room-msg').textContent = 'Neuronas propuestas generadas y capa narrativa lista para guardar.';
   showToast('Neuronas propuestas creadas', 'success');
 }
 
@@ -4205,6 +4400,9 @@ async function guardarNeuronasTraining() {
       }
     }
   }
+
+  await saveNarrativePatterns(trainingRoomState.detectedNarrativePatterns);
+  await saveVoiceLearning(trainingRoomState.learnedVoiceProfile);
 
   document.getElementById('training-room-msg').textContent = `${completas.length} neurona(s) guardadas e integradas al sistema.`;
   showToast('Neuronas guardadas, reconectadas y sincronizadas', 'success');
