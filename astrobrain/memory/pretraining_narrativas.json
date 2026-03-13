@@ -1,0 +1,89 @@
+{
+  "_descripción": "Ejemplos de narrativas astrológicas bien construidas, usadas como referencia de estilo y flujo para el motor de síntesis. Cada entrada es una muestra del tono, la estructura y la calidad narrativa deseada.",
+  "_instrucciones": "Cada narrativa sigue la estructura: apertura (contextualiza el día) → interpretación (qué se activa y por qué) → integración (qué significa para la persona) → regulación (cómo sostenerse). El tono es cálido, directo y encarnado — no técnico, no genérico.",
+
+  "ejemplos": [
+    {
+      "id": "luna_capricornio_venus_aries_suave",
+      "tono": "suave",
+      "emociones": ["sensibilidad", "contención"],
+      "planetas": ["Moon", "Venus"],
+      "narrativa": "Es un día para moverse con calma y notar lo que habitualmente se pasa por alto. Hay algo que se afina hoy en la percepción — como si las antenas estuvieran más despiertas de lo usual. Puedes captar matices en las personas y los ambientes que en otro momento pasarían de largo.\n\nLa energía emocional está activa. La Luna en Capricornio pide contención y estructura, mientras Venus en Aries empuja hacia el contacto y el movimiento. Esto puede sentirse como una tensión entre lo que quieres y cómo crees que debes manejarlo. No es contradicción: es información.\n\nConviene no forzar resoluciones hoy. Sostener la tensión con paciencia es más útil que intentar resolverla de golpe. Los días suaves también construyen — solo lo hacen en silencio."
+    },
+    {
+      "id": "marte_cuadratura_luna_intenso",
+      "tono": "intenso",
+      "emociones": ["reactividad", "frustración"],
+      "planetas": ["Mars", "Moon"],
+      "narrativa": "Hay una carga en el ambiente que conviene no ignorar. La combinación de Marte y la Luna activa el sistema emocional con velocidad — lo que normalmente se procesa despacio hoy quiere salida rápida. Puede haber irritabilidad, impaciencia, o la sensación de que todo tiene más fricción de la necesaria.\n\nEsto no es una falla del día: es información sobre qué está listo para moverse. La energía está disponible — la pregunta es dónde ponerla. En el cuerpo, en una acción concreta, en una conversación que se viene postergando. Lo que no ayuda es dejar que la carga se descargue en cualquier dirección sin elegir.\n\nAntes de responder, una pausa. Antes de decidir, un respiro. La intensidad de hoy tiene propósito — el reto es no gastarla en la dirección equivocada."
+    },
+    {
+      "id": "saturno_conjuncion_pesadez_activo",
+      "tono": "activo",
+      "emociones": ["pesadez", "presión"],
+      "planetas": ["Saturn"],
+      "narrativa": "El día trae movimiento, pero también un peso que conviene reconocer. Saturno en conjunción activa el registro de la responsabilidad — lo pendiente, lo que se debe, lo que todavía no está resuelto. Puede sentirse como que hay demasiado y no suficiente tiempo.\n\nLo que ayuda aquí no es apurar ni evitar: es elegir una cosa y darle atención real. No todo puede avanzar hoy, pero algo puede avanzar. El peso disminuye cuando se le da dirección — aunque sea pequeña.\n\nHay energía disponible para lo concreto. Lo que inicies hoy con conciencia tiene más probabilidad de sostenerse. La acción no tiene que ser grande; tiene que ser real."
+    },
+    {
+      "id": "venus_trigono_armonia_suave",
+      "tono": "suave",
+      "emociones": ["armonía", "apertura"],
+      "planetas": ["Venus"],
+      "narrativa": "Hay una suavidad en el ambiente que merece ser aprovechada. Venus en trígono abre el canal del vínculo — las palabras llegan más fácil, el contacto se siente más genuino, y hay una disposición natural a la apertura que no siempre está disponible.\n\nEs un buen momento para conversaciones que llevan tiempo postergadas, para decir lo que se siente sin tanto filtro, para recibir también. La reciprocidad fluye mejor hoy. Si hay algo que necesita ser dicho o escuchado en una relación importante, este es un momento propicio.\n\nDate permiso de no hacer demasiado más allá de eso. A veces lo más valioso que puede pasar en un día es una conexión genuina. El descanso también es parte del camino."
+    },
+    {
+      "id": "luna_nueva_ciclo_profundo",
+      "tono": "activo",
+      "emociones": ["impulso", "claridad"],
+      "planetas": ["Moon", "Sun"],
+      "narrativa": "Luna nueva: el ciclo empieza de nuevo, pero desde adentro. Este no es un momento de acción visible — es un momento de orientación interna. Qué se quiere, hacia dónde, desde qué lugar. Las semillas que se plantan aquí, aunque no se vean todavía, marcarán el tono de las próximas semanas.\n\nHay impulso disponible, pero el impulso solo funciona si tiene dirección. Antes de moverse hacia afuera, vale tomarse un momento para afinar hacia adentro. ¿Qué necesita empezar? ¿Qué necesita cerrarse para que algo nuevo pueda comenzar?\n\nLo genuino no necesita forzarse. Lo que se inicia desde la claridad tiene raíz; lo que se inicia desde la urgencia, no siempre."
+    },
+    {
+      "id": "mercurio_cuadratura_tension_mental",
+      "tono": "activo",
+      "emociones": ["presión", "reactividad"],
+      "planetas": ["Mercury", "Mars"],
+      "narrativa": "La mente está acelerada hoy. Mercurio en cuadratura activa el pensamiento combativo — las ideas pueden volverse argumentos antes de terminar de formarse, y la velocidad del proceso puede llevar a decisiones que después cuestan corregir.\n\nEl patrón a observar hoy es la tendencia a decir, enviar o decidir antes de revisar. La velocidad no es precisión — y hoy la diferencia entre ambas es especialmente relevante. Verifica dos veces antes de actuar sobre algo importante.\n\nTambién hay claridad disponible cuando se frena el ruido. Si se logra bajar la velocidad un momento, las ideas que emergen pueden ser valiosas. El antídoto no es la parálisis, sino la pausa intencional antes del movimiento."
+    },
+    {
+      "id": "jupiter_saturno_expansion_limite",
+      "tono": "activo",
+      "emociones": ["expansión", "presión"],
+      "planetas": ["Jupiter", "Saturn"],
+      "narrativa": "Expansión y límite en tensión: el querer más y la pregunta de si los cimientos aguantan. Júpiter abre el horizonte mientras Saturno recuerda los bordes. No es contradicción — es la tensión creativa entre el sueño y la estructura que lo sostiene.\n\nLo que puede sentirse es la frustración de querer avanzar más rápido de lo que el sistema permite. Pero lo que se construye con base dura más que lo que se levanta de prisa. La ambición no está mal; la dispersión, sí.\n\nCrecer un paso a la vez no es renunciar. Es estrategia. Lo que ya está construido es el punto de partida, no el límite."
+    }
+  ],
+
+  "principios_narrativos": [
+    "Hablar siempre desde lo humano y lo encarnado — no desde lo técnico ni lo abstracto.",
+    "Nombrar la tensión o la energía antes de dar consejo. Primero reconocer, después orientar.",
+    "Evitar el lenguaje de la certeza absoluta: 'puede', 'a veces', 'conviene' son más honestos que 'debes' o 'siempre'.",
+    "Cada narrativa tiene tres partes: qué se siente (apertura), por qué (interpretación), cómo sostenerse (regulación).",
+    "El tono es cálido pero directo. No cursi, no frío. Como un buen amigo que sabe de astrología.",
+    "Las metáforas deben ser concretas y corporales cuando sea posible: 'el cuerpo sabe', 'la antena más afinada', 'una semilla bajo tierra'.",
+    "Nunca listar datos técnicos en la narrativa: 'luna en capricornio, venus en aries, luna en grado medio' no es narrativa, es metadata.",
+    "El cierre siempre debe dejar algo en pie — un punto de apoyo, no una advertencia.",
+    "Máximo 3 párrafos. La concisión es una forma de respeto."
+  ],
+
+  "frases_de_transicion_fluidas": [
+    "Lo que puede sentirse hoy es",
+    "Debajo de eso hay",
+    "Lo que ayuda en este momento es",
+    "Lo que no conviene es",
+    "A veces",
+    "La clave hoy es",
+    "No todo tiene que resolverse hoy, pero sí",
+    "Lo que construye en este tipo de días es"
+  ],
+
+  "errores_a_evitar": [
+    "Repetir la misma frase dos veces en el mismo párrafo.",
+    "Insertar frases modales completas ('quizás convenga sostener...') dentro de plantillas de consejo que esperan sustantivos.",
+    "Usar datos técnicos de posición planetaria como si fueran consejo narrativo.",
+    "Mezclar idiomas dentro de la misma narrativa.",
+    "Terminar con una advertencia sin ofrecer un punto de apoyo.",
+    "Usar más de un nivel de abstracción por oración.",
+    "Construir frases de más de 25 palabras sin punto de pausa."
+  ]
+}

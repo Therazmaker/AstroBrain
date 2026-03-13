@@ -2502,13 +2502,13 @@ function filterTránsitos(transits, limit=3) {
 
 // Emotional translation
 function emotionalTranslation(t) {
-  if (t.planet==='Mars' && t.aspect==='square') return { emotion:'frustración', action:'conviene canalizar el calor en movimiento antes de conversaciones difíciles' };
-  if (t.planet==='Moon' && t.target==='Mars') return { emotion:'reactividad', action:'baja el ritmo y nombra lo que sientes primero' };
-  if (t.planet==='Mars' && t.target==='Moon') return { emotion:'reactividad', action:'responde, no reacciones en el momento' };
-  if (t.planet==='Venus' && t.aspect==='trine') return { emotion:'armonía', action:'apóyate en la conexión y el apoyo mutuo' };
-  if (t.planet==='Saturn' && t.aspect==='conjunction') return { emotion:'pesadez', action:'haz una cosa responsable a la vez' };
+  if (t.planet==='Mars' && t.aspect==='square') return { emotion:'frustración', action:'canalizar el impulso en movimiento antes de conversaciones difíciles', avoid:'actuar desde la frustración sin pausa previa' };
+  if (t.planet==='Moon' && t.target==='Mars') return { emotion:'reactividad', action:'bajar el ritmo y nombrar lo que se siente primero', avoid:'responder antes de procesar lo que se siente' };
+  if (t.planet==='Mars' && t.target==='Moon') return { emotion:'reactividad', action:'responder con pausa en lugar de reaccionar al instante', avoid:'las reacciones automáticas sin reflexión' };
+  if (t.planet==='Venus' && t.aspect==='trine') return { emotion:'armonía', action:'apoyarte en la conexión y el intercambio genuino', avoid:'la desconexión o el aislamiento innecesario' };
+  if (t.planet==='Saturn' && t.aspect==='conjunction') return { emotion:'pesadez', action:'dar un paso responsable a la vez sin sobrecargar', avoid:'la autoexigencia excesiva o la dispersión' };
   const BASE = { Mars:'impulso / enojo', Saturn:'presión / bloqueo', Moon:'sensibilidad', Mercury:'mente', Venus:'deseo', Jupiter:'expansión', Sun:'claridad' };
-  return { emotion: BASE[t.planet]||'movimiento emocional', action:'quizás convenga sostener un ritmo intencional y simple' };
+  return { emotion: BASE[t.planet]||'movimiento emocional', action:'sostener un ritmo intencional y simple', avoid:'las decisiones apresuradas o el exceso de urgencia' };
 }
 
 function toneFromScore(score) {
@@ -2642,6 +2642,19 @@ function tagToReadableLabel(tag) {
   return '';
 }
 
+// Emotion → human-readable focus phrase (used in advice templates like "recordando que {focus}…")
+const EMOTION_FOCUS_ES = {
+  frustración:  'la dirección clara y la pausa antes de actuar',
+  reactividad:  'la pausa consciente antes de responder',
+  pesadez:      'soltar lo que no es tuyo y avanzar despacio',
+  armonía:      'la conexión genuina y el intercambio abierto',
+  expansión:    'crecer con base y una dirección clara',
+  presión:      'lo que puede moverse sin forzar el resto',
+  claridad:     'las decisiones que llevan tiempo pendientes',
+  impulso:      'una sola dirección y darle toda la energía',
+  sensibilidad: 'la escucha interna y el cuidado propio',
+};
+
 // Main interpret function
 function interpretTránsitos(transits) {
   const prioritized = filterTránsitos(transits, 3);
@@ -2668,19 +2681,14 @@ function interpretTránsitos(transits) {
     });
   });
 
-  const firstActivation = interpreted[0]?.activation || {};
-  const primaryFocusLabel = tagToReadableLabel(firstActivation.primaryNeuron?.match);
-  const secondaryFocusLabels = (firstActivation.secondaryNeurons || [])
-    .map(item => tagToReadableLabel(item.match))
-    .filter(Boolean)
-    .slice(0, 3);
-  const allFocusLabels = [primaryFocusLabel, ...secondaryFocusLabels].filter(Boolean);
-  const focusValue = allFocusLabels.length ? allFocusLabels.join(', ') : 'pausa, regula y responde con intención';
+  // Build focus from the dominant emotion — gives a meaningful human phrase instead of raw tag data
+  const dominantEmotion = emotions[0] || '';
+  const focusValue = EMOTION_FOCUS_ES[dominantEmotion] || 'el ritmo propio y la presencia interna';
 
   const narrative = {
     energy: `${tone}: ${[...new Set(emotions)].join(', ')||'clima emocional mixto'}`,
-    avoid: interpreted[0]?.action || 'evitar reacción automática en el vínculo',
-    use: actions[0]||'prioridades claras y acciones simples',
+    avoid: interpreted[0]?.avoid || 'las reacciones impulsivas',
+    use: actions[0] || 'prioridades claras y acciones simples',
     focus: focusValue,
   };
 
