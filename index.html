@@ -1233,6 +1233,17 @@
   .training-import-modal { width: min(760px, 96vw); background: var(--card); border: 1px solid var(--border-hi); border-radius: 14px; padding: 16px; }
   .training-import-modal textarea { min-height: 220px; }
   .training-import-feedback { margin-top: 10px; font-size: 0.8rem; color: var(--text-secondary); white-space: pre-line; }
+  .learning-lab-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+  .learning-metric-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .learning-metric { border:1px solid var(--border); border-radius:10px; padding:8px; background: rgba(0,0,0,0.16); }
+  .learning-metric label { font-family: var(--font-mono); font-size:0.56rem; color:var(--text-muted); display:block; margin-bottom:4px; }
+  .learning-metric input { width:100%; background: rgba(255,255,255,0.04); border:1px solid var(--border); color:var(--text-primary); border-radius:8px; padding:6px 8px; }
+  .learning-list { margin:0; padding-left:16px; display:grid; gap:5px; }
+  .learning-list li { color: var(--text-secondary); font-size:0.9rem; }
+  .learning-json-preview { max-height:360px; overflow:auto; border:1px solid var(--border); border-radius:10px; padding:10px; background: rgba(0,0,0,0.22); font-family: var(--font-mono); font-size:0.64rem; color: var(--text-secondary); }
+  .learning-memory-grid { display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:10px; margin-top:12px; }
+  .learning-memory-card { border:1px solid var(--border); border-radius:10px; padding:10px; background: rgba(0,0,0,0.16); }
+  .learning-memory-card h5 { font-family: var(--font-mono); font-size:0.58rem; color: var(--gold); margin-bottom:5px; }
   .btn-training-shortcut {
     background: rgba(77,208,196,0.08);
     border:1px solid rgba(77,208,196,0.25);
@@ -1368,6 +1379,7 @@
     .engine-grid { grid-template-columns: 1fr; }
     .transit-cards { grid-template-columns: 1fr; }
     .memory-grid, .training-grid { grid-template-columns: 1fr; }
+    .learning-lab-grid, .learning-memory-grid, .learning-metric-grid { grid-template-columns: 1fr; }
     .hero-title { font-size: 2.2rem; }
     .transit-row { grid-template-columns: 1fr 1fr; }
   }
@@ -2227,6 +2239,27 @@
       </div>
     </div>
     <div class="training-room-card" style="margin-top:20px">
+      <div class="panel-title">Learning Lab · aprendizaje acumulativo</div>
+      <div class="panel-sub" style="margin-bottom:10px">ABSTRACCIÓN SEMÁNTICA, NARRATIVA, VOZ Y CALIDAD</div>
+      <div class="training-room-actions" style="margin-bottom:12px">
+        <button class="btn-training-room" onclick="procesarLearningLabTraining()">Procesar aprendizaje</button>
+        <button class="btn-training-room" onclick="guardarLearningLabTraining()">Guardar aprendizaje</button>
+      </div>
+      <div class="learning-lab-grid">
+        <div>
+          <div class="training-analysis-item"><h5>Patrones narrativos detectados</h5><ul class="learning-list" id="learning-narrative-patterns"><li>Sin procesamiento aún.</li></ul></div>
+          <div class="training-analysis-item"><h5>Reglas aprendidas</h5><ul class="learning-list" id="learning-rules-list"><li>Sin reglas aún.</li></ul></div>
+          <div class="training-analysis-item"><h5>Neuronas semánticas</h5><ul class="learning-list" id="learning-neurons-list"><li>Sin neuronas aún.</li></ul></div>
+        </div>
+        <div>
+          <div class="training-analysis-item"><h5>Perfil de voz</h5><div class="learning-metric-grid" id="learning-voice-grid"></div></div>
+          <div class="training-analysis-item"><h5>Evaluación de calidad</h5><div class="learning-metric-grid" id="learning-quality-grid"></div></div>
+        </div>
+      </div>
+      <div class="training-analysis-item" style="margin-top:12px"><h5>Estructura completa de aprendizaje</h5><pre class="learning-json-preview" id="learning-json-preview">Sin procesamiento aún.</pre></div>
+      <div class="learning-memory-grid" id="learning-memory-summary"></div>
+    </div>
+    <div class="training-room-card" style="margin-top:20px">
       <div class="panel-title">Neuronas propuestas</div>
       <div class="panel-sub" style="margin-bottom:10px">PREVISUALIZACIÓN EDITABLE ANTES DE GUARDAR</div>
       <div id="training-neurons-output" class="training-neuron-list">
@@ -2367,11 +2400,29 @@ function openDB() {
       if (!d.objectStoreNames.contains('trainingNeurons')) {
         d.createObjectStore('trainingNeurons', { keyPath: 'id' });
       }
+<<<<<<< codex/evolve-astrobrain-for-human-training
+      if (!d.objectStoreNames.contains('contentMemory')) {
+        d.createObjectStore('contentMemory', { keyPath: 'id' });
+      }
+      if (!d.objectStoreNames.contains('narrativeMemory')) {
+        d.createObjectStore('narrativeMemory', { keyPath: 'id' });
+      }
+      if (!d.objectStoreNames.contains('voiceMemory')) {
+        d.createObjectStore('voiceMemory', { keyPath: 'id' });
+      }
+      if (!d.objectStoreNames.contains('qualityMemory')) {
+        d.createObjectStore('qualityMemory', { keyPath: 'id' });
+      }
+      if (!d.objectStoreNames.contains('learningHistory')) {
+        const l = d.createObjectStore('learningHistory', { keyPath: 'id', autoIncrement: true });
+        l.createIndex('timestamp', 'timestamp');
+=======
       if (!d.objectStoreNames.contains('trainingNarrativePatterns')) {
         d.createObjectStore('trainingNarrativePatterns', { keyPath: 'id' });
       }
       if (!d.objectStoreNames.contains('trainingVoiceProfiles')) {
         d.createObjectStore('trainingVoiceProfiles', { keyPath: 'id' });
+>>>>>>> main
       }
     };
     req.onsuccess = e => { db = e.target.result; resolve(db); };
@@ -3578,7 +3629,11 @@ function irATrainingRoom() {
 
 const trainingRoomState = {
   analysis: null,
+<<<<<<< codex/evolve-astrobrain-for-human-training
+  learningResult: null,
+=======
   learningPack: null,
+>>>>>>> main
   drafts: [],
   detectedNarrativePatterns: [],
   learnedVoiceProfile: null,
@@ -3711,8 +3766,276 @@ function analizarRawTraining(texto) {
   };
 }
 
+<<<<<<< codex/evolve-astrobrain-for-human-training
+
+const LEARNING_PROFILE_KEYS = ['proximity','softness','emotionality','technicality','warmth','directness','symbolism','collectiveness'];
+const QUALITY_KEYS = ['clarity','naturalness','warmth','usefulness','coherence','emotionalResonance'];
+
+function clamp01(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return 0;
+  return Math.min(1, Math.max(0, n));
+}
+
+function scoreFromHits(text, words, divisor = 5) {
+  const hits = words.reduce((acc, w) => acc + (text.includes(w) ? 1 : 0), 0);
+  return clamp01(hits / divisor);
+}
+
+function extractContentNeuronsFromRaw(text) {
+  const normalized = text.toLowerCase().replace(/[^a-záéíóúñü0-9\s]/gi, ' ');
+  const words = normalized.split(/\s+/).filter(Boolean);
+  const counts = words.reduce((acc, word) => {
+    if (word.length < 4) return acc;
+    acc[word] = (acc[word] || 0) + 1;
+    return acc;
+  }, {});
+
+  const semanticNeurons = Object.entries(counts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([term, freq], idx) => ({
+      id: `semantic_${term}_${idx + 1}`,
+      match: term,
+      signals: [term],
+      combinations: [],
+      semanticContext: detectarCategoriasTraining(text).join(', ') || 'general',
+      abstractionLevel: 'semantic',
+      confidence: clamp01(freq / 4),
+    }));
+
+  return semanticNeurons;
+}
+
+function detectNarrativePatterns(text) {
+  const lower = text.toLowerCase();
+  const patterns = [];
+  if (/hoy|ahora|momento|esta semana|este ciclo/.test(lower)) patterns.push('apertura_contextual');
+  if (/signo|casa|tránsito|aspecto|grado|conjunción|cuadratura/.test(lower)) patterns.push('explicacion_tecnica_suave');
+  if (/sientes|sentir|te pasa|es normal|válido|acompaña/.test(lower)) patterns.push('validacion_emocional');
+  if (/respira|paso|haz|observa|escribe|intención|práctica/.test(lower)) patterns.push('cierre_regulador');
+  if (/impulso|acción|calma|equilibrio|regular|pausa/.test(lower)) patterns.push('contraste_energia_accion');
+  return patterns;
+}
+
+function buildVoiceProfileFromRaw(text) {
+  const lower = text.toLowerCase();
+  return {
+    proximity: scoreFromHits(lower, ['tú', 'te', 'contigo', 'nosotros', 'acompaño'], 4),
+    softness: scoreFromHits(lower, ['suave', 'gentil', 'pausa', 'respira', 'calma'], 4),
+    emotionality: scoreFromHits(lower, ['emoc', 'sentir', 'corazón', 'miedo', 'deseo', 'alma'], 4),
+    technicality: scoreFromHits(lower, ['tránsito', 'orbe', 'casa', 'grado', 'aspecto', 'conjunción'], 5),
+    warmth: scoreFromHits(lower, ['cariño', 'cuidado', 'acompaño', 'comprensión', 'humano'], 4),
+    directness: scoreFromHits(lower, ['haz', 'define', 'elige', 'evita', 'enfoca', 'actúa'], 4),
+    symbolism: scoreFromHits(lower, ['luz', 'sombra', 'portal', 'ritmo', 'ciclo', 'marea'], 4),
+    collectiveness: scoreFromHits(lower, ['colectivo', 'sociedad', 'equipo', 'comunidad', 'todos'], 4),
+  };
+}
+
+function evaluateTrainingExampleQuality(text) {
+  const lower = text.toLowerCase();
+  const sentences = text.split(/(?<=[.!?])\s+/).filter(Boolean);
+  const avgSentenceLength = sentences.length
+    ? sentences.reduce((acc, s) => acc + s.split(/\s+/).length, 0) / sentences.length
+    : 0;
+
+  return {
+    clarity: clamp01(1 - Math.abs(avgSentenceLength - 18) / 18),
+    naturalness: scoreFromHits(lower, ['hoy', 'ahora', 'sientes', 'puede', 'quizás', 'cuando'], 5),
+    warmth: scoreFromHits(lower, ['cuidado', 'acompaña', 'respira', 'gentil', 'humano'], 4),
+    usefulness: scoreFromHits(lower, ['paso', 'acción', 'práctica', 'evita', 'usa', 'foco'], 4),
+    coherence: clamp01(sentences.length >= 3 ? 0.85 : 0.45),
+    emotionalResonance: scoreFromHits(lower, ['emoc', 'sentir', 'miedo', 'amor', 'deseo', 'confianza'], 4),
+  };
+}
+
+function deriveLearnedRules(example) {
+  const rules = [];
+  if (example.narrativeLearning.patterns.includes('apertura_contextual')) rules.push('iniciar con contexto temporal y emocional antes de interpretar');
+  if (example.narrativeLearning.patterns.includes('explicacion_tecnica_suave')) rules.push('traducir términos técnicos a lenguaje cotidiano');
+  if (example.qualityAssessment.usefulness > 0.55) rules.push('cerrar con una acción concreta y reguladora');
+  if (example.voiceLearning.warmth > 0.45 && example.voiceLearning.proximity > 0.45) rules.push('mantener cercanía sin perder claridad estructural');
+  if (!rules.length) rules.push('priorizar claridad, coherencia y tono humano antes de detalle técnico');
+  return rules;
+}
+
+function mergeWeightedScore(current, next, qualityFactor) {
+  const count = (current.count || 0) + 1;
+  const weight = Math.max(0.2, qualityFactor);
+  const avg = ((current.score || 0) * (count - 1) + (next * weight)) / count;
+  return { score: clamp01(avg), count };
+}
+
+async function consolidateLearningIntoMemory(result) {
+  const contentMemory = (await dbGetAll('contentMemory')) || [];
+  const narrativeMemory = (await dbGetAll('narrativeMemory')) || [];
+  const voiceMemory = (await dbGetAll('voiceMemory')) || [];
+  const qualityMemory = (await dbGetAll('qualityMemory')) || [];
+
+  const qualityFactor = (Object.values(result.qualityAssessment).reduce((acc, n) => acc + n, 0) / QUALITY_KEYS.length) || 0.5;
+
+  for (const neuron of result.contentLearning.neurons) {
+    const existing = contentMemory.find((item) => item.match === neuron.match);
+    if (existing) {
+      const merged = {
+        ...existing,
+        confidence: clamp01((existing.confidence * (existing.frequency || 1) + neuron.confidence * qualityFactor) / ((existing.frequency || 1) + 1)),
+        frequency: (existing.frequency || 1) + 1,
+        lastSource: result.source,
+        updatedAt: new Date().toISOString(),
+      };
+      await dbPut('contentMemory', merged);
+    } else {
+      await dbPut('contentMemory', {
+        id: neuron.id,
+        ...neuron,
+        frequency: 1,
+        weight: neuron.confidence,
+        sourceTrail: [result.source],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    }
+  }
+
+  for (const pattern of result.narrativeLearning.patterns) {
+    const id = `pattern_${pattern}`;
+    const existing = narrativeMemory.find((item) => item.id === id);
+    const nextScore = result.qualityAssessment.coherence;
+    if (existing) {
+      const merged = mergeWeightedScore(existing, nextScore, qualityFactor);
+      await dbPut('narrativeMemory', {
+        ...existing,
+        id,
+        pattern,
+        score: merged.score,
+        count: merged.count,
+        lastSource: result.source,
+        updatedAt: new Date().toISOString(),
+      });
+    } else {
+      await dbPut('narrativeMemory', {
+        id,
+        pattern,
+        score: nextScore,
+        count: 1,
+        firstSource: result.source,
+        lastSource: result.source,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+    }
+  }
+
+  const voiceState = voiceMemory.find((item) => item.id === 'global_voice_profile') || { id: 'global_voice_profile', count: 0 };
+  const voiceCount = (voiceState.count || 0) + 1;
+  const mergedVoice = { id: 'global_voice_profile', count: voiceCount, updatedAt: new Date().toISOString(), source: result.source };
+  LEARNING_PROFILE_KEYS.forEach((key) => {
+    mergedVoice[key] = clamp01((((voiceState[key] || 0) * (voiceCount - 1)) + (result.voiceLearning[key] * qualityFactor)) / voiceCount);
+  });
+  await dbPut('voiceMemory', mergedVoice);
+
+  const qualityState = qualityMemory.find((item) => item.id === 'global_quality_profile') || { id: 'global_quality_profile', count: 0 };
+  const qualityCount = (qualityState.count || 0) + 1;
+  const mergedQuality = { id: 'global_quality_profile', count: qualityCount, updatedAt: new Date().toISOString(), source: result.source };
+  QUALITY_KEYS.forEach((key) => {
+    mergedQuality[key] = clamp01((((qualityState[key] || 0) * (qualityCount - 1)) + result.qualityAssessment[key]) / qualityCount);
+  });
+  await dbPut('qualityMemory', mergedQuality);
+
+  await dbAdd('learningHistory', {
+    timestamp: Date.now(),
+    source: result.source,
+    learnedRules: result.learnedRules,
+    narrativePatterns: result.narrativeLearning.patterns,
+    qualityAssessment: result.qualityAssessment,
+  });
+
+  return {
+    contentCount: (await dbGetAll('contentMemory')).length,
+    narrativeCount: (await dbGetAll('narrativeMemory')).length,
+    voiceProfile: mergedVoice,
+    qualityProfile: mergedQuality,
+  };
+}
+
+function buildLearningExample(text) {
+  const contentNeurons = extractContentNeuronsFromRaw(text);
+  const narrativePatterns = detectNarrativePatterns(text);
+  const voiceLearning = buildVoiceProfileFromRaw(text);
+  const qualityAssessment = evaluateTrainingExampleQuality(text);
+
+  const result = {
+    source: {
+      type: 'human_text',
+      author: '',
+      origin: 'training_room',
+    },
+    contentLearning: {
+      neurons: contentNeurons,
+    },
+    narrativeLearning: {
+      patterns: narrativePatterns,
+    },
+    voiceLearning,
+    qualityAssessment,
+    learnedRules: [],
+  };
+
+  result.learnedRules = deriveLearnedRules(result);
+  return result;
+}
+
+function renderLearningMetricGrid(containerId, metrics) {
+  const node = document.getElementById(containerId);
+  if (!node) return;
+  node.innerHTML = Object.entries(metrics).map(([key, value]) => `
+    <div class="learning-metric">
+      <label>${key}</label>
+      <input type="text" readonly value="${Number(value).toFixed(2)}">
+    </div>
+  `).join('');
+}
+
+function renderLearningLabResult(result, memorySummary = null) {
+  const neuronsNode = document.getElementById('learning-neurons-list');
+  const patternsNode = document.getElementById('learning-narrative-patterns');
+  const rulesNode = document.getElementById('learning-rules-list');
+  const jsonNode = document.getElementById('learning-json-preview');
+  const memoryNode = document.getElementById('learning-memory-summary');
+
+  if (!result) return;
+  neuronsNode.innerHTML = result.contentLearning.neurons.length
+    ? result.contentLearning.neurons.slice(0, 8).map((n) => `<li>${n.match} · confianza ${n.confidence.toFixed(2)} · contexto ${n.semanticContext}</li>`).join('')
+    : '<li>Sin neuronas detectadas.</li>';
+  patternsNode.innerHTML = result.narrativeLearning.patterns.length
+    ? result.narrativeLearning.patterns.map((p) => `<li>${p}</li>`).join('')
+    : '<li>No se detectaron patrones narrativos fuertes.</li>';
+  rulesNode.innerHTML = result.learnedRules.length
+    ? result.learnedRules.map((r) => `<li>${r}</li>`).join('')
+    : '<li>Sin reglas derivadas.</li>';
+
+  renderLearningMetricGrid('learning-voice-grid', result.voiceLearning);
+  renderLearningMetricGrid('learning-quality-grid', result.qualityAssessment);
+  jsonNode.textContent = JSON.stringify(result, null, 2);
+
+  if (memorySummary) {
+    memoryNode.innerHTML = `
+      <div class="learning-memory-card"><h5>contentMemory</h5><p>${memorySummary.contentCount} neuronas semánticas consolidadas.</p></div>
+      <div class="learning-memory-card"><h5>narrativeMemory</h5><p>${memorySummary.narrativeCount} patrones narrativos acumulados.</p></div>
+      <div class="learning-memory-card"><h5>voiceMemory</h5><p>Perfil global actualizado con ${memorySummary.voiceProfile.count} ejemplos.</p></div>
+      <div class="learning-memory-card"><h5>qualityMemory</h5><p>Calidad global actualizada con ${memorySummary.qualityProfile.count} ejemplos.</p></div>
+    `;
+  } else {
+    memoryNode.innerHTML = '<div class="learning-memory-card"><h5>Memoria</h5><p>Procesa y guarda aprendizaje para ver consolidación acumulativa.</p></div>';
+  }
+}
+
+function construirDraftsDesdeRaw(analysis, rawText) {
+=======
 function extractContentNeuronsFromRaw(text) {
   const analysis = analizarRawTraining(text);
+>>>>>>> main
   const baseCategorias = analysis.tipoContenido.length ? analysis.tipoContenido : ['tono narrativo'];
   return baseCategorias.slice(0,4).map((categoria, idx) => {
     const baseId = `training_${Date.now()}_${idx + 1}`;
@@ -3992,6 +4315,7 @@ async function actualizarYRenderizarDraft(index) {
   if (isGraphOpen() && draft?.id) showToast(`Tarjeta ${draft.id} actualizada y reconectada en el grafo`, 'success');
 }
 
+
 function analizarTextoTraining() {
   const raw = document.getElementById('training-raw-text').value.trim();
   if (!raw) { showToast('Pega texto RAW para analizar.', 'error'); return; }
@@ -4005,6 +4329,27 @@ function analizarTextoTraining() {
   renderizarPerfilVoz(learningPack.learnedVoiceProfile);
   document.getElementById('training-room-msg').textContent = 'Análisis dual completado: contenido + patrones narrativos + perfil de voz.';
   showToast('Texto analizado con éxito', 'success');
+}
+
+function procesarLearningLabTraining() {
+  const raw = document.getElementById('training-raw-text').value.trim();
+  if (!raw) { showToast('Pega texto RAW para procesar aprendizaje.', 'error'); return; }
+  const learning = buildLearningExample(raw);
+  trainingRoomState.learningResult = learning;
+  renderLearningLabResult(learning);
+  document.getElementById('training-room-msg').textContent = 'Learning Lab procesado. Revisa patrones, voz, calidad y reglas antes de guardar.';
+  showToast('Aprendizaje abstracto generado', 'success');
+}
+
+async function guardarLearningLabTraining() {
+  if (!trainingRoomState.learningResult) {
+    showToast('Primero procesa el texto en Learning Lab.', 'error');
+    return;
+  }
+  const summary = await consolidateLearningIntoMemory(trainingRoomState.learningResult);
+  renderLearningLabResult(trainingRoomState.learningResult, summary);
+  document.getElementById('training-room-msg').textContent = 'Aprendizaje consolidado en contentMemory, narrativeMemory, voiceMemory y qualityMemory.';
+  showToast('Aprendizaje acumulativo guardado', 'success');
 }
 
 function generarNeuronasTraining() {
