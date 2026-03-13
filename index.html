@@ -1069,6 +1069,238 @@
   }
   .fab.visible { opacity: 1; pointer-events: all; }
   .fab:hover { border-color: var(--violet-dim); color: var(--violet); }
+
+  /* ── GRAPH BUTTON ── */
+  .graph-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 18px;
+    background: none;
+    border: 1px solid var(--border-hi);
+    border-radius: 100px;
+    color: var(--violet);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    transition: all 0.2s;
+  }
+  .graph-btn:hover {
+    background: var(--violet-glow);
+    border-color: var(--violet);
+    box-shadow: 0 0 20px rgba(155,114,245,0.2);
+  }
+  .graph-btn-icon { font-size: 0.8rem; }
+
+  /* ── GRAPH MODAL ── */
+  .graph-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: rgba(6,5,13,0.92);
+    backdrop-filter: blur(20px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .graph-modal.open { display: flex; }
+
+  .graph-modal-inner {
+    width: 100%;
+    max-width: 1100px;
+    height: 85vh;
+    background: var(--card);
+    border: 1px solid var(--border-hi);
+    border-radius: 24px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 40px 120px rgba(0,0,0,0.6);
+  }
+
+  .graph-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .graph-modal-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .graph-modal-sub {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+    margin-top: 2px;
+  }
+
+  .graph-modal-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .aspect-filters {
+    display: flex;
+    gap: 4px;
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .af-btn {
+    padding: 5px 12px;
+    border: none;
+    border-radius: 6px;
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    transition: all 0.15s;
+  }
+  .af-btn:hover { color: var(--text-secondary); }
+  .af-btn.active {
+    background: var(--card);
+    color: var(--text-primary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  .graph-close {
+    width: 32px; height: 32px;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .graph-close:hover { border-color: var(--rose); color: var(--rose); }
+
+  .graph-body {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #graph-canvas {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+  }
+  #graph-canvas:active { cursor: grabbing; }
+
+  .graph-legend {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: rgba(14,12,26,0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+
+  .graph-legend-right {
+    left: auto;
+    right: 20px;
+  }
+
+  .gl-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+  }
+
+  .gl-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .gl-line {
+    width: 16px; height: 2px;
+    border-radius: 1px;
+    flex-shrink: 0;
+    display: inline-block;
+  }
+
+  .graph-tooltip {
+    position: absolute;
+    background: rgba(14,12,26,0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-hi);
+    border-radius: 12px;
+    padding: 16px 18px;
+    max-width: 280px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 10;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+  }
+  .graph-tooltip.visible { opacity: 1; }
+
+  .gt-planet {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .gt-neuron {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .gt-neuron:last-child { border-bottom: none; }
+
+  .gt-header {
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .gt-chip {
+    font-size: 0.52rem;
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+  .gt-chip.conjunction { border-color: rgba(212,168,67,0.5); color: #d4a843; }
+  .gt-chip.opposition { border-color: rgba(229,115,115,0.5); color: #e57373; }
+  .gt-chip.square { border-color: rgba(255,153,102,0.5); color: #ff9966; }
+  .gt-chip.trine { border-color: rgba(77,208,196,0.5); color: #4dd0c4; }
+  .gt-chip.sextile { border-color: rgba(155,114,245,0.5); color: #9b72f5; }
+
+  .gt-avoid { color: rgba(229,115,115,0.85); margin-bottom: 3px; line-height: 1.4; }
+  .gt-focus { color: rgba(77,208,196,0.85); line-height: 1.4; }
+  .gt-avoid::before { content: "✕ "; opacity: 0.6; }
+  .gt-focus::before { content: "✦ "; opacity: 0.6; }
+
 </style>
 </head>
 <body>
@@ -1088,12 +1320,59 @@
       </div>
     </div>
     <div class="header-right">
+      <button class="graph-btn" onclick="openGraphModal()">
+        <span class="graph-btn-icon">✦</span>
+        Red Neuronal
+      </button>
       <div class="status-pill">
         <div class="status-dot"></div>
         <span id="status-text">LISTO</span>
       </div>
     </div>
   </header>
+
+  <!-- GRAPH MODAL -->
+  <div class="graph-modal" id="graph-modal">
+    <div class="graph-modal-inner">
+      <div class="graph-modal-header">
+        <div>
+          <div class="graph-modal-title">Red Neuronal</div>
+          <div class="graph-modal-sub">210 NEURONAS · FÍSICA INTERACTIVA</div>
+        </div>
+        <div class="graph-modal-controls">
+          <div class="aspect-filters">
+            <button class="af-btn active" data-aspect="all" onclick="filterAspect('all',this)">Todos</button>
+            <button class="af-btn" data-aspect="conjunction" onclick="filterAspect('conjunction',this)">Conjunción</button>
+            <button class="af-btn" data-aspect="opposition" onclick="filterAspect('opposition',this)">Oposición</button>
+            <button class="af-btn" data-aspect="square" onclick="filterAspect('square',this)">Cuadratura</button>
+            <button class="af-btn" data-aspect="trine" onclick="filterAspect('trine',this)">Trígono</button>
+            <button class="af-btn" data-aspect="sextile" onclick="filterAspect('sextile',this)">Sextil</button>
+          </div>
+          <button class="graph-close" onclick="closeGraphModal()">✕</button>
+        </div>
+      </div>
+      <div class="graph-body">
+        <canvas id="graph-canvas"></canvas>
+        <div class="graph-legend">
+          <div class="gl-item"><span class="gl-dot" style="background:#b8a9e8"></span>Luna</div>
+          <div class="gl-item"><span class="gl-dot" style="background:#e57373"></span>Marte</div>
+          <div class="gl-item"><span class="gl-dot" style="background:#8b9dc3"></span>Saturno</div>
+          <div class="gl-item"><span class="gl-dot" style="background:#f5c842"></span>Sol</div>
+          <div class="gl-item"><span class="gl-dot" style="background:#f48fb1"></span>Venus</div>
+          <div class="gl-item"><span class="gl-dot" style="background:#4dd0c4"></span>Mercurio</div>
+          <div class="gl-item"><span class="gl-dot" style="background:#9b72f5"></span>Júpiter</div>
+        </div>
+        <div class="graph-legend graph-legend-right">
+          <div class="gl-item"><span class="gl-line" style="background:#d4a843"></span>Conjunción</div>
+          <div class="gl-item"><span class="gl-line" style="background:#e57373"></span>Oposición</div>
+          <div class="gl-item"><span class="gl-line" style="background:#ff9966"></span>Cuadratura</div>
+          <div class="gl-item"><span class="gl-line" style="background:#4dd0c4"></span>Trígono</div>
+          <div class="gl-item"><span class="gl-line" style="background:#9b72f5"></span>Sextil</div>
+        </div>
+        <div class="graph-tooltip" id="graph-tooltip"></div>
+      </div>
+    </div>
+  </div>
 
   <!-- ── HERO ── -->
   <section class="hero">
@@ -1998,6 +2277,614 @@ window.addEventListener('scroll', () => {
     `).join('');
   }
 })();
+
+// ─────────────────────────────────────────────────────────────
+// GRAPH MODAL - Obsidian-style force graph
+// ─────────────────────────────────────────────────────────────
+
+const PLANET_COLORS = {
+  Moon: '#b8a9e8', Mars: '#e57373', Saturn: '#8b9dc3',
+  Sun: '#f5c842', Venus: '#f48fb1', Mercury: '#4dd0c4', Jupiter: '#9b72f5'
+};
+
+const PLANET_LABELS = {
+  Moon: 'Luna', Mars: 'Marte', Saturn: 'Saturno',
+  Sun: 'Sol', Venus: 'Venus', Mercury: 'Mercurio', Jupiter: 'Júpiter'
+};
+
+const ASPECT_COLORS = {
+  conjunction: '#d4a843', opposition: '#e57373',
+  square: '#ff9966', trine: '#4dd0c4', sextile: '#9b72f5'
+};
+
+const ASPECT_LABELS = {
+  conjunction: 'conjunción', opposition: 'oposición',
+  square: 'cuadratura', trine: 'trígono', sextile: 'sextil'
+};
+
+const ALL_NEURONS = [
+  // LUNA
+  {planet:'Moon',aspect:'conjunction',target:'Mars',avoid:'actuar desde la emoción cruda sin pausa',focus:'canaliza el impulso en movimiento, no en reacción'},
+  {planet:'Moon',aspect:'conjunction',target:'Saturn',avoid:'suprimir sentimientos en nombre del deber',focus:'honra tanto la emoción como la responsabilidad'},
+  {planet:'Moon',aspect:'conjunction',target:'Sun',avoid:'confundir las necesidades del ego con las emocionales',focus:'alinea lo que sientes con lo que realmente quieres'},
+  {planet:'Moon',aspect:'conjunction',target:'Venus',avoid:'buscar comodidad en lugar de verdad',focus:'deja que la calidez guíe sin suavizar lo necesario'},
+  {planet:'Moon',aspect:'conjunction',target:'Mercury',avoid:'analizar los sentimientos en lugar de sentirlos',focus:'nombra la emoción con precisión antes de hablar'},
+  {planet:'Moon',aspect:'conjunction',target:'Jupiter',avoid:'exageración emocional y respuestas desproporcionadas',focus:'expande la compasión sin perder los límites'},
+  {planet:'Moon',aspect:'opposition',target:'Mars',avoid:'confrontación impulsada por frustración no procesada',focus:'separa lo que te activó de lo que realmente importa'},
+  {planet:'Moon',aspect:'opposition',target:'Saturn',avoid:'cierre emocional o retirada fría',focus:'permanece presente aunque los sentimientos pesen'},
+  {planet:'Moon',aspect:'opposition',target:'Sun',avoid:'conflicto interno entre necesidades y deseos',focus:'encuentra el punto medio entre tú y los demás'},
+  {planet:'Moon',aspect:'opposition',target:'Venus',avoid:'complacer a otros a costa de tus propias necesidades',focus:'equilibra el dar con el recibir honestamente'},
+  {planet:'Moon',aspect:'opposition',target:'Mercury',avoid:'decir lo que piensas en lugar de lo que sientes',focus:'habla desde el corazón, no solo desde la mente'},
+  {planet:'Moon',aspect:'opposition',target:'Jupiter',avoid:'desbordamiento emocional por asumir demasiado',focus:'discerne qué merece realmente tu energía emocional'},
+  {planet:'Moon',aspect:'square',target:'Mars',avoid:'conversaciones reactivas y palabras impulsivas',focus:'regulación emocional antes de cualquier confrontación'},
+  {planet:'Moon',aspect:'square',target:'Saturn',avoid:'autocrítica y rigidez emocional',focus:'sé gentil con tu propio proceso y ritmo'},
+  {planet:'Moon',aspect:'square',target:'Sun',avoid:'tensión entre tu cara pública y tu sentir privado',focus:'honra tu mundo interior incluso en roles públicos'},
+  {planet:'Moon',aspect:'square',target:'Venus',avoid:'confundir el amor con la comodidad o la evasión',focus:'sé honesto sobre lo que necesitas en tus relaciones'},
+  {planet:'Moon',aspect:'square',target:'Mercury',avoid:'intelectualizar el dolor en lugar de procesarlo',focus:'permite sentir antes de formar conclusiones'},
+  {planet:'Moon',aspect:'square',target:'Jupiter',avoid:'inflación emocional y búsqueda inquieta',focus:'ancla la expansión en lo que es real y presente'},
+  {planet:'Moon',aspect:'trine',target:'Mars',avoid:'confundir la facilidad con permiso para actuar sin reflexión',focus:'usa la claridad emocional para impulsar acción con propósito'},
+  {planet:'Moon',aspect:'trine',target:'Saturn',avoid:'conformarse con estabilidad cuando se necesita crecimiento',focus:'construye estructura emocional que soporte paz duradera'},
+  {planet:'Moon',aspect:'trine',target:'Sun',avoid:'complacencia en zonas de confort emocionales',focus:'deja que la armonía interior inspire expresión exterior'},
+  {planet:'Moon',aspect:'trine',target:'Venus',avoid:'contentamiento pasivo que evita cambios necesarios',focus:'inclínate hacia la conexión genuina y el flujo creativo'},
+  {planet:'Moon',aspect:'trine',target:'Mercury',avoid:'comunicar sentimientos sin escuchar los ajenos',focus:'expresa emociones con claridad y recibe con apertura'},
+  {planet:'Moon',aspect:'trine',target:'Jupiter',avoid:'idealismo emocional que pierde contacto con la realidad',focus:'expande tu mundo emocional con gratitud y apertura'},
+  {planet:'Moon',aspect:'sextile',target:'Mars',avoid:'dejar la energía emocional sin usar ni enfocar',focus:'toma una pequeña acción valiente alineada con lo que sientes'},
+  {planet:'Moon',aspect:'sextile',target:'Saturn',avoid:'ignorar la oportunidad de construir resiliencia emocional',focus:'usa la disciplina para honrar tus necesidades emocionales'},
+  {planet:'Moon',aspect:'sextile',target:'Sun',avoid:'perder la ventana para la autoexpresión auténtica',focus:'alinea tus acciones diarias con tu verdad emocional interior'},
+  {planet:'Moon',aspect:'sextile',target:'Venus',avoid:'pasar por alto pequeños momentos de conexión genuina',focus:'nutre relaciones con actos simples y presentes de cuidado'},
+  {planet:'Moon',aspect:'sextile',target:'Mercury',avoid:'perder la oportunidad de articular lo que sientes',focus:'pon los sentimientos en palabras mientras la claridad está'},
+  {planet:'Moon',aspect:'sextile',target:'Jupiter',avoid:'dejar el optimismo solo en la cabeza sin llevarlo a la vida',focus:'da un paso hacia la expansión emocional hoy'},
+  // MARTE
+  {planet:'Mars',aspect:'conjunction',target:'Moon',avoid:'actuar desde la reactividad emocional sin anclaje',focus:'responde, no reacciones en el momento'},
+  {planet:'Mars',aspect:'conjunction',target:'Saturn',avoid:'forzar el progreso contra límites estructurales reales',focus:'aplica esfuerzo sostenido a lo que realmente puede moverse'},
+  {planet:'Mars',aspect:'conjunction',target:'Sun',avoid:'agresión impulsada por el ego disfrazada de confianza',focus:'dirige tu voluntad hacia lo que verdaderamente importa'},
+  {planet:'Mars',aspect:'conjunction',target:'Venus',avoid:'perseguir el deseo sin considerar el impacto en otros',focus:'equilibra la asertividad con el cuidado genuino'},
+  {planet:'Mars',aspect:'conjunction',target:'Mercury',avoid:'comunicación afilada o impaciente',focus:'piensa antes de hablar, especialmente en conflicto'},
+  {planet:'Mars',aspect:'conjunction',target:'Jupiter',avoid:'sobreextensión imprudente y energía dispersa',focus:'enfoca la intensidad en un objetivo significativo'},
+  {planet:'Mars',aspect:'opposition',target:'Moon',avoid:'conflicto impulsado por necesidad emocional no reconocida',focus:'nombra lo que sientes antes de nombrar lo que hicieron otros'},
+  {planet:'Mars',aspect:'opposition',target:'Saturn',avoid:'empujar con fuerza contra obstáculos inamovibles',focus:'elige paciencia estratégica sobre fuerza directa'},
+  {planet:'Mars',aspect:'opposition',target:'Sun',avoid:'luchas de poder y asertividad defensiva',focus:'colabora en lugar de competir'},
+  {planet:'Mars',aspect:'opposition',target:'Venus',avoid:'tensión entre el deseo y el amor',focus:'encuentra el puente entre tus necesidades y las de otros'},
+  {planet:'Mars',aspect:'opposition',target:'Mercury',avoid:'energía argumentativa que cierra en lugar de abrir',focus:'escucha tan activamente como hablas'},
+  {planet:'Mars',aspect:'opposition',target:'Jupiter',avoid:'ambición inflada que desperdicia el impulso real',focus:'calibra tu esfuerzo a lo que es realmente alcanzable hoy'},
+  {planet:'Mars',aspect:'square',target:'Moon',avoid:'discusiones reactivas y golpes emocionales impulsivos',focus:'pausa, respira, luego responde con intención'},
+  {planet:'Mars',aspect:'square',target:'Saturn',avoid:'frustración por chocar contra muros que necesitan tiempo',focus:'identifica qué puedes mover y mueve eso'},
+  {planet:'Mars',aspect:'square',target:'Sun',avoid:'agresión disfrazada de impulso o ambición',focus:'canaliza la energía competitiva hacia la superación personal'},
+  {planet:'Mars',aspect:'square',target:'Venus',avoid:'forzar resultados en el amor o el trabajo creativo',focus:'permite que el deseo respire sin exigir resolución'},
+  {planet:'Mars',aspect:'square',target:'Mercury',avoid:'discurso combativo y conclusiones apresuradas',focus:'desacelera la comunicación, precisión antes que velocidad'},
+  {planet:'Mars',aspect:'square',target:'Jupiter',avoid:'asumir más de lo que la capacidad actual permite',focus:'comprométete con la profundidad sobre la amplitud ahora'},
+  {planet:'Mars',aspect:'trine',target:'Moon',avoid:'quemar energía emocional sin reponer',focus:'usa el flujo del sentimiento y la acción juntos'},
+  {planet:'Mars',aspect:'trine',target:'Saturn',avoid:'confundir el progreso fluido con permiso para saltarse pasos',focus:'aplica disciplina constante mientras el impulso es fuerte'},
+  {planet:'Mars',aspect:'trine',target:'Sun',avoid:'sobreconfianza en la capacidad de superar cualquier cosa',focus:'actúa con claridad y propósito, no solo con energía'},
+  {planet:'Mars',aspect:'trine',target:'Venus',avoid:'actuar sobre el deseo sin verificar la alineación profunda',focus:'persigue lo que quieres con corazón e intención'},
+  {planet:'Mars',aspect:'trine',target:'Mercury',avoid:'pensamiento rápido que omite matices necesarios',focus:'usa la agudeza mental para comunicarte con decisión'},
+  {planet:'Mars',aspect:'trine',target:'Jupiter',avoid:'expandirse tan rápido que se omiten los cimientos',focus:'muévete con audacia y construye mientras avanzas'},
+  {planet:'Mars',aspect:'sextile',target:'Moon',avoid:'dejar el impulso emocional sin usar',focus:'toma acción que honre tanto el sentir como la dirección'},
+  {planet:'Mars',aspect:'sextile',target:'Saturn',avoid:'perder la ventana para construir algo duradero',focus:'pon esfuerzo disciplinado en una cosa tangible hoy'},
+  {planet:'Mars',aspect:'sextile',target:'Sun',avoid:'esperar condiciones perfectas para comenzar',focus:'empieza con lo que tienes y afina en movimiento'},
+  {planet:'Mars',aspect:'sextile',target:'Venus',avoid:'dudar en perseguir lo que genuinamente te atrae',focus:'da un pequeño paso hacia lo que deseas'},
+  {planet:'Mars',aspect:'sextile',target:'Mercury',avoid:'pensar en la acción en lugar de tomarla',focus:'muévete sobre la idea más clara disponible ahora mismo'},
+  {planet:'Mars',aspect:'sextile',target:'Jupiter',avoid:'dejar pasar la oportunidad sin comprometerse',focus:'di sí a una posibilidad expansiva hoy'},
+  // SATURNO
+  {planet:'Saturn',aspect:'conjunction',target:'Moon',avoid:'supresión emocional disfrazada de autocontrol',focus:'estructura tus sentimientos sin borrarlos'},
+  {planet:'Saturn',aspect:'conjunction',target:'Mars',avoid:'acción bloqueada creando frustración interna',focus:'trabaja metódicamente dentro de las limitaciones reales'},
+  {planet:'Saturn',aspect:'conjunction',target:'Sun',avoid:'autocrítica excesiva y limitación autoimpuesta',focus:'haz una cosa responsable a la vez'},
+  {planet:'Saturn',aspect:'conjunction',target:'Venus',avoid:'retener amor o afecto por miedo',focus:'comprométete con lo que valoras aunque sea difícil'},
+  {planet:'Saturn',aspect:'conjunction',target:'Mercury',avoid:'pensamiento rígido y diálogo interno excesivamente crítico',focus:'habla con precisión y claridad estructural'},
+  {planet:'Saturn',aspect:'conjunction',target:'Jupiter',avoid:'contracción que bloquea la expansión necesaria',focus:'construye los cimientos antes de agregar más pisos'},
+  {planet:'Saturn',aspect:'square',target:'Moon',avoid:'autocrítica y rigidez emocional',focus:'sé paciente con tu propio proceso emocional'},
+  {planet:'Saturn',aspect:'square',target:'Mars',avoid:'esfuerzo agotador contra obstáculos inamovibles',focus:'conserva energía y elige las batallas sabiamente'},
+  {planet:'Saturn',aspect:'square',target:'Sun',avoid:'obligación aplastando la expresión auténtica',focus:'cumple la responsabilidad sin perderte en ella'},
+  {planet:'Saturn',aspect:'square',target:'Venus',avoid:'amor bloqueado por miedo a la insuficiencia',focus:'preséntate imperfectamente en lugar de no presentarte'},
+  {planet:'Saturn',aspect:'square',target:'Mercury',avoid:'bucles mentales negativos y pensamiento derrotista',focus:'reemplaza la crítica con un próximo paso constructivo'},
+  {planet:'Saturn',aspect:'square',target:'Jupiter',avoid:'parálisis entre la ambición y el miedo al fracaso',focus:'da el paso más pequeño posible hacia adelante hoy'},
+  {planet:'Saturn',aspect:'trine',target:'Moon',avoid:'usar la estabilidad como excusa para evitar el crecimiento',focus:'construye estructuras emocionales duraderas desde la calma'},
+  {planet:'Saturn',aspect:'trine',target:'Mars',avoid:'complacencia con el ritmo actual de progreso',focus:'aplica esfuerzo disciplinado mientras las condiciones lo apoyan'},
+  {planet:'Saturn',aspect:'trine',target:'Sun',avoid:'conformarse con menos de lo que eres capaz',focus:'asume mayor responsabilidad con confianza'},
+  {planet:'Saturn',aspect:'trine',target:'Venus',avoid:'dar por sentada la estabilidad relacional',focus:'invierte en lo que amas con presencia constante'},
+  {planet:'Saturn',aspect:'trine',target:'Mercury',avoid:'pensamiento estructurado que se vuelve doctrina inflexible',focus:'usa la disciplina mental para resolver un problema real hoy'},
+  {planet:'Saturn',aspect:'trine',target:'Jupiter',avoid:'planificar sin comprometerse con la ejecución',focus:'convierte la visión en un plan realista y estructurado'},
+  {planet:'Saturn',aspect:'sextile',target:'Moon',avoid:'ignorar la oportunidad de estabilizar patrones emocionales',focus:'crea un hábito emocional saludable o un límite nuevo'},
+  {planet:'Saturn',aspect:'sextile',target:'Mars',avoid:'dejar que el impulso útil se desperdicie',focus:'canaliza la energía en algo con estructura duradera'},
+  {planet:'Saturn',aspect:'sextile',target:'Sun',avoid:'perder la ventana para el desarrollo disciplinado',focus:'haz el trabajo que tu yo futuro te agradecerá'},
+  {planet:'Saturn',aspect:'sextile',target:'Venus',avoid:'descuidar la inversión en relaciones importantes',focus:'muestra amor a través de una presencia confiable y constante'},
+  {planet:'Saturn',aspect:'sextile',target:'Mercury',avoid:'pensamiento disperso cuando la planificación enfocada está disponible',focus:'organiza tus pensamientos en una estructura escrita y clara'},
+  {planet:'Saturn',aspect:'sextile',target:'Jupiter',avoid:'dejar pasar la oportunidad práctica sin actuar',focus:'da un paso concreto hacia tu visión más amplia'},
+  {planet:'Saturn',aspect:'opposition',target:'Moon',avoid:'distanciamiento emocional como mecanismo de defensa',focus:'permanece en contacto con el sentir incluso bajo presión'},
+  {planet:'Saturn',aspect:'opposition',target:'Mars',avoid:'desgastarse contra límites hasta el agotamiento',focus:'identifica la única cosa que puede moverse hoy'},
+  {planet:'Saturn',aspect:'opposition',target:'Sun',avoid:'presión externa erosionando la autoestima',focus:'ancla tu identidad en lo que sabes que es verdad sobre ti'},
+  {planet:'Saturn',aspect:'opposition',target:'Venus',avoid:'retener calidez por decepciones pasadas',focus:'ábrete al amor mientras mantienes tu propio terreno'},
+  {planet:'Saturn',aspect:'opposition',target:'Mercury',avoid:'pesadez mental y pensamiento catastrófico',focus:'cuestiona la historia pesimista antes de aceptarla'},
+  {planet:'Saturn',aspect:'opposition',target:'Jupiter',avoid:'miedo al crecimiento disfrazado de practicidad',focus:'toma el riesgo realista que realmente está disponible'},
+  // SOL
+  {planet:'Sun',aspect:'conjunction',target:'Moon',avoid:'confundir necesidades internas con identidad externa',focus:'integra lo que sientes con lo que proyectas'},
+  {planet:'Sun',aspect:'conjunction',target:'Mars',avoid:'fuerza impulsada por el ego que quema puentes',focus:'actúa desde la voluntad auténtica, no desde el orgullo herido'},
+  {planet:'Sun',aspect:'conjunction',target:'Saturn',avoid:'cargar más peso del que realmente te corresponde',focus:'ejerce tu autoridad con humildad'},
+  {planet:'Sun',aspect:'conjunction',target:'Venus',avoid:'absorción en el yo en relaciones y trabajo creativo',focus:'brilla generosamente sin necesitar ser el centro'},
+  {planet:'Sun',aspect:'conjunction',target:'Mercury',avoid:'hablar antes de escucharte verdaderamente a ti mismo',focus:'deja que el pensamiento auténtico preceda a la expresión'},
+  {planet:'Sun',aspect:'conjunction',target:'Jupiter',avoid:'autoimagen grandiosa desconectada de la realidad',focus:'crece desde un centro genuino, no desde uno inflado'},
+  {planet:'Sun',aspect:'square',target:'Moon',avoid:'tensión interna entre el querer y el necesitar',focus:'honra la verdad emocional bajo el objetivo de superficie'},
+  {planet:'Sun',aspect:'square',target:'Mars',avoid:'agresión disfrazada de liderazgo o impulso',focus:'dirige la fuerza hacia la creación, no hacia la destrucción'},
+  {planet:'Sun',aspect:'square',target:'Saturn',avoid:'obligación aplastando la autoexpresión auténtica',focus:'completa lo que debe hacerse sin perder tu centro'},
+  {planet:'Sun',aspect:'square',target:'Venus',avoid:'forzar resultados creativos o relacionales',focus:'permite que la belleza y la conexión emerjan naturalmente'},
+  {planet:'Sun',aspect:'square',target:'Mercury',avoid:'ruido mental ahogando la intuición auténtica',focus:'simplifica: un pensamiento claro, una acción clara'},
+  {planet:'Sun',aspect:'square',target:'Jupiter',avoid:'exceso de alcance y ambición dispersa',focus:'elige una dirección y comprométete plenamente'},
+  {planet:'Sun',aspect:'trine',target:'Moon',avoid:'alineación cómoda que genera complacencia',focus:'usa la armonía interior para tomar acción exterior significativa'},
+  {planet:'Sun',aspect:'trine',target:'Mars',avoid:'gastar energía sin intención significativa',focus:'actúa con audacia desde un lugar anclado y auténtico'},
+  {planet:'Sun',aspect:'trine',target:'Saturn',avoid:'confundir la facilidad con razón para saltarse el trabajo',focus:'construye algo real mientras las condiciones lo apoyan'},
+  {planet:'Sun',aspect:'trine',target:'Venus',avoid:'disfrute pasivo que evita el compromiso necesario',focus:'crea y conecta desde un lugar de alegría genuina'},
+  {planet:'Sun',aspect:'trine',target:'Mercury',avoid:'expresión fluida que se queda en la superficie',focus:'usa la claridad expresiva para ir más profundo de lo habitual'},
+  {planet:'Sun',aspect:'trine',target:'Jupiter',avoid:'optimismo que flota sin aterrizar en ningún lugar',focus:'expándete hacia algo concreto y significativo'},
+  {planet:'Sun',aspect:'sextile',target:'Moon',avoid:'perder la ventana para la autoexpresión auténtica',focus:'deja que la verdad interior guíe una acción visible hoy'},
+  {planet:'Sun',aspect:'sextile',target:'Mars',avoid:'energía pasiva cuando la iniciativa está disponible',focus:'comienza algo que te importe ahora mismo'},
+  {planet:'Sun',aspect:'sextile',target:'Saturn',avoid:'dejar la estructura y la disciplina sin usar',focus:'aplica esfuerzo enfocado a un compromiso importante'},
+  {planet:'Sun',aspect:'sextile',target:'Venus',avoid:'descuidar la belleza, el placer o la conexión hoy',focus:'invierte en lo que genuinamente te hace sentir vivo'},
+  {planet:'Sun',aspect:'sextile',target:'Mercury',avoid:'claridad que se desperdicia sin expresión',focus:'habla o escribe lo que has estado guardando'},
+  {planet:'Sun',aspect:'sextile',target:'Jupiter',avoid:'oportunidad que pasa sin ser reconocida ni aprovechada',focus:'di sí a lo que podría expandir tu mundo'},
+  {planet:'Sun',aspect:'opposition',target:'Moon',avoid:'conflicto entre el rol público y la necesidad privada',focus:'encuentra armonía entre quién eres y lo que muestras'},
+  {planet:'Sun',aspect:'opposition',target:'Mars',avoid:'conflictos de poder y choques de ego con otros',focus:'lidera con el ejemplo en lugar de con la fuerza'},
+  {planet:'Sun',aspect:'opposition',target:'Saturn',avoid:'autoridad externa socavando la autoconfianza',focus:'mantén tu terreno sin volverse rígido'},
+  {planet:'Sun',aspect:'opposition',target:'Venus',avoid:'tensión entre autoexpresión y armonía relacional',focus:'sé completamente tú mismo mientras permaneces genuinamente abierto'},
+  {planet:'Sun',aspect:'opposition',target:'Mercury',avoid:'intelectualizar a expensas del sentir auténtico',focus:'deja que la claridad mental sirva, no que silencie al corazón'},
+  {planet:'Sun',aspect:'opposition',target:'Jupiter',avoid:'sobreestimar la capacidad o los recursos disponibles',focus:'sé honesto sobre lo que es realmente posible ahora'},
+  // VENUS
+  {planet:'Venus',aspect:'conjunction',target:'Moon',avoid:'dependencia emocional disfrazada de amor',focus:'nutre desde la plenitud, no desde la necesidad'},
+  {planet:'Venus',aspect:'conjunction',target:'Mars',avoid:'el deseo creando presión en relaciones cercanas',focus:'persigue lo que quieres con cuidado por el otro'},
+  {planet:'Venus',aspect:'conjunction',target:'Saturn',avoid:'retener afecto por miedo a la pérdida',focus:'ama con compromiso, no con condición'},
+  {planet:'Venus',aspect:'conjunction',target:'Sun',avoid:'vanidad o autoindulgencia en la expresión creativa',focus:'crea y conecta desde el centro genuino del corazón'},
+  {planet:'Venus',aspect:'conjunction',target:'Mercury',avoid:'decir cosas agradables en lugar de verdaderas',focus:'habla con amor y honestidad al mismo tiempo'},
+  {planet:'Venus',aspect:'conjunction',target:'Jupiter',avoid:'sobreindulgencia y exceso en el placer o el gasto',focus:'disfruta generosamente sin perder el discernimiento'},
+  {planet:'Venus',aspect:'square',target:'Moon',avoid:'confundir necesidad emocional con amor genuino',focus:'distingue entre buscar comodidad y buscar conexión real'},
+  {planet:'Venus',aspect:'square',target:'Mars',avoid:'fricción en relaciones por deseo no expresado',focus:'expresa lo que quieres claramente y con cuidado'},
+  {planet:'Venus',aspect:'square',target:'Saturn',avoid:'frialdad relacional o indisponibilidad emocional',focus:'toma un pequeño riesgo en el amor o la expresión creativa'},
+  {planet:'Venus',aspect:'square',target:'Sun',avoid:'complacer a otros a expensas del yo auténtico',focus:'sé simpático sin traicionar tu verdad'},
+  {planet:'Venus',aspect:'square',target:'Mercury',avoid:'encanto social que evita la comunicación honesta',focus:'di lo real, no solo lo fácil'},
+  {planet:'Venus',aspect:'square',target:'Jupiter',avoid:'exceso en el amor, el gasto o la indulgencia',focus:'disfruta dentro de límites que apoyen tu bienestar real'},
+  {planet:'Venus',aspect:'trine',target:'Moon',avoid:'contentamiento emocional pasivo que evita el crecimiento',focus:'usa la facilidad relacional para ir más profundo'},
+  {planet:'Venus',aspect:'trine',target:'Mars',avoid:'deseo cómodo que nunca se convierte en acción',focus:'persigue lo que amas con impulso anclado y alegre'},
+  {planet:'Venus',aspect:'trine',target:'Saturn',avoid:'dar por sentadas relaciones estables o trabajo creativo',focus:'invierte consistentemente en lo que y en quien amas'},
+  {planet:'Venus',aspect:'trine',target:'Sun',avoid:'autosatisfacción que se cierra a nuevas experiencias',focus:'muestra tu yo genuino y deja que atraiga lo que pertenece'},
+  {planet:'Venus',aspect:'trine',target:'Mercury',avoid:'conversación agradable que omite la profundidad necesaria',focus:'combina calidez con honestidad para la intimidad real'},
+  {planet:'Venus',aspect:'trine',target:'Jupiter',avoid:'mentalidad de abundancia que omite el trabajo de la gratitud',focus:'recibe belleza y alegría con presencia genuina'},
+  {planet:'Venus',aspect:'sextile',target:'Moon',avoid:'pasar por alto pequeñas oportunidades de conexión genuina',focus:'comunícate con alguien que te importa hoy'},
+  {planet:'Venus',aspect:'sextile',target:'Mars',avoid:'deseo sin expresión ni acción',focus:'da un paso hacia lo que genuinamente te atrae'},
+  {planet:'Venus',aspect:'sextile',target:'Saturn',avoid:'descuidar mostrar amor a través de acción constante',focus:'demuestra cuidado a través de presencia confiable y tangible'},
+  {planet:'Venus',aspect:'sextile',target:'Sun',avoid:'autoexpresión que permanece sin expresar',focus:'comparte algo hermoso o verdadero con alguien hoy'},
+  {planet:'Venus',aspect:'sextile',target:'Mercury',avoid:'pensamientos amables que nunca se convierten en palabras',focus:'dile a alguien algo real y amoroso hoy'},
+  {planet:'Venus',aspect:'sextile',target:'Jupiter',avoid:'gratitud que permanece interna y sin expresar',focus:'comparte tu aprecio abierta y generosamente'},
+  {planet:'Venus',aspect:'opposition',target:'Moon',avoid:'dar amor a otros antes de dártelo a ti mismo',focus:'llena tu propio vaso antes de llenar el de otros'},
+  {planet:'Venus',aspect:'opposition',target:'Mars',avoid:'ciclos de atracción-repulsión en relaciones cercanas',focus:'nombra la tensión honestamente antes de que se convierta en conflicto'},
+  {planet:'Venus',aspect:'opposition',target:'Saturn',avoid:'amor bloqueado por heridas antiguas o autoprotección',focus:'ábrete a la conexión mientras mantienes límites saludables'},
+  {planet:'Venus',aspect:'opposition',target:'Sun',avoid:'perderte en relaciones o en la aprobación de otros',focus:'permanece anclado en tu propio valor mientras te conectas'},
+  {planet:'Venus',aspect:'opposition',target:'Mercury',avoid:'elegir palabras cómodas sobre palabras honestas',focus:'sé amable y verdadero, no solo uno de los dos'},
+  {planet:'Venus',aspect:'opposition',target:'Jupiter',avoid:'idealismo romántico o financiero sin anclaje',focus:'aprecia lo que es real antes de alcanzar más'},
+  // MERCURIO
+  {planet:'Mercury',aspect:'conjunction',target:'Moon',avoid:'parloteo mental ahogando la señal emocional',focus:'escucha lo que sientes antes de formar una opinión'},
+  {planet:'Mercury',aspect:'conjunction',target:'Mars',avoid:'comunicación afilada e impaciente en momentos sensibles',focus:'piensa dos veces, habla una, con precisión'},
+  {planet:'Mercury',aspect:'conjunction',target:'Saturn',avoid:'rigidez mental y voz interior excesivamente crítica',focus:'estructura tu pensamiento sin encarcelarlo'},
+  {planet:'Mercury',aspect:'conjunction',target:'Sun',avoid:'hablar sobre otros para afirmar tu perspectiva',focus:'exprésate auténticamente, luego escucha plenamente'},
+  {planet:'Mercury',aspect:'conjunction',target:'Venus',avoid:'decir lo que suena bien en lugar de lo que es verdad',focus:'deja que tus palabras sean amables y honestas'},
+  {planet:'Mercury',aspect:'conjunction',target:'Jupiter',avoid:'exceso verbal y prometer más de lo que puedes cumplir',focus:'piensa en grande pero comunícate con precisión'},
+  {planet:'Mercury',aspect:'square',target:'Moon',avoid:'pensar sobre los sentimientos en lugar de sentirlos',focus:'siéntate con la emoción antes de buscar explicación'},
+  {planet:'Mercury',aspect:'square',target:'Mars',avoid:'discurso reactivo y tono combativo en desacuerdo',focus:'pausa entre pensamiento y palabra en momentos tensos'},
+  {planet:'Mercury',aspect:'square',target:'Saturn',avoid:'bucles mentales reforzando limitaciones y derrota',focus:'identifica un patrón de pensamiento para interrumpir hoy'},
+  {planet:'Mercury',aspect:'square',target:'Sun',avoid:'ruido mental socavando el autoconocimiento auténtico',focus:'simplifica tu diálogo interno a lo que es realmente verdad'},
+  {planet:'Mercury',aspect:'square',target:'Venus',avoid:'palabras ingeniosas evitando la honestidad emocional',focus:'di lo real aunque lo fácil esté disponible'},
+  {planet:'Mercury',aspect:'square',target:'Jupiter',avoid:'sobrecomplicar lo que podría ser simple y directo',focus:'destila la idea a su forma más clara y simple'},
+  {planet:'Mercury',aspect:'trine',target:'Moon',avoid:'comunicación fluida que omite la profundidad emocional',focus:'usa la claridad expresiva para articular lo que es real'},
+  {planet:'Mercury',aspect:'trine',target:'Mars',avoid:'pensamiento rápido que omite matices importantes',focus:'comunícate con decisión manteniéndote abierto a revisión'},
+  {planet:'Mercury',aspect:'trine',target:'Saturn',avoid:'pensamiento estructurado convirtiéndose en dogma inflexible',focus:'usa la disciplina mental para resolver un problema real hoy'},
+  {planet:'Mercury',aspect:'trine',target:'Sun',avoid:'expresión confiada que deja de escuchar',focus:'comparte claramente y permanece genuinamente curioso sobre otros'},
+  {planet:'Mercury',aspect:'trine',target:'Venus',avoid:'discurso encantador que evita la honestidad necesaria',focus:'combina elocuencia con verdad para un impacto duradero'},
+  {planet:'Mercury',aspect:'trine',target:'Jupiter',avoid:'pensamiento expansivo sin aplicación práctica',focus:'mapea la gran idea en tres próximos pasos concretos'},
+  {planet:'Mercury',aspect:'sextile',target:'Moon',avoid:'claridad emocional que permanece sin expresar',focus:'articula un sentimiento que ha sido difícil de nombrar'},
+  {planet:'Mercury',aspect:'sextile',target:'Mars',avoid:'pensamiento claro sin acción decisiva',focus:'convierte tu intuición más clara en un paso inmediato'},
+  {planet:'Mercury',aspect:'sextile',target:'Saturn',avoid:'buen pensamiento que no deja registro ni estructura duradera',focus:'escribe, organiza o compromete la intuición clave'},
+  {planet:'Mercury',aspect:'sextile',target:'Sun',avoid:'pensamiento auténtico que permanece sin compartir',focus:'expresa lo que genuinamente piensas a alguien que importa'},
+  {planet:'Mercury',aspect:'sextile',target:'Venus',avoid:'pensamientos amables que permanecen internos',focus:'di algo verdadero y hermoso a alguien hoy'},
+  {planet:'Mercury',aspect:'sextile',target:'Jupiter',avoid:'intuición sin expansión ni aplicación',focus:'comparte la idea con alguien que pueda ayudarla a crecer'},
+  {planet:'Mercury',aspect:'opposition',target:'Moon',avoid:'lógica usada para desestimar la verdad emocional',focus:'deja que la mente sirva al corazón, no que lo silencie'},
+  {planet:'Mercury',aspect:'opposition',target:'Mars',avoid:'modo debate activándose cuando se necesita diálogo',focus:'busca entender antes de buscar ser entendido'},
+  {planet:'Mercury',aspect:'opposition',target:'Saturn',avoid:'pesadez mental y narrativa catastrófica',focus:'desafía la historia pesimista con un hecho real'},
+  {planet:'Mercury',aspect:'opposition',target:'Sun',avoid:'sobreanálisis de la autoexpresión auténtica',focus:'confía en lo que sabes sin necesitar justificarlo'},
+  {planet:'Mercury',aspect:'opposition',target:'Venus',avoid:'parálisis analítica en asuntos de amor o creatividad',focus:'deja que el sentir lidere y la mente refine, no decida'},
+  {planet:'Mercury',aspect:'opposition',target:'Jupiter',avoid:'grandes ideas que nunca se refinan en acción',focus:'toma la idea más grande y hazla específica y pequeña'},
+  // JÚPITER
+  {planet:'Jupiter',aspect:'conjunction',target:'Moon',avoid:'exceso emocional y reactividad amplificada',focus:'expande la compasión manteniéndote emocionalmente anclado'},
+  {planet:'Jupiter',aspect:'conjunction',target:'Mars',avoid:'sobreextensión y gasto imprudente de energía',focus:'enfoca el impulso expandido en una búsqueda significativa'},
+  {planet:'Jupiter',aspect:'conjunction',target:'Saturn',avoid:'tensión entre el impulso de crecer y el miedo estructural',focus:'construye una capa de la visión más grande hoy'},
+  {planet:'Jupiter',aspect:'conjunction',target:'Sun',avoid:'inflación del ego o autoimagen poco realista',focus:'crece desde tu centro genuino, no desde la actuación'},
+  {planet:'Jupiter',aspect:'conjunction',target:'Venus',avoid:'exceso en el placer, el gasto o el amor idealizado',focus:'recibe la abundancia con presencia y gratitud real'},
+  {planet:'Jupiter',aspect:'conjunction',target:'Mercury',avoid:'pensamiento verboso que pierde el punto esencial',focus:'deja que la visión expansiva se refine en lenguaje preciso'},
+  {planet:'Jupiter',aspect:'square',target:'Moon',avoid:'desbordamiento emocional por absorber demasiado a la vez',focus:'limita la entrada y profundiza con lo que ya está presente'},
+  {planet:'Jupiter',aspect:'square',target:'Mars',avoid:'acción imprudente impulsada por optimismo sin verificar',focus:'evalúa la capacidad honestamente antes de comprometerte a más'},
+  {planet:'Jupiter',aspect:'square',target:'Saturn',avoid:'expansión bloqueada por escasez real o imaginada',focus:'identifica un recurso genuino y úsalo plenamente'},
+  {planet:'Jupiter',aspect:'square',target:'Sun',avoid:'sobreconfianza en la habilidad o el momento',focus:'prueba la visión contra condiciones reales antes de comprometerte'},
+  {planet:'Jupiter',aspect:'square',target:'Venus',avoid:'exceso romántico o financiero',focus:'disfruta lo disponible sin alcanzar más allá de tus medios'},
+  {planet:'Jupiter',aspect:'square',target:'Mercury',avoid:'pensar demasiado en grande para dar algún paso real',focus:'reduce la visión a las próximas tres palabras accionables'},
+  {planet:'Jupiter',aspect:'trine',target:'Moon',avoid:'generosidad emocional que agota tus propias reservas',focus:'da desde la plenitud genuina y recibe con igual gracia'},
+  {planet:'Jupiter',aspect:'trine',target:'Mars',avoid:'impulso sin dirección ni objetivo significativo',focus:'monta la energía hacia algo que genuinamente importa'},
+  {planet:'Jupiter',aspect:'trine',target:'Saturn',avoid:'crecimiento cómodo que evita el desafío necesario',focus:'empuja justo más allá de tu límite actual mientras las condiciones lo apoyan'},
+  {planet:'Jupiter',aspect:'trine',target:'Sun',avoid:'confianza fácil generando complacencia',focus:'usa condiciones favorables para intentar lo que normalmente parece arriesgado'},
+  {planet:'Jupiter',aspect:'trine',target:'Venus',avoid:'disfrute pasivo que da la belleza por sentada',focus:'cultiva activamente la alegría y compártela con otros'},
+  {planet:'Jupiter',aspect:'trine',target:'Mercury',avoid:'pensamiento expansivo que nunca se escribe ni comparte',focus:'registra, expresa o enseña la intuición mientras fluye'},
+  {planet:'Jupiter',aspect:'sextile',target:'Moon',avoid:'expansión emocional quedándose solo en la imaginación',focus:'da un paso que lleve tu mundo interior hacia afuera'},
+  {planet:'Jupiter',aspect:'sextile',target:'Mars',avoid:'energía disponible yendo a actividad de baja prioridad',focus:'dirige el impulso hacia el objetivo de mayor valor hoy'},
+  {planet:'Jupiter',aspect:'sextile',target:'Saturn',avoid:'oportunidad práctica pasando sin compromiso',focus:'construye algo real desde la visión en tu mente'},
+  {planet:'Jupiter',aspect:'sextile',target:'Sun',avoid:'potencial expansivo que permanece sin realizar',focus:'comienza el proyecto, conversación o paso que has estado aplazando'},
+  {planet:'Jupiter',aspect:'sextile',target:'Venus',avoid:'aprecio que permanece sin expresar ni actuar',focus:'invierte en belleza, amor o alegría de una forma concreta'},
+  {planet:'Jupiter',aspect:'sextile',target:'Mercury',avoid:'intuición que permanece privada cuando podría multiplicarse',focus:'comparte la idea, escríbela o enséñasela a alguien'},
+  {planet:'Jupiter',aspect:'opposition',target:'Moon',avoid:'inquietud emocional buscando más sin asentarse',focus:'encuentra la abundancia ya presente en el hoy'},
+  {planet:'Jupiter',aspect:'opposition',target:'Mars',avoid:'ambición dispersa quemando recursos reales',focus:'canaliza el impulso hacia la única cosa más significativa'},
+  {planet:'Jupiter',aspect:'opposition',target:'Saturn',avoid:'parálisis entre visión expansiva y miedo limitante',focus:'da el paso más realista hacia el panorama más amplio'},
+  {planet:'Jupiter',aspect:'opposition',target:'Sun',avoid:'validación externa inflando o desinflando la autoestima',focus:'ancla la identidad en lo que sabes, no en lo que otros reflejan'},
+  {planet:'Jupiter',aspect:'opposition',target:'Venus',avoid:'amor o belleza idealizada desconectada de la realidad',focus:'aprecia la conexión genuina sobre la conexión perfecta'},
+  {planet:'Jupiter',aspect:'opposition',target:'Mercury',avoid:'gran pensamiento que nunca se convierte en acción anclada',focus:'elige la idea más importante y hazla concreta'},
+];
+
+const PLANETS_LIST = ['Moon','Mars','Saturn','Sun','Venus','Mercury','Jupiter'];
+
+let graphInitialized = false;
+let currentFilter = 'all';
+let animFrame = null;
+let nodes = [], edges = [], dragging = null;
+let camX = 0, camY = 0, camScale = 1;
+let isPanning = false, panStart = null;
+
+function openGraphModal() {
+  document.getElementById('graph-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (!graphInitialized) { initGraph(); graphInitialized = true; }
+  else startGraphLoop();
+}
+
+function closeGraphModal() {
+  document.getElementById('graph-modal').classList.remove('open');
+  document.body.style.overflow = '';
+  if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }
+}
+
+function filterAspect(aspect, btn) {
+  currentFilter = aspect;
+  document.querySelectorAll('.af-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (graphInitialized) buildEdges();
+}
+
+function initGraph() {
+  const canvas = document.getElementById('graph-canvas');
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width;
+  canvas.height = rect.height;
+  camX = rect.width / 2;
+  camY = rect.height / 2;
+
+  // Create planet nodes arranged in a circle
+  const cx = 0, cy = 0, r = 180;
+  nodes = PLANETS_LIST.map((planet, i) => {
+    const angle = (i / PLANETS_LIST.length) * Math.PI * 2 - Math.PI / 2;
+    return {
+      id: planet,
+      label: PLANET_LABELS[planet],
+      color: PLANET_COLORS[planet],
+      x: cx + Math.cos(angle) * r + (Math.random()-0.5)*40,
+      y: cy + Math.sin(angle) * r + (Math.random()-0.5)*40,
+      vx: 0, vy: 0,
+      radius: 28,
+    };
+  });
+
+  buildEdges();
+  bindCanvasEvents(canvas);
+  startGraphLoop();
+}
+
+function buildEdges() {
+  const neurons = currentFilter === 'all'
+    ? ALL_NEURONS
+    : ALL_NEURONS.filter(n => n.aspect === currentFilter);
+
+  edges = neurons.map(n => ({
+    source: n.planet,
+    target: n.target,
+    aspect: n.aspect,
+    color: ASPECT_COLORS[n.aspect],
+    avoid: n.avoid,
+    focus: n.focus,
+    label: ASPECT_LABELS[n.aspect],
+  }));
+}
+
+function startGraphLoop() {
+  if (animFrame) cancelAnimationFrame(animFrame);
+  function loop() {
+    simulate();
+    draw();
+    animFrame = requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+function simulate() {
+  if (dragging) return;
+  const k = 0.012;
+  const repulse = 9000;
+  const dampen = 0.82;
+  const centerForce = 0.004;
+
+  // Reset forces
+  nodes.forEach(n => { n.fx = 0; n.fy = 0; });
+
+  // Repulsion between nodes
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i+1; j < nodes.length; j++) {
+      const a = nodes[i], b = nodes[j];
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const dist = Math.sqrt(dx*dx+dy*dy) || 1;
+      const force = repulse / (dist*dist);
+      const nx = dx/dist, ny = dy/dist;
+      a.fx -= nx*force; a.fy -= ny*force;
+      b.fx += nx*force; b.fy += ny*force;
+    }
+  }
+
+  // Attraction along edges
+  const activeEdges = {};
+  edges.forEach(e => {
+    const key = e.source+'_'+e.target;
+    if (!activeEdges[key]) activeEdges[key] = 0;
+    activeEdges[key]++;
+  });
+
+  Object.entries(activeEdges).forEach(([key, count]) => {
+    const [sid, tid] = key.split('_');
+    const s = nodes.find(n=>n.id===sid);
+    const t = nodes.find(n=>n.id===tid);
+    if (!s||!t) return;
+    const dx = t.x-s.x, dy = t.y-s.y;
+    const dist = Math.sqrt(dx*dx+dy*dy)||1;
+    const target = 160 + count*8;
+    const force = (dist-target)*k*count;
+    const nx = dx/dist, ny = dy/dist;
+    s.fx += nx*force; s.fy += ny*force;
+    t.fx -= nx*force; t.fy -= ny*force;
+  });
+
+  // Center gravity
+  nodes.forEach(n => {
+    n.fx -= n.x * centerForce;
+    n.fy -= n.y * centerForce;
+    n.vx = (n.vx + n.fx) * dampen;
+    n.vy = (n.vy + n.fy) * dampen;
+    n.x += n.vx;
+    n.y += n.vy;
+  });
+}
+
+function draw() {
+  const canvas = document.getElementById('graph-canvas');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.save();
+  ctx.translate(camX, camY);
+  ctx.scale(camScale, camScale);
+
+  // Draw edges
+  const edgeGroups = {};
+  edges.forEach(e => {
+    const key = e.source+'_'+e.target;
+    if (!edgeGroups[key]) edgeGroups[key] = [];
+    edgeGroups[key].push(e);
+  });
+
+  Object.entries(edgeGroups).forEach(([key, group]) => {
+    const s = nodes.find(n=>n.id===group[0].source);
+    const t = nodes.find(n=>n.id===group[0].target);
+    if (!s||!t) return;
+
+    // Draw one line per aspect type in group
+    const byAspect = {};
+    group.forEach(e => { byAspect[e.aspect] = e; });
+    const aspects = Object.values(byAspect);
+    const total = aspects.length;
+
+    aspects.forEach((e, i) => {
+      const dx = t.x - s.x, dy = t.y - s.y;
+      const len = Math.sqrt(dx*dx+dy*dy)||1;
+      const nx = -dy/len, ny = dx/len;
+      const offset = (i - (total-1)/2) * 4;
+
+      ctx.beginPath();
+      ctx.moveTo(s.x + nx*offset, s.y + ny*offset);
+      ctx.lineTo(t.x + nx*offset, t.y + ny*offset);
+
+      const alpha = currentFilter === 'all' ? 0.18 : 0.5;
+      ctx.strokeStyle = e.color + Math.round(alpha*255).toString(16).padStart(2,'0');
+      ctx.lineWidth = currentFilter === 'all' ? 1 : 1.5;
+      ctx.stroke();
+    });
+  });
+
+  // Draw node glow
+  nodes.forEach(n => {
+    const grad = ctx.createRadialGradient(n.x, n.y, n.radius*0.5, n.x, n.y, n.radius*2.5);
+    grad.addColorStop(0, n.color + '30');
+    grad.addColorStop(1, n.color + '00');
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.radius*2.5, 0, Math.PI*2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+  });
+
+  // Draw nodes
+  nodes.forEach(n => {
+    // Outer ring
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.radius+2, 0, Math.PI*2);
+    ctx.strokeStyle = n.color + '60';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Fill
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.radius, 0, Math.PI*2);
+    ctx.fillStyle = n.color + '22';
+    ctx.fill();
+    ctx.strokeStyle = n.color + 'aa';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Label
+    ctx.fillStyle = '#ede8ff';
+    ctx.font = 'bold 10px "JetBrains Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(n.label, n.x, n.y);
+  });
+
+  ctx.restore();
+}
+
+function bindCanvasEvents(canvas) {
+  let hoveredNode = null;
+
+  canvas.addEventListener('mousedown', e => {
+    const pos = canvasPos(e, canvas);
+    const node = nodeAt(pos);
+    if (node) { dragging = node; canvas.style.cursor = 'grabbing'; }
+    else { isPanning = true; panStart = {x: e.clientX - camX, y: e.clientY - camY}; }
+  });
+
+  canvas.addEventListener('mousemove', e => {
+    const pos = canvasPos(e, canvas);
+    if (dragging) {
+      dragging.x = pos.x; dragging.y = pos.y;
+      dragging.vx = 0; dragging.vy = 0;
+    } else if (isPanning && panStart) {
+      camX = e.clientX - panStart.x;
+      camY = e.clientY - panStart.y;
+    } else {
+      const node = nodeAt(pos);
+      if (node !== hoveredNode) {
+        hoveredNode = node;
+        if (node) showTooltip(node, e);
+        else hideTooltip();
+      } else if (node) {
+        moveTooltip(e);
+      }
+      canvas.style.cursor = node ? 'pointer' : 'grab';
+    }
+  });
+
+  canvas.addEventListener('mouseup', () => {
+    dragging = null; isPanning = false; panStart = null;
+    canvas.style.cursor = 'grab';
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    dragging = null; isPanning = false; hideTooltip();
+  });
+
+  canvas.addEventListener('wheel', e => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    camScale = Math.max(0.3, Math.min(3, camScale * delta));
+  }, { passive: false });
+
+  // Touch support
+  let lastTouch = null;
+  canvas.addEventListener('touchstart', e => {
+    const t = e.touches[0];
+    const pos = canvasPosFromXY(t.clientX, t.clientY, canvas);
+    const node = nodeAt(pos);
+    if (node) dragging = node;
+    else lastTouch = {x: t.clientX - camX, y: t.clientY - camY};
+  });
+  canvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    const t = e.touches[0];
+    if (dragging) {
+      const pos = canvasPosFromXY(t.clientX, t.clientY, canvas);
+      dragging.x = pos.x; dragging.y = pos.y; dragging.vx = 0; dragging.vy = 0;
+    } else if (lastTouch) {
+      camX = t.clientX - lastTouch.x; camY = t.clientY - lastTouch.y;
+    }
+  }, { passive: false });
+  canvas.addEventListener('touchend', () => { dragging = null; lastTouch = null; });
+}
+
+function canvasPos(e, canvas) {
+  return canvasPosFromXY(e.clientX, e.clientY, canvas);
+}
+
+function canvasPosFromXY(cx, cy, canvas) {
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: (cx - rect.left - camX) / camScale,
+    y: (cy - rect.top - camY) / camScale,
+  };
+}
+
+function nodeAt(pos) {
+  return nodes.find(n => {
+    const dx = n.x - pos.x, dy = n.y - pos.y;
+    return Math.sqrt(dx*dx+dy*dy) <= n.radius + 4;
+  }) || null;
+}
+
+function showTooltip(node, e) {
+  const tip = document.getElementById('graph-tooltip');
+  const nodeEdges = edges.filter(ed => ed.source === node.id || ed.target === node.id);
+  const byTarget = {};
+  nodeEdges.forEach(ed => {
+    const other = ed.source === node.id ? ed.target : ed.source;
+    if (!byTarget[other]) byTarget[other] = [];
+    byTarget[other].push(ed);
+  });
+
+  const items = Object.entries(byTarget).slice(0,4).map(([tid, edList]) => {
+    const tNode = nodes.find(n=>n.id===tid);
+    return `<div class="gt-neuron">
+      <div class="gt-header" style="color:${tNode?.color||'#fff'}">
+        ${tNode ? PLANET_LABELS[tid] : tid}
+        ${edList.slice(0,2).map(ed=>`<span class="gt-chip ${ed.aspect}">${ed.label}</span>`).join('')}
+      </div>
+      <div class="gt-avoid">${edList[0].avoid}</div>
+      <div class="gt-focus">${edList[0].focus}</div>
+    </div>`;
+  }).join('');
+
+  tip.innerHTML = `
+    <div class="gt-planet" style="color:${node.color}">${node.label}</div>
+    ${items || '<div style="color:var(--text-muted);font-size:0.6rem">Sin conexiones visibles</div>'}
+  `;
+
+  moveTooltip(e);
+  tip.classList.add('visible');
+}
+
+function moveTooltip(e) {
+  const tip = document.getElementById('graph-tooltip');
+  const modal = document.getElementById('graph-modal');
+  const rect = modal.getBoundingClientRect();
+  let x = e.clientX - rect.left + 16;
+  let y = e.clientY - rect.top + 16;
+  if (x + 290 > rect.width) x = e.clientX - rect.left - 300;
+  if (y + 200 > rect.height) y = e.clientY - rect.top - 220;
+  tip.style.left = x + 'px';
+  tip.style.top = y + 'px';
+}
+
+function hideTooltip() {
+  document.getElementById('graph-tooltip').classList.remove('visible');
+}
+
+// Close modal on backdrop click
+document.getElementById('graph-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('graph-modal')) closeGraphModal();
+});
+
 </script>
 </body>
 </html>
