@@ -1,5 +1,7 @@
 const interpretTransits = require('./core/interpretTransits');
 const { ingestTranscript } = require('./training/ingestTranscript');
+const { runRawPipeline } = require('./core/rawPipeline');
+const { parseRaw } = require('./core/rawParser');
 
 function runAstroBrain(transits) {
   return interpretTransits(transits).narrative;
@@ -9,6 +11,8 @@ module.exports = {
   runAstroBrain,
   interpretTransits,
   ingestTranscript,
+  runRawPipeline,
+  parseRaw,
 };
 
 if (require.main === module) {
