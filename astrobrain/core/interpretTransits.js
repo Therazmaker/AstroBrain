@@ -150,6 +150,7 @@ function interpretTransits(transits = []) {
     neuronId: neuralNet.neuronIdFromTransit(transit),
   }));
 
+  const transitActivations = neuralNet.resolveTransitActivations(interpretedTransits);
   const activatedNeurons = neuralNet.activateNeurons(interpretedTransits);
   neuralNet.logCoactivations(activatedNeurons);
   const generatedNeurons = neuralNet.generateNewNeurons();
@@ -165,6 +166,11 @@ function interpretTransits(transits = []) {
     .flatMap((neuron) => [neuron.output?.energy, neuron.output?.focus])
     .filter(Boolean);
 
+  const compositeNarrativeSignals = neuralNet.buildCompositeNarrativeSignals({
+    primaryNeuron: transitActivations[0]?.activation?.primaryNeuron,
+    secondaryNeurons: transitActivations[0]?.activation?.secondaryNeurons || [],
+  });
+
   const baseNarrative = buildNarrative({
     interpretedTransits,
     activatedNeurons,
@@ -172,6 +178,8 @@ function interpretTransits(transits = []) {
       ...memoryPhrases,
       ...metaSignals.map((signal) => signal.then),
       ...frasesNeuronales,
+      ...compositeNarrativeSignals.energy,
+      ...compositeNarrativeSignals.avoid,
       situationSummary,
     ],
   });
@@ -187,7 +195,11 @@ function interpretTransits(transits = []) {
     ? { ...baseNarrative, focus: `${baseNarrative.focus}, ${anticipation}` }
     : baseNarrative;
 
-  const balancedNarrative = counterbalance(withAnticipation);
+  const withComposite = compositeNarrativeSignals.dominantFocus
+    ? { ...withAnticipation, focus: `${withAnticipation.focus}. Matiz dominante: ${compositeNarrativeSignals.dominantFocus}` }
+    : withAnticipation;
+
+  const balancedNarrative = counterbalance(withComposite);
 
   const dominantCluster = dominantClusterFromScores(clusterScores);
   const recentContext = getRecentContext();
@@ -236,6 +248,7 @@ function interpretTransits(transits = []) {
   return {
     sessionId,
     topTransits: interpretedTransits,
+    transitActivations,
     activatedNeurons,
     memoryPhrases,
     narrative: personalizedNarrative,
