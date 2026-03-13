@@ -2004,6 +2004,14 @@
               <span style="color:var(--text-muted);font-size:0.7rem">Los tags aparecen aquí</span>
             </div>
           </details>
+          <details class="et-debug" style="margin-top:6px">
+            <summary>▸ Ver resolved signals</summary>
+            <div class="et-tags-wrap" id="et-resolved-signals"><span style="color:var(--text-muted);font-size:0.7rem">Sin señales resueltas</span></div>
+          </details>
+          <details class="et-debug" style="margin-top:6px">
+            <summary>▸ Ver neurona principal / secundarias / descartadas</summary>
+            <pre id="et-activation-debug"></pre>
+          </details>
         </div>
 
         <!-- BOTÓN ENVIAR -->
@@ -2449,41 +2457,106 @@ function parseRaw(rawText) {
   return { rawText, emotions, situations, advice, tone };
 }
 
+function resolvePreviewSignals(transit, tags = []) {
+  const signals = [];
+  const tagSet = new Set((tags || []).map(t => String(t||'').toLowerCase()));
+  if (['square','opposition'].includes((transit.aspect||'').toLowerCase())) signals.push('tension_relacional');
+  if ((transit.planet||'').toLowerCase()==='moon') signals.push('reactividad_afectiva');
+  if (tagSet.has('moon_en_capricornio')) signals.push('contencion_emocional');
+  if (tagSet.has('venus_en_aries')) signals.push('impulso_vincular');
+  if (tagSet.has('moon_en_capricornio') && tagSet.has('venus_en_aries')) signals.push('friccion_entre_control_y_deseo');
+  if (tagSet.has('aspecto_aplicativo')) signals.push('dinamica_aplicativa');
+  return [...new Set(signals)];
+}
+
+function scoreActivationCandidate(tag, tags, signals) {
+  const tagSet = new Set(tags);
+  const signalSet = new Set(signals);
+  const exactMatchScore = tagSet.has(tag) ? 1 : 0;
+  const triggerCoverageScore = tag.includes('__') ? 0.9 : 0.65;
+  const contextCoverageScore = /_en_|grado|aspecto_aplicativo/.test(tag) ? 0.8 : 0.5;
+  const resolvedSignalScore = [...signalSet].some(s => tag.includes('moon') && s.includes('afectiva') || tag.includes('venus') && s.includes('relacional')) ? 0.8 : 0.3;
+  const clusterCoverageScore = /moon|venus|square/.test(tag) ? 0.6 : 0.3;
+  const orbBonus = tag.includes('orb') || tag.includes('orbe') ? 1 : 0;
+  const applyingBonus = tag.includes('aplicativo') ? 1 : 0;
+  const signBonus = tag.includes('_en_') ? 1 : 0;
+  const compoundBonus = tag.includes('__') || tag.split('_').length >= 4 ? 1 : 0;
+  const score = Math.max(0, Math.min(1,
+    exactMatchScore*0.30 + triggerCoverageScore*0.20 + contextCoverageScore*0.15 + resolvedSignalScore*0.15 + clusterCoverageScore*0.05 + orbBonus*0.05 + applyingBonus*0.05 + signBonus*0.05 + compoundBonus*0.05
+  ));
+
+  return {
+    id: `preview_${tag}`,
+    match: tag,
+    family: tag.includes('__') ? 'compound-interpretation' : tag.includes('_en_') ? 'planet-sign' : tag.includes('orb') || tag.includes('orbe') ? 'orb/modifier' : tag.includes('aplicativo') ? 'phase/applying-separating' : 'aspect-base',
+    score,
+    reasons: [exactMatchScore ? 'exact tag match' : 'contextual match'],
+    scoreBreakdown: { exactMatchScore, triggerCoverageScore, clusterCoverageScore, contextCoverageScore, resolvedSignalScore, orbBonus, applyingBonus, signBonus, compoundBonus },
+  };
+}
+
+function matchTransitToRelevantNeuronsPreview(transit) {
+  const tags = generatePreviewTags(transit);
+  const resolvedSignals = resolvePreviewSignals(transit, tags);
+  const scored = tags.map(tag => scoreActivationCandidate(tag, tags, resolvedSignals)).sort((a,b)=>b.score-a.score);
+  const threshold = 0.55;
+  const selected = [];
+  const byFamily = {};
+  scored.forEach(c => {
+    if (c.score < threshold || selected.length >= 8) return;
+    byFamily[c.family] = byFamily[c.family] || 0;
+    if (byFamily[c.family] >= 2) return;
+    byFamily[c.family] += 1;
+    selected.push(c);
+  });
+  const [primaryNeuron, ...secondaryNeurons] = selected;
+  const discardedNeurons = scored.filter(c => !selected.includes(c)).map(c => ({ id:c.id, match:c.match, score:c.score, reason:c.score < threshold ? 'below threshold' : 'family/total limit' }));
+  return {
+    activationMode: secondaryNeurons.length ? 'multi-neuron' : 'single-neuron-fallback',
+    primaryNeuron: primaryNeuron || scored[0] || null,
+    secondaryNeurons,
+    discardedNeurons,
+    activationSummary: { totalCandidates: scored.length, selected: selected.length || (scored[0]?1:0), threshold, familiesUsed: [...new Set(selected.map(s=>s.family))] },
+    tags,
+    resolvedSignals,
+  };
+}
+
 // Main interpret function
 function interpretTránsitos(transits) {
   const prioritized = filterTránsitos(transits, 3);
-  const interpreted = prioritized.map(t => ({ ...t, ...emotionalTranslation(t), neuronId: `${t.planet}_${t.target}_${t.aspect}`.toLowerCase() }));
+  const interpreted = prioritized.map(t => {
+    const withEmotion = { ...t, ...emotionalTranslation(t), neuronId: `${t.planet}_${t.target}_${t.aspect}`.toLowerCase() };
+    const activation = matchTransitToRelevantNeuronsPreview(withEmotion);
+    return { ...withEmotion, derivedTags: activation.tags, resolvedSignals: activation.resolvedSignals, activation };
+  });
 
   const emotions = interpreted.map(t=>t.emotion).filter(Boolean);
   const actions = interpreted.map(t=>t.action).filter(Boolean);
   const topScore = interpreted[0]?.score || 0;
   const tone = toneFromScore(topScore);
 
-  // Cluster from interpreted transits
   const clusterScores = { emotional:0, mental:0, relational:0, actional:0 };
   interpreted.forEach(t => {
-    const cluster = clusterFromId(t.neuronId);
-    clusterScores[cluster] += 0.4;
+    const primary = t.activation?.primaryNeuron;
+    const items = [primary, ...(t.activation?.secondaryNeurons || [])].filter(Boolean);
+    items.forEach(item => {
+      if (item.family === 'planet-sign' || item.family === 'relational-theme') clusterScores.relational += item.score;
+      else if (item.family === 'phase/applying-separating') clusterScores.actional += item.score;
+      else if (item.family === 'aspect-base') clusterScores.emotional += item.score;
+      else clusterScores.mental += item.score * 0.5;
+    });
   });
 
-  const avoidMap = {
-    frustration:'reactiva discussions and pressure conversations',
-    reactivity:'quick replies and defensive moments',
-    harmony:'people-pleasing at the cost of clarity',
-    heaviness:'prolonged obligations without rest',
-  };
-  const focusMap = {
-    frustration:'regulación emocional y anclaje',
-    reactivity:'pause, name what you feel, then respond',
-    harmony:'heart-led clarity and shared rituals',
-    heaviness:'one responsible thing at a time',
-  };
+  const firstActivation = interpreted[0]?.activation || {};
+  const primaryFocus = firstActivation.primaryNeuron?.match || 'pausa, regula y responde con intención';
+  const secondaryFocus = (firstActivation.secondaryNeurons || []).map(item => item.match).slice(0, 3).join(', ');
 
   const narrative = {
     energy: `${tone}: ${[...new Set(emotions)].join(', ')||'clima emocional mixto'}`,
-    avoid: interpreted[0] ? (avoidMap[interpreted[0].emotion]||'empujar conversaciones antes de sentirte estable') : 'empujar conversaciones antes de sentirte estable',
+    avoid: interpreted[0]?.action || 'evitar reacción automática en el vínculo',
     use: actions[0]||'prioridades claras y acciones simples',
-    focus: interpreted[0] ? (focusMap[interpreted[0].emotion]||'pausa, regula y responde con intención') : 'pausa, regula y responde con intención',
+    focus: secondaryFocus ? `${primaryFocus} + matices: ${secondaryFocus}` : primaryFocus,
   };
 
   const metaSignals = [];
@@ -2491,7 +2564,7 @@ function interpretTránsitos(transits) {
 
   const dominantCluster = Object.entries(clusterScores).sort((a,b)=>b[1]-a[1])[0][0];
 
-  return { topTránsitos: interpreted, narrative, clusterScores, dominantCluster, metaSignals, tone };
+  return { topTránsitos: interpreted, narrative, clusterScores, dominantCluster, metaSignals, tone, transitActivations: interpreted.map(t => t.activation) };
 }
 
 function interpretRaw(rawText) {
@@ -2727,15 +2800,29 @@ function updateEnrichedPreview() {
   const preview   = buildNaturalPreview(transit);
   naturalEl.innerHTML = preview || '<span style="color:var(--text-muted);font-size:0.85rem">Completa el formulario para ver la vista previa</span>';
 
+  const activation = matchTransitToRelevantNeuronsPreview(transit);
+
   // JSON de depuración
-  document.getElementById('et-preview-json').textContent = JSON.stringify(transit, null, 2);
+  document.getElementById('et-preview-json').textContent = JSON.stringify({ ...transit, tags: activation.tags, resolvedSignals: activation.resolvedSignals }, null, 2);
 
   // Tags generados
-  const tags    = generatePreviewTags(transit);
+  const tags    = activation.tags;
   const tagsEl  = document.getElementById('et-tags');
   tagsEl.innerHTML = tags.length
     ? tags.map(tag => `<span class="et-tag">${tag}</span>`).join('')
     : '<span style="color:var(--text-muted);font-size:0.7rem">Los tags aparecen aquí al completar el formulario</span>';
+
+  const rsEl = document.getElementById('et-resolved-signals');
+  rsEl.innerHTML = activation.resolvedSignals.length
+    ? activation.resolvedSignals.map(sig => `<span class="et-tag">${sig}</span>`).join('')
+    : '<span style="color:var(--text-muted);font-size:0.7rem">Sin señales resueltas</span>';
+
+  document.getElementById('et-activation-debug').textContent = JSON.stringify({
+    primaryNeuron: activation.primaryNeuron,
+    secondaryNeurons: activation.secondaryNeurons,
+    discardedNeurons: activation.discardedNeurons.slice(0, 8),
+    activationSummary: activation.activationSummary,
+  }, null, 2);
 }
 
 async function runEnrichedInterpretation() {
@@ -3216,11 +3303,16 @@ function updateEnginePanel(result) {
   });
 
   // Neurons
-  const neurons = topTránsitos.map(t => ({
-    id: t.neuronId || t.planet,
-    weight: t.score ? (t.score/12).toFixed(3) : '0.400',
-    auto: false
-  }));
+  const neurons = topTránsitos.flatMap(t => {
+    const a = t.activation || {};
+    const selected = [a.primaryNeuron, ...(a.secondaryNeurons || [])].filter(Boolean);
+    return selected.map(item => ({
+      id: item.id || item.match || t.neuronId || t.planet,
+      weight: (item.score || 0.4).toFixed(3),
+      auto: false,
+      family: item.family || '—'
+    }));
+  });
 
   const tbody = document.getElementById('neurons-body');
   if (!neurons.length) {
@@ -3233,7 +3325,7 @@ function updateEnginePanel(result) {
           <div>${n.weight}</div>
           <div><span class="weight-bar" style="width:${Math.round(parseFloat(n.weight)*80)}px"></span></div>
         </td>
-        <td style="color:var(--text-muted)">${n.auto?'sí':'no'}</td>
+        <td style="color:var(--text-muted)">${n.family || (n.auto?'sí':'no')}</td>
       </tr>
     `).join('');
   }

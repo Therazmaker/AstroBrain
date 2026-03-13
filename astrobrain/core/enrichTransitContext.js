@@ -7,6 +7,7 @@ const {
   clasificarOrbe,
 } = require('./astroTagHelpers');
 const { buildTransitTags } = require('./buildTransitTags');
+const { resolveTransitSignals } = require('./resolveTransitSignals');
 
 function findValue(options = []) {
   return options.find((option) => option !== undefined && option !== null && option !== '');
@@ -113,6 +114,7 @@ function enrichTransitContext(transit = {}) {
   };
 
   const derivedTags = buildTransitTags(enrichedTransit);
+  const resolvedSignals = resolveTransitSignals(enrichedTransit, derivedTags);
   console.debug('[AstroBrain] Tránsito enriquecido:', {
     planeta: enrichedTransit.planet,
     aspecto: enrichedTransit.aspect,
@@ -124,6 +126,7 @@ function enrichTransitContext(transit = {}) {
   return {
     ...enrichedTransit,
     derivedTags,
+    resolvedSignals,
   };
 }
 

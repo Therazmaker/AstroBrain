@@ -1,6 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const { buildTransitTags } = require('./buildTransitTags');
+const {
+  matchTransitToRelevantNeurons,
+  loadNeuronCatalog,
+  buildCompositeNarrativeSignals,
+} = require('./multiNeuronMatcher');
 
 const MEMORY_DIR = path.join(__dirname, '..', 'memory');
 const CONTEXT_NEURONS_DIR = path.join(MEMORY_DIR, 'neurons');
@@ -182,55 +187,58 @@ function collectTransitTags(transit = {}) {
   return [...new Set([...directTags, ...generated].filter(Boolean))];
 }
 
-function activateNeurons(transits = []) {
-  const weights = loadWeights();
-  const baseNeurons = loadBaseNeurons().map((neuron) => normalizeNeuron(neuron, weights));
-  const contextLibrary = loadContextualNeurons()
-    .map((neuron) => normalizeContextNeuron(neuron))
-    .map((neuron) => normalizeNeuron(neuron, weights));
+function activateNeurons(transits = [], options = {}) {
+  const catalog = loadNeuronCatalog();
+  const selectedNeurons = [];
 
+  transits.forEach((transit) => {
+    const activation = matchTransitToRelevantNeurons(transit, catalog, options);
+    const selected = [activation.primaryNeuron, ...(activation.secondaryNeurons || [])]
+      .filter(Boolean)
+      .map((item) => ({
+        ...item.neuron,
+        key: transitKey(transit),
+        score: item.score,
+        family: item.family,
+        reasons: item.reasons,
+        scoreBreakdown: item.scoreBreakdown,
+      }));
+
+    selectedNeurons.push(...selected);
+  });
+
+  const uniqueById = new Map();
+  selectedNeurons.forEach((neuron) => {
+    if (!neuron?.id) return;
+    const current = uniqueById.get(neuron.id);
+    if (!current || Number(neuron.score || 0) > Number(current.score || 0)) {
+      uniqueById.set(neuron.id, neuron);
+    }
+  });
+
+  const contextualActive = [...uniqueById.values()];
+  const activeIds = contextualActive.map((neuron) => neuron.id);
+
+  const weights = loadWeights();
   const metaStore = loadMetaStore();
   const patternNeurons = (metaStore.patterns || [])
     .map((pattern) => neuronFromPattern(pattern))
     .map((neuron) => normalizeNeuron(neuron, weights));
 
-  const activeBase = [];
-  const activeContext = [];
-
-  transits.forEach((transit) => {
-    baseNeurons.forEach((neuron) => {
-      if (baseNeuronMatch(transit, neuron)) {
-        activeBase.push({ ...neuron, key: transitKey(transit) });
-      }
-    });
-
-    const transitTags = collectTransitTags(transit);
-    contextLibrary.forEach((neuron) => {
-      if (contextualNeuronMatch(neuron, transitTags)) {
-        activeContext.push({
-          ...neuron,
-          key: transitKey(transit),
-          activadaPorTags: neuron.triggers.filter((tag) => transitTags.includes(tag)),
-        });
-      }
-    });
-  });
-
-  const uniqueById = new Map();
-  [...activeBase, ...activeContext].forEach((neuron) => {
-    if (!neuron?.id || uniqueById.has(neuron.id)) return;
-    uniqueById.set(neuron.id, neuron);
-  });
-
-  const contextualActive = [...uniqueById.values()];
-  const activeIds = contextualActive.map((neuron) => neuron.id);
   const activePatterns = patternNeurons.filter((neuron) => patternNeuronMatch(activeIds, neuron));
 
-  console.debug('[AstroBrain] Neuronas contextuales activadas:', activeContext.map((n) => n.id));
+  console.debug('[AstroBrain] Multi-neuron activations:', contextualActive.map((n) => `${n.id}:${(n.score || 0).toFixed(2)}`));
 
   return [...contextualActive, ...activePatterns];
 }
 
+function resolveTransitActivations(transits = [], options = {}) {
+  const catalog = loadNeuronCatalog();
+  return transits.map((transit) => ({
+    transit,
+    activation: matchTransitToRelevantNeurons(transit, catalog, options),
+  }));
+}
 function logCoactivations(activeNeurons = []) {
   const ids = [...new Set(activeNeurons.map((neuron) => neuron.id).filter(Boolean))];
   if (ids.length < 2) return [];
@@ -387,4 +395,6 @@ module.exports = {
   assessNarrativeRelevance,
   neuronIdFromTransit,
   pruneWeakNeurons,
+  resolveTransitActivations,
+  buildCompositeNarrativeSignals,
 };
