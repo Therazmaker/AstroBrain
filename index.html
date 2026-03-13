@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AstroBrain — Motor de Tránsitos Neurales</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Ctext y=%2250%22 font-size=%2250%22%3E%E2%9C%A8%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=JetBrains+Mono:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
@@ -2400,7 +2401,6 @@ function openDB() {
       if (!d.objectStoreNames.contains('trainingNeurons')) {
         d.createObjectStore('trainingNeurons', { keyPath: 'id' });
       }
-<<<<<<< codex/evolve-astrobrain-for-human-training
       if (!d.objectStoreNames.contains('contentMemory')) {
         d.createObjectStore('contentMemory', { keyPath: 'id' });
       }
@@ -2416,13 +2416,12 @@ function openDB() {
       if (!d.objectStoreNames.contains('learningHistory')) {
         const l = d.createObjectStore('learningHistory', { keyPath: 'id', autoIncrement: true });
         l.createIndex('timestamp', 'timestamp');
-=======
+      }
       if (!d.objectStoreNames.contains('trainingNarrativePatterns')) {
         d.createObjectStore('trainingNarrativePatterns', { keyPath: 'id' });
       }
       if (!d.objectStoreNames.contains('trainingVoiceProfiles')) {
         d.createObjectStore('trainingVoiceProfiles', { keyPath: 'id' });
->>>>>>> main
       }
     };
     req.onsuccess = e => { db = e.target.result; resolve(db); };
@@ -3629,11 +3628,8 @@ function irATrainingRoom() {
 
 const trainingRoomState = {
   analysis: null,
-<<<<<<< codex/evolve-astrobrain-for-human-training
   learningResult: null,
-=======
   learningPack: null,
->>>>>>> main
   drafts: [],
   detectedNarrativePatterns: [],
   learnedVoiceProfile: null,
@@ -3766,7 +3762,6 @@ function analizarRawTraining(texto) {
   };
 }
 
-<<<<<<< codex/evolve-astrobrain-for-human-training
 
 const LEARNING_PROFILE_KEYS = ['proximity','softness','emotionality','technicality','warmth','directness','symbolism','collectiveness'];
 const QUALITY_KEYS = ['clarity','naturalness','warmth','usefulness','coherence','emotionalResonance'];
@@ -4032,10 +4027,6 @@ function renderLearningLabResult(result, memorySummary = null) {
 }
 
 function construirDraftsDesdeRaw(analysis, rawText) {
-=======
-function extractContentNeuronsFromRaw(text) {
-  const analysis = analizarRawTraining(text);
->>>>>>> main
   const baseCategorias = analysis.tipoContenido.length ? analysis.tipoContenido : ['tono narrativo'];
   return baseCategorias.slice(0,4).map((categoria, idx) => {
     const baseId = `training_${Date.now()}_${idx + 1}`;
@@ -4071,7 +4062,7 @@ function extractContentNeuronsFromRaw(text) {
 function buildTrainingLearningPack(text) {
   const analysis = analizarRawTraining(text);
   return {
-    proposedNeurons: extractContentNeuronsFromRaw(text),
+    proposedNeurons: construirDraftsDesdeRaw(analysis, text),
     detectedNarrativePatterns: detectNarrativePatterns(text),
     learnedVoiceProfile: buildVoiceProfileFromRaw(text),
     analysis,
