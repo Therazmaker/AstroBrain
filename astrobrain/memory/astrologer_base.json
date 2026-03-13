@@ -346,5 +346,103 @@
       "cualidad": "apertura sutil hacia lo posible",
       "tension": "baja"
     }
+  },
+  "eventos": {
+    "luna_nueva": {
+      "contexto": [
+        "Hoy el cielo marca un comienzo colectivo.",
+        "Este es un momento de umbral: algo termina y algo nuevo espera ser nombrado.",
+        "El cielo señala un punto de reinicio que trasciende lo individual.",
+        "Hay una pausa cósmica hoy. El ciclo anterior cierra; el siguiente aún no ha tomado forma."
+      ],
+      "explicacion": [
+        "La Luna y el Sol se fusionan en conjunción, alineando el mundo emocional con el impulso de identidad.",
+        "Luna nueva: los dos grandes luminares se encuentran en el mismo punto del cielo, creando un momento de unión entre lo que se siente y lo que se quiere ser.",
+        "Cuando la Luna abraza al Sol, el cielo nocturno queda en silencio. Es el momento más oscuro del ciclo, y también el más fértil.",
+        "La conjunción Luna-Sol es el cero del ciclo lunar: un instante en que la emoción y el propósito hablan con la misma voz."
+      ],
+      "significado": [
+        "Este es el momento para plantar intenciones, no para cosechar resultados.",
+        "La energía de luna nueva favorece los inicios silenciosos, los compromisos internos y las decisiones que no necesitan ser anunciadas todavía.",
+        "Lo que se siembra hoy en consciencia tiene más probabilidad de enraizar que lo que se planta en cualquier otro momento del ciclo.",
+        "La luna nueva invita a preguntarse: ¿qué quiero construir en este nuevo ciclo? No como promesa, sino como dirección."
+      ],
+      "integracion": [
+        "La integración pasa por hacer menos y sentir más. Este no es un día para el ruido externo.",
+        "Puedes trabajar con esta energía tomando un momento de quietud para nombrar lo que verdaderamente quieres que tome forma.",
+        "Lo que ayuda ahora es reducir la dispersión y dar un solo paso en la dirección que más importa.",
+        "La oscuridad de la luna nueva no es ausencia, es posibilidad aún no manifestada. Trátala con cuidado."
+      ],
+      "accion": [
+        "Escribe una intención concreta para este ciclo. No una lista: una sola frase que capture lo esencial.",
+        "Elige una acción pequeña y simbólica que marque el inicio de algo nuevo para ti.",
+        "Dedica unos minutos hoy a la quietud intencionada. El primer acto del nuevo ciclo puede ser simplemente escuchar.",
+        "Nombra en voz alta o por escrito qué quieres que germine en los próximos 28 días."
+      ]
+    },
+    "luna_llena": {
+      "contexto": [
+        "El cielo alcanza hoy su punto de mayor intensidad en el ciclo lunar.",
+        "La luna llena ilumina lo que ha estado creciendo en silencio.",
+        "Hay una culminación en el aire. Lo que se inició hace dos semanas llega ahora a su punto de mayor visibilidad.",
+        "Este es un momento de máxima luz: lo que estaba oculto tiende a salir a la superficie."
+      ],
+      "explicacion": [
+        "La Luna y el Sol se enfrentan en oposición, creando una tensión entre el mundo emocional y el impulso de identidad.",
+        "En la luna llena, el Sol ilumina completamente el disco lunar. La emoción y el propósito no se fusionan: se miran de frente y negocian.",
+        "La oposición Luna-Sol amplifica lo que se siente. Las necesidades emocionales y los objetivos personales pueden entrar en tensión antes de encontrar equilibrio.",
+        "Cuando la Luna está llena, la energía emocional alcanza su pico. Lo que se ha ido acumulando tiende a desbordarse o a resolverse."
+      ],
+      "significado": [
+        "Este es el momento de la cosecha: los resultados de lo que se inició en luna nueva ahora son visibles.",
+        "La luna llena pide reconocer qué ha crecido y qué ya no necesita seguir siendo cargado.",
+        "Es un momento de completación y de suelta. Lo que ya no sirve al ciclo siguiente puede ser liberado con consciencia.",
+        "La intensidad emocional de la luna llena no es un error. Es información sobre lo que más importa en este momento."
+      ],
+      "integracion": [
+        "La integración pasa por reconocer lo que se ha logrado y lo que se está listo para soltar.",
+        "Puedes trabajar con esta energía honrando lo que ha crecido, aunque no haya tomado la forma que esperabas.",
+        "Lo que ayuda ahora es no amplificar las reacciones emocionales sino observarlas. La luna llena exagera; la perspectiva equilibra.",
+        "La tensión que puedas sentir hoy entre lo que necesitas y lo que el mundo parece pedir es parte natural de este momento."
+      ],
+      "accion": [
+        "Identifica una cosa concreta que estés listo para soltar o completar en este ciclo.",
+        "Reconoce en voz alta o por escrito algo que ha crecido o se ha logrado desde la luna nueva.",
+        "Si hay una conversación pendiente, la luna llena puede ser el momento de tenerla con honestidad y cuidado.",
+        "Escribe qué quieres dejar ir antes del próximo ciclo. Nombrarlo es ya la mitad del proceso."
+      ]
+    },
+    "stellium": {
+      "contexto": [
+        "El cielo concentra hoy una energía inusual: varios planetas habitan el mismo signo.",
+        "Hay una acumulación planetaria que raramente se da. El foco colectivo está muy definido en este momento.",
+        "Cuando varios planetas convergen en el mismo signo, el cielo habla con una sola voz amplificada.",
+        "El patrón de hoy es excepcional: múltiples fuerzas cósmicas apuntan en la misma dirección."
+      ],
+      "explicacion": [
+        "Un stellium ocurre cuando tres o más planetas se agrupan en el mismo signo, amplificando y concentrando esa energía de forma inusual.",
+        "La acumulación planetaria que se da hoy convierte los temas de ese signo en el punto focal de la jornada. No hay dispersión posible: todo converge ahí.",
+        "Con múltiples planetas en el mismo signo, la energía de ese arquetipo se intensifica hasta hacerse imposible de ignorar.",
+        "El stellium es como una lupa sobre un área específica de la experiencia. La luz se concentra, se calienta, y puede tanto iluminar como quemar si no se maneja con atención."
+      ],
+      "significado": [
+        "Lo que el signo en cuestión representa se convierte hoy en el tema dominante, tanto a nivel personal como colectivo.",
+        "Esta concentración de energía no es neutra: demanda atención consciente. Lo que se ignore en este momento tiende a insistir.",
+        "Un stellium es una oportunidad de avance significativo en los temas del signo afectado, pero también puede traducirse en saturación si no se canaliza.",
+        "Cuando el cielo concentra tanto en un solo punto, la vida tiende a organizar situaciones que reflejan exactamente esa energía."
+      ],
+      "integracion": [
+        "La integración pasa por no dispersarse y reconocer el tema central que el stellium activa.",
+        "Puedes trabajar con esta energía eligiendo un área de enfoque que se alinee con la concentración planetaria en lugar de resistirla.",
+        "Lo que ayuda es canalizar la intensidad en una sola dirección con intención. La dispersión fragmenta; el foco construye.",
+        "El stellium requiere presencia. No es un día para el piloto automático: la energía es demasiado concentrada para pasarla por alto."
+      ],
+      "accion": [
+        "Identifica el área de tu vida que corresponde al signo afectado y dale atención deliberada hoy.",
+        "Elige una acción concreta y significativa que honre la concentración de energía del día.",
+        "Evita la dispersión: haz menos cosas pero hazlas con mayor presencia e intención.",
+        "Observa qué situaciones o emociones se repiten hoy: el stellium suele hacer visibles los patrones más activos del momento."
+      ]
+    }
   }
 }

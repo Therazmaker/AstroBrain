@@ -1,1 +1,5 @@
-{}
+{
+  "mars_moon_square": 0.45,
+  "saturn_sun_conjunction": 0.45,
+  "venus_sun_trine": 0.45
+}
