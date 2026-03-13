@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AstroBrain Neural Dashboard</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="dashboard">
+      <header>
+        <h1>AstroBrain — Neural Dashboard</h1>
+        <p id="status">Loading neural activity…</p>
+      </header>
+
+      <section>
+        <h2>Active Neurons</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Neuron ID</th>
+              <th>Weight</th>
+              <th>Cluster</th>
+              <th>Auto-Generated</th>
+            </tr>
+          </thead>
+          <tbody id="neurons-body"></tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Co-activation Map</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Neuron A</th>
+              <th>Neuron B</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+          <tbody id="coactivation-body"></tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Clusters</h2>
+        <div id="cluster-bars" class="cluster-bars"></div>
+      </section>
+
+      <section>
+        <h2>Growth Log</h2>
+        <ul id="growth-log" class="timeline"></ul>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

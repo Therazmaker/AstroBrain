@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const filterTransits = require('./filterTransits');
-const { buildNarrative } = require('./narrativeEngine');
+const { buildNarrative, toneFromScore } = require('./narrativeEngine');
+const { refineNarrative } = require('./cerebellum');
 const neuralNet = require('./neuralNet');
 
 const BASE_MEANINGS = {
@@ -82,7 +83,7 @@ function interpretTransits(transits = []) {
   const clusterScores = neuralNet.clusterNeurons(activatedNeurons);
   const metaSignals = neuralNet.generateMetaSignals(activatedNeurons);
   const memoryPhrases = gatherMemoryPhrases(interpretedTransits, hippocampus);
-  const narrative = buildNarrative({
+  const baseNarrative = buildNarrative({
     interpretedTransits,
     activatedNeurons,
     memoryPhrases: [
@@ -90,6 +91,9 @@ function interpretTransits(transits = []) {
       ...metaSignals.map((signal) => signal.then),
     ],
   });
+
+  const tone = toneFromScore(interpretedTransits[0]?.score || 0);
+  const narrative = refineNarrative(baseNarrative, tone);
 
   const improvedNarrative = neuralNet.assessNarrativeRelevance({ clusterScores, metaSignals });
   const learnedWeights = neuralNet.updateWeights(activatedNeurons, { improvedNarrative });
