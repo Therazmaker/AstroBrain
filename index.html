@@ -325,6 +325,166 @@
   .btn-run:activa { transform: translateY(0); }
   .btn-run span { position: relative; z-index: 1; }
 
+  /* ─── TRÁNSITO ENRIQUECIDO ────────────────────────── */
+  .et-sub-toggle {
+    display: flex;
+    gap: 4px;
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 3px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+    width: fit-content;
+  }
+  .et-toggle-btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.63rem;
+    letter-spacing: 0.1em;
+    transition: all 0.2s;
+  }
+  .et-toggle-btn.active {
+    background: var(--card-hi);
+    color: var(--text-primary);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.3);
+  }
+  .et-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+  }
+  .et-block-title {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .et-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .et-row:last-child { margin-bottom: 0; }
+  .et-field { display: flex; flex-direction: column; gap: 4px; }
+  .et-label {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .et-optional {
+    font-size: 0.56rem;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.05);
+    border-radius: 3px;
+    padding: 1px 4px;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .et-hint { font-size: 0.56rem; color: var(--violet-dim); text-transform: none; letter-spacing: 0; }
+  .et-field select,
+  .et-field input[type="number"] {
+    background: var(--deep);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 10px;
+    color: var(--text-primary);
+    font-size: 0.76rem;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+    font-family: var(--font-body);
+  }
+  .et-field select:focus,
+  .et-field input[type="number"]:focus { border-color: var(--violet-dim); }
+  .et-field select option { background: var(--deep); }
+  .et-advanced { display: none; }
+  .et-advanced.visible { display: block; }
+  .et-preview {
+    background: var(--surface);
+    border: 1px solid var(--border-hi);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+  }
+  .et-preview-label {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .et-preview-natural {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    min-height: 36px;
+  }
+  .et-pn-planet { color: var(--gold); font-weight: 600; }
+  .et-pn-aspect { color: var(--rose); }
+  .et-pn-target { color: var(--violet); font-weight: 600; }
+  .et-debug {
+    margin-top: 8px;
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+  }
+  .et-debug summary {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    cursor: pointer;
+    user-select: none;
+    text-transform: uppercase;
+    list-style: none;
+  }
+  .et-debug summary:hover { color: var(--text-secondary); }
+  .et-debug summary::-webkit-details-marker { display: none; }
+  .et-debug pre {
+    background: var(--deep);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: var(--font-mono);
+    font-size: 0.63rem;
+    color: var(--teal);
+    overflow-x: auto;
+    white-space: pre-wrap;
+    margin-top: 6px;
+  }
+  .et-tags-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 6px;
+  }
+  .et-tag {
+    background: rgba(155,114,245,0.1);
+    border: 1px solid rgba(155,114,245,0.25);
+    border-radius: 100px;
+    padding: 2px 9px;
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    color: var(--violet-dim);
+    letter-spacing: 0.05em;
+  }
+
   /* ─── RAW TEXT INPUT ────────────────────────────── */
   .raw-panel {
     background: var(--card);
@@ -1529,6 +1689,7 @@
 
       <div class="mode-tabs">
         <button class="mode-tab active" onclick="setMode('transits')">Tránsitos</button>
+        <button class="mode-tab" onclick="setMode('enriquecido')">Tránsito Enriquecido</button>
         <button class="mode-tab" onclick="setMode('raw')">Texto Libre</button>
       </div>
 
@@ -1553,6 +1714,215 @@
         <textarea id="raw-text" placeholder="Describe un sentimiento, una situación, un día... AstroBrain extraerá patrones emocionales y generará una narrativa desde tus palabras.&#10;&#10;Ej.: 'Me he sentido abrumado y ansioso. Hay demasiado en el trabajo y mis relaciones se sienten tensas…'" rows="6"></textarea>
         <button class="btn-run-raw" onclick="runRawInterpretation()">
           ▶ CORRER PIPELINE LIBRE
+        </button>
+      </div>
+
+      <!-- TRÁNSITO ENRIQUECIDO MODE -->
+      <div class="mode-panel" id="mode-enriquecido">
+
+        <!-- Toggle Modo Simple / Avanzado -->
+        <div class="et-sub-toggle">
+          <button class="et-toggle-btn active" id="btn-et-simple" onclick="setEtMode('simple')">Modo Simple</button>
+          <button class="et-toggle-btn" id="btn-et-avanzado" onclick="setEtMode('avanzado')">Modo Avanzado</button>
+        </div>
+
+        <!-- BLOQUE A — CUERPO PRINCIPAL -->
+        <div class="et-block">
+          <div class="et-block-title">A — Cuerpo Principal</div>
+          <div class="et-row">
+            <div class="et-field">
+              <label class="et-label">Planeta / Cuerpo</label>
+              <select id="et-planet" onchange="updateEnrichedPreview()">
+                <option value="Luna">Luna</option>
+                <option value="Sol">Sol</option>
+                <option value="Mercurio">Mercurio</option>
+                <option value="Venus">Venus</option>
+                <option value="Marte">Marte</option>
+                <option value="Júpiter">Júpiter</option>
+                <option value="Saturno">Saturno</option>
+                <option value="Urano">Urano</option>
+                <option value="Neptuno">Neptuno</option>
+                <option value="Plutón">Plutón</option>
+                <option value="Lilith">Lilith</option>
+                <option value="Quirón">Quirón</option>
+              </select>
+            </div>
+            <div class="et-field et-advanced">
+              <label class="et-label">Tipo de cuerpo</label>
+              <select id="et-planet-type" onchange="updateEnrichedPreview()">
+                <option value="">Selecciona un tipo</option>
+                <option value="planeta">Planeta</option>
+                <option value="punto_matematico">Punto matemático</option>
+                <option value="asteroide">Asteroide</option>
+              </select>
+            </div>
+            <div class="et-field et-advanced">
+              <label class="et-label">Signo</label>
+              <select id="et-planet-sign" onchange="updateEnrichedPreview()">
+                <option value="">Selecciona un signo</option>
+                <option value="Aries">Aries</option>
+                <option value="Tauro">Tauro</option>
+                <option value="Géminis">Géminis</option>
+                <option value="Cáncer">Cáncer</option>
+                <option value="Leo">Leo</option>
+                <option value="Virgo">Virgo</option>
+                <option value="Libra">Libra</option>
+                <option value="Escorpio">Escorpio</option>
+                <option value="Sagitario">Sagitario</option>
+                <option value="Capricornio">Capricornio</option>
+                <option value="Acuario">Acuario</option>
+                <option value="Piscis">Piscis</option>
+              </select>
+            </div>
+            <div class="et-field et-advanced">
+              <label class="et-label">Grado <span class="et-hint">Ej: 21.8</span></label>
+              <input type="number" id="et-planet-degree" min="0" max="29.99" step="0.01" placeholder="0 – 29.99" onchange="updateEnrichedPreview()">
+            </div>
+            <div class="et-field et-advanced">
+              <label class="et-label">Casa <span class="et-optional">Opcional</span></label>
+              <select id="et-planet-house" onchange="updateEnrichedPreview()">
+                <option value="">Puedes dejar vacío</option>
+                <option value="1">Casa 1</option>
+                <option value="2">Casa 2</option>
+                <option value="3">Casa 3</option>
+                <option value="4">Casa 4</option>
+                <option value="5">Casa 5</option>
+                <option value="6">Casa 6</option>
+                <option value="7">Casa 7</option>
+                <option value="8">Casa 8</option>
+                <option value="9">Casa 9</option>
+                <option value="10">Casa 10</option>
+                <option value="11">Casa 11</option>
+                <option value="12">Casa 12</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOQUE B — ASPECTO -->
+        <div class="et-block">
+          <div class="et-block-title">B — Aspecto</div>
+          <div class="et-row">
+            <div class="et-field">
+              <label class="et-label">Tipo de aspecto</label>
+              <select id="et-aspect" onchange="updateEnrichedPreview()">
+                <option value="cuadratura">Cuadratura</option>
+                <option value="conjunción">Conjunción</option>
+                <option value="trígono">Trígono</option>
+                <option value="sextil">Sextil</option>
+                <option value="semisextil">Semisextil</option>
+                <option value="oposición">Oposición</option>
+              </select>
+            </div>
+            <div class="et-field">
+              <label class="et-label">Orbe <span class="et-hint">Ej: 2.9</span></label>
+              <input type="number" id="et-orb" value="1.5" min="0" max="12" step="0.1" placeholder="0.0" oninput="updateEnrichedPreview()">
+            </div>
+            <div class="et-field et-advanced">
+              <label class="et-label">Estado del aspecto</label>
+              <select id="et-applying" onchange="updateEnrichedPreview()">
+                <option value="">Desconocido</option>
+                <option value="aplicativo">Aplicativo</option>
+                <option value="separativo">Separativo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOQUE C — DESTINO (TARGET) -->
+        <div class="et-block">
+          <div class="et-block-title">C — Destino</div>
+          <div class="et-row">
+            <div class="et-field">
+              <label class="et-label">Planeta destino</label>
+              <select id="et-target" onchange="updateEnrichedPreview()">
+                <option value="Venus">Venus</option>
+                <option value="Luna">Luna</option>
+                <option value="Sol">Sol</option>
+                <option value="Mercurio">Mercurio</option>
+                <option value="Marte">Marte</option>
+                <option value="Júpiter">Júpiter</option>
+                <option value="Saturno">Saturno</option>
+                <option value="Urano">Urano</option>
+                <option value="Neptuno">Neptuno</option>
+                <option value="Plutón">Plutón</option>
+                <option value="Lilith">Lilith</option>
+                <option value="Quirón">Quirón</option>
+              </select>
+            </div>
+            <div class="et-field et-advanced">
+              <label class="et-label">Tipo de destino</label>
+              <select id="et-target-type" onchange="updateEnrichedPreview()">
+                <option value="">Selecciona un tipo</option>
+                <option value="planeta">Planeta</option>
+                <option value="punto_matematico">Punto matemático</option>
+                <option value="asteroide">Asteroide</option>
+              </select>
+            </div>
+            <div class="et-field et-advanced">
+              <label class="et-label">Signo del destino</label>
+              <select id="et-target-sign" onchange="updateEnrichedPreview()">
+                <option value="">Selecciona un signo</option>
+                <option value="Aries">Aries</option>
+                <option value="Tauro">Tauro</option>
+                <option value="Géminis">Géminis</option>
+                <option value="Cáncer">Cáncer</option>
+                <option value="Leo">Leo</option>
+                <option value="Virgo">Virgo</option>
+                <option value="Libra">Libra</option>
+                <option value="Escorpio">Escorpio</option>
+                <option value="Sagitario">Sagitario</option>
+                <option value="Capricornio">Capricornio</option>
+                <option value="Acuario">Acuario</option>
+                <option value="Piscis">Piscis</option>
+              </select>
+            </div>
+            <div class="et-field et-advanced">
+              <label class="et-label">Grado destino <span class="et-hint">Ej: 5.2</span></label>
+              <input type="number" id="et-target-degree" min="0" max="29.99" step="0.01" placeholder="0 – 29.99" oninput="updateEnrichedPreview()">
+            </div>
+            <div class="et-field et-advanced">
+              <label class="et-label">Casa destino <span class="et-optional">Opcional</span></label>
+              <select id="et-target-house" onchange="updateEnrichedPreview()">
+                <option value="">Puedes dejar vacío</option>
+                <option value="1">Casa 1</option>
+                <option value="2">Casa 2</option>
+                <option value="3">Casa 3</option>
+                <option value="4">Casa 4</option>
+                <option value="5">Casa 5</option>
+                <option value="6">Casa 6</option>
+                <option value="7">Casa 7</option>
+                <option value="8">Casa 8</option>
+                <option value="9">Casa 9</option>
+                <option value="10">Casa 10</option>
+                <option value="11">Casa 11</option>
+                <option value="12">Casa 12</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- VISTA PREVIA -->
+        <div class="et-preview">
+          <div class="et-preview-label">✦ Vista Previa del Tránsito</div>
+          <div class="et-preview-natural" id="et-preview-natural">
+            <span style="color:var(--text-muted);font-size:0.85rem">Completa el formulario para ver la vista previa</span>
+          </div>
+          <details class="et-debug">
+            <summary>▸ Ver JSON generado</summary>
+            <pre id="et-preview-json"></pre>
+          </details>
+          <details class="et-debug" style="margin-top:6px">
+            <summary>▸ Ver tags generados</summary>
+            <div class="et-tags-wrap" id="et-tags">
+              <span style="color:var(--text-muted);font-size:0.7rem">Los tags aparecen aquí</span>
+            </div>
+          </details>
+        </div>
+
+        <!-- BOTÓN ENVIAR -->
+        <button class="btn-run" onclick="runEnrichedInterpretation()">
+          <span>✦ Interpretar Tránsito</span>
         </button>
       </div>
     </div>
@@ -2053,11 +2423,198 @@ addTransitRow('Saturn','conjunction','Sun',1.7);
 // ─────────────────────────────────────────────────────────────
 function setMode(mode) {
   currentMode = mode;
+  const tabOrder = ['transits', 'enriquecido', 'raw'];
   document.querySelectorAll('.mode-tab').forEach((tab, i) => {
-    tab.classList.toggle('active', (i===0&&mode==='transits')||(i===1&&mode==='raw'));
+    tab.classList.toggle('active', tabOrder[i] === mode);
   });
-  document.getElementById('mode-transits').classList.toggle('active', mode==='transits');
-  document.getElementById('mode-raw').classList.toggle('active', mode==='raw');
+  document.getElementById('mode-transits').classList.toggle('active', mode === 'transits');
+  document.getElementById('mode-raw').classList.toggle('active', mode === 'raw');
+  document.getElementById('mode-enriquecido').classList.toggle('active', mode === 'enriquecido');
+  if (mode === 'enriquecido') updateEnrichedPreview();
+}
+
+// ─────────────────────────────────────────────────────────────
+// TRÁNSITO ENRIQUECIDO
+// ─────────────────────────────────────────────────────────────
+
+// Mapeos internos (español → inglés para el motor)
+const CUERPOS_MAP = {
+  'Sol': 'Sun', 'Luna': 'Moon', 'Mercurio': 'Mercury', 'Venus': 'Venus',
+  'Marte': 'Mars', 'Júpiter': 'Jupiter', 'Saturno': 'Saturn',
+  'Urano': 'Uranus', 'Neptuno': 'Neptune', 'Plutón': 'Pluto',
+  'Lilith': 'Lilith', 'Quirón': 'Chiron',
+};
+
+const ASPECTOS_MAP = {
+  'conjunción': 'conjunction', 'trígono': 'trine', 'sextil': 'sextile',
+  'semisextil': 'semisextile', 'cuadratura': 'square', 'oposición': 'opposition',
+};
+
+// Traducción inversa para vista previa (inglés → español)
+const CUERPOS_ES = Object.fromEntries(Object.entries(CUERPOS_MAP).map(([es, en]) => [en, es]));
+const ASPECTOS_ES = Object.fromEntries(Object.entries(ASPECTOS_MAP).map(([es, en]) => [en, es]));
+
+let etCurrentMode = 'simple';
+
+function setEtMode(mode) {
+  etCurrentMode = mode;
+  document.getElementById('btn-et-simple').classList.toggle('active', mode === 'simple');
+  document.getElementById('btn-et-avanzado').classList.toggle('active', mode === 'avanzado');
+  document.querySelectorAll('.et-advanced').forEach(el => {
+    el.classList.toggle('visible', mode === 'avanzado');
+  });
+  updateEnrichedPreview();
+}
+
+function buildEnrichedTransitObject() {
+  const planetEs = document.getElementById('et-planet').value;
+  const targetEs = document.getElementById('et-target').value;
+  const aspectEs = document.getElementById('et-aspect').value;
+  const orbVal   = document.getElementById('et-orb').value;
+
+  const planet = CUERPOS_MAP[planetEs] || planetEs;
+  const target = CUERPOS_MAP[targetEs] || targetEs;
+  const aspect = ASPECTOS_MAP[aspectEs] || aspectEs;
+  const parsedOrb = parseFloat(orbVal);
+  const orb       = Number.isFinite(parsedOrb) ? Math.max(0, parsedOrb) : 0;
+
+  const transit = { planet, aspect, target, orb };
+
+  if (etCurrentMode === 'avanzado') {
+    const ctx = {};
+
+    const planetType   = document.getElementById('et-planet-type').value;
+    const planetSign   = document.getElementById('et-planet-sign').value;
+    const planetDegRaw = document.getElementById('et-planet-degree').value;
+    const planetHouse  = document.getElementById('et-planet-house').value;
+
+    const targetType   = document.getElementById('et-target-type').value;
+    const targetSign   = document.getElementById('et-target-sign').value;
+    const targetDegRaw = document.getElementById('et-target-degree').value;
+    const targetHouse  = document.getElementById('et-target-house').value;
+
+    const applyingVal  = document.getElementById('et-applying').value;
+
+    if (planetType)           ctx.planetType   = planetType;
+    if (planetSign)           ctx.planetSign   = planetSign;
+    if (planetDegRaw !== '')  ctx.planetDegree = Math.min(29.99, Math.max(0, parseFloat(planetDegRaw)));
+    if (planetHouse)          ctx.planetHouse  = parseInt(planetHouse, 10);
+
+    if (targetType)           ctx.targetType   = targetType;
+    if (targetSign)           ctx.targetSign   = targetSign;
+    if (targetDegRaw !== '')  ctx.targetDegree = Math.min(29.99, Math.max(0, parseFloat(targetDegRaw)));
+    if (targetHouse)          ctx.targetHouse  = parseInt(targetHouse, 10);
+
+    if (applyingVal === 'aplicativo')  ctx.isApplying = true;
+    if (applyingVal === 'separativo')  ctx.isApplying = false;
+
+    if (Object.keys(ctx).length) transit.context = ctx;
+  }
+
+  return transit;
+}
+
+function generatePreviewTags(transit) {
+  const tags = [];
+  const p   = (transit.planet  || '').toLowerCase();
+  const t   = (transit.target  || '').toLowerCase();
+  const a   = (transit.aspect  || '').toLowerCase();
+  const orb = transit.orb;
+  const ctx = transit.context || {};
+
+  if (p && a && t) tags.push(`${p}_${a}_${t}`);
+  if (ctx.planetSign) tags.push(`${p}_en_${ctx.planetSign.toLowerCase()}`);
+  if (ctx.targetSign) tags.push(`${t}_en_${ctx.targetSign.toLowerCase()}`);
+  if (ctx.planetHouse) tags.push(`${p}_casa_${ctx.planetHouse}`);
+  if (ctx.targetHouse) tags.push(`${t}_casa_${ctx.targetHouse}`);
+
+  if (typeof orb === 'number') {
+    if (orb < 1)       tags.push('orbe_exacto');
+    else if (orb < 3)  tags.push('orbe_ajustado');
+    else               tags.push('orbe_amplio');
+  }
+
+  if (ctx.isApplying === true)  tags.push('aspecto_aplicativo');
+  if (ctx.isApplying === false) tags.push('aspecto_separativo');
+
+  if (ctx.planetDegree !== undefined) {
+    const deg = ctx.planetDegree;
+    tags.push(deg < 10 ? `${p}_grado_temprano` : deg < 20 ? `${p}_grado_medio` : `${p}_grado_tardio`);
+  }
+  if (ctx.targetDegree !== undefined) {
+    const deg = ctx.targetDegree;
+    tags.push(deg < 10 ? `${t}_grado_temprano` : deg < 20 ? `${t}_grado_medio` : `${t}_grado_tardio`);
+  }
+  return tags;
+}
+
+function buildNaturalPreview(transit) {
+  if (!transit.planet && !transit.target) return '';
+
+  const ctx      = transit.context || {};
+  const planetEs = CUERPOS_ES[transit.planet]  || transit.planet  || '—';
+  const targetEs = CUERPOS_ES[transit.target]  || transit.target  || '—';
+  const aspectEs = ASPECTOS_ES[transit.aspect] || transit.aspect  || '—';
+
+  let planetLine = `<span class="et-pn-planet">${planetEs}</span>`;
+  if (ctx.planetSign)   planetLine += ` en ${ctx.planetSign}`;
+  if (ctx.planetDegree !== undefined) planetLine += ` grado ${ctx.planetDegree}`;
+  if (ctx.planetHouse)  planetLine += ` · Casa ${ctx.planetHouse}`;
+
+  let aspectLine = `<span class="et-pn-aspect">${aspectEs}</span>`;
+  if (typeof transit.orb === 'number') aspectLine += ` (orbe: ${transit.orb}°)`;
+  if (ctx.isApplying === true)  aspectLine += ' · <em>aplicativo</em>';
+  if (ctx.isApplying === false) aspectLine += ' · <em>separativo</em>';
+
+  let targetLine = `<span class="et-pn-target">${targetEs}</span>`;
+  if (ctx.targetSign)   targetLine += ` en ${ctx.targetSign}`;
+  if (ctx.targetDegree !== undefined) targetLine += ` grado ${ctx.targetDegree}`;
+  if (ctx.targetHouse)  targetLine += ` · Casa ${ctx.targetHouse}`;
+
+  return [planetLine, aspectLine, targetLine].join('<br>');
+}
+
+function updateEnrichedPreview() {
+  const transit = buildEnrichedTransitObject();
+
+  // Vista previa en lenguaje natural
+  const naturalEl = document.getElementById('et-preview-natural');
+  const preview   = buildNaturalPreview(transit);
+  naturalEl.innerHTML = preview || '<span style="color:var(--text-muted);font-size:0.85rem">Completa el formulario para ver la vista previa</span>';
+
+  // JSON de depuración
+  document.getElementById('et-preview-json').textContent = JSON.stringify(transit, null, 2);
+
+  // Tags generados
+  const tags    = generatePreviewTags(transit);
+  const tagsEl  = document.getElementById('et-tags');
+  tagsEl.innerHTML = tags.length
+    ? tags.map(tag => `<span class="et-tag">${tag}</span>`).join('')
+    : '<span style="color:var(--text-muted);font-size:0.7rem">Los tags aparecen aquí al completar el formulario</span>';
+}
+
+async function runEnrichedInterpretation() {
+  const transit = buildEnrichedTransitObject();
+  if (!transit.planet || !transit.aspect || !transit.target) {
+    showToast('Completa al menos el cuerpo, aspecto y destino', 'error');
+    return;
+  }
+  setLoading(true);
+  await delay(600);
+  try {
+    const result = interpretTránsitos([transit]);
+    currentResult = result;
+    await saveSession(result, [transit], 'transit');
+    renderResult(result);
+    updateEnginePanel(result);
+    await renderContextMemory(result);
+    await renderHistory();
+    showToast('Interpretación completa', 'success');
+  } catch(err) {
+    showToast('Error: ' + err.message, 'error');
+  } finally {
+    setLoading(false);
+  }
 }
 
 // ─────────────────────────────────────────────────────────────
