@@ -53,6 +53,24 @@ function construirMatizContextual(transit = {}) {
   return '';
 }
 
+
+function applyLearnedMemoryAdjustments(baseNarrative, learnedMemory = {}) {
+  const voice = learnedMemory.voiceMemory || {};
+  const quality = learnedMemory.qualityMemory || {};
+
+  const narrative = { ...baseNarrative };
+  if ((voice.warmth || 0) > 0.65) {
+    narrative.energy = `${narrative.energy} Mantén calidez explícita y cercanía humana en el tono.`;
+  }
+  if ((voice.directness || 0) > 0.65) {
+    narrative.focus = `${narrative.focus} Prioriza una instrucción concreta y accionable.`;
+  }
+  if ((quality.clarity || 0) < 0.45) {
+    narrative.avoid = `${narrative.avoid} Evita frases largas o ambiguas.`;
+  }
+  return narrative;
+}
+
 function dayOfYear(date = new Date()) {
   const start = new Date(date.getFullYear(), 0, 0);
   const diff = date - start;
@@ -158,7 +176,7 @@ const TEMPLATE_BANK = {
   ],
 };
 
-function buildNarrative({ interpretedTransits = [], activatedNeurons = [], memoryPhrases = [] }) {
+function buildNarrative({ interpretedTransits = [], activatedNeurons = [], memoryPhrases = [], learnedMemory = {} }) {
   const topScore = interpretedTransits[0]?.score || 0;
   const tone = toneFromScore(topScore);
 
@@ -184,17 +202,18 @@ function buildNarrative({ interpretedTransits = [], activatedNeurons = [], memor
     situations,
   });
 
-  if (contextualLines.length) {
-    return {
+  const narrativeBase = contextualLines.length
+    ? {
       ...base,
       energy: `${base.energy} ${contextualLines.join('. ')}.`,
-    };
-  }
+    }
+    : base;
 
-  return base;
+  return applyLearnedMemoryAdjustments(narrativeBase, learnedMemory);
 }
 
 module.exports = {
   buildNarrative,
   toneFromScore,
+  applyLearnedMemoryAdjustments,
 };
