@@ -1,29 +1,1060 @@
 [
-
   {
-
-    "id": "venus_en_aries",
-
-    "triggers": ["venus_en_aries"],
-
+    "id": "aries_tono_base",
+    "triggers": [
+      "signo_aries_activo"
+    ],
     "match": "all",
-
-    "peso": 0.75,
-
-    "clusters": ["relational", "actional"],
-
+    "peso": 0.58,
+    "clusters": [
+      "aries"
+    ],
     "output": {
-
-      "energy": "deseo directo y espontáneo",
-
-      "avoid": "confundir impulso con certeza",
-
-      "use": "expresar lo que quieres con tacto",
-
-      "focus": "iniciativa afectiva consciente"
-
+      "energy": "el tono general es directo, impulsivo y orientado a iniciar",
+      "avoid": "confundir impulso con claridad definitiva",
+      "use": "usar el impulso como chispa, no como única brújula",
+      "focus": "inicio, coraje y movimiento"
     }
-
+  },
+  {
+    "id": "tauro_tono_base",
+    "triggers": [
+      "signo_tauro_activo"
+    ],
+    "match": "all",
+    "peso": 0.58,
+    "clusters": [
+      "tauro"
+    ],
+    "output": {
+      "energy": "el tono general busca estabilidad, cuerpo, sostén y continuidad",
+      "avoid": "aferrarte por seguridad aunque algo ya pida cambio",
+      "use": "darle valor a lo que sí nutre y sostiene de verdad",
+      "focus": "estabilidad, placer y arraigo"
+    }
+  },
+  {
+    "id": "geminis_tono_base",
+    "triggers": [
+      "signo_geminis_activo"
+    ],
+    "match": "all",
+    "peso": 0.58,
+    "clusters": [
+      "geminis"
+    ],
+    "output": {
+      "energy": "el tono general se mueve rápido, conecta ideas y abre posibilidades",
+      "avoid": "dispersarte entre demasiadas opciones o estímulos",
+      "use": "ordenar curiosidad y elegir qué conversación sí importa",
+      "focus": "ideas, intercambio y movilidad"
+    }
+  },
+  {
+    "id": "cancer_tono_base",
+    "triggers": [
+      "signo_cancer_activo"
+    ],
+    "match": "all",
+    "peso": 0.58,
+    "clusters": [
+      "cancer"
+    ],
+    "output": {
+      "energy": "el tono general es sensible, protector y atento a la seguridad emocional",
+      "avoid": "replegarte demasiado o reaccionar desde memoria vieja",
+      "use": "escuchar lo que realmente necesitas para sentirte a salvo",
+      "focus": "cuidado, refugio y sensibilidad"
+    }
+  },
+  {
+    "id": "leo_tono_base",
+    "triggers": [
+      "signo_leo_activo"
+    ],
+    "match": "all",
+    "peso": 0.58,
+    "clusters": [
+      "leo"
+    ],
+    "output": {
+      "energy": "el tono general quiere expresarse con calor, presencia y creatividad",
+      "avoid": "buscar validación externa antes que verdad interna",
+      "use": "crear y mostrarte desde autenticidad y corazón",
+      "focus": "brillo, deseo y autoexpresión"
+    }
+  },
+  {
+    "id": "virgo_tono_base",
+    "triggers": [
+      "signo_virgo_activo"
+    ],
+    "match": "all",
+    "peso": 0.58,
+    "clusters": [
+      "virgo"
+    ],
+    "output": {
+      "energy": "el tono general observa detalles, ordena y busca mejorar lo concreto",
+      "avoid": "caer en crítica excesiva o autoexigencia constante",
+      "use": "usar discernimiento para servir sin castigarte",
+      "focus": "orden, ajuste y utilidad"
+    }
+  },
+  {
+    "id": "libra_tono_base",
+    "triggers": [
+      "signo_libra_activo"
+    ],
+    "match": "all",
+    "peso": 0.58,
+    "clusters": [
+      "libra"
+    ],
+    "output": {
+      "energy": "el tono general busca equilibrio, acuerdo y lectura del otro",
+      "avoid": "ceder demasiado para evitar tensión",
+      "use": "negociar sin abandonar tu eje",
+      "focus": "vínculo, armonía y decisión compartida"
+    }
+  },
+  {
+    "id": "escorpio_tono_base",
+    "triggers": [
+      "signo_escorpio_activo"
+    ],
+    "match": "all",
+    "peso": 0.58,
+    "clusters": [
+      "escorpio"
+    ],
+    "output": {
+      "energy": "el tono general va al fondo, intensifica y transforma",
+      "avoid": "controlar por miedo a perder poder o profundidad",
+      "use": "sostener verdad emocional sin volverte implacable",
+      "focus": "intensidad, intimidad y transformación"
+    }
+  },
+  {
+    "id": "sagitario_tono_base",
+    "triggers": [
+      "signo_sagitario_activo"
+    ],
+    "match": "all",
+    "peso": 0.58,
+    "clusters": [
+      "sagitario"
+    ],
+    "output": {
+      "energy": "el tono general expande, busca sentido y abre horizonte",
+      "avoid": "usar entusiasmo para esquivar la complejidad real",
+      "use": "crecer con visión y también con aterrizaje",
+      "focus": "sentido, expansión y camino"
+    }
+  },
+  {
+    "id": "capricornio_tono_base",
+    "triggers": [
+      "signo_capricornio_activo"
+    ],
+    "match": "all",
+    "peso": 0.58,
+    "clusters": [
+      "capricornio"
+    ],
+    "output": {
+      "energy": "el tono general estructura, madura y prioriza resultados sólidos",
+      "avoid": "endurecerte demasiado o medir todo por rendimiento",
+      "use": "construir con paciencia sin desconectarte de lo humano",
+      "focus": "estructura, meta y responsabilidad"
+    }
+  },
+  {
+    "id": "acuario_tono_base",
+    "triggers": [
+      "signo_acuario_activo"
+    ],
+    "match": "all",
+    "peso": 0.58,
+    "clusters": [
+      "acuario"
+    ],
+    "output": {
+      "energy": "el tono general busca autenticidad, aire mental y visión de futuro",
+      "avoid": "desconectarte emocionalmente en nombre de la libertad",
+      "use": "abrir espacio a lo nuevo sin cortar todo puente",
+      "focus": "innovación, distancia y visión"
+    }
+  },
+  {
+    "id": "piscis_tono_base",
+    "triggers": [
+      "signo_piscis_activo"
+    ],
+    "match": "all",
+    "peso": 0.58,
+    "clusters": [
+      "piscis"
+    ],
+    "output": {
+      "energy": "el tono general se vuelve más poroso, intuitivo y sensible a lo invisible",
+      "avoid": "perder límites o confundirte en la niebla emocional",
+      "use": "dar cauce compasivo a lo sutil sin dejar de anclarte",
+      "focus": "intuición, entrega y sensibilidad"
+    }
+  },
+  {
+    "id": "venus_en_aries",
+    "triggers": [
+      "venus_en_aries"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "venus",
+      "aries",
+      "fuego"
+    ],
+    "output": {
+      "energy": "deseo directo y espontáneo",
+      "avoid": "confundir impulso con certeza",
+      "use": "expresar lo que quieres con tacto",
+      "focus": "iniciativa afectiva consciente"
+    }
+  },
+  {
+    "id": "venus_en_tauro",
+    "triggers": [
+      "venus_en_tauro"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "venus",
+      "tauro",
+      "tierra"
+    ],
+    "output": {
+      "energy": "deseo estable, sensual y orientado a sostener",
+      "avoid": "aferrarte a lo cómodo aunque algo ya haya cambiado",
+      "use": "cultivar placer con presencia y valor real",
+      "focus": "placer, calma y sostén"
+    }
+  },
+  {
+    "id": "venus_en_geminis",
+    "triggers": [
+      "venus_en_geminis"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "venus",
+      "geminis",
+      "aire"
+    ],
+    "output": {
+      "energy": "el deseo se mueve por curiosidad, juego mental y ligereza",
+      "avoid": "usar encanto verbal para evitar profundidad emocional",
+      "use": "decir lo que sientes sin perder frescura",
+      "focus": "curiosidad afectiva y comunicación"
+    }
+  },
+  {
+    "id": "venus_en_cancer",
+    "triggers": [
+      "venus_en_cancer"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "venus",
+      "cancer",
+      "agua"
+    ],
+    "output": {
+      "energy": "lo afectivo busca contención, cercanía y seguridad emocional",
+      "avoid": "proteger tanto el corazón que termines cerrándolo",
+      "use": "pedir ternura y refugio con claridad",
+      "focus": "cuidado afectivo y pertenencia"
+    }
+  },
+  {
+    "id": "venus_en_leo",
+    "triggers": [
+      "venus_en_leo"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "venus",
+      "leo",
+      "fuego"
+    ],
+    "output": {
+      "energy": "el deseo quiere calor, expresión y reconocimiento sincero",
+      "avoid": "buscar validación romántica antes que conexión verdadera",
+      "use": "amar desde generosidad y autenticidad",
+      "focus": "romance, brillo y corazón"
+    }
+  },
+  {
+    "id": "venus_en_virgo",
+    "triggers": [
+      "venus_en_virgo"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "venus",
+      "virgo",
+      "tierra"
+    ],
+    "output": {
+      "energy": "el afecto se expresa en detalles, cuidado y presencia útil",
+      "avoid": "corregir tanto que se enfríe la conexión",
+      "use": "cuidar sin caer en perfeccionismo afectivo",
+      "focus": "afecto práctico y discernimiento"
+    }
+  },
+  {
+    "id": "venus_en_libra",
+    "triggers": [
+      "venus_en_libra"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "venus",
+      "libra",
+      "aire"
+    ],
+    "output": {
+      "energy": "Venus se mueve con gracia, reciprocidad y deseo de armonía",
+      "avoid": "ceder tu deseo para sostener paz aparente",
+      "use": "buscar equilibrio sin silenciar lo que quieres",
+      "focus": "reciprocidad y vínculo"
+    }
+  },
+  {
+    "id": "venus_en_escorpio",
+    "triggers": [
+      "venus_en_escorpio"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "venus",
+      "escorpio",
+      "agua"
+    ],
+    "output": {
+      "energy": "el deseo se intensifica, se vuelve profundo y nada superficial",
+      "avoid": "confundir fusión con amor o control con intimidad",
+      "use": "habitar profundidad con honestidad emocional",
+      "focus": "intimidad, deseo y verdad"
+    }
+  },
+  {
+    "id": "venus_en_sagitario",
+    "triggers": [
+      "venus_en_sagitario"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "venus",
+      "sagitario",
+      "fuego"
+    ],
+    "output": {
+      "energy": "lo afectivo busca expansión, libertad y una visión más amplia del vínculo",
+      "avoid": "idealizar el amor como promesa infinita sin raíz",
+      "use": "abrirte al amor con entusiasmo y honestidad",
+      "focus": "amor, libertad y horizonte"
+    }
+  },
+  {
+    "id": "venus_en_capricornio",
+    "triggers": [
+      "venus_en_capricornio"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "venus",
+      "capricornio",
+      "tierra"
+    ],
+    "output": {
+      "energy": "el valor afectivo se expresa con seriedad, lealtad y consistencia",
+      "avoid": "cerrarte demasiado por miedo a mostrar necesidad",
+      "use": "dar forma estable a lo que sientes",
+      "focus": "compromiso, dignidad y constancia"
+    }
+  },
+  {
+    "id": "venus_en_acuario",
+    "triggers": [
+      "venus_en_acuario"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "venus",
+      "acuario",
+      "aire"
+    ],
+    "output": {
+      "energy": "el deseo necesita espacio, autenticidad y una forma no rígida de vincularse",
+      "avoid": "usar distancia para no tocar lo vulnerable",
+      "use": "crear vínculos donde haya aire y verdad",
+      "focus": "libertad afectiva y autenticidad"
+    }
+  },
+  {
+    "id": "venus_en_piscis",
+    "triggers": [
+      "venus_en_piscis"
+    ],
+    "match": "all",
+    "peso": 0.75,
+    "clusters": [
+      "relacional",
+      "venus",
+      "piscis",
+      "agua"
+    ],
+    "output": {
+      "energy": "el amor se vuelve compasivo, imaginativo y muy receptivo",
+      "avoid": "idealizar o disolver límites en nombre de la unión",
+      "use": "amar con sensibilidad sin perder discernimiento",
+      "focus": "ternura, empatía y sutileza"
+    }
+  },
+  {
+    "id": "luna_en_aries",
+    "triggers": [
+      "luna_en_aries"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "luna",
+      "aries"
+    ],
+    "output": {
+      "energy": "la emoción reacciona rápido y busca descarga inmediata",
+      "avoid": "responder antes de entender lo que sientes",
+      "use": "darle nombre al impulso emocional antes de actuar",
+      "focus": "reacción y regulación"
+    }
+  },
+  {
+    "id": "luna_en_tauro",
+    "triggers": [
+      "luna_en_tauro"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "luna",
+      "tauro"
+    ],
+    "output": {
+      "energy": "la emoción busca calma, cuerpo y continuidad",
+      "avoid": "resistirte al cambio solo para mantener paz aparente",
+      "use": "crear estabilidad emocional concreta",
+      "focus": "calma, cuerpo y seguridad"
+    }
+  },
+  {
+    "id": "luna_en_geminis",
+    "triggers": [
+      "luna_en_geminis"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "luna",
+      "geminis"
+    ],
+    "output": {
+      "energy": "lo emocional se mueve por pensamientos, palabras y cambios de foco",
+      "avoid": "hablar por nervio en vez de por claridad",
+      "use": "ordenar lo que sientes antes de verbalizarlo",
+      "focus": "procesamiento emocional y palabra"
+    }
+  },
+  {
+    "id": "luna_en_cancer",
+    "triggers": [
+      "luna_en_cancer"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "luna",
+      "cancer"
+    ],
+    "output": {
+      "energy": "la emoción se amplifica y necesita refugio, contención y pertenencia",
+      "avoid": "encerrarte en memoria o susceptibilidad",
+      "use": "escuchar qué te hace sentir cuidado de verdad",
+      "focus": "refugio, ternura y raíz"
+    }
+  },
+  {
+    "id": "luna_en_leo",
+    "triggers": [
+      "luna_en_leo"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "luna",
+      "leo"
+    ],
+    "output": {
+      "energy": "la emoción quiere calor, expresión y respuesta del corazón",
+      "avoid": "dramatizar para conseguir validación",
+      "use": "expresar lo que sientes con honestidad y nobleza",
+      "focus": "corazón y expresión afectiva"
+    }
+  },
+  {
+    "id": "luna_en_virgo",
+    "triggers": [
+      "luna_en_virgo"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "luna",
+      "virgo"
+    ],
+    "output": {
+      "energy": "el sentir pasa por filtro, detalle y necesidad de orden interno",
+      "avoid": "analizar tanto que te desconectes de la emoción viva",
+      "use": "cuidar tu mundo interno con sencillez y rutina",
+      "focus": "orden emocional y cuidado"
+    }
+  },
+  {
+    "id": "luna_en_libra",
+    "triggers": [
+      "luna_en_libra"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "luna",
+      "libra"
+    ],
+    "output": {
+      "energy": "la emoción busca equilibrio, armonía y buena respuesta del otro",
+      "avoid": "adaptarte demasiado para evitar incomodidad",
+      "use": "notar tu necesidad antes de negociar",
+      "focus": "equilibrio emocional y vínculo"
+    }
+  },
+  {
+    "id": "luna_en_escorpio",
+    "triggers": [
+      "luna_en_escorpio"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "luna",
+      "escorpio"
+    ],
+    "output": {
+      "energy": "la emoción se vuelve profunda, intensa y difícil de fingir",
+      "avoid": "irte al extremo por miedo a la vulnerabilidad",
+      "use": "habitar lo que sientes sin controlarlo todo",
+      "focus": "intensidad y verdad emocional"
+    }
+  },
+  {
+    "id": "luna_en_sagitario",
+    "triggers": [
+      "luna_en_sagitario"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "luna",
+      "sagitario"
+    ],
+    "output": {
+      "energy": "lo emocional busca aire, sentido y una lectura más amplia",
+      "avoid": "escapar hacia arriba para no tocar lo incómodo",
+      "use": "abrir perspectiva sin negar la herida",
+      "focus": "sentido emocional y expansión"
+    }
+  },
+  {
+    "id": "luna_en_capricornio",
+    "triggers": [
+      "luna_en_capricornio"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "luna",
+      "capricornio"
+    ],
+    "output": {
+      "energy": "la emoción se contiene, se ordena y a veces se vuelve sobria",
+      "avoid": "confundir madurez con bloqueo afectivo",
+      "use": "dar estructura a lo que sientes sin congelarlo",
+      "focus": "contención y responsabilidad emocional"
+    }
+  },
+  {
+    "id": "luna_en_acuario",
+    "triggers": [
+      "luna_en_acuario"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "luna",
+      "acuario"
+    ],
+    "output": {
+      "energy": "la emoción toma distancia para observar y ganar perspectiva",
+      "avoid": "desconectarte para no sentir intensidad",
+      "use": "darte espacio sin exiliarte de ti",
+      "focus": "perspectiva y libertad emocional"
+    }
+  },
+  {
+    "id": "luna_en_piscis",
+    "triggers": [
+      "luna_en_piscis"
+    ],
+    "match": "all",
+    "peso": 0.78,
+    "clusters": [
+      "emocional",
+      "luna",
+      "piscis"
+    ],
+    "output": {
+      "energy": "la emoción se vuelve porosa, empática y muy receptiva al ambiente",
+      "avoid": "absorber demasiado sin límite claro",
+      "use": "descansar y discriminar qué es tuyo y qué no",
+      "focus": "sensibilidad, sueño y compasión"
+    }
+  },
+  {
+    "id": "sol_en_aries",
+    "triggers": [
+      "sol_en_aries"
+    ],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": [
+      "identidad",
+      "sol",
+      "aries"
+    ],
+    "output": {
+      "energy": "la identidad busca iniciar, afirmarse y abrir camino",
+      "avoid": "confundir autoafirmación con choque innecesario",
+      "use": "usar coraje con conciencia",
+      "focus": "presencia e iniciativa"
+    }
+  },
+  {
+    "id": "sol_en_leo",
+    "triggers": [
+      "sol_en_leo"
+    ],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": [
+      "identidad",
+      "sol",
+      "leo"
+    ],
+    "output": {
+      "energy": "la identidad quiere brillar, crear y expresarse con plenitud",
+      "avoid": "depender demasiado de reconocimiento externo",
+      "use": "brillar desde verdad y no solo desde imagen",
+      "focus": "brillo y autoexpresión"
+    }
+  },
+  {
+    "id": "sol_en_libra",
+    "triggers": [
+      "sol_en_libra"
+    ],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": [
+      "identidad",
+      "sol",
+      "libra"
+    ],
+    "output": {
+      "energy": "la identidad se define también en relación con el otro y el equilibrio",
+      "avoid": "perder eje por complacer",
+      "use": "elegir acuerdo sin traicionarte",
+      "focus": "identidad y vínculo"
+    }
+  },
+  {
+    "id": "sol_en_capricornio",
+    "triggers": [
+      "sol_en_capricornio"
+    ],
+    "match": "all",
+    "peso": 0.74,
+    "clusters": [
+      "identidad",
+      "sol",
+      "capricornio"
+    ],
+    "output": {
+      "energy": "la identidad busca construir, sostener y asumir responsabilidad",
+      "avoid": "medirte solo por logro o rendimiento",
+      "use": "desarrollar autoridad con humanidad",
+      "focus": "dirección y madurez"
+    }
+  },
+  {
+    "id": "marte_en_aries",
+    "triggers": [
+      "marte_en_aries"
+    ],
+    "match": "all",
+    "peso": 0.76,
+    "clusters": [
+      "acción",
+      "marte",
+      "aries"
+    ],
+    "output": {
+      "energy": "Marte actúa con rapidez, coraje y deseo de iniciar",
+      "avoid": "reaccionar sin medir consecuencias",
+      "use": "canalizar impulso en acción consciente",
+      "focus": "acción y coraje"
+    }
+  },
+  {
+    "id": "marte_en_cancer",
+    "triggers": [
+      "marte_en_cancer"
+    ],
+    "match": "all",
+    "peso": 0.76,
+    "clusters": [
+      "acción",
+      "marte",
+      "cancer"
+    ],
+    "output": {
+      "energy": "la acción se mezcla con sensibilidad, defensa y reactividad emocional",
+      "avoid": "pelear desde la herida sin reconocerla",
+      "use": "proteger sin cerrarte ni explotar",
+      "focus": "defensa y cuidado"
+    }
+  },
+  {
+    "id": "marte_en_libra",
+    "triggers": [
+      "marte_en_libra"
+    ],
+    "match": "all",
+    "peso": 0.76,
+    "clusters": [
+      "acción",
+      "marte",
+      "libra"
+    ],
+    "output": {
+      "energy": "la energía busca acuerdo, pero también puede frustrarse con indecisión",
+      "avoid": "ceder tanto que la rabia salga por debajo",
+      "use": "negociar firmeza sin perder armonía",
+      "focus": "fricción y equilibrio"
+    }
+  },
+  {
+    "id": "marte_en_capricornio",
+    "triggers": [
+      "marte_en_capricornio"
+    ],
+    "match": "all",
+    "peso": 0.76,
+    "clusters": [
+      "acción",
+      "marte",
+      "capricornio"
+    ],
+    "output": {
+      "energy": "Marte se vuelve estratégico, persistente y orientado a resultados",
+      "avoid": "endurecerte o sobrefuncionar",
+      "use": "usar disciplina para avanzar sin quemarte",
+      "focus": "estrategia y constancia"
+    }
+  },
+  {
+    "id": "mercurio_en_geminis",
+    "triggers": [
+      "mercurio_en_geminis"
+    ],
+    "match": "all",
+    "peso": 0.69,
+    "clusters": [
+      "mente",
+      "mercurio",
+      "geminis"
+    ],
+    "output": {
+      "energy": "Mercurio se mueve con rapidez, curiosidad y agilidad mental",
+      "avoid": "dispersarte entre demasiadas ideas",
+      "use": "filtrar y priorizar lo que sí merece tu atención",
+      "focus": "mente, palabra y movilidad"
+    }
+  },
+  {
+    "id": "jupiter_en_sagitario",
+    "triggers": [
+      "jupiter_en_sagitario"
+    ],
+    "match": "all",
+    "peso": 0.68,
+    "clusters": [
+      "expansión",
+      "jupiter",
+      "sagitario"
+    ],
+    "output": {
+      "energy": "Júpiter amplía visión, fe y deseo de explorar",
+      "avoid": "prometer más de lo que puedes sostener",
+      "use": "crecer con entusiasmo y también con verdad",
+      "focus": "expansión, fe y horizonte"
+    }
+  },
+  {
+    "id": "saturno_en_capricornio",
+    "triggers": [
+      "saturno_en_capricornio"
+    ],
+    "match": "all",
+    "peso": 0.77,
+    "clusters": [
+      "estructura",
+      "saturno",
+      "capricornio"
+    ],
+    "output": {
+      "energy": "Saturno busca consolidar, estructurar y asumir peso real",
+      "avoid": "volver la exigencia más grande que la vida misma",
+      "use": "construir con paciencia, sobriedad y propósito",
+      "focus": "estructura, tiempo y responsabilidad"
+    }
+  },
+  {
+    "id": "urano_en_acuario",
+    "triggers": [
+      "urano_en_acuario"
+    ],
+    "match": "all",
+    "peso": 0.67,
+    "clusters": [
+      "cambio",
+      "urano",
+      "acuario"
+    ],
+    "output": {
+      "energy": "Urano abre visión de futuro, autenticidad y ruptura inteligente",
+      "avoid": "cortar demasiado rápido solo por incomodidad",
+      "use": "innovar sin romper lo que todavía sirve",
+      "focus": "libertad, futuro e innovación"
+    }
+  },
+  {
+    "id": "neptuno_en_piscis",
+    "triggers": [
+      "neptuno_en_piscis"
+    ],
+    "match": "all",
+    "peso": 0.66,
+    "clusters": [
+      "sensibilidad",
+      "neptuno",
+      "piscis"
+    ],
+    "output": {
+      "energy": "Neptuno amplifica intuición, compasión y mundo sutil",
+      "avoid": "disolver límites en niebla emocional",
+      "use": "honrar lo sensible con anclaje y discernimiento",
+      "focus": "intuición, compasión y entrega"
+    }
+  },
+  {
+    "id": "pluton_en_escorpio",
+    "triggers": [
+      "pluton_en_escorpio"
+    ],
+    "match": "all",
+    "peso": 0.79,
+    "clusters": [
+      "transformación",
+      "pluton",
+      "escorpio"
+    ],
+    "output": {
+      "energy": "Plutón intensifica profundidad, poder y procesos de muerte simbólica",
+      "avoid": "controlar por miedo a perder fondo o poder",
+      "use": "atravesar transformación con honestidad y coraje",
+      "focus": "poder, sombra y renacimiento"
+    }
+  },
+  {
+    "id": "lilith_en_escorpio",
+    "triggers": [
+      "lilith_en_escorpio"
+    ],
+    "match": "all",
+    "peso": 0.72,
+    "clusters": [
+      "sombra",
+      "lilith",
+      "escorpio"
+    ],
+    "output": {
+      "energy": "Lilith despierta deseo crudo, verdad incómoda y necesidad de soberanía emocional",
+      "avoid": "usar intensidad como arma o prueba de poder",
+      "use": "nombrar deseo y sombra sin vergüenza",
+      "focus": "sombra, deseo y autonomía"
+    }
+  },
+  {
+    "id": "quiron_en_virgo",
+    "triggers": [
+      "quiron_en_virgo"
+    ],
+    "match": "all",
+    "peso": 0.73,
+    "clusters": [
+      "herida",
+      "quiron",
+      "virgo"
+    ],
+    "output": {
+      "energy": "Quirón toca heridas ligadas a perfección, servicio y sensación de no ser suficiente",
+      "avoid": "castigarte por no poder hacerlo todo perfecto",
+      "use": "tratar tu sensibilidad con humildad y ternura práctica",
+      "focus": "herida, cuidado y reparación"
+    }
+  },
+  {
+    "id": "luna_en_cancer__venus_en_aries",
+    "triggers": [
+      "luna_en_cancer",
+      "venus_en_aries"
+    ],
+    "match": "all",
+    "peso": 0.88,
+    "clusters": [
+      "emocional",
+      "relacional",
+      "agua",
+      "fuego"
+    ],
+    "output": {
+      "energy": "hay una mezcla entre necesidad de contención y deseo de respuesta rápida que puede sentirse muy viva",
+      "avoid": "pedir cercanía desde susceptibilidad e impulso al mismo tiempo",
+      "use": "nombrar la necesidad emocional antes de buscar solución inmediata",
+      "focus": "cuidado, deseo y regulación"
+    }
+  },
+  {
+    "id": "venus_en_libra__marte_en_aries",
+    "triggers": [
+      "venus_en_libra",
+      "marte_en_aries"
+    ],
+    "match": "all",
+    "peso": 0.89,
+    "clusters": [
+      "relacional",
+      "acción",
+      "polaridad"
+    ],
+    "output": {
+      "energy": "se activa la tensión entre armonía vincular y acción directa",
+      "avoid": "oscilar entre complacer y reaccionar",
+      "use": "integrar deseo propio con capacidad de acuerdo",
+      "focus": "equilibrio, deseo y acción"
+    }
+  },
+  {
+    "id": "sol_en_capricornio__saturno_en_capricornio",
+    "triggers": [
+      "sol_en_capricornio",
+      "saturno_en_capricornio"
+    ],
+    "match": "all",
+    "peso": 0.91,
+    "clusters": [
+      "identidad",
+      "estructura",
+      "tierra"
+    ],
+    "output": {
+      "energy": "la identidad se vuelve más seria, exigente y orientada a construcción real",
+      "avoid": "creer que tu valor depende solo de lo que logras",
+      "use": "dar forma a tu ambición sin apagar tu humanidad",
+      "focus": "madurez, dirección y estructura"
+    }
+  },
+  {
+    "id": "mercurio_en_geminis__jupiter_en_sagitario",
+    "triggers": [
+      "mercurio_en_geminis",
+      "jupiter_en_sagitario"
+    ],
+    "match": "all",
+    "peso": 0.84,
+    "clusters": [
+      "mente",
+      "expansión",
+      "aire",
+      "fuego"
+    ],
+    "output": {
+      "energy": "la mente quiere aprender, conectar y abrir horizonte al mismo tiempo",
+      "avoid": "irte a demasiadas ideas sin aterrizar ninguna",
+      "use": "usar curiosidad y visión para construir pensamiento con sentido",
+      "focus": "aprendizaje, visión y palabra"
+    }
   }
-
 ]
