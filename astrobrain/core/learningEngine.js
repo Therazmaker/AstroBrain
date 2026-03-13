@@ -31,6 +31,20 @@ const CATEGORY_KEYWORDS = {
   abstraction: ['proceso', 'aprendizaje', 'integrar', 'sentir antes de entender', 'interpretar', 'significado'],
 };
 
+const WEAK_SENSATION_TERMS = new Set(['emoción', 'emocion', 'energía', 'energia', 'sensación', 'sensacion', 'sentir', 'ánimo', 'animo', 'estado']);
+
+const STRONG_ABSTRACTION_PATTERNS = [
+  /no\s+siempre/,
+  /a\s+veces/,
+  /primero\b[^.?!]{0,60}\bdespu[eé]s/,
+  /aunque/,
+  /todav[ií]a\s+no/,
+  /capa\s+m[aá]s\s+sutil/,
+  /antes\s+de\s+tomar\s+forma/,
+  /no\s+significa\s+que\s+no\s+est[eé]\s+pasando\s+nada/,
+  /invisible/,
+];
+
 function splitSentences(text = '') {
   return `${text}`.split(/(?<=[.!?])\s+/).map((line) => line.trim()).filter(Boolean);
 }
@@ -75,6 +89,92 @@ function buildNeuron(id, match, signals, semanticContext, category, confidence) 
   };
 }
 
+function hasMeaningfulQualifier(text = '') {
+  const tokens = normalizeText(text).split(/\s+/).filter(Boolean);
+  const meaningful = tokens.filter((token) => !STOPWORDS.has(token));
+  return meaningful.length >= 2;
+}
+
+function isWeakSensationCandidate(candidate) {
+  if (!candidate || candidate.category !== 'sensation') return false;
+  const normalized = normalizeText(candidate.match || candidate.id || '').replace(/[·_]/g, ' ').trim();
+  const compact = normalized.split(/\s+/).filter(Boolean);
+  if (!compact.length) return true;
+  if (compact.length === 1 && WEAK_SENSATION_TERMS.has(compact[0])) return true;
+  const nonStop = compact.filter((token) => !STOPWORDS.has(token));
+  if (nonStop.length <= 1 && nonStop.every((token) => WEAK_SENSATION_TERMS.has(token))) return true;
+  return !hasMeaningfulQualifier(normalized) && nonStop.some((token) => WEAK_SENSATION_TERMS.has(token));
+}
+
+function enrichWeakSensationCandidate(candidate, chunks) {
+  const sensationChunks = chunks.filter((chunk) => /(sent|emoc|incomod|inquiet|intern|sutil|rara|afect|tensi|silencio|pausa)/.test(chunk));
+  const preferred = [
+    { id: 'incomodidad_interna', match: 'incomodidad interna', signals: ['incomodidad', 'interna'], context: 'sensación de incomodidad interna no lineal' },
+    { id: 'sensibilidad_sutil', match: 'sensibilidad sutil', signals: ['sutil', 'sensibilidad'], context: 'registro emocional fino y contemplativo' },
+    { id: 'pausa_rara', match: 'pausa rara', signals: ['pausa', 'rara'], context: 'sensación de pausa extraña antes de movimiento interno' },
+    { id: 'tension_afectiva', match: 'tensión afectiva', signals: ['tensión', 'afectiva'], context: 'carga emocional percibida de forma interna' },
+  ];
+  const selected = preferred.find((item) => sensationChunks.some((chunk) => item.signals.some((signal) => chunk.includes(signal))));
+  if (!selected) return null;
+  return buildNeuron(
+    selected.id,
+    selected.match,
+    selected.signals,
+    selected.context,
+    'sensation',
+    0.7,
+  );
+}
+
+function buildSpecificSensationFromContext(chunks = []) {
+  if (chunks.some((chunk) => chunk.includes('pausa') && chunk.includes('rara'))) {
+    return buildNeuron('pausa_rara', 'pausa rara', ['pausa', 'rara'], 'sensación de pausa extraña antes del cambio', 'sensation', 0.72);
+  }
+  if (chunks.some((chunk) => chunk.includes('por dentro') || chunk.includes('internamente'))) {
+    return buildNeuron('incomodidad_interna', 'incomodidad interna', ['internamente', 'por dentro'], 'registro interno de sensación emocional', 'sensation', 0.7);
+  }
+  if (chunks.some((chunk) => chunk.includes('sutil'))) {
+    return buildNeuron('sensibilidad_sutil', 'sensibilidad sutil', ['sutil', 'sensibilidad'], 'sensación delicada del proceso emocional', 'sensation', 0.7);
+  }
+  return null;
+}
+
+function extractAbstractionNeurons(text = '', chunks = [], candidates = []) {
+  const lower = normalizeText(text);
+  const abstractions = [];
+  const hasStrongEvidence = STRONG_ABSTRACTION_PATTERNS.some((regex) => regex.test(lower));
+
+  if (/primero\b[^.?!]{0,60}\bdespu[eé]s/.test(lower) || /sentir\s+y\s+despu[eé]s\s+se\s+entiende/.test(lower)) {
+    abstractions.push(buildNeuron('sentir_antes_de_entender', 'sentir antes de entender', ['primero', 'después', 'sentir'], 'comprensión emocional no lineal', 'abstraction', 0.78));
+  }
+  if (/invisible|no\s+significa\s+que\s+no\s+est[eé]\s+pasando/.test(lower)) {
+    abstractions.push(buildNeuron('movimiento_invisible', 'movimiento invisible', ['invisible', 'proceso'], 'proceso activo que aún no es evidente', 'abstraction', 0.74));
+  }
+  if (/no\s+siempre\s+se\s+siente\s+como\s+un\s+comienzo|inicio\s+no\s+evidente/.test(lower)) {
+    abstractions.push(buildNeuron('inicio_no_evidente', 'inicio no evidente', ['inicio', 'no evidente'], 'inicio interno previo a evidencia externa', 'abstraction', 0.76));
+  }
+  if (/todav[ií]a\s+no\s+tiene\s+nombre|claridad\s+total/.test(lower)) {
+    abstractions.push(buildNeuron('claridad_no_inmediata', 'claridad no inmediata', ['claridad', 'proceso'], 'claridad que emerge después de integración', 'abstraction', 0.72));
+  }
+  if (/capa\s+m[aá]s\s+sutil|antes\s+de\s+tomar\s+forma/.test(lower)) {
+    abstractions.push(buildNeuron('proceso_sutil_en_formacion', 'proceso sutil en formación', ['sutil', 'formación'], 'cambio en capas internas todavía en formación', 'abstraction', 0.74));
+  }
+
+  if (!abstractions.length && hasStrongEvidence) {
+    abstractions.push(buildNeuron(
+      'capa_sutil_del_cambio',
+      'capa sutil del cambio',
+      ['proceso', 'sutil', 'cambio'],
+      'abstracción inferida por estructuras no lineales del texto',
+      'abstraction',
+      0.7,
+    ));
+  }
+
+  const existingIds = new Set(candidates.map((item) => item.id));
+  return abstractions.filter((item, index, list) => !existingIds.has(item.id) && list.findIndex((x) => x.id === item.id) === index);
+}
+
 function inferFallbackNeurons(chunks) {
   const neurons = [];
   Object.entries(CATEGORY_KEYWORDS).forEach(([category, keywords]) => {
@@ -82,14 +182,16 @@ function inferFallbackNeurons(chunks) {
     if (!matched.length) return;
     const match = matched.slice(0, 2).join(' · ');
     if (hasStopwordOnlyContent(match)) return;
-    neurons.push(buildNeuron(
+    const neuron = buildNeuron(
       `semantic_${category}_${matched[0].replace(/\s+/g, '_')}`,
       match,
       matched.slice(0, 3),
       `señales ${category} detectadas en narrativa humana`,
       category,
       0.66 + matched.length * 0.06,
-    ));
+    );
+    if (isWeakSensationCandidate(neuron)) return;
+    neurons.push(neuron);
   });
   return neurons;
 }
@@ -105,6 +207,11 @@ function ensureNeuronCoverage(neurons, chunks) {
       if (candidate) neurons.push(candidate);
     }
   });
+
+  if (!neurons.some((n) => n.category === 'sensation' && !isWeakSensationCandidate(n))) {
+    const contextualSensation = buildSpecificSensationFromContext(chunks);
+    if (contextualSensation) neurons.push(contextualSensation);
+  }
 
   const hasTensionOrSensation = neurons.some((n) => n.category === 'tension' || n.category === 'sensation');
   if (!hasTensionOrSensation) {
@@ -127,17 +234,35 @@ function extractContentNeuronsFromRaw(text = '') {
   SEMANTIC_PATTERNS.forEach((pattern) => {
     const hit = pattern.patterns.some((regex) => regex.test(normalizeText(text)));
     if (!hit) return;
-    neurons.push(buildNeuron(
+    const neuron = buildNeuron(
       pattern.id,
       pattern.id,
       pattern.signals,
       pattern.context,
       pattern.category,
       confidenceFromSignals(chunks, pattern.signals),
-    ));
+    );
+    if (isWeakSensationCandidate(neuron)) {
+      const enrichedSensation = enrichWeakSensationCandidate(neuron, chunks);
+      if (enrichedSensation) neurons.push(enrichedSensation);
+      return;
+    }
+    neurons.push(neuron);
   });
 
+  neurons.push(...extractAbstractionNeurons(text, chunks, neurons));
+
+  const strongAbstractionEvidence = STRONG_ABSTRACTION_PATTERNS.some((regex) => regex.test(normalizeText(text)));
+
   const enriched = ensureNeuronCoverage(neurons, chunks)
+    .map((neuron) => {
+      if (!isWeakSensationCandidate(neuron)) return neuron;
+      return enrichWeakSensationCandidate(neuron, chunks);
+    })
+    .filter(Boolean)
+    .concat(strongAbstractionEvidence && !neurons.some((n) => n.category === 'abstraction')
+      ? extractAbstractionNeurons(text, chunks, neurons)
+      : [])
     .filter((neuron, index, list) => list.findIndex((item) => item.id === neuron.id) === index)
     .filter((neuron) => !hasStopwordOnlyContent(neuron.match))
     .filter((neuron) => neuron.confidence >= 0.6)
@@ -166,15 +291,21 @@ function buildVoiceProfileFromRaw(text = '') {
     return clamp01(base + hits * step);
   };
 
+  const contemplativeBoost = score([
+    'puede sentirse', 'conviene', 'quizás', 'a veces', 'no siempre', 'todavía no', 'no significa que',
+    'por dentro', 'internamente', 'escuchar', 'observar', 'capa más sutil', 'tomar forma', 'movimiento invisible', 'date espacio', 'baja el ruido',
+  ], 0, 0.04);
+  const technicalPressure = score(['orbe exacto', 'grado exacto', 'configuración', 'estadística', 'protocolo'], 0, 0.05);
+
   return {
-    proximity: score(['puede sentirse', 'te puede', 'conviene', 'te acompaña', 'quizás', 'hoy'], 0.26, 0.14),
-    softness: score(['puede', 'conviene', 'quizás', 'suave', 'gentil', 'respira'], 0.28, 0.13),
-    emotionality: score(['sentir', 'emoc', 'corazón', 'miedo', 'deseo', 'alma', 'incomodidad'], 0.24, 0.12),
+    proximity: clamp01(score(['puede sentirse', 'te puede', 'conviene', 'te acompaña', 'quizás', 'date espacio', 'hoy'], 0.3, 0.13) + contemplativeBoost - technicalPressure * 0.4),
+    softness: clamp01(score(['puede', 'conviene', 'quizás', 'suave', 'gentil', 'respira', 'a veces', 'no siempre', 'baja el ruido'], 0.34, 0.11) + contemplativeBoost - technicalPressure * 0.45),
+    emotionality: clamp01(score(['sentir', 'emoc', 'corazón', 'miedo', 'deseo', 'alma', 'incomodidad', 'por dentro', 'internamente'], 0.3, 0.11) + contemplativeBoost * 0.9),
     technicality: score(['tránsito', 'orbe', 'casa', 'grado', 'aspecto', 'conjunción'], 0.02, 0.11),
-    warmth: score(['acompaña', 'cuidado', 'con cariño', 'humano', 'nos sostiene', 'respira', 'escuchar'], 0.24, 0.12),
+    warmth: clamp01(score(['acompaña', 'cuidado', 'con cariño', 'humano', 'nos sostiene', 'respira', 'escuchar', 'date espacio', 'sin presión'], 0.28, 0.1) + contemplativeBoost * 0.8),
     directness: score(['haz', 'define', 'elige', 'evita', 'enfoca', 'actúa', 'conviene', 'toca'], 0.14, 0.12),
-    symbolism: score(['luz', 'sombra', 'portal', 'ritmo', 'ciclo', 'marea', 'arquetipo'], 0.2, 0.14),
-    collectiveness: score(['hoy', 'muchos', 'nos', 'colectivo', 'comunidad', 'todos', 'humana'], 0.22, 0.1),
+    symbolism: clamp01(score(['luz', 'sombra', 'portal', 'ritmo', 'ciclo', 'marea', 'arquetipo', 'capa sutil', 'tomar forma', 'movimiento invisible', 'lo invisible'], 0.24, 0.1) + contemplativeBoost * 0.7),
+    collectiveness: clamp01(score(['hoy', 'muchos', 'nos', 'colectivo', 'comunidad', 'todos', 'humana', 'nos pasa'], 0.24, 0.09) + contemplativeBoost * 0.35),
   };
 }
 
@@ -191,14 +322,24 @@ function evaluateTrainingExampleQuality(text = '') {
   };
 
   const roboticPenalty = /(?:\b\w+\b)(?:\s+\1){2,}/.test(lower) ? 0.2 : 0;
+  const contemplativeSignals = lexicalScore([
+    'puede sentirse', 'a veces', 'no siempre', 'por dentro', 'internamente', 'escuchar', 'observar', 'sin presión',
+    'date espacio', 'bajar el ruido', 'primero se siente', 'después se entiende',
+  ], 0.02, 0.06);
+  const appliedGuidanceSignals = lexicalScore([
+    'conviene', 'guía', 'paso', 'práctica', 'respira', 'observa', 'date espacio', 'bajar el ruido', 'regular',
+  ], 0.05, 0.08);
+  const translationSignals = lexicalScore([
+    'se siente', 'experiencia', 'humana', 'aterriza', 'comprensible', 'internamente', 'emoción',
+  ], 0.04, 0.07);
 
   return {
     clarity: clamp01(0.25 + (1 - Math.abs(avgSentenceLength - 18) / 18) * 0.75),
-    naturalness: clamp01(lexicalScore(['hoy', 'puede', 'quizás', 'sentir', 'conviene', 'a veces']) - roboticPenalty),
-    warmth: lexicalScore(['acompaña', 'cuidado', 'respira', 'gentil', 'humano', 'contención'], 0.2, 0.14),
-    usefulness: lexicalScore(['traducir', 'aterrizar', 'llevar', 'paso', 'guía', 'práctica', 'cómo'], 0.18, 0.14),
+    naturalness: clamp01(lexicalScore(['hoy', 'puede', 'quizás', 'sentir', 'conviene', 'a veces', 'no siempre']) + contemplativeSignals * 0.7 - roboticPenalty),
+    warmth: clamp01(lexicalScore(['acompaña', 'cuidado', 'respira', 'gentil', 'humano', 'contención', 'sin presión', 'date espacio'], 0.24, 0.11) + contemplativeSignals * 0.75),
+    usefulness: clamp01(lexicalScore(['traducir', 'aterrizar', 'llevar', 'paso', 'guía', 'práctica', 'cómo', 'regular', 'observar', 'conviene'], 0.24, 0.1) + appliedGuidanceSignals * 0.65 + translationSignals * 0.4),
     coherence: clamp01(sentences.length >= 3 ? 0.86 : 0.62),
-    emotionalResonance: lexicalScore(['sentir', 'miedo', 'amor', 'deseo', 'incomodidad', 'alivio'], 0.16, 0.15),
+    emotionalResonance: clamp01(lexicalScore(['sentir', 'miedo', 'amor', 'deseo', 'incomodidad', 'alivio', 'por dentro', 'internamente', 'sin presión'], 0.24, 0.11) + contemplativeSignals * 0.8),
   };
 }
 
@@ -217,10 +358,17 @@ function validateLearningResult(result) {
   const neurons = result?.contentLearning?.neurons || [];
   const validNeurons = neurons.filter((neuron) => neuron.confidence >= 0.6 && !hasStopwordOnlyContent(neuron.match));
   const categories = new Set(validNeurons.map((neuron) => neuron.category));
-  const hasCoherence = categories.has('event') && (categories.has('sensation') || categories.has('tension')) && categories.has('regulation');
+  const lowerText = normalizeText(result?.source?.text || result?.sourceText || '');
+  const abstractionExpected = STRONG_ABSTRACTION_PATTERNS.some((regex) => regex.test(lowerText));
+  const hasSpecificSensation = validNeurons.some((neuron) => neuron.category === 'sensation' && !isWeakSensationCandidate(neuron));
+  const hasCoherence = categories.has('event') && categories.has('regulation') && hasSpecificSensation && (!abstractionExpected || categories.has('abstraction'));
+  const voiceSoftEnough = !/(puede|conviene|a veces|no siempre|internamente|escuchar|observar)/.test(lowerText)
+    || (result?.voiceLearning?.softness ?? 0) >= 0.4;
+  const usefulEnough = !/(tr[aá]nsito|luna|piscis|regul|respira|observa|conviene|espacio)/.test(lowerText)
+    || (result?.qualityAssessment?.usefulness ?? 0) >= 0.4;
 
   return {
-    valid: validNeurons.length >= 4 && hasCoherence,
+    valid: validNeurons.length >= 4 && hasCoherence && voiceSoftEnough && usefulEnough,
     validNeurons,
     hasCoherence,
   };
@@ -232,7 +380,7 @@ function buildLearningExample(text, source = { type: 'human_text', author: '', o
   const voiceLearning = buildVoiceProfileFromRaw(text);
   const qualityAssessment = evaluateTrainingExampleQuality(text);
   const learning = {
-    source,
+    source: { ...source, text },
     contentLearning,
     narrativeLearning,
     voiceLearning,
