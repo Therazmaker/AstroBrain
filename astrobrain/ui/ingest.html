@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AstroBrain — Historical Memory Input</title>
+    <link rel="stylesheet" href="./ingest.css" />
+  </head>
+  <body>
+    <main class="ingest-shell">
+      <h1>AstroBrain — Historical Memory Input</h1>
+
+      <section class="panel">
+        <label for="raw-text">Raw Text</label>
+        <textarea
+          id="raw-text"
+          placeholder="Paste raw historical, symbolic, or reflective text here..."
+        ></textarea>
+      </section>
+
+      <section class="panel">
+        <label for="trigger">Trigger</label>
+        <select id="trigger">
+          <option value="uranus">uranus</option>
+          <option value="saturn">saturn</option>
+          <option value="mars">mars</option>
+          <option value="venus">venus</option>
+          <option value="moon">moon</option>
+          <option value="mercury">mercury</option>
+          <option value="sun">sun</option>
+          <option value="general" selected>general</option>
+        </select>
+      </section>
+
+      <section class="actions">
+        <button id="ingest-btn" type="button">Ingest Memory</button>
+        <button id="clear-btn" type="button" class="ghost">Clear</button>
+      </section>
+
+      <section class="panel output" aria-live="polite">
+        <h2>Output</h2>
+        <ul>
+          <li id="themes-line">✔ themes extracted</li>
+          <li id="tone-line">✔ tone detected</li>
+          <li id="phrases-line">✔ phrases saved</li>
+        </ul>
+        <p id="status" class="status">Ready.</p>
+      </section>
+    </main>
+
+    <script src="./ingest.js"></script>
+  </body>
+</html>

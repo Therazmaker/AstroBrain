@@ -1,0 +1,109 @@
+:root {
+  color-scheme: dark;
+  --bg: #080b12;
+  --panel: #121724;
+  --text: #e8ecff;
+  --muted: #9aa6c9;
+  --accent: #7ea8ff;
+  --accent-glow: rgba(126, 168, 255, 0.45);
+  --border: #2d3652;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background: radial-gradient(circle at top, #111a2d, var(--bg) 60%);
+  color: var(--text);
+}
+
+.ingest-shell {
+  max-width: 780px;
+  margin: 2.5rem auto;
+  padding: 0 1rem 2rem;
+}
+
+h1 {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.panel {
+  background: color-mix(in srgb, var(--panel) 88%, black);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.45rem;
+}
+
+textarea,
+select,
+button {
+  font: inherit;
+  color: var(--text);
+}
+
+textarea,
+select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #0b1020;
+  padding: 0.7rem 0.8rem;
+}
+
+textarea {
+  min-height: 200px;
+  resize: vertical;
+}
+
+.actions {
+  display: flex;
+  gap: 0.7rem;
+  margin: 1.1rem 0;
+}
+
+button {
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  background: #27385e;
+  box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.35), 0 0 1rem var(--accent-glow);
+  cursor: pointer;
+}
+
+button:hover {
+  background: #304472;
+}
+
+button.ghost {
+  background: #161d30;
+  border-color: var(--border);
+  box-shadow: none;
+}
+
+.output h2 {
+  margin: 0 0 0.6rem;
+  font-size: 1rem;
+}
+
+.output ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.status {
+  margin-top: 0.9rem;
+  color: var(--muted);
+}
