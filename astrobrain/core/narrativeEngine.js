@@ -56,6 +56,93 @@ function uniqueById(items = []) {
   return [...map.values()];
 }
 
+const ASTRO_ES = {
+  moon: 'luna', sun: 'sol', mars: 'marte', mercury: 'mercurio',
+  jupiter: 'júpiter', saturn: 'saturno', uranus: 'urano',
+  neptune: 'neptuno', pluto: 'plutón',
+  conjunction: 'conjunción', square: 'cuadratura', trine: 'trígono',
+  opposition: 'oposición', sextile: 'sextil',
+};
+
+function sanitizeTechnicalTokens(text = '') {
+  let result = text
+    .replace(/\b\w+_en_\w+\b/gi, '')
+    .replace(/\b\w+_grado_\w+\b/gi, '')
+    .replace(/\b[a-zA-Z][a-zA-Z0-9]*(?:_[a-zA-Z0-9]+)+\b/g, '');
+
+  Object.entries(ASTRO_ES).forEach(([en, es]) => {
+    result = result.replace(new RegExp(`\\b${en}\\b`, 'gi'), es);
+  });
+
+  return result
+    .replace(/[^\S\n]+/g, ' ')
+    .replace(/,\s*,/g, ',')
+    .replace(/\.\s*\./g, '.')
+    .trim();
+}
+
+const ENGLISH_FUNCTION_WORDS = new Set([
+  'the', 'this', 'that', 'your', 'their', 'which', 'where',
+  'when', 'from', 'into', 'about', 'have', 'has', 'had',
+  'were', 'will', 'would', 'could', 'should', 'are', 'you',
+]);
+
+function enforceSingleLanguage(text = '', lang = 'es') {
+  if (lang !== 'es') return text;
+  const paragraphs = text.split(/\n\n/);
+  const processedParagraphs = paragraphs.map((paragraph) => {
+    const sentences = paragraph.trim().split(/(?<=[.!?])\s+/);
+    const filtered = sentences.filter((sentence) => {
+      const words = sentence.toLowerCase().replace(/[^a-z\s]/g, ' ').split(/\s+/);
+      const count = words.filter((w) => ENGLISH_FUNCTION_WORDS.has(w)).length;
+      return count < 2;
+    });
+    return (filtered.length ? filtered : sentences).join(' ');
+  });
+  return processedParagraphs.filter(Boolean).join('\n\n').replace(/[^\S\n]+/g, ' ').trim();
+}
+
+function humanizeTone(text = '') {
+  return text
+    .replace(/\blo que emerge es\b/gi, 'puede sentirse')
+    .replace(/\blo que emerge\b/gi, 'lo que puede sentirse')
+    .replace(/\ben este contexto\b/gi, 'a veces')
+    .replace(/\bsignifica que\b/gi, 'puede sentirse como')
+    .replace(/\blo que no ayuda\b/gi, 'lo que conviene evitar')
+    .replace(/[^\S\n]+/g, ' ')
+    .trim();
+}
+
+const ABSTRACT_SENTENCE_PATTERNS = [
+  /\bproceso interno\b/i,
+  /\bmovimiento interno\b/i,
+  /\bprimero se siente y despu[eé]s se entiende\b/i,
+  /\bantes de mostrarse con claridad\b/i,
+  /\bacomod[aá]ndose en silencio\b/i,
+];
+
+function reduceAbstractDensity(text = '') {
+  const paragraphs = text.split(/\n\n/).map((p) => p.trim()).filter(Boolean);
+  const processed = paragraphs.map((paragraph) => {
+    const sentences = paragraph.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);
+    let abstractCount = 0;
+    const result = [];
+    for (const sentence of sentences) {
+      const isAbstract = ABSTRACT_SENTENCE_PATTERNS.some((p) => p.test(sentence));
+      if (isAbstract) {
+        if (abstractCount < 1) {
+          result.push(sentence);
+          abstractCount++;
+        }
+      } else {
+        result.push(sentence);
+      }
+    }
+    return result.join(' ');
+  });
+  return processed.filter(Boolean).join('\n\n');
+}
+
 function prioritizeNeurons(neurons = []) {
   const normalized = uniqueById(neurons)
     .map((neuron) => ({
@@ -97,9 +184,24 @@ function prioritizeNeurons(neurons = []) {
 function openingFromNeurons(core = [], support = []) {
   const event = core.find((item) => item.category === 'event') || core[0] || support[0];
   const sensation = support.find((item) => item.category === 'sensation') || support[0];
-  const eventLabel = event?.narrativeLabel || 'este tránsito';
-  const sensationLabel = sensation?.narrativeLabel || 'una sensación difícil de nombrar';
-  return `Hoy ${eventLabel} puede sentirse menos evidente de lo esperado, con ${sensationLabel} abriendo espacio para mirar hacia adentro.`;
+
+  const rawEvent = sanitizeTechnicalTokens(event?.narrativeLabel || '');
+  const rawSensation = sanitizeTechnicalTokens(sensation?.narrativeLabel || '');
+
+  const LEADING_INFINITIVE = /^(sentir|regular|bajar|escuchar|respirar|notar|observar|ver|hacer|dejar)\s+/i;
+  const GENERIC_LABELS = /^(este tránsito|movimiento interno|una sensación difícil de nombrar)$/i;
+  const cleanEvent = rawEvent && !GENERIC_LABELS.test(rawEvent) ? rawEvent : '';
+  const cleanSensation = rawSensation && !GENERIC_LABELS.test(rawSensation)
+    ? rawSensation.replace(LEADING_INFINITIVE, '')
+    : '';
+
+  if (cleanSensation) {
+    return `Hoy puede sentirse ${cleanSensation}, como si algo tocara un poco más profundo de lo habitual.`;
+  }
+  if (cleanEvent) {
+    return `Hoy puede sentirse ${cleanEvent} con mayor intensidad, como si algo pidiera atención desde adentro.`;
+  }
+  return 'Hoy puede sentirse cierta sensibilidad en el ambiente, como si todo tocara un poco más profundo de lo habitual.';
 }
 
 function translationFromNeurons(core = [], support = []) {
@@ -176,7 +278,7 @@ function applyVoiceProfile(text = '', voiceProfile = {}) {
       .replace(/\belige\b/gi, 'puede servir elegir');
   }
 
-  return output.replace(/\s+/g, ' ').trim();
+  return output.replace(/[^\S\n]+/g, ' ').trim();
 }
 
 function applyLearnedRules(text = '', learnedRules = []) {
@@ -208,17 +310,19 @@ function refineNarrative(text = '') {
     .slice(0, 3)
     .map((line) => line.replace(/\s+/g, ' '));
 
+  const seen = new Set();
+
   const cleaned = paragraphs.map((paragraph) => {
     const sentences = paragraph
       .split(/(?<=[.!?])\s+/)
       .map((sentence) => sentence.trim())
       .filter(Boolean)
-      .map((sentence) => breakLongSentence(sentence, 22));
+      // 28 words gives room for natural Spanish sentence length (Spanish is naturally wordier)
+      .map((sentence) => breakLongSentence(sentence, 28));
 
     const uniqueSentences = [];
-    const seen = new Set();
     sentences.forEach((sentence) => {
-      const key = sentence.toLowerCase();
+      const key = sentence.toLowerCase().replace(/\s+/g, ' ');
       if (!seen.has(key)) {
         seen.add(key);
         uniqueSentences.push(sentence);
@@ -228,7 +332,7 @@ function refineNarrative(text = '') {
     return uniqueSentences.join(' ');
   });
 
-  return cleaned.join('\n\n');
+  return cleaned.filter(Boolean).join('\n\n');
 }
 
 function synthesizeNarrative({
@@ -248,7 +352,11 @@ function synthesizeNarrative({
 
   const voiced = applyVoiceProfile(draft, voiceProfile);
   const learned = applyLearnedRules(voiced, learnedRules);
-  const narrative = refineNarrative(learned);
+  let narrative = sanitizeTechnicalTokens(learned);
+  narrative = enforceSingleLanguage(narrative);
+  narrative = humanizeTone(narrative);
+  narrative = reduceAbstractDensity(narrative);
+  narrative = refineNarrative(narrative);
 
   const parts = narrative.split(/\n\n/);
 
@@ -287,6 +395,10 @@ function buildNarrative({
 
 module.exports = {
   toneFromScore,
+  sanitizeTechnicalTokens,
+  enforceSingleLanguage,
+  humanizeTone,
+  reduceAbstractDensity,
   prioritizeNeurons,
   buildNarrativeStructure,
   applyVoiceProfile,
