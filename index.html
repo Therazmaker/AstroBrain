@@ -218,10 +218,15 @@
 
   .transit-row {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr auto auto;
+    grid-template-columns: 1.1fr 0.9fr 1.1fr 1.1fr auto auto;
     gap: 8px;
     align-items: center;
   }
+  .transit-row .tr-sign {
+    border-color: rgba(212,168,67,0.2);
+    font-size: 0.68rem;
+  }
+  .transit-row .tr-sign:hover { border-color: rgba(212,168,67,0.5); }
 
   .transit-row select,
   .transit-row input[type="number"] {
@@ -634,6 +639,205 @@
   .nsig-energy { color: var(--gold-dim); border-color: var(--gold-dim); background: var(--gold-glow); }
   .nsig-cluster { color: var(--violet-dim); border-color: var(--violet-glow); background: var(--violet-glow); }
   .nsig-meta { color: var(--teal-dim); border-color: rgba(77,208,196,0.2); background: rgba(77,208,196,0.06); }
+
+  /* ─── NATAL PROFILE STRIP ────────────────────────── */
+  .natal-strip {
+    background: linear-gradient(135deg, rgba(212,168,67,0.06) 0%, rgba(155,114,245,0.06) 100%);
+    border: 1px solid rgba(212,168,67,0.2);
+    border-radius: 16px;
+    padding: 18px 24px;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .natal-strip-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+  .natal-strip-label {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .natal-strip-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  .natal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 140px;
+  }
+  .natal-field label {
+    font-family: var(--font-mono);
+    font-size: 0.57rem;
+    letter-spacing: 0.14em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .natal-field select,
+  .natal-field input {
+    background: rgba(6,5,13,0.6);
+    border: 1px solid rgba(212,168,67,0.25);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .natal-field select:hover,
+  .natal-field input:hover { border-color: var(--gold); }
+  .natal-field select:focus,
+  .natal-field input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-glow); }
+  .natal-active-badge {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+    border: 1px solid rgba(212,168,67,0.4);
+    border-radius: 100px;
+    padding: 3px 12px;
+    background: var(--gold-glow);
+    white-space: nowrap;
+    display: none;
+    align-items: center;
+    gap: 6px;
+  }
+  .natal-active-badge.show { display: flex; }
+  .natal-active-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse-gold 2s infinite;
+  }
+  @keyframes pulse-gold {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  /* ─── PERSONAL IMPACT BLOCK ──────────────────────── */
+  .impact-section {
+    margin-top: 28px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+  }
+  .impact-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .impact-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .impact-header-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(212,168,67,0.4), transparent);
+  }
+  .impact-header-label {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .impact-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+  }
+  .impact-card {
+    background: linear-gradient(135deg, rgba(30,26,53,0.9), rgba(22,19,42,0.9));
+    border: 1px solid rgba(212,168,67,0.18);
+    border-radius: 14px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .impact-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    opacity: 0.5;
+  }
+  .impact-card-icon {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .impact-card-label {
+    font-family: var(--font-mono);
+    font-size: 0.56rem;
+    letter-spacing: 0.16em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .impact-card-value {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  .impact-card-desc {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  .impact-narrative {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, rgba(212,168,67,0.05), rgba(155,114,245,0.05));
+    border: 1px solid rgba(212,168,67,0.22);
+    border-radius: 14px;
+    padding: 22px 26px;
+    position: relative;
+  }
+  .impact-narrative::before {
+    content: '✦';
+    position: absolute;
+    top: 16px; right: 20px;
+    color: var(--gold);
+    opacity: 0.2;
+    font-size: 1.4rem;
+  }
+  .impact-narrative-text {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-primary);
+    font-style: italic;
+  }
+
+  /* ─── HOUSE WHEEL SVG ─────────────────────────────── */
+  .house-wheel-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .house-wheel-wrap svg {
+    filter: drop-shadow(0 0 12px rgba(212,168,67,0.15));
+  }
 
   /* ─── TRANSIT FINDER ────────────────────────────── */
   .tf-section { margin-bottom: 48px; }
@@ -1760,6 +1964,8 @@
     .learning-lab-grid, .learning-memory-grid, .learning-metric-grid { grid-template-columns: 1fr; }
     .hero-title { font-size: 2.2rem; }
     .transit-row { grid-template-columns: 1fr 1fr; }
+    .impact-cards { grid-template-columns: 1fr; }
+    .natal-strip { flex-direction: column; align-items: flex-start; }
   }
 
   /* ─── SCROLL REVEAL ──────────────────────────────── */
@@ -2773,6 +2979,51 @@
     </div>
   </div>
 
+  <!-- ── PERFIL NATAL ── -->
+  <div class="natal-strip" id="natal-strip">
+    <div class="natal-strip-icon">♑</div>
+    <div style="flex:1">
+      <div class="natal-strip-label">Perfil Natal — Personalización por Ascendente</div>
+      <div class="natal-strip-row">
+        <div class="natal-field">
+          <label>Ascendente (Rising Sign)</label>
+          <select id="natal-rising" onchange="onNatalChange()">
+            <option value="">Sin perfil natal</option>
+            <option value="Aries">Aries ♈</option>
+            <option value="Tauro">Tauro ♉</option>
+            <option value="Géminis">Géminis ♊</option>
+            <option value="Cáncer">Cáncer ♋</option>
+            <option value="Leo">Leo ♌</option>
+            <option value="Virgo">Virgo ♍</option>
+            <option value="Libra">Libra ♎</option>
+            <option value="Escorpio">Escorpio ♏</option>
+            <option value="Sagitario">Sagitario ♐</option>
+            <option value="Capricornio">Capricornio ♑</option>
+            <option value="Acuario">Acuario ♒</option>
+            <option value="Piscis">Piscis ♓</option>
+          </select>
+        </div>
+        <div class="natal-field">
+          <label>Nombre del cliente</label>
+          <input type="text" id="natal-name" placeholder="Ej: Carlos" oninput="onNatalChange()" style="padding:7px 12px;width:140px">
+        </div>
+        <div class="natal-active-badge" id="natal-active-badge">
+          <div class="natal-active-dot"></div>
+          <span id="natal-badge-text">Perfil activo</span>
+        </div>
+      </div>
+    </div>
+    <div class="house-wheel-wrap">
+      <svg id="house-wheel-svg" width="82" height="82" viewBox="0 0 82 82" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="41" cy="41" r="38" fill="none" stroke="rgba(212,168,67,0.12)" stroke-width="1"/>
+        <circle cx="41" cy="41" r="22" fill="none" stroke="rgba(212,168,67,0.08)" stroke-width="1"/>
+        <g id="wheel-sectors"></g>
+        <g id="wheel-labels"></g>
+        <circle cx="41" cy="41" r="5" fill="rgba(212,168,67,0.3)" stroke="var(--gold)" stroke-width="1"/>
+      </svg>
+    </div>
+  </div>
+
   <!-- ── HERO ── -->
   <section class="hero">
     <div class="hero-left reveal">
@@ -2801,6 +3052,7 @@
       <div class="mode-panel active" id="mode-transits">
         <div class="col-labels">
           <div class="row-label">PLANETA</div>
+          <div class="row-label" style="color:rgba(212,168,67,0.6);font-size:0.52rem">SIGNO <span style="opacity:0.5">Casa</span></div>
           <div class="row-label">ASPECTO</div>
           <div class="row-label">DESTINO</div>
           <div class="row-label">ORBE</div>
@@ -3055,6 +3307,16 @@
     <div class="narrative-body" id="narrative-body">
       <p class="narrative-paragraph" id="narrative-paragraph"></p>
       <div class="narrative-signals" id="narrative-signals"></div>
+
+      <!-- ── IMPACTO PERSONAL (aparece solo si hay ascendente) ── -->
+      <div class="impact-section" id="impact-section">
+        <div class="impact-header">
+          <div class="impact-header-line"></div>
+          <div class="impact-header-label">✦ Impacto Personal</div>
+          <div class="impact-header-line" style="background:linear-gradient(90deg,transparent,rgba(212,168,67,0.4))"></div>
+        </div>
+        <div class="impact-cards" id="impact-cards"></div>
+      </div>
     </div>
   </section>
 
@@ -3898,6 +4160,277 @@ const EMOTION_FOCUS_ES = {
   sensibilidad: 'la escucha interna y el cuidado propio',
 };
 
+// ═══════════════════════════════════════════════════════════════
+// MÓDULO: PERFIL NATAL — Cálculo de Casas por Ascendente
+// ═══════════════════════════════════════════════════════════════
+
+const SIGNOS_ORDEN = [
+  'Aries','Tauro','Géminis','Cáncer','Leo','Virgo',
+  'Libra','Escorpio','Sagitario','Capricornio','Acuario','Piscis'
+];
+
+const SIGN_SYMBOLS = {
+  'Aries':'♈','Tauro':'♉','Géminis':'♊','Cáncer':'♋',
+  'Leo':'♌','Virgo':'♍','Libra':'♎','Escorpio':'♏',
+  'Sagitario':'♐','Capricornio':'♑','Acuario':'♒','Piscis':'♓'
+};
+
+// Calcula en qué casa cae un signo dado el ascendente
+function calcularCasa(signoTransito, ascendente) {
+  if (!signoTransito || !ascendente) return null;
+  const idxAsc = SIGNOS_ORDEN.indexOf(ascendente);
+  const idxSigno = SIGNOS_ORDEN.indexOf(signoTransito);
+  if (idxAsc === -1 || idxSigno === -1) return null;
+  return ((idxSigno - idxAsc + 12) % 12) + 1;
+}
+
+// Devuelve qué signo rige cada casa para un ascendente dado
+function getCasaSigno(numeroCasa, ascendente) {
+  const idxAsc = SIGNOS_ORDEN.indexOf(ascendente);
+  if (idxAsc === -1) return null;
+  return SIGNOS_ORDEN[(idxAsc + numeroCasa - 1) % 12];
+}
+
+const TEMAS_CASAS = {
+  1:  { titulo: 'Casa 1 · Identidad',       emoji: '🪞', desc: 'Tu yo, apariencia física, imagen proyectada al mundo, el inicio de ciclos.', area: 'identidad y presencia personal' },
+  2:  { titulo: 'Casa 2 · Recursos',        emoji: '💰', desc: 'Dinero, posesiones materiales, valor propio, autoestima y seguridad económica.', area: 'recursos, dinero y valor propio' },
+  3:  { titulo: 'Casa 3 · Comunicación',    emoji: '💬', desc: 'Mente cotidiana, hermanos, vecinos, viajes cortos, escritura y aprendizaje cercano.', area: 'comunicación y mente cotidiana' },
+  4:  { titulo: 'Casa 4 · Hogar',           emoji: '🏠', desc: 'Familia, raíces, hogar físico y emocional, el pasado y los cimientos internos.', area: 'hogar, familia y raíces' },
+  5:  { titulo: 'Casa 5 · Creatividad',     emoji: '🎨', desc: 'Placer, romance, hijos, creatividad, juego, riesgo y autoexpresión genuina.', area: 'creatividad, romance y placer' },
+  6:  { titulo: 'Casa 6 · Servicio',        emoji: '⚕️', desc: 'Trabajo diario, salud, rutinas, hábitos, servicio y relación con el cuerpo.', area: 'salud, trabajo y rutinas' },
+  7:  { titulo: 'Casa 7 · Vínculos',        emoji: '🤝', desc: 'Relaciones serias, pareja, socios, contratos y proyecciones en el otro.', area: 'relaciones, pareja y alianzas' },
+  8:  { titulo: 'Casa 8 · Transformación',  emoji: '🦋', desc: 'Profundidad, sexualidad, muerte y renacimiento, recursos compartidos, lo oculto.', area: 'transformación profunda y lo oculto' },
+  9:  { titulo: 'Casa 9 · Expansión',       emoji: '🌍', desc: 'Filosofía, espiritualidad, viajes largos, educación superior, creencias y visión.', area: 'creencias, expansión y filosofía' },
+  10: { titulo: 'Casa 10 · Carrera',        emoji: '🏆', desc: 'Carrera profesional, reputación pública, legado y ambición en el mundo exterior.', area: 'carrera, reputación y legado' },
+  11: { titulo: 'Casa 11 · Comunidad',      emoji: '🌐', desc: 'Amigos, grupos, causas colectivas, sueños futuros, redes y pertenencia social.', area: 'comunidad, amistades y futuros' },
+  12: { titulo: 'Casa 12 · Trascendencia',  emoji: '🌊', desc: 'Lo inconsciente, karma, retiros, espiritualidad profunda, lo que está oculto en ti.', area: 'espiritualidad, inconsciente y karma' },
+};
+
+const ASPECTOS_TEXTO = {
+  'Conjunción':'fusionado con', 'conjunction':'fusionado con',
+  'Oposición':'en tensión con', 'opposition':'en tensión con',
+  'Cuadratura':'en fricción con', 'square':'en fricción con',
+  'Trígono':'fluyendo hacia', 'trine':'fluyendo hacia',
+  'Sextil':'abriendo puertas hacia', 'sextile':'abriendo puertas hacia',
+};
+
+// Genera la narrativa personalizada de impacto de casa
+function generarNarrativaImpacto(planeta, aspecto, destino, signoTransito, casa, tema, nombre, ascendente) {
+  const nombreStr = nombre ? `${nombre}, con` : 'Con';
+  const aspectoTexto = ASPECTOS_TEXTO[aspecto] || 'conectando con';
+  const casaInfo = TEMAS_CASAS[casa];
+  if (!casaInfo) return '';
+
+  const intensidades = {
+    'Conjunción': 'activa con fuerza', 'conjunction': 'activa con fuerza',
+    'Oposición': 'tensiona directamente', 'opposition': 'tensiona directamente',
+    'Cuadratura': 'genera fricción en', 'square': 'genera fricción en',
+    'Trígono': 'fluye armoniosamente hacia', 'trine': 'fluye armoniosamente hacia',
+    'Sextil': 'abre oportunidades en', 'sextile': 'abre oportunidades en',
+  };
+  const verbo = intensidades[aspecto] || 'activa';
+
+  return `${nombreStr} Ascendente ${ascendente}, el tránsito de ${planeta} en ${signoTransito || ''} ${verbo} tu ${casaInfo.titulo}. ` +
+    `Esto pone el foco en ${casaInfo.area}. ` +
+    `${casaInfo.desc} Es un momento para prestar atención a esta esfera de tu vida.`;
+}
+
+// ─── PERFIL NATAL — Estado global ────────────────────────────
+let natalProfile = {
+  rising: localStorage.getItem('natal_rising') || '',
+  name: localStorage.getItem('natal_name') || '',
+};
+
+function onNatalChange() {
+  natalProfile.rising = document.getElementById('natal-rising').value;
+  natalProfile.name   = document.getElementById('natal-name').value.trim();
+  localStorage.setItem('natal_rising', natalProfile.rising);
+  localStorage.setItem('natal_name',   natalProfile.name);
+  updateNatalUI();
+}
+
+function updateNatalUI() {
+  const badge = document.getElementById('natal-active-badge');
+  const badgeText = document.getElementById('natal-badge-text');
+  if (natalProfile.rising) {
+    badge.classList.add('show');
+    const sym = SIGN_SYMBOLS[natalProfile.rising] || '';
+    const n = natalProfile.name ? ` · ${natalProfile.name}` : '';
+    badgeText.textContent = `${sym} Asc. ${natalProfile.rising}${n}`;
+  } else {
+    badge.classList.remove('show');
+  }
+  renderHouseWheel(natalProfile.rising);
+}
+
+// ─── RUEDA DE CASAS SVG ──────────────────────────────────────
+function renderHouseWheel(ascendente) {
+  const sectorsG = document.getElementById('wheel-sectors');
+  const labelsG  = document.getElementById('wheel-labels');
+  if (!sectorsG || !labelsG) return;
+  sectorsG.innerHTML = '';
+  labelsG.innerHTML  = '';
+
+  if (!ascendente) return;
+
+  const cx = 41, cy = 41, r = 38, rInner = 22, rLabel = 31;
+  const step = (2 * Math.PI) / 12;
+
+  for (let i = 0; i < 12; i++) {
+    const startAngle = -Math.PI / 2 + i * step;
+    const endAngle   = startAngle + step;
+    const midAngle   = startAngle + step / 2;
+
+    const x1 = cx + r * Math.cos(startAngle);
+    const y1 = cy + r * Math.sin(startAngle);
+    const x2 = cx + r * Math.cos(endAngle);
+    const y2 = cy + r * Math.sin(endAngle);
+    const xi1 = cx + rInner * Math.cos(startAngle);
+    const yi1 = cy + rInner * Math.sin(startAngle);
+    const xi2 = cx + rInner * Math.cos(endAngle);
+    const yi2 = cy + rInner * Math.sin(endAngle);
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    const d = `M ${xi1} ${yi1} L ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2} L ${xi2} ${yi2} A ${rInner} ${rInner} 0 0 0 ${xi1} ${yi1} Z`;
+    path.setAttribute('d', d);
+    path.setAttribute('fill', i === 0 ? 'rgba(212,168,67,0.18)' : 'rgba(155,114,245,0.05)');
+    path.setAttribute('stroke', 'rgba(212,168,67,0.2)');
+    path.setAttribute('stroke-width', '0.5');
+    sectorsG.appendChild(path);
+
+    // House number label
+    const lx = cx + rLabel * Math.cos(midAngle);
+    const ly = cy + rLabel * Math.sin(midAngle);
+    const text = document.createElementNS('http://www.w3.org/2000/svg','text');
+    text.setAttribute('x', lx);
+    text.setAttribute('y', ly);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('dominant-baseline', 'central');
+    text.setAttribute('font-size', '5.5');
+    text.setAttribute('font-family', 'JetBrains Mono, monospace');
+    text.setAttribute('fill', i === 0 ? 'rgba(212,168,67,0.9)' : 'rgba(155,114,245,0.55)');
+    text.textContent = i + 1;
+    labelsG.appendChild(text);
+  }
+}
+
+// ─── RENDERIZAR BLOQUE IMPACTO PERSONAL ──────────────────────
+function renderImpactoPersonal(result) {
+  const section = document.getElementById('impact-section');
+  const cardsEl = document.getElementById('impact-cards');
+  if (!section || !cardsEl) return;
+
+  if (!natalProfile.rising) {
+    section.classList.remove('visible');
+    return;
+  }
+
+  const transits = result.topTránsitos || [];
+  if (!transits.length) { section.classList.remove('visible'); return; }
+
+  // Calcular impacto para cada tránsito top
+  const impactos = transits.map(t => {
+    const signoTransito = t.context?.planetSign || t.sign || t.planetSign || '';
+    const casa = signoTransito ? calcularCasa(signoTransito, natalProfile.rising) : null;
+    return { ...t, casaCalculada: casa, signoTransito };
+  }).filter(t => t.casaCalculada);
+
+  // Si el tránsito no tiene signo, intentar con el destino
+  const impactosConDestino = transits.map(t => {
+    if (t.casaCalculada) return null;
+    const signoDestino = t.context?.targetSign || t.targetSign || '';
+    const casa = signoDestino ? calcularCasa(signoDestino, natalProfile.rising) : null;
+    return casa ? { ...t, casaCalculada: casa, signoTransito: signoDestino, esDestino: true } : null;
+  }).filter(Boolean);
+
+  const todos = [...impactos, ...impactosConDestino];
+
+  if (!todos.length) {
+    // No hay signos — mostrar aviso de que se necesita más dato
+    section.classList.add('visible');
+    cardsEl.innerHTML = `
+      <div class="impact-card" style="grid-column:1/-1;text-align:center;opacity:0.6">
+        <span class="impact-card-icon">ℹ️</span>
+        <div class="impact-card-desc">
+          Para ver el impacto personal en casas, usa el modo <strong>Tránsito Enriquecido</strong> 
+          e indica el <em>Signo</em> del planeta y destino.
+        </div>
+      </div>`;
+    return;
+  }
+
+  const html = [];
+
+  // Card de rueda personalizada
+  const casa1 = todos[0].casaCalculada;
+  const tema1  = TEMAS_CASAS[casa1];
+  const sym    = SIGN_SYMBOLS[natalProfile.rising] || '';
+
+  if (tema1) {
+    html.push(`
+      <div class="impact-card">
+        <span class="impact-card-icon">${tema1.emoji}</span>
+        <div class="impact-card-label">Tránsito principal activa</div>
+        <div class="impact-card-value">${tema1.titulo}</div>
+        <div class="impact-card-desc">${tema1.desc}</div>
+      </div>`);
+  }
+
+  // Card de signos en esa casa
+  html.push(`
+    <div class="impact-card">
+      <span class="impact-card-icon">${sym}</span>
+      <div class="impact-card-label">Tu Ascendente</div>
+      <div class="impact-card-value">Ascendente ${natalProfile.rising}</div>
+      <div class="impact-card-desc">
+        Tu Casa 1 comienza en <strong>${natalProfile.rising}</strong>. 
+        Los signos rotan desde ahí en orden natural del zodíaco.
+      </div>
+    </div>`);
+
+  // Cards adicionales si hay más tránsitos con signo
+  todos.slice(1,3).forEach(t => {
+    const c = t.casaCalculada;
+    const tm = TEMAS_CASAS[c];
+    if (!tm) return;
+    html.push(`
+      <div class="impact-card">
+        <span class="impact-card-icon">${tm.emoji}</span>
+        <div class="impact-card-label">${t.planet} ${t.aspect} ${t.target}</div>
+        <div class="impact-card-value">${tm.titulo}</div>
+        <div class="impact-card-desc">${tm.area}</div>
+      </div>`);
+  });
+
+  // Narrativa completa del tránsito principal
+  const tp = todos[0];
+  const narrativa = generarNarrativaImpacto(
+    tp.planet, tp.aspect, tp.target,
+    tp.signoTransito, tp.casaCalculada, tema1,
+    natalProfile.name, natalProfile.rising
+  );
+  if (narrativa) {
+    html.push(`
+      <div class="impact-narrative">
+        <div class="impact-card-label" style="margin-bottom:10px">Lectura personalizada</div>
+        <div class="impact-narrative-text">${narrativa}</div>
+      </div>`);
+  }
+
+  cardsEl.innerHTML = html.join('');
+  section.classList.add('visible');
+}
+
+// ─── INIT NATAL PROFILE ──────────────────────────────────────
+function initNatalProfile() {
+  const risingEl = document.getElementById('natal-rising');
+  const nameEl   = document.getElementById('natal-name');
+  if (risingEl && natalProfile.rising) risingEl.value = natalProfile.rising;
+  if (nameEl   && natalProfile.name)   nameEl.value   = natalProfile.name;
+  updateNatalUI();
+}
+
+// ═══════════════════════════════════════════════════════════════
 // Main interpret function
 function interpretTránsitos(transits) {
   const prioritized = filterTránsitos(transits, 3);
@@ -3979,12 +4512,17 @@ let previousWeights = {};
 const PLANETAS = ['Moon','Mars','Saturn','Sun','Venus','Mercury','Jupiter'];
 const ASPECTOS = ['conjunction','opposition','square','trine','sextile'];
 
-function addTransitRow(planet='Mars', aspect='square', target='Moon', orb=0.8) {
+function addTransitRow(planet='Mars', aspect='square', target='Moon', orb=0.8, sign='') {
   const row = document.createElement('div');
   row.className = 'transit-row';
+  const signosOpts = ['','Aries','Tauro','Géminis','Cáncer','Leo','Virgo','Libra','Escorpio','Sagitario','Capricornio','Acuario','Piscis']
+    .map(s => `<option value="${s}" ${s===sign?'selected':''}>${s||'— Signo —'}</option>`).join('');
   row.innerHTML = `
     <select class="tr-planet">
       ${PLANETAS.map(p=>`<option value="${p}" ${p===planet?'selected':''}>${p}</option>`).join('')}
+    </select>
+    <select class="tr-sign" title="Signo del tránsito (para cálculo de casas)" style="opacity:0.75">
+      ${signosOpts}
     </select>
     <select class="tr-aspect">
       ${ASPECTOS.map(a=>`<option value="${a}" ${a===aspect?'selected':''}>${a}</option>`).join('')}
@@ -4004,6 +4542,7 @@ function getTránsitos() {
     aspecto: row.querySelector('.tr-aspect').value,
     target: row.querySelector('.tr-target').value,
     orb: parseFloat(row.querySelector('.tr-orb').value)||0,
+    context: { planetSign: row.querySelector('.tr-sign')?.value || '' },
   }));
 }
 
@@ -4011,6 +4550,9 @@ function getTránsitos() {
 addTransitRow('Mars','square','Moon',0.8);
 addTransitRow('Venus','trine','Sun',1.2);
 addTransitRow('Saturn','conjunction','Sun',1.7);
+
+// Init natal profile
+initNatalProfile();
 
 // ─────────────────────────────────────────────────────────────
 // MODE SWITCH
@@ -4624,6 +5166,9 @@ function renderResult(result, isRaw=false) {
     if (label) chips.push(`<span class="nsig-chip nsig-meta">${label}</span>`);
   });
   document.getElementById('narrative-signals').innerHTML = chips.join('');
+
+  // ── Impacto Personal por Ascendente ──
+  renderImpactoPersonal(result);
 
   section.classList.add('visible');
 
