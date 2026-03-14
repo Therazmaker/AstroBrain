@@ -1610,7 +1610,10 @@
   .learning-metric input { width:100%; background: rgba(255,255,255,0.04); border:1px solid var(--border); color:var(--text-primary); border-radius:8px; padding:6px 8px; }
   .learning-list { margin:0; padding-left:16px; display:grid; gap:5px; }
   .learning-list li { color: var(--text-secondary); font-size:0.9rem; }
-  .learning-json-preview { max-height:360px; overflow:auto; border:1px solid var(--border); border-radius:10px; padding:10px; background: rgba(0,0,0,0.22); font-family: var(--font-mono); font-size:0.64rem; color: var(--text-secondary); }
+  .learning-json-preview { width:100%; max-height:360px; overflow:auto; border:1px solid var(--border); border-radius:10px; padding:10px; background: rgba(0,0,0,0.22); font-family: var(--font-mono); font-size:0.64rem; color: var(--text-secondary); resize:vertical; box-sizing:border-box; outline:none; transition: border-color 0.2s; }
+  .learning-json-preview:focus { border-color: var(--teal); }
+  .learning-json-save-btn { margin-top:8px; padding:6px 18px; background: rgba(77,208,196,0.12); border:1px solid rgba(77,208,196,0.4); border-radius:8px; color: var(--teal); font-family: var(--font-mono); font-size:0.68rem; cursor:pointer; transition: background 0.2s, border-color 0.2s; }
+  .learning-json-save-btn:hover { background: rgba(77,208,196,0.22); border-color: var(--teal); }
   .learning-memory-grid { display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:10px; margin-top:12px; }
   .learning-memory-card { border:1px solid var(--border); border-radius:10px; padding:10px; background: rgba(0,0,0,0.16); }
   .learning-memory-card h5 { font-family: var(--font-mono); font-size:0.58rem; color: var(--gold); margin-bottom:5px; }
@@ -3155,7 +3158,13 @@
           <div class="training-analysis-item"><h5>Evaluación de calidad</h5><div class="learning-metric-grid" id="learning-quality-grid"></div></div>
         </div>
       </div>
-      <div class="training-analysis-item" style="margin-top:12px"><h5>Estructura completa de aprendizaje</h5><pre class="learning-json-preview" id="learning-json-preview">Sin procesamiento aún.</pre></div>
+      <div class="training-analysis-item" style="margin-top:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <h5 style="margin:0">Estructura completa de aprendizaje</h5>
+          <button class="learning-json-save-btn" onclick="guardarLearningJsonEdit()" title="Guardar cambios en el JSON de aprendizaje">💾 Guardar cambios</button>
+        </div>
+        <textarea class="learning-json-preview" id="learning-json-preview" spellcheck="false" rows="18">Sin procesamiento aún.</textarea>
+      </div>
       <div class="learning-memory-grid" id="learning-memory-summary"></div>
     </div>
     <div class="training-room-card" style="margin-top:20px">
@@ -5281,13 +5290,40 @@ function renderLearningLabResult(result, memorySummary = null) {
 
   renderLearningMetricGrid('learning-voice-grid', result.voiceLearning, 'chart');
   renderLearningMetricGrid('learning-quality-grid', result.qualityAssessment, 'cards');
-  jsonNode.textContent = JSON.stringify(result, null, 2);
+  jsonNode.value = JSON.stringify(result, null, 2);
+  window._lastLearningResult = result;
 
   if (memorySummary) {
     memoryNode.innerHTML = `<div class="learning-memory-card"><h5>contentMemory</h5><p>${memorySummary.contentCount} neuronas semánticas consolidadas.</p></div><div class="learning-memory-card"><h5>narrativeMemory</h5><p>${memorySummary.narrativeCount} patrones narrativos acumulados.</p></div><div class="learning-memory-card"><h5>voiceMemory</h5><p>Perfil global actualizado con ${memorySummary.voiceProfile.count} ejemplos.</p></div><div class="learning-memory-card"><h5>qualityMemory</h5><p>Calidad global actualizada con ${memorySummary.qualityProfile.count} ejemplos.</p></div>`;
   } else {
     memoryNode.innerHTML = '<div class="learning-memory-card"><h5>Memoria</h5><p>Procesa y guarda aprendizaje para ver consolidación acumulativa.</p></div>';
   }
+}
+
+async function guardarLearningJsonEdit() {
+  const jsonNode = document.getElementById('learning-json-preview');
+  if (!jsonNode || !jsonNode.value.trim() || jsonNode.value.trim() === 'Sin procesamiento aún.') {
+    showToast('No hay JSON de aprendizaje para guardar.', 'error');
+    return;
+  }
+  let parsed;
+  try {
+    parsed = JSON.parse(jsonNode.value);
+  } catch (e) {
+    showToast('JSON inválido: ' + e.message, 'error');
+    return;
+  }
+  window._lastLearningResult = parsed;
+  await dbAdd('learningHistory', {
+    ...parsed,
+    timestamp: Date.now(),
+    source: parsed.source || {},
+    learnedRules: parsed.learnedRules || [],
+    narrativePatterns: (parsed.narrativeLearning && parsed.narrativeLearning.patterns) || [],
+    qualityAssessment: parsed.qualityAssessment || {},
+    manualEdit: true,
+  });
+  showToast('Aprendizaje guardado correctamente.', 'success');
 }
 
 function construirDraftsDesdeRaw(analysis, rawText) {
