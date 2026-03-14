@@ -17,8 +17,9 @@
 
 const interpretTransits = require('./interpretTransits');
 const { enrichTransits } = require('./enrichTransitContext');
-const { scoreTransit, strengthLabel } = require('./scoreTransits');
+const { scoreTransit: legacyScoreTransit, strengthLabel } = require('./scoreTransits');
 const { assignStrength, isMoonPhaseTransit, STRENGTH_RANK } = require('./filterTransits');
+const { rankDayTransits, labelScore } = require('../astro/scoring/scoreTransit');
 
 // ─── RESPONSE MODE ────────────────────────────────────────────────────────────
 
@@ -159,7 +160,7 @@ const ASPECT_ENERGY_TYPE = {
 function prioritizeByStrength(transits = []) {
   return transits
     .map((t) => {
-      const scored = t.score !== undefined ? t : scoreTransit(t);
+      const scored = t.score !== undefined ? t : legacyScoreTransit(t);
       return { ...scored, strength: assignStrength(scored) };
     })
     .sort((a, b) => (STRENGTH_RANK[b.strength] ?? 0) - (STRENGTH_RANK[a.strength] ?? 0));
@@ -306,17 +307,19 @@ const MONTH_MAP_ES = {
  * Determines how many transits and what date range the user is asking for.
  *
  * Rules:
- *   "dame varios"             → 'multiple'   (up to 5 transits)
+ *   "dame varios"                   → 'multiple'        (top 3 transits)
  *   "cuál meto" / "más fuerte" / "dame uno fuerte" → 'strongest' (1 transit)
- *   "semana" / "esta semana"  → 'week'
- *   default                   → 'specific_day' (1–3 transits)
+ *   "interesantes … semana"         → 'interesting_week' (top 1–2/day, score ≥ 11)
+ *   "semana" / "esta semana"        → 'week'
+ *   default                         → 'specific_day' (1–3 transits)
  *
  * @param {string} userText
- * @returns {'specific_day'|'week'|'strongest'|'multiple'}
+ * @returns {'specific_day'|'week'|'strongest'|'multiple'|'interesting_week'}
  */
 function detectLookupType(userText = '') {
   if (/dame\s+varios/i.test(userText)) return 'multiple';
   if (/cu[aá]l\s+meto|dame\s+uno\s+fuerte|m[aá]s\s+fuerte/i.test(userText)) return 'strongest';
+  if (/interesantes?.*semana|semana.*interesantes?/i.test(userText)) return 'interesting_week';
   if (/semana/i.test(userText)) return 'week';
   return 'specific_day';
 }
@@ -468,11 +471,26 @@ function buildActiveSignals(moonPhase = {}, transits = []) {
 
 // ─── DATA MODE: SINGLE DAY PAYLOAD ───────────────────────────────────────────
 
+/** Minimum finalScore for a transit to appear in an 'interesting_week' response. */
+const INTERESTING_MIN_SCORE = 11;
+
+/**
+ * Maps a lookupType to the scoring intent used inside rankDayTransits.
+ *
+ * @param {string} lookupType
+ * @returns {string|null}
+ */
+function lookupTypeToScoringIntent(lookupType) {
+  if (lookupType === 'strongest')        return 'strongest_pick';
+  if (lookupType === 'interesting_week') return 'interesting';
+  return null;
+}
+
 /**
  * Builds a structured data payload for a single day.
  *
  * @param {object} day          - { date?, transits: [], moonPhase?: {} }
- * @param {string} lookupType   - 'specific_day' | 'week' | 'strongest' | 'multiple'
+ * @param {string} lookupType   - 'specific_day'|'week'|'strongest'|'multiple'|'interesting_week'
  * @param {number} transitCount - Max number of topTransits to include
  * @returns {object}
  */
@@ -481,16 +499,32 @@ function buildDayPayload(day = {}, lookupType, transitCount) {
   const moonPhase   = day.moonPhase || {};
   const date        = day.date || new Date().toISOString().slice(0, 10);
 
-  // Enrich, score, and sort transits by strength
+  // 1. Enrich transits (adds sign / house / element context)
   const enriched = enrichTransits(rawTransits);
-  const scored   = enriched
-    .map((t) => {
-      const s = t.score !== undefined ? t : scoreTransit(t);
-      return { ...s, strength: assignStrength(s) };
-    })
-    .sort((a, b) => (STRENGTH_RANK[b.strength] ?? 0) - (STRENGTH_RANK[a.strength] ?? 0));
 
-  const topTransits = scored.slice(0, transitCount);
+  // 2. Assign legacy strength label (used in formPresets and backward-compat fields)
+  const withStrength = enriched.map((t) => {
+    const s = t.score !== undefined ? t : legacyScoreTransit(t);
+    return { ...s, strength: assignStrength(s) };
+  });
+
+  // 3. Build active signals from all enriched transits + moon phase
+  const activeSignals = buildActiveSignals(moonPhase, withStrength);
+
+  // 4. Rank using the new scoring system
+  const scored = rankDayTransits(
+    { ...day, transits: withStrength },
+    {
+      activeSignals,
+      intent:      lookupTypeToScoringIntent(lookupType),
+      userProfile: {},
+    },
+  );
+
+  // 5. For 'interesting_week', apply minimum score filter (up to 2 per day)
+  const topTransits = lookupType === 'interesting_week'
+    ? scored.filter((t) => t.score >= INTERESTING_MIN_SCORE).slice(0, 2)
+    : scored.slice(0, transitCount);
 
   return {
     mode: 'data',
@@ -502,21 +536,24 @@ function buildDayPayload(day = {}, lookupType, transitCount) {
       degree:    moonPhase.degree    !== undefined ? moonPhase.degree : null,
     },
     topTransits: topTransits.map((t) => ({
-      planet:   t.planet,
-      aspect:   t.aspect,
-      target:   t.target,
-      strength: t.strength,
-      orb:      t.orb !== undefined ? t.orb : null,
-      sign:     (t.context && t.context.planetSign) || t.sign   || null,
-      degree:   (t.context && t.context.planetDegree) !== undefined
+      planet:         t.planet,
+      aspect:         t.aspect,
+      target:         t.target,
+      strength:       t.strength,
+      orb:            t.orb !== undefined ? t.orb : null,
+      sign:           (t.context && t.context.planetSign) || t.sign   || null,
+      degree:         (t.context && t.context.planetDegree) !== undefined
         ? t.context.planetDegree
         : (t.degree ?? null),
-      applying: t.context && t.context.isApplying !== undefined
+      applying:       t.context && t.context.isApplying !== undefined
         ? t.context.isApplying
         : (t.applying !== undefined ? t.applying : null),
+      score:          t.score,
+      scoreBreakdown: t.scoreBreakdown,
+      scoreLabel:     t.scoreLabel,
     })),
-    activeSignals: buildActiveSignals(moonPhase, topTransits),
-    formPresets:   topTransits.map(buildFormPreset),
+    activeSignals,
+    formPresets: topTransits.map(buildFormPreset),
   };
 }
 
@@ -531,10 +568,11 @@ function buildDayPayload(day = {}, lookupType, transitCount) {
  *   resolve signals → build JSON → return
  *
  * Transit count rules:
- *   specific_day → 1–3 transits
- *   strongest    → 1 transit (the highest-scoring one)
- *   multiple     → up to 5 transits
- *   week         → each day gets its own payload (up to 3 transits each)
+ *   specific_day     → 1–3 transits ordered by score
+ *   strongest        → 1 transit  (top score)
+ *   multiple         → top 3 transits
+ *   week             → each day gets its own payload (up to 3 transits each)
+ *   interesting_week → top 1–2 per day with score ≥ 11
  *
  * @param {Array}  days     - Array of day objects: { date?, transits: [], moonPhase?: {} }
  * @param {string} userText - The user's raw message (used for intent & date resolution)
@@ -547,13 +585,13 @@ function buildTransitDataResponse(days = [], userText = '') {
   // Update state
   astroConversationState.lastIntent = 'transit_data_request';
 
-  // Week lookup: return one payload per day
-  if (lookupType === 'week') {
-    astroConversationState.lastDatasetType = 'week';
+  // Week / interesting-week lookup: return one payload per day
+  if (lookupType === 'week' || lookupType === 'interesting_week') {
+    astroConversationState.lastDatasetType = lookupType;
     return {
       mode:       'data',
-      lookupType: 'week',
-      days:       safeDays.map((day) => buildDayPayload(day, 'week', 3)),
+      lookupType,
+      days:       safeDays.map((day) => buildDayPayload(day, lookupType, 3)),
     };
   }
 
@@ -576,7 +614,7 @@ function buildTransitDataResponse(days = [], userText = '') {
   }
 
   const transitCount = lookupType === 'strongest' ? 1
-    : lookupType === 'multiple' ? 5
+    : lookupType === 'multiple' ? 3
     : 3; // specific_day default
 
   const payload = buildDayPayload(targetDay, lookupType, transitCount);
@@ -751,9 +789,11 @@ module.exports = {
   buildSemanticParagraph,
   buildFormPreset,
   buildActiveSignals,
+  buildDayPayload,
   buildSynthesis,
   astroConversationState,
   DEFAULT_RESPONSE_MODE,
   INTENT_PLANET_PRIORITY,
+  INTERESTING_MIN_SCORE,
   STRENGTH_RANK,
 };

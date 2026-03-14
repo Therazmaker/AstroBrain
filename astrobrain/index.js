@@ -17,6 +17,19 @@ const {
   astroConversationState,
   DEFAULT_RESPONSE_MODE,
 } = require('./core/conversationalMode');
+const {
+  scoreTransit: scoreTransitFull,
+  rankDayTransits,
+  labelScore,
+  DEFAULT_USER_PROFILE,
+  COMBO_BOOST_TABLE,
+} = require('./astro/scoring/scoreTransit');
+const {
+  buildChoiceEvent,
+  recordChoice,
+  getChoiceHistory,
+  clearChoiceHistory,
+} = require('./astro/scoring/userChoiceStorage');
 
 function runAstroBrain(transits) {
   return interpretTransits(transits).narrative;
@@ -42,6 +55,17 @@ module.exports = {
   enrichTransits,
   detectEventType,
   learningEngine,
+  // Scoring system
+  scoreTransitFull,
+  rankDayTransits,
+  labelScore,
+  DEFAULT_USER_PROFILE,
+  COMBO_BOOST_TABLE,
+  // User choice storage (no-ML learning foundation)
+  buildChoiceEvent,
+  recordChoice,
+  getChoiceHistory,
+  clearChoiceHistory,
 };
 
 if (require.main === module) {
