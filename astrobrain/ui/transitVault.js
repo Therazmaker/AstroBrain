@@ -214,10 +214,36 @@
     const txt = userText.toLowerCase();
     const needsInteresting = ['interesante', 'interesantes', 'importante', 'fuertes'].some((k) => txt.includes(k));
     if (!needsInteresting) return days;
+    return filterInterestingDays(days);
+  }
+
+  function isMajorMoonPhase(phaseName) {
+    return ['New Moon', 'First Quarter', 'Full Moon', 'Last Quarter'].includes(phaseName);
+  }
+
+  function filterInterestingDays(days = []) {
     return days.map((day) => ({
       ...day,
       transits: (day.transits || []).filter((t) => ['very_strong', 'strong'].includes(t.strength)),
-    })).filter((d) => d.transits.length || ['New Moon', 'First Quarter', 'Full Moon', 'Last Quarter'].includes(d?.moonPhase?.phaseName || d?.moonPhase?.phase));
+    })).filter((d) => {
+      const phaseName = d?.moonPhase?.phaseName || d?.moonPhase?.phase;
+      return d.transits.length > 0 || isMajorMoonPhase(phaseName);
+    });
+  }
+
+  function buildNarrativeContext(days = []) {
+    return days.slice(0, 10).map((day) => {
+      const moon = day.moonPhase || {};
+      return {
+        date: day.date,
+        moonPhase: {
+          phaseName: moon.phaseName || moon.phase || '',
+          sign: moon.sign || '',
+          degree: moon.degree || null,
+        },
+        topTransits: (day.transits || []).slice(0, 3),
+      };
+    });
   }
 
   function buildPromptContext(days = [], signals = []) {
@@ -458,9 +484,8 @@
     const dataset = vaultState.datasets.find((d) => d.id === vaultState.active.chat) || vaultState.datasets[0];
     if (!dataset) return 'No hay dataset activo para preview.';
     const days = getDaysForIntent('weekly', dataset);
-    const signals = days.flatMap((d) => resolveSignalsFromDay(d));
-    const context = buildPromptContext(days, signals);
-    const out = `Preview narrativa semanal\n\n${context}`;
+    const narrative = global.renderSpanishNarrative ? global.renderSpanishNarrative(days) : buildPromptContext(days, days.flatMap((d) => resolveSignalsFromDay(d)));
+    const out = `Narrativa semanal\n\n${narrative}`;
     const target = document.getElementById('tv-quick-output');
     if (target) target.textContent = out;
     return out;
@@ -472,9 +497,11 @@
     const intent = resolveTimeIntent(userText);
     let days = getDaysForIntent(intent, activeDataset);
     days = filterInteresting(days, userText);
+    if (global.renderSpanishNarrative) {
+      return global.renderSpanishNarrative(days);
+    }
     const signals = days.flatMap((d) => resolveSignalsFromDay(d));
-    const context = buildPromptContext(days, signals);
-    return `Usando Transit Vault (${activeDataset.label})\n\n${context}`;
+    return buildPromptContext(days, signals);
   }
 
   function bindVaultUi() {
@@ -515,7 +542,10 @@
     activateGraphSignals,
     resolveTimeIntent,
     getDaysForIntent,
+    isMajorMoonPhase,
+    filterInterestingDays,
     filterInteresting,
+    buildNarrativeContext,
     buildPromptContext,
     summarizeDataset,
     importJsonData,
