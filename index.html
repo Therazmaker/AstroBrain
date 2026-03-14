@@ -2129,6 +2129,233 @@
     to   { transform: rotate(360deg); }
   }
 
+  /* ─── SETTINGS BUTTON ─────────────────────────────── */
+  .btn-settings {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 16px;
+    background: rgba(155, 114, 245, 0.07);
+    border: 1px solid rgba(155, 114, 245, 0.28);
+    border-radius: 100px;
+    color: var(--violet);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    outline: none;
+  }
+  .btn-settings:hover {
+    background: rgba(155, 114, 245, 0.14);
+    border-color: var(--violet);
+    box-shadow: 0 0 14px rgba(155, 114, 245, 0.22);
+  }
+  .btn-settings .settings-btn-icon {
+    font-size: 0.92rem;
+    display: inline-block;
+    transition: transform 0.4s;
+  }
+  .btn-settings:hover .settings-btn-icon {
+    transform: rotate(60deg);
+  }
+  .settings-neuron-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    background: rgba(155, 114, 245, 0.22);
+    border: 1px solid rgba(155, 114, 245, 0.45);
+    border-radius: 100px;
+    color: var(--violet);
+    font-size: 0.56rem;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: 0;
+    transition: background 0.2s;
+  }
+  .settings-neuron-badge.has-neurons {
+    background: rgba(155, 114, 245, 0.3);
+    border-color: var(--violet);
+    color: #e8d8ff;
+    box-shadow: 0 0 8px rgba(155, 114, 245, 0.3);
+  }
+
+  /* ─── SETTINGS MODAL ──────────────────────────────── */
+  .settings-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    background: rgba(6, 5, 13, 0.82);
+    backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+  }
+  .settings-modal.open { display: flex; }
+  .settings-modal-inner {
+    background: var(--card);
+    border: 1px solid rgba(155, 114, 245, 0.28);
+    border-radius: 20px;
+    width: min(520px, 92vw);
+    max-height: 88vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 60px rgba(155, 114, 245, 0.15), 0 24px 60px rgba(0,0,0,0.6);
+  }
+  .settings-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid rgba(155, 114, 245, 0.15);
+  }
+  .settings-modal-title {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--violet);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .settings-modal-title span.settings-title-icon {
+    font-size: 1rem;
+  }
+  .settings-modal-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: color 0.15s, background 0.15s;
+  }
+  .settings-modal-close:hover { color: var(--text-primary); background: rgba(255,255,255,0.06); }
+  .settings-modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Neuron stats card inside settings */
+  .settings-neuron-stats {
+    background: rgba(155, 114, 245, 0.06);
+    border: 1px solid rgba(155, 114, 245, 0.18);
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .settings-neuron-stats-icon {
+    font-size: 2rem;
+    opacity: 0.7;
+  }
+  .settings-neuron-stats-info {
+    flex: 1;
+  }
+  .settings-neuron-stats-count {
+    font-family: var(--font-mono);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--violet);
+    line-height: 1;
+  }
+  .settings-neuron-stats-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* Action cards in settings */
+  .settings-action-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .settings-action-label {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding-bottom: 4px;
+  }
+  .settings-action-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .settings-action-card:hover {
+    border-color: rgba(155, 114, 245, 0.3);
+    background: rgba(155, 114, 245, 0.04);
+  }
+  .settings-action-icon {
+    font-size: 1.2rem;
+    width: 32px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .settings-action-content { flex: 1; }
+  .settings-action-title {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--text-primary);
+    letter-spacing: 0.04em;
+  }
+  .settings-action-desc {
+    font-family: var(--font-mono);
+    font-size: 0.56rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+  .settings-action-btn {
+    background: rgba(155, 114, 245, 0.1);
+    border: 1px solid rgba(155, 114, 245, 0.3);
+    border-radius: 8px;
+    color: var(--violet);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+  }
+  .settings-action-btn:hover {
+    background: rgba(155, 114, 245, 0.2);
+    border-color: var(--violet);
+    box-shadow: 0 0 10px rgba(155, 114, 245, 0.2);
+  }
+  .settings-action-btn.danger {
+    background: rgba(229, 115, 115, 0.08);
+    border-color: rgba(229, 115, 115, 0.3);
+    color: var(--rose);
+  }
+  .settings-action-btn.danger:hover {
+    background: rgba(229, 115, 115, 0.18);
+    border-color: var(--rose);
+  }
+  #settings-import-file { display: none; }
+
   /* ─── DEV PANEL ───────────────────────────────────── */
   .dev-panel-section { display: none; margin-bottom: 48px; }
   .dev-panel-section.visible { display: block; }
@@ -2413,8 +2640,13 @@
         Red Neuronal
       </button>
       <button class="btn-training-shortcut" onclick="irATrainingRoom()">Training Room</button>
+      <button class="btn-settings" id="btn-settings" onclick="openSettingsModal()" title="Configuración — Exportar e importar neuronas entrenadas">
+        <span class="settings-btn-icon">⚙</span>
+        Settings
+        <span class="settings-neuron-badge" id="settings-neuron-badge">0</span>
+      </button>
       <button class="btn-dev-mode" id="btn-dev-mode" onclick="toggleDevMode()" title="Modo Dev — Auditoría cognitiva interna">
-        <span class="dev-btn-icon">⚙</span>
+        <span class="dev-btn-icon">⚡</span>
         Dev Mode
       </button>
       <div class="status-pill">
@@ -2464,6 +2696,71 @@
           <div class="gl-item"><span class="gl-line" style="background:#4dd0c4"></span>Conexión Training Room</div>
         </div>
         <div class="graph-tooltip" id="graph-tooltip"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SETTINGS MODAL ── -->
+  <div class="settings-modal" id="settings-modal">
+    <div class="settings-modal-inner">
+      <div class="settings-modal-header">
+        <div class="settings-modal-title">
+          <span class="settings-title-icon">⚙</span>
+          Configuración de Neuronas
+        </div>
+        <button class="settings-modal-close" onclick="closeSettingsModal()">✕</button>
+      </div>
+      <div class="settings-modal-body">
+
+        <!-- Neuron counter -->
+        <div class="settings-neuron-stats">
+          <div class="settings-neuron-stats-icon">🧠</div>
+          <div class="settings-neuron-stats-info">
+            <div class="settings-neuron-stats-count" id="settings-neuron-count">0</div>
+            <div class="settings-neuron-stats-label">Neuronas entrenadas guardadas</div>
+          </div>
+        </div>
+
+        <!-- Export group -->
+        <div class="settings-action-group">
+          <div class="settings-action-label">Exportar</div>
+          <div class="settings-action-card">
+            <div class="settings-action-icon">📤</div>
+            <div class="settings-action-content">
+              <div class="settings-action-title">Exportar neuronas entrenadas</div>
+              <div class="settings-action-desc">Descarga un archivo JSON con todas las neuronas del Training Room</div>
+            </div>
+            <button class="settings-action-btn" onclick="exportTrainedNeurons()">Exportar</button>
+          </div>
+        </div>
+
+        <!-- Import group -->
+        <div class="settings-action-group">
+          <div class="settings-action-label">Importar</div>
+          <div class="settings-action-card">
+            <div class="settings-action-icon">📥</div>
+            <div class="settings-action-content">
+              <div class="settings-action-title">Importar neuronas desde JSON</div>
+              <div class="settings-action-desc">Carga neuronas exportadas previamente; las existentes con el mismo ID se actualizarán</div>
+            </div>
+            <button class="settings-action-btn" onclick="document.getElementById('settings-import-file').click()">Importar</button>
+            <input type="file" id="settings-import-file" accept=".json,application/json" onchange="importTrainedNeurons(event)">
+          </div>
+        </div>
+
+        <!-- Danger zone -->
+        <div class="settings-action-group">
+          <div class="settings-action-label">Zona peligrosa</div>
+          <div class="settings-action-card">
+            <div class="settings-action-icon">🗑</div>
+            <div class="settings-action-content">
+              <div class="settings-action-title">Eliminar todas las neuronas entrenadas</div>
+              <div class="settings-action-desc">Borra permanentemente todas las neuronas del Training Room del almacenamiento local</div>
+            </div>
+            <button class="settings-action-btn danger" onclick="clearTrainedNeurons()">Borrar todo</button>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -5751,6 +6048,7 @@ async function guardarNeuronasTraining() {
   showToast('Neuronas guardadas, reconectadas y sincronizadas', 'success');
   await refreshGraphLive();
   await enviarNeuronasAlGrafo(false);
+  await updateNeuronCounter();
 }
 
 async function obtenerNeuronasTrainingGuardadas() {
@@ -5790,6 +6088,7 @@ window.addEventListener('scroll', () => {
   await renderHistory();
   if (window.TransitVault) { window.TransitVault.init().catch(err => console.warn('[TransitVault] init failed', err)); }
   await renderHippocampus();
+  await updateNeuronCounter();
   const ctxAll = await dbGetAll('contextMemory');
   if (ctxAll.length) {
     const container = document.getElementById('context-memory-list');
@@ -6595,6 +6894,10 @@ document.getElementById('graph-modal').addEventListener('click', e => {
   if (e.target === document.getElementById('graph-modal')) closeGraphModal();
 });
 
+document.getElementById('settings-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('settings-modal')) closeSettingsModal();
+});
+
 // ─────────────────────────────────────────────────────────────
 // TRANSIT FINDER ENGINE
 // Search-driven interface to find, score and act on transits
@@ -7251,6 +7554,117 @@ function toggleDevMode() {
     section.classList.remove('visible');
     showToast('Modo Dev desactivado', 'info');
   }
+}
+
+// ── Settings Modal ──────────────────────────────────────────────
+
+async function updateNeuronCounter() {
+  try {
+    const neurons = await dbGetAll('trainingNeurons');
+    const count = (neurons || []).length;
+    const badge = document.getElementById('settings-neuron-badge');
+    const countEl = document.getElementById('settings-neuron-count');
+    if (badge) {
+      badge.textContent = count;
+      badge.classList.toggle('has-neurons', count > 0);
+    }
+    if (countEl) countEl.textContent = count;
+    return count;
+  } catch(e) {
+    return 0;
+  }
+}
+
+function openSettingsModal() {
+  document.getElementById('settings-modal').classList.add('open');
+  updateNeuronCounter();
+}
+
+function closeSettingsModal() {
+  document.getElementById('settings-modal').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('settings-modal').classList.contains('open')) {
+    closeSettingsModal();
+  }
+});
+
+async function exportTrainedNeurons() {
+  const neurons = await dbGetAll('trainingNeurons');
+  if (!neurons || !neurons.length) {
+    showToast('No hay neuronas entrenadas para exportar.', 'error');
+    return;
+  }
+  const payload = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    source: 'AstroBrain — Training Room',
+    count: neurons.length,
+    neurons
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const dateStamp = new Date().toISOString().slice(0, 10);
+  a.download = `astrobrain-neuronas-${dateStamp}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast(`${neurons.length} neurona(s) exportada(s) correctamente`, 'success');
+}
+
+async function importTrainedNeurons(event) {
+  const file = event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    let neurons = [];
+    if (Array.isArray(data)) {
+      neurons = data;
+    } else if (data && Array.isArray(data.neurons)) {
+      neurons = data.neurons;
+    } else {
+      showToast('Formato de archivo no reconocido.', 'error');
+      return;
+    }
+    if (!neurons.length) {
+      showToast('El archivo no contiene neuronas.', 'error');
+      return;
+    }
+    let imported = 0;
+    for (const n of neurons) {
+      if (!n || !n.id) continue;
+      await dbPut('trainingNeurons', n);
+      imported++;
+    }
+    await updateNeuronCounter();
+    showToast(`${imported} neurona(s) importada(s) correctamente`, 'success');
+    await refreshGraphLive();
+  } catch(e) {
+    showToast('Error al leer el archivo: ' + e.message, 'error');
+  }
+}
+
+async function clearTrainedNeurons() {
+  const neurons = await dbGetAll('trainingNeurons');
+  if (!neurons || !neurons.length) {
+    showToast('No hay neuronas entrenadas para borrar.', 'error');
+    return;
+  }
+  if (!confirm(`¿Seguro que quieres borrar las ${neurons.length} neurona(s) entrenadas? Esta acción no se puede deshacer.`)) return;
+  const d = await openDB();
+  await new Promise((res, rej) => {
+    const tx = d.transaction('trainingNeurons', 'readwrite');
+    const req = tx.objectStore('trainingNeurons').clear();
+    req.onsuccess = () => res();
+    req.onerror = e => rej(e.target.error);
+  });
+  await updateNeuronCounter();
+  showToast('Todas las neuronas entrenadas fueron eliminadas.', 'info');
+  await refreshGraphLive();
 }
 
 // ── Module tracers ─────────────────────────────────────────────
