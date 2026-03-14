@@ -1594,6 +1594,12 @@
   .training-neuron-grid label { font-family: var(--font-mono); font-size: 0.58rem; color: var(--text-muted); display:block; margin-bottom:3px; letter-spacing:0.04em; }
   .faltantes-lista { margin-top:8px; font-size:0.82rem; color: var(--rose); }
   .training-neuron-conexion { margin-top:8px; font-family: var(--font-mono); font-size:0.7rem; color: var(--teal); opacity:0.85; }
+  .training-signal-field { margin-bottom:10px; }
+  .training-signal-chips { display:flex; flex-wrap:wrap; gap:5px; margin-top:5px; }
+  .training-signal-chip { padding:2px 8px; border-radius:999px; background: rgba(155,114,245,0.12); border:1px solid rgba(155,114,245,0.35); font-family: var(--font-mono); font-size:0.58rem; color: var(--violet); }
+  .training-conexion-status { margin-top:8px; font-family: var(--font-mono); font-size:0.7rem; }
+  .training-conexion-status.floating { color: var(--text-muted); }
+  .training-conexion-status.connected { color: var(--teal); }
   .training-neuron-tools { display:flex; flex-wrap: wrap; gap:8px; margin-top:10px; }
   .training-room-status-row { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; }
   .training-room-warning { color: var(--gold); font-size: 0.75rem; }
@@ -2672,6 +2678,7 @@
             <button class="af-btn" data-aspect="square" onclick="filterAspect('square',this)">Cuadratura</button>
             <button class="af-btn" data-aspect="trine" onclick="filterAspect('trine',this)">Trígono</button>
             <button class="af-btn" data-aspect="sextile" onclick="filterAspect('sextile',this)">Sextil</button>
+            <button class="af-btn" onclick="reconstruirConexionesGrafo()" title="Reconstruir conexiones por signals">⚡ Reconectar</button>
           </div>
           <button class="graph-close" onclick="closeGraphModal()">✕</button>
         </div>
@@ -2694,6 +2701,7 @@
           <div class="gl-item"><span class="gl-line" style="background:#4dd0c4"></span>Trígono</div>
           <div class="gl-item"><span class="gl-line" style="background:#9b72f5"></span>Sextil</div>
           <div class="gl-item"><span class="gl-line" style="background:#4dd0c4"></span>Conexión Training Room</div>
+          <div class="gl-item"><span class="gl-line" style="background:#9b72f5"></span>Conexión por Signals</div>
         </div>
         <div class="graph-tooltip" id="graph-tooltip"></div>
       </div>
@@ -3426,6 +3434,7 @@
           <button class="btn-training-room" onclick="abrirImportadorTraining()">Importar JSON</button>
           <button class="btn-training-room" onclick="guardarNeuronasTraining()">Guardar neuronas</button>
           <button class="btn-training-room" onclick="enviarNeuronasAlGrafo()">Enviar al grafo</button>
+          <button class="btn-training-room" onclick="reconstruirConexionesGrafo()">Reconstruir conexiones</button>
         </div>
         <div class="training-room-msg" id="training-room-msg">Sin análisis aún.</div>
       </div>
@@ -3524,6 +3533,7 @@
 <!-- FAB -->
 <button class="fab" id="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
+<script src="./astrobrain/brain/graph/connectBySignals.js"></script>
 <script src="./astrobrain/training/trainingRoomHelpers.js"></script>
 <script src="./astrobrain/astro/moonPhaseMap.js"></script>
 <script src="./astrobrain/astro/resolveMoonPhase.js"></script>
@@ -3579,7 +3589,7 @@
 // INDEXEDDB
 // ─────────────────────────────────────────────────────────────
 const DB_NAME = 'AstroBrainDB';
-const DB_VERSION = 4;
+const DB_VERSION = 5;
 let db = null;
 
 function openDB() {
@@ -3642,6 +3652,11 @@ function openDB() {
       if (!d.objectStoreNames.contains('transitVaultSettings')) {
         d.createObjectStore('transitVaultSettings', { keyPath: 'id' });
       }
+      if (!d.objectStoreNames.contains('signalConnections')) {
+        const sc = d.createObjectStore('signalConnections', { keyPath: 'id' });
+        sc.createIndex('from', 'from');
+        sc.createIndex('to', 'to');
+      }
     };
     req.onsuccess = e => { db = e.target.result; resolve(db); };
     req.onerror = e => reject(e.target.error);
@@ -3674,6 +3689,16 @@ async function dbAdd(store, item) {
     const tx = d.transaction(store, 'readwrite');
     const req = tx.objectStore(store).add(item);
     req.onsuccess = () => res(req.result);
+    req.onerror = e => rej(e.target.error);
+  });
+}
+
+async function dbClearStore(store) {
+  const d = await openDB();
+  return new Promise((res, rej) => {
+    const tx = d.transaction(store, 'readwrite');
+    const req = tx.objectStore(store).clear();
+    req.onsuccess = () => res();
     req.onerror = e => rej(e.target.error);
   });
 }
@@ -5750,6 +5775,11 @@ function actualizarDraftDesdeUI(index) {
   d.match = document.getElementById(pref+'match').value.trim();
   d.peso = document.getElementById(pref+'peso').value ? Number(document.getElementById(pref+'peso').value) : '';
   d.clusters = extraerListaPorComas(document.getElementById(pref+'clusters').value);
+  const rawSignals = document.getElementById(pref+'signals').value;
+  // Always normalize signals using the module; fall back to basic split if module unavailable
+  d.signals = window.ConnectBySignals
+    ? window.ConnectBySignals.normalizeSignals(rawSignals)
+    : rawSignals.split(',').map(s => s.trim().toLowerCase().replace(/\s+/g, '_')).filter(Boolean);
   d.output.energy = document.getElementById(pref+'energy').value.trim();
   d.output.avoid = document.getElementById(pref+'avoid').value.trim();
   d.output.use = document.getElementById(pref+'use').value.trim();
@@ -5778,13 +5808,35 @@ function descargarPackTraining(index) {
   showToast(`Pack de entrenamiento descargado (${pack.meta.status})`, 'success');
 }
 
-function resolverEtiquetaConexion(draft) {
-  const links = resolveNeuronGraphLinks(draft);
-  if (!Array.isArray(links) || !links.length) return 'Flotará sola (sin conexiones detectadas)';
-  const targets = [...new Set(links.map(l => PLANET_LABELS[l.target] || l.target))];
-  return targets.length
-    ? `Se conectará a: ${targets.join(', ')}`
-    : 'Flotará sola (sin conexiones detectadas)';
+function resolverEtiquetaConexion(draft, allDrafts) {
+  const planetLinks = resolveNeuronGraphLinks(draft);
+  const signalLinks = [];
+
+  if (window.ConnectBySignals && (draft.signals || []).length > 0 && Array.isArray(allDrafts)) {
+    allDrafts.forEach(other => {
+      if (other.id === draft.id) return;
+      const shared = (draft.signals || []).filter(s => (other.signals || []).includes(s));
+      if (shared.length > 0) {
+        signalLinks.push({ target: other.id, signals: shared });
+      }
+    });
+  }
+
+  if (!planetLinks.length && !signalLinks.length) {
+    return '⚫ Flotará sola (sin conexiones)';
+  }
+
+  const parts = [];
+  if (planetLinks.length) {
+    const targets = [...new Set(planetLinks.map(l => PLANET_LABELS[l.target] || l.target))];
+    parts.push(`planetas: ${targets.join(', ')}`);
+  }
+  if (signalLinks.length) {
+    const sigParts = signalLinks.map(l => `${l.target} (×${l.signals.length})`);
+    parts.push(`signals: ${sigParts.join(', ')}`);
+  }
+
+  return `🟢 Conectada a → ${parts.join(' | ')}`;
 }
 
 function importarJSONCorregidoDraft(index) {
@@ -5832,12 +5884,21 @@ function renderizarDraftsTraining() {
     return;
   }
   cont.innerHTML = trainingRoomState.drafts.map((d, idx) => {
-    const conexionLabel = resolverEtiquetaConexion(d);
+    const conexionLabel = resolverEtiquetaConexion(d, trainingRoomState.drafts);
+    const signalChips = (d.signals || []).length
+      ? (d.signals || []).map(s => `<span class="training-signal-chip">${s}</span>`).join('')
+      : '';
+    const conexionClass = conexionLabel.startsWith('🟢') ? 'connected' : 'floating';
     return `
     <div class="training-neuron-card">
       <div class="training-neuron-head">
         <div class="training-neuron-id">origen: Training Room · origen técnico: ${d.source}</div>
         <span class="estado-neurona ${d.estado}">${d.estado === 'completa' ? 'completa' : 'incompleta'}</span>
+      </div>
+      <div class="training-signal-field" style="grid-column:1/-1">
+        <label style="font-family:var(--font-mono);font-size:0.58rem;color:var(--violet);display:block;margin-bottom:3px;letter-spacing:0.04em">Signals estructurales (separados por coma)</label>
+        <input id="draft-${idx}-signals" value="${(d.signals||[]).join(', ')}" placeholder="ej: mercury, revision, mensaje_interno" style="width:100%;background:rgba(155,114,245,0.06);border:1px solid rgba(155,114,245,0.3);color:var(--text-primary);border-radius:8px;padding:7px 10px;font-family:var(--font-mono);font-size:0.7rem;outline:none">
+        ${signalChips ? `<div class="training-signal-chips">${signalChips}</div>` : ''}
       </div>
       <div class="training-neuron-grid">
         <div><label>ID</label><input id="draft-${idx}-id" value="${d.id}"></div>
@@ -5854,7 +5915,7 @@ function renderizarDraftsTraining() {
         <div><label>output.focus</label><input id="draft-${idx}-focus" value="${d.output.focus || ''}"></div>
       </div>
       ${d.faltantes.length ? `<div class="faltantes-lista">Campos faltantes: ${d.faltantes.join(', ')}</div>` : '<div class="faltantes-lista" style="color:var(--teal)">Neurona lista para guardar.</div>'}
-      <div class="training-neuron-conexion">🔗 ${conexionLabel}</div>
+      <div class="training-conexion-status ${conexionClass}">🔗 ${conexionLabel}</div>
       <div class="training-neuron-tools">
         <button class="btn-training-room" onclick="actualizarYRenderizarDraft(${idx})">Actualizar tarjeta</button>
         <button class="btn-training-room" onclick="exportarJSONNeuronTraining(${idx})">Exportar JSON</button>
@@ -6041,6 +6102,27 @@ async function guardarNeuronasTraining() {
     }
   }
 
+  // Auto-connect by signals after saving
+  if (window.ConnectBySignals) {
+    const allSaved = await obtenerNeuronasTrainingGuardadas();
+    // Create base signal neurons for any new signals not yet in the catalog
+    const allSignals = [...new Set(allSaved.flatMap(n => n.signals || []))];
+    const newSignalNeurons = window.ConnectBySignals.ensureSignalNeurons(allSignals, allSaved);
+    for (const sn of newSignalNeurons) {
+      await dbPut('trainingNeurons', sn);
+    }
+    // Rebuild signal connections
+    const allWithSignalNeurons = await obtenerNeuronasTrainingGuardadas();
+    const connections = window.ConnectBySignals.rebuildGraphConnections(allWithSignalNeurons);
+    await dbClearStore('signalConnections');
+    for (const conn of connections) {
+      const id = window.ConnectBySignals.signalConnectionId(conn.from, conn.to);
+      await dbPut('signalConnections', { ...conn, id });
+      console.log(`[graph] connecting ${conn.from} → ${conn.to} (shared: ${conn.signals.join(', ')})`);
+    }
+    console.log(`[graph] signals detectados: ${allSignals.length} | conexiones: ${connections.length}`);
+  }
+
   await saveNarrativePatterns(trainingRoomState.detectedNarrativePatterns);
   await saveVoiceLearning(trainingRoomState.learnedVoiceProfile);
 
@@ -6067,6 +6149,25 @@ async function enviarNeuronasAlGrafo(show = true) {
     openGraphModal();
     showToast('Neuronas enviadas al grafo', 'success');
   }
+}
+
+async function reconstruirConexionesGrafo() {
+  if (!window.ConnectBySignals) { showToast('ConnectBySignals no cargado', 'error'); return; }
+  const allNeurons = await obtenerNeuronasTrainingGuardadas();
+  if (!allNeurons.length) { showToast('No hay neuronas guardadas para reconectar.', 'error'); return; }
+
+  const connections = window.ConnectBySignals.rebuildGraphConnections(allNeurons);
+  await dbClearStore('signalConnections');
+  for (const conn of connections) {
+    const id = window.ConnectBySignals.signalConnectionId(conn.from, conn.to);
+    await dbPut('signalConnections', { ...conn, id });
+    console.log(`[graph] connecting ${conn.from} → ${conn.to} (shared: ${conn.signals.join(', ')})`);
+  }
+  console.log(`[graph] Reconstrucción completa: ${connections.length} conexiones`);
+
+  await refreshGraphLive();
+  showToast(`Reconstrucción completada: ${connections.length} conexiones`, 'success');
+  document.getElementById('training-room-msg').textContent = `Grafo reconstruido: ${connections.length} conexiones por signals.`;
 }
 
 // Scroll reveal
@@ -6359,6 +6460,7 @@ let currentFilter = 'all';
 let animFrame = null;
 let nodes = [], edges = [], dragging = null;
 let trainingGraphNeurons = [];
+let signalEdgesCache = [];
 let camX = 0, camY = 0, camScale = 1;
 let isPanning = false, panStart = null;
 
@@ -6498,23 +6600,42 @@ function rebuildGraphNodes() {
     };
   });
 
-  const trainingNodes = trainingGraphNeurons.map((n, idx) => ({
-    id: n.id,
-    label: n.id.replace(/^training_/, ''),
-    color: '#4dd0c4',
-    x: cx + Math.cos((idx / Math.max(trainingGraphNeurons.length,1)) * Math.PI * 2) * (r + 120) + (Math.random()-0.5)*35,
-    y: cy + Math.sin((idx / Math.max(trainingGraphNeurons.length,1)) * Math.PI * 2) * (r + 120) + (Math.random()-0.5)*35,
-    vx: 0, vy: 0,
-    radius: 16,
-    nodeType: 'training',
-    neuronData: n,
-  }));
+  const trainingNodes = trainingGraphNeurons.map((n, idx) => {
+    const isSignalNeuron = n.type === 'semantic_signal' || n.createdFrom === 'auto_signal';
+    return {
+      id: n.id,
+      label: n.label || n.id.replace(/^training_/, ''),
+      color: isSignalNeuron ? '#9b72f5' : '#4dd0c4',
+      x: cx + Math.cos((idx / Math.max(trainingGraphNeurons.length,1)) * Math.PI * 2) * (r + 120) + (Math.random()-0.5)*35,
+      y: cy + Math.sin((idx / Math.max(trainingGraphNeurons.length,1)) * Math.PI * 2) * (r + 120) + (Math.random()-0.5)*35,
+      vx: 0, vy: 0,
+      radius: isSignalNeuron ? 12 : 16,
+      nodeType: isSignalNeuron ? 'signal' : 'training',
+      neuronData: n,
+    };
+  });
 
   nodes = [...baseNodes, ...trainingNodes];
 }
 
 async function refreshGraphData() {
   trainingGraphNeurons = await obtenerNeuronasTrainingGuardadas();
+  signalEdgesCache = await cargarSignalConnections();
+}
+
+async function cargarSignalConnections() {
+  const all = await dbGetAll('signalConnections');
+  return (all || []).map(conn => ({
+    source: conn.from,
+    target: conn.to,
+    aspect: 'signal_overlap',
+    color: '#9b72f5',
+    signals: conn.signals || [],
+    weight: conn.weight || 1,
+    avoid: '',
+    focus: '',
+    label: `signal: ${(conn.signals || []).join(', ')}`,
+  }));
 }
 
 function initGraph() {
@@ -6568,7 +6689,13 @@ function buildEdges() {
     trainingEdges.push(...resolveNeuronGraphLinks(trainingGraphNeurons[i]));
   }
 
-  edges = [...baseEdges, ...trainingEdges];
+  // Add signal-based connections (only when both nodes exist in the graph)
+  const nodeIds = new Set(nodes.map(n => n.id));
+  const filteredSignalEdges = signalEdgesCache.filter(
+    e => nodeIds.has(e.source) && nodeIds.has(e.target)
+  );
+
+  edges = [...baseEdges, ...trainingEdges, ...filteredSignalEdges];
 }
 
 function startGraphLoop() {
@@ -6856,6 +6983,16 @@ function showTooltip(node, e, isPinned = false) {
 
   const data = node.neuronData;
   const detectedLinks = data ? resolveNeuronGraphLinks(data).map(l => PLANET_LABELS[l.target] || l.target) : [];
+  const signalInfo = data && (data.signals || []).length
+    ? `<div><b>Signals:</b> ${data.signals.join(', ')}</div>`
+    : '';
+  const signalConns = signalEdgesCache.filter(e => e.source === node.id || e.target === node.id);
+  const signalConnsInfo = signalConns.length
+    ? `<div><b>Conexiones por signal:</b> ${signalConns.map(e => {
+        const other = e.source === node.id ? e.target : e.source;
+        return `${other} (×${e.weight || 1})`;
+      }).join(', ')}</div>`
+    : '';
 
   tip.innerHTML = `
     <div class="gt-planet" style="color:${node.color}">${node.label}${isPinned ? ' · seleccionado' : ''}</div>
@@ -6863,7 +7000,9 @@ function showTooltip(node, e, isPinned = false) {
       <div><b>ID:</b> ${data.id}</div>
       <div><b>Triggers:</b> ${(data.triggers || []).join(', ') || '—'}</div>
       <div><b>Clusters:</b> ${(data.clusters || []).join(', ') || '—'}</div>
-      <div><b>Origen:</b> ${data.source || 'training_room'}</div>
+      ${signalInfo}
+      ${signalConnsInfo}
+      <div><b>Origen:</b> ${data.source || data.createdFrom || 'training_room'}</div>
       <div><b>Conexiones detectadas:</b> ${detectedLinks.join(', ') || 'sin conexiones automáticas'}</div>
     </div>` : ''}
     ${items || '<div style="color:var(--text-muted);font-size:0.6rem">Sin conexiones visibles</div>'}
