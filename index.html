@@ -1593,6 +1593,7 @@
   .training-neuron-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
   .training-neuron-grid label { font-family: var(--font-mono); font-size: 0.58rem; color: var(--text-muted); display:block; margin-bottom:3px; letter-spacing:0.04em; }
   .faltantes-lista { margin-top:8px; font-size:0.82rem; color: var(--rose); }
+  .training-neuron-conexion { margin-top:8px; font-family: var(--font-mono); font-size:0.7rem; color: var(--teal); opacity:0.85; }
   .training-neuron-tools { display:flex; flex-wrap: wrap; gap:8px; margin-top:10px; }
   .training-room-status-row { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; }
   .training-room-warning { color: var(--gold); font-size: 0.75rem; }
@@ -5444,13 +5445,62 @@ function descargarPackTraining(index) {
   showToast(`Pack de entrenamiento descargado (${pack.meta.status})`, 'success');
 }
 
+function resolverEtiquetaConexion(draft) {
+  const links = resolveNeuronGraphLinks(draft);
+  if (!Array.isArray(links) || !links.length) return 'Flotará sola (sin conexiones detectadas)';
+  const targets = [...new Set(links.map(l => PLANET_LABELS[l.target] || l.target))];
+  return targets.length
+    ? `Se conectará a: ${targets.join(', ')}`
+    : 'Flotará sola (sin conexiones detectadas)';
+}
+
+function importarJSONCorregidoDraft(index) {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json,application/json';
+  input.onchange = function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        const parsed = JSON.parse(ev.target.result);
+        if (!trainingHelpers) { showToast('Training helpers no cargado', 'error'); return; }
+        const validation = trainingHelpers.validateTrainingNeuron(parsed);
+        if (!validation.valid) {
+          showToast('JSON inválido: ' + validation.errors.join(', '), 'error');
+          return;
+        }
+        const existing = trainingRoomState.drafts[index];
+        if (!existing) { showToast('Neurona no encontrada en el índice indicado.', 'error'); return; }
+        const draft = trainingHelpers.deserializeTrainingNeuron(validation.canonical, {
+          source: existing.source || 'training_room',
+          sourceTextType: 'corrected_json',
+          createdAt: existing.createdAt || new Date().toISOString(),
+          validationStatus: 'imported',
+        });
+        evaluarEstadoDraftTraining(draft);
+        trainingRoomState.drafts[index] = draft;
+        renderizarDraftsTraining();
+        showToast('JSON corregido importado correctamente', 'success');
+      } catch(err) {
+        showToast('Error al parsear el JSON: ' + err.message, 'error');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
 function renderizarDraftsTraining() {
   const cont = document.getElementById('training-neurons-output');
   if (!trainingRoomState.drafts.length) {
     cont.innerHTML = '<div class="empty-state"><span class="es-icon">🧠</span><p>NO HAY NEURONAS PROPUESTAS TODAVÍA</p></div>';
     return;
   }
-  cont.innerHTML = trainingRoomState.drafts.map((d, idx) => `
+  cont.innerHTML = trainingRoomState.drafts.map((d, idx) => {
+    const conexionLabel = resolverEtiquetaConexion(d);
+    return `
     <div class="training-neuron-card">
       <div class="training-neuron-head">
         <div class="training-neuron-id">origen: Training Room · origen técnico: ${d.source}</div>
@@ -5471,12 +5521,15 @@ function renderizarDraftsTraining() {
         <div><label>output.focus</label><input id="draft-${idx}-focus" value="${d.output.focus || ''}"></div>
       </div>
       ${d.faltantes.length ? `<div class="faltantes-lista">Campos faltantes: ${d.faltantes.join(', ')}</div>` : '<div class="faltantes-lista" style="color:var(--teal)">Neurona lista para guardar.</div>'}
+      <div class="training-neuron-conexion">🔗 ${conexionLabel}</div>
       <div class="training-neuron-tools">
         <button class="btn-training-room" onclick="actualizarYRenderizarDraft(${idx})">Actualizar tarjeta</button>
         <button class="btn-training-room" onclick="exportarJSONNeuronTraining(${idx})">Exportar JSON</button>
         <button class="btn-training-room" onclick="descargarPackTraining(${idx})">Descargar pack de entrenamiento</button>
+        <button class="btn-training-room" onclick="importarJSONCorregidoDraft(${idx})">Importar JSON corregido</button>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function abrirImportadorTraining() {
