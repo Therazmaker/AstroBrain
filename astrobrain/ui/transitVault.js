@@ -494,6 +494,14 @@
   async function answerFromTransitVault(userText = '') {
     const activeDataset = await getActiveTransitDataset('chat') || await getActiveTransitDataset('general');
     if (!activeDataset) return null;
+
+    // Try the smart Q&A engine first — it understands specific questions
+    if (global.AstroQA) {
+      const qaAnswer = global.AstroQA.answer(userText, activeDataset);
+      if (qaAnswer !== null) return qaAnswer;
+    }
+
+    // Fall back to narrative/context summary for open-ended questions
     const intent = resolveTimeIntent(userText);
     let days = getDaysForIntent(intent, activeDataset);
     days = filterInteresting(days, userText);
