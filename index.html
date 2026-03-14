@@ -1999,6 +1999,26 @@
     .dev-steps { grid-template-columns: repeat(3,1fr); }
   }
 
+
+  /* ─── TRANSIT VAULT ─────────────────────────────── */
+  .transit-vault-section { margin-bottom: 48px; }
+  .tv-shell { background: var(--card); border:1px solid var(--border); border-radius:16px; padding:18px; }
+  .tv-subtabs { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+  .tv-subtab-btn { background:var(--surface); border:1px solid var(--border); color:var(--text-secondary); border-radius:999px; padding:6px 12px; font-family:var(--font-mono); font-size:0.62rem; cursor:pointer; }
+  .tv-subtab-btn.active { border-color:var(--violet); color:var(--text-primary); }
+  .tv-subtab { display:none; }
+  .tv-subtab.active { display:block; }
+  .tv-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .tv-actions button, .tv-quick-actions button { background:var(--surface); border:1px solid var(--border); color:var(--text-primary); border-radius:10px; padding:7px 10px; font-size:0.66rem; cursor:pointer; }
+  .tv-import-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .tv-textarea { width:100%; min-height:180px; background:var(--deep); border:1px solid var(--border); border-radius:10px; padding:10px; color:var(--text-primary); font-family:var(--font-mono); font-size:0.62rem; }
+  .tv-card { border:1px solid var(--border); border-radius:12px; padding:12px; background:rgba(0,0,0,0.18); margin-bottom:10px; }
+  .tv-card-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:6px; }
+  .tv-badge { font-family:var(--font-mono); font-size:0.56rem; border:1px solid var(--border-hi); border-radius:999px; padding:3px 8px; color:var(--gold); text-transform:uppercase; }
+  .tv-card-meta, .tv-debug, .tv-activation-row { color:var(--text-secondary); font-size:0.82rem; }
+  .tv-quick-actions { display:flex; gap:8px; flex-wrap:wrap; margin:10px 0; }
+  .tv-output { white-space:pre-wrap; background:var(--deep); border:1px solid var(--border); border-radius:10px; padding:10px; min-height:72px; font-family:var(--font-mono); font-size:0.6rem; color:var(--text-secondary); }
+
 </style>
 </head>
 <body>
@@ -2386,6 +2406,56 @@
     </div>
   </section>
 
+  <hr class="divider">
+
+  <!-- ── TRANSIT VAULT ── -->
+  <section class="transit-vault-section" id="transit-vault-section">
+    <div class="section-header">
+      <h2 class="section-title">Transit Vault</h2>
+      <span class="section-badge">BIBLIOTECA DE CIELO</span>
+    </div>
+    <div class="tv-shell">
+      <div class="tv-subtabs">
+        <button class="tv-subtab-btn active" data-tv-tab="import">Import</button>
+        <button class="tv-subtab-btn" data-tv-tab="library">Library</button>
+        <button class="tv-subtab-btn" data-tv-tab="activation">Activation</button>
+        <button class="tv-subtab-btn" data-tv-tab="debug">Debug</button>
+      </div>
+
+      <div class="tv-subtab active" id="tv-tab-import">
+        <div class="tv-import-grid">
+          <div>
+            <div class="panel-sub">ARCHIVOS JSON</div>
+            <input type="file" id="tv-file-input" accept=".json" multiple />
+            <div class="tv-actions"><button id="tv-btn-import-files">Importar archivos</button></div>
+          </div>
+          <div>
+            <div class="panel-sub">PEGAR JSON</div>
+            <textarea id="tv-json-textarea" class="tv-textarea" placeholder="Pega aquí un JSON con meta + days[]"></textarea>
+            <div class="tv-actions"><button id="tv-btn-import-text">Importar JSON pegado</button></div>
+          </div>
+        </div>
+        <div id="tv-import-status" class="tv-debug" style="margin-top:8px"></div>
+      </div>
+
+      <div class="tv-subtab" id="tv-tab-library"><div id="tv-library-list"></div></div>
+
+      <div class="tv-subtab" id="tv-tab-activation">
+        <div id="tv-activation-panel"></div>
+        <div class="tv-quick-actions">
+          <button id="tv-btn-chat-today">Usar hoy para chat</button>
+          <button id="tv-btn-chat-week">Usar semana para chat</button>
+          <button id="tv-btn-graph-activate">Activar dataset en grafo</button>
+          <button id="tv-btn-resolve-today">Resolver señales del día actual</button>
+          <button id="tv-btn-weekly-preview">Preview narrativa semanal</button>
+        </div>
+        <div id="tv-quick-output" class="tv-output"></div>
+      </div>
+
+      <div class="tv-subtab" id="tv-tab-debug"><div id="tv-debug-panel" class="tv-debug"></div></div>
+    </div>
+  </section>
+
   <hr class="divider" id="divider-1" style="display:none">
 
   <!-- ── TRANSIT BREAKDOWN ── -->
@@ -2684,6 +2754,9 @@
 <button class="fab" id="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script src="./astrobrain/training/trainingRoomHelpers.js"></script>
+<script src="./astrobrain/astro/moonPhaseMap.js"></script>
+<script src="./astrobrain/astro/resolveMoonPhase.js"></script>
+<script src="./astrobrain/ui/transitVault.js"></script>
 <script>
 // ─────────────────────────────────────────────────────────────
 // STAR CANVAS
@@ -2731,7 +2804,7 @@
 // INDEXEDDB
 // ─────────────────────────────────────────────────────────────
 const DB_NAME = 'AstroBrainDB';
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 let db = null;
 
 function openDB() {
@@ -2785,6 +2858,14 @@ function openDB() {
       }
       if (!d.objectStoreNames.contains('trainingVoiceProfiles')) {
         d.createObjectStore('trainingVoiceProfiles', { keyPath: 'id' });
+      }
+      if (!d.objectStoreNames.contains('transitDatasets')) {
+        const t = d.createObjectStore('transitDatasets', { keyPath: 'id' });
+        t.createIndex('type', 'type');
+        t.createIndex('importedAt', 'importedAt');
+      }
+      if (!d.objectStoreNames.contains('transitVaultSettings')) {
+        d.createObjectStore('transitVaultSettings', { keyPath: 'id' });
       }
     };
     req.onsuccess = e => { db = e.target.result; resolve(db); };
@@ -5155,6 +5236,7 @@ window.addEventListener('scroll', () => {
 (async () => {
   await openDB();
   await renderHistory();
+  if (window.TransitVault) { window.TransitVault.init().catch(err => console.warn('[TransitVault] init failed', err)); }
   await renderHippocampus();
   const ctxAll = await dbGetAll('contextMemory');
   if (ctxAll.length) {
@@ -6143,7 +6225,7 @@ async function sendChatMessage() {
 
   await new Promise(r => setTimeout(r, 600 + Math.random() * 400));
 
-  const response = await generateChatResponse(text);
+  const response = (window.TransitVault ? await window.TransitVault.answerFromTransitVault(text) : null) || await generateChatResponse(text);
   hideChatTyping();
   appendChatMsg('assistant', response);
 
