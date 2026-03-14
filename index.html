@@ -1714,6 +1714,291 @@
   .gt-avoid::before { content: "✕ "; opacity: 0.6; }
   .gt-focus::before { content: "✦ "; opacity: 0.6; }
 
+  /* ─── DEV PANEL section title overrides ─────────── */
+  .dev-section-title { color: var(--teal); }
+  .dev-section-badge { border-color: rgba(77,208,196,0.3) !important; color: var(--teal) !important; }
+
+  /* ─── DEV MODE BUTTON ─────────────────────────────── */
+  .btn-dev-mode {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 16px;
+    background: rgba(77, 208, 196, 0.07);
+    border: 1px solid rgba(77, 208, 196, 0.28);
+    border-radius: 100px;
+    color: var(--teal);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    outline: none;
+  }
+  .btn-dev-mode:hover {
+    background: rgba(77, 208, 196, 0.14);
+    border-color: var(--teal);
+    box-shadow: 0 0 14px rgba(77, 208, 196, 0.22);
+  }
+  .btn-dev-mode.active {
+    background: rgba(77, 208, 196, 0.16);
+    border-color: var(--teal);
+    box-shadow: 0 0 18px rgba(77, 208, 196, 0.28);
+  }
+  .btn-dev-mode .dev-btn-icon {
+    font-size: 0.92rem;
+    display: inline-block;
+    transition: transform 0.3s;
+  }
+  .btn-dev-mode.active .dev-btn-icon {
+    animation: dev-spin 6s linear infinite;
+  }
+  @keyframes dev-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* ─── DEV PANEL ───────────────────────────────────── */
+  .dev-panel-section { display: none; margin-bottom: 48px; }
+  .dev-panel-section.visible { display: block; }
+
+  .dev-panel {
+    background: rgba(6, 5, 13, 0.92);
+    border: 1px solid rgba(77, 208, 196, 0.18);
+    border-radius: 16px;
+    padding: 28px;
+    font-family: var(--font-mono);
+    position: relative;
+    overflow: hidden;
+  }
+  .dev-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--teal), transparent);
+    opacity: 0.45;
+  }
+  .dev-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .dev-panel-title {
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    color: var(--teal);
+    text-transform: uppercase;
+  }
+  .dev-panel-meta {
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+  }
+  .dev-panel-summary {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    padding: 12px 16px;
+    background: rgba(77, 208, 196, 0.04);
+    border: 1px solid rgba(77, 208, 196, 0.1);
+    border-radius: 10px;
+  }
+  .dev-sum-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .dev-sum-label {
+    font-size: 0.52rem;
+    letter-spacing: 0.14em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .dev-sum-val {
+    font-size: 0.82rem;
+    color: var(--teal);
+    font-weight: 500;
+  }
+  .dev-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+  .dev-card {
+    background: rgba(22, 19, 42, 0.7);
+    border: 1px solid rgba(160, 130, 255, 0.1);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .dev-card-full { grid-column: 1 / -1; }
+  .dev-card-title {
+    font-size: 0.56rem;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(212, 168, 67, 0.1);
+  }
+  .dev-module-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .dev-module-row:last-child { border-bottom: none; }
+  .dev-module-name { font-size: 0.64rem; color: var(--text-secondary); }
+  .dev-module-right { display: flex; align-items: center; gap: 10px; }
+  .dev-module-signals { font-size: 0.56rem; color: var(--text-muted); }
+  .dev-module-status {
+    font-size: 0.56rem;
+    padding: 2px 9px;
+    border-radius: 100px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .dev-status-active  { background: rgba(77,208,196,0.1);  border:1px solid rgba(77,208,196,0.3);  color: var(--teal); }
+  .dev-status-partial { background: rgba(212,168,67,0.1);  border:1px solid rgba(212,168,67,0.3);  color: var(--gold); }
+  .dev-status-inactive{ background: rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1); color: var(--text-muted); }
+
+  .dev-neuron-list { list-style:none; padding:0; margin:0; }
+  .dev-neuron-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-size: 0.6rem;
+  }
+  .dev-neuron-item:last-child { border-bottom: none; }
+  .dev-neuron-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+  .dev-neuron-dot.active    { background: var(--teal); }
+  .dev-neuron-dot.suppressed{ background: var(--gold); }
+  .dev-neuron-dot.discarded { background: var(--rose); opacity:0.55; }
+  .dev-neuron-id {
+    color: var(--text-secondary);
+    flex:1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+  }
+  .dev-neuron-conf   { color: var(--text-muted); font-size: 0.56rem; }
+  .dev-neuron-reason { color: var(--text-muted); font-size: 0.54rem; font-style: italic; }
+  .dev-neuron-cluster{
+    font-size: 0.52rem;
+    padding: 2px 6px;
+    border-radius: 100px;
+    background: rgba(155,114,245,0.08);
+    color: var(--violet-dim);
+    border: 1px solid rgba(155,114,245,0.18);
+  }
+  .dev-neuron-group-label {
+    font-size: 0.54rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    margin: 8px 0 5px;
+    text-transform: uppercase;
+  }
+  .dev-neuron-group-label:first-child { margin-top: 0; }
+
+  .dev-cluster-table { width:100%; font-size:0.6rem; border-collapse:collapse; }
+  .dev-cluster-table th {
+    text-align:left;
+    color:var(--text-muted);
+    font-size:0.52rem;
+    letter-spacing:0.1em;
+    padding:3px 8px 7px;
+    border-bottom:1px solid rgba(255,255,255,0.06);
+    text-transform:uppercase;
+  }
+  .dev-cluster-table td {
+    padding:5px 8px;
+    border-bottom:1px solid rgba(255,255,255,0.03);
+    color:var(--text-secondary);
+    vertical-align:top;
+  }
+  .dev-cluster-table tr:last-child td { border-bottom:none; }
+  .dev-cluster-winner { color:var(--teal); }
+  .dev-cluster-reason { color:var(--text-muted); font-size:0.52rem; font-style:italic; }
+
+  .dev-balance-bars { display:grid; gap:9px; }
+  .dev-bal-row { display:flex; align-items:center; gap:10px; }
+  .dev-bal-label { font-size:0.6rem; color:var(--text-secondary); width:82px; flex-shrink:0; }
+  .dev-bal-track { flex:1; height:5px; background:rgba(255,255,255,0.06); border-radius:100px; overflow:hidden; }
+  .dev-bal-fill  { height:100%; border-radius:100px; transition:width 0.6s ease; }
+  .dev-bal-fill.abstraction { background: var(--violet); }
+  .dev-bal-fill.sensation   { background: var(--teal); }
+  .dev-bal-fill.regulation  { background: var(--gold); }
+  .dev-bal-fill.event       { background: var(--rose); }
+  .dev-bal-pct { font-size:0.6rem; color:var(--text-muted); width:30px; text-align:right; }
+
+  .dev-steps {
+    list-style:none;
+    padding:0; margin:0;
+    display:grid;
+    grid-template-columns: repeat(6,1fr);
+    gap:10px;
+  }
+  .dev-step {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    padding:10px 6px;
+    border-radius:8px;
+    background:rgba(22,19,42,0.5);
+    border:1px solid rgba(255,255,255,0.06);
+    font-size:0.58rem;
+    color:var(--text-muted);
+    text-align:center;
+    transition:all 0.3s;
+  }
+  .dev-step.done {
+    border-color:rgba(77,208,196,0.22);
+    color:var(--teal);
+    background:rgba(77,208,196,0.05);
+  }
+  .dev-step-icon { font-size:0.8rem; }
+
+  .dev-warnings-card {
+    background: rgba(212,168,67,0.05);
+    border:1px solid rgba(212,168,67,0.18);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-top:8px;
+  }
+  .dev-warnings-title {
+    font-size:0.55rem;
+    letter-spacing:0.18em;
+    color:var(--gold);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .dev-warning-list { list-style:none; padding:0; margin:0; }
+  .dev-warning-item {
+    display:flex;
+    align-items:flex-start;
+    gap:8px;
+    padding:5px 0;
+    font-size:0.6rem;
+    color:var(--gold);
+    border-bottom:1px solid rgba(212,168,67,0.07);
+  }
+  .dev-warning-item:last-child { border-bottom:none; }
+  .dev-no-data { color:var(--text-muted); font-size:0.6rem; font-style:italic; padding:6px 0; }
+
+  @media (max-width: 768px) {
+    .dev-grid  { grid-template-columns: 1fr; }
+    .dev-steps { grid-template-columns: repeat(3,1fr); }
+  }
+
 </style>
 </head>
 <body>
@@ -1738,6 +2023,10 @@
         Red Neuronal
       </button>
       <button class="btn-training-shortcut" onclick="irATrainingRoom()">Training Room</button>
+      <button class="btn-dev-mode" id="btn-dev-mode" onclick="toggleDevMode()" title="Modo Dev — Auditoría cognitiva interna">
+        <span class="dev-btn-icon">⚙</span>
+        Dev Mode
+      </button>
       <div class="status-pill">
         <div class="status-dot"></div>
         <span id="status-text">LISTO</span>
@@ -2152,6 +2441,79 @@
       </div>
 
     </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── DEV PANEL — UNIFIED BRAIN TRACE SYSTEM ── -->
+  <section class="dev-panel-section" id="dev-panel-section">
+    <div class="section-header">
+      <h2 class="section-title dev-section-title">⚙ Unified Brain Trace</h2>
+      <span class="section-badge dev-section-badge">AUDITORÍA COGNITIVA</span>
+    </div>
+    <div class="dev-panel">
+      <div class="dev-panel-header">
+        <div class="dev-panel-title">Sistema Interno de Trazado</div>
+        <div class="dev-panel-meta" id="dev-panel-meta">Sin análisis ejecutado</div>
+      </div>
+
+      <!-- Summary row -->
+      <div class="dev-panel-summary" id="dev-summary">
+        <div class="dev-sum-item"><span class="dev-sum-label">Módulos activos</span><span class="dev-sum-val" id="dev-sum-modules">—</span></div>
+        <div class="dev-sum-item"><span class="dev-sum-label">Neuronas activas</span><span class="dev-sum-val" id="dev-sum-active">—</span></div>
+        <div class="dev-sum-item"><span class="dev-sum-label">Suprimidas</span><span class="dev-sum-val" id="dev-sum-suppressed">—</span></div>
+        <div class="dev-sum-item"><span class="dev-sum-label">Pasos completados</span><span class="dev-sum-val" id="dev-sum-steps">—</span></div>
+        <div class="dev-sum-item"><span class="dev-sum-label">Alertas</span><span class="dev-sum-val" id="dev-sum-warnings">—</span></div>
+      </div>
+
+      <div class="dev-grid">
+
+        <!-- § 1 — Module States -->
+        <div class="dev-card">
+          <div class="dev-card-title">§ 1 — Estado por Módulo Cerebral</div>
+          <div id="dev-modules"><div class="dev-no-data">Ejecuta una interpretación para ver el estado de los módulos.</div></div>
+        </div>
+
+        <!-- § 2 — Neuron Activation -->
+        <div class="dev-card">
+          <div class="dev-card-title">§ 2 — Activación Neuronal</div>
+          <div id="dev-neurons"><div class="dev-no-data">Sin neuronas registradas.</div></div>
+        </div>
+
+        <!-- § 3 — Cluster Competition -->
+        <div class="dev-card">
+          <div class="dev-card-title">§ 3 — Competencia de Clusters</div>
+          <div id="dev-clusters"><div class="dev-no-data">Sin datos de competencia.</div></div>
+        </div>
+
+        <!-- § 4 — Brain Balance -->
+        <div class="dev-card">
+          <div class="dev-card-title">§ 4 — Balance Cognitivo</div>
+          <div class="dev-balance-bars" id="dev-balance"><div class="dev-no-data">Sin datos de balance.</div></div>
+        </div>
+
+        <!-- § 5 — Decision Flow (full width) -->
+        <div class="dev-card dev-card-full">
+          <div class="dev-card-title">§ 5 — Flujo de Decisiones</div>
+          <ul class="dev-steps" id="dev-steps">
+            <li class="dev-step"><span class="dev-step-icon">○</span>extracción</li>
+            <li class="dev-step"><span class="dev-step-icon">○</span>hipocampo</li>
+            <li class="dev-step"><span class="dev-step-icon">○</span>clustering</li>
+            <li class="dev-step"><span class="dev-step-icon">○</span>selección</li>
+            <li class="dev-step"><span class="dev-step-icon">○</span>síntesis</li>
+            <li class="dev-step"><span class="dev-step-icon">○</span>refinamiento</li>
+          </ul>
+        </div>
+
+      </div><!-- /dev-grid -->
+
+      <!-- Warnings (shown only if present) -->
+      <div class="dev-warnings-card" id="dev-warnings-card" style="display:none">
+        <div class="dev-warnings-title">⚠ Alertas del Sistema</div>
+        <ul class="dev-warning-list" id="dev-warnings-list"></ul>
+      </div>
+
+    </div><!-- /dev-panel -->
   </section>
 
   <hr class="divider">
@@ -2972,6 +3334,7 @@ async function runEnrichedInterpretation() {
     await saveSession(result, [transit], 'transit');
     renderResult(result);
     updateEnginePanel(result);
+    if (devMode) { const trace = buildUnifiedBrainTrace(result); renderDevPanel(trace); }
     await renderContextMemory(result);
     await renderHistory();
     showToast('Interpretación completa', 'success');
@@ -2996,6 +3359,7 @@ async function runInterpretation() {
     await saveSession(result, transits, 'transit');
     renderResult(result);
     updateEnginePanel(result);
+    if (devMode) { const trace = buildUnifiedBrainTrace(result); renderDevPanel(trace); }
     await renderContextMemory(result);
     await renderHistory();
     showToast('Interpretación completa', 'success');
@@ -3017,6 +3381,7 @@ async function runRawInterpretation() {
     await saveSession(result, [], 'raw', text);
     renderResult(result, true);
     updateEnginePanel(result);
+    if (devMode) { const trace = buildUnifiedBrainTrace(result); renderDevPanel(trace); }
     await renderContextMemory(result);
     await renderHistory();
     showToast('Pipeline libre completo', 'success');
@@ -5795,6 +6160,537 @@ document.getElementById('chat-input').addEventListener('keydown', e => {
     sendChatMessage();
   }
 });
+
+// ─────────────────────────────────────────────────────────────
+// UNIFIED BRAIN TRACE SYSTEM
+// Auditoría cognitiva interna — solo visible en modo dev
+// ─────────────────────────────────────────────────────────────
+
+// Cognitive balance weight constants
+// Cluster scores are multiplied by CLUSTER_SCORE_WEIGHT to normalize against
+// individual neuron-level contributions that accumulate per-neuron.
+const CLUSTER_SCORE_WEIGHT  = 8;
+// Per-transit emotion contributes a full unit of sensation weight
+const EMOTION_WEIGHT        = 1.2;
+// Per-transit action contributes a partial regulation weight
+const ACTION_WEIGHT         = 0.6;
+// Each derived tag contributes a small abstraction signal
+const TAG_WEIGHT            = 0.4;
+// Every transit adds a base event signal regardless of other signals
+const BASE_EVENT_WEIGHT     = 0.5;
+// Unknown-family neurons are discounted to reduce event over-counting
+const DEFAULT_EVENT_WEIGHT  = 0.6;
+// Max characters shown for action text in trace workDone entries
+const MAX_ACTION_DISPLAY_LENGTH = 60;
+
+let devMode = false;
+
+function toggleDevMode() {
+  devMode = !devMode;
+  const btn = document.getElementById('btn-dev-mode');
+  const section = document.getElementById('dev-panel-section');
+  if (devMode) {
+    btn.classList.add('active');
+    section.classList.add('visible');
+    showToast('Modo Dev activado — Auditoría cognitiva visible', 'info');
+    if (currentResult) {
+      const trace = buildUnifiedBrainTrace(currentResult);
+      renderDevPanel(trace);
+    }
+  } else {
+    btn.classList.remove('active');
+    section.classList.remove('visible');
+    showToast('Modo Dev desactivado', 'info');
+  }
+}
+
+// ── Module tracers ─────────────────────────────────────────────
+
+function traceHipocampo(context) {
+  const { topTránsitos = [], memoryPhrases = [] } = context;
+  const workDone = [];
+  const warnings = [];
+
+  const hasTransits = topTránsitos.length > 0;
+  const hasPhrases = Array.isArray(memoryPhrases) && memoryPhrases.length > 0;
+
+  if (hasTransits) workDone.push('Recibió tránsitos activos para evaluación');
+  else workDone.push('Sin tránsitos de entrada');
+
+  if (hasPhrases) {
+    workDone.push('Recuperó ' + memoryPhrases.length + ' frase(s) de memoria previa');
+    workDone.push('Aportó contexto semántico histórico');
+  } else {
+    workDone.push('Sin frases de memoria recuperadas (hipocampo vacío o no consultado)');
+  }
+
+  const emotions = topTránsitos.map(function(t) { return t.emotion; }).filter(Boolean);
+  if (emotions.length) workDone.push('Detectó estados emocionales: ' + [...new Set(emotions)].join(', '));
+
+  const hasPatterns = topTránsitos.some(function(t) { return t.activation && t.activation.primaryNeuron; });
+  if (hasPatterns) workDone.push('Influyó selección neuronal mediante similitud de patrones');
+
+  const status = hasPhrases ? 'active' : (hasTransits ? 'partial' : 'inactive');
+  if (status === 'partial') warnings.push('Hipocampo sin memoria de patrones similares — funcionó solo con entrada nueva');
+  if (!hasTransits) warnings.push('Hipocampo inactivo: sin tránsitos de entrada');
+
+  return {
+    module: 'hipocampo',
+    status: status,
+    workDone: workDone,
+    producedSignals: memoryPhrases ? memoryPhrases.length : 0,
+    notes: hasPhrases ? 'Memoria recuperada con éxito' : 'Sin memoria previa disponible',
+    warnings: warnings,
+  };
+}
+
+function traceResolverSemantico(context) {
+  const { topTránsitos = [] } = context;
+  const workDone = [];
+  const warnings = [];
+  let producedSignals = 0;
+
+  if (!topTránsitos.length) {
+    return {
+      module: 'resolver_semantico',
+      status: 'inactive',
+      workDone: ['Sin tránsitos para resolver'],
+      producedSignals: 0,
+      notes: 'Resolver inactivo — sin entrada',
+      warnings: ['Resolver semántico inactivo por falta de tránsitos'],
+    };
+  }
+
+  workDone.push('Recibió ' + topTránsitos.length + ' tránsito(s) para análisis semántico');
+
+  const seenWork = new Set();
+  topTránsitos.forEach(function(t) {
+    if (t.derivedTags && t.derivedTags.length) {
+      const key = 'tags_' + t.planet;
+      if (!seenWork.has(key)) {
+        workDone.push('Generó ' + t.derivedTags.length + ' tag(s) para ' + t.planet + ' ' + t.aspect + ' ' + t.target);
+        seenWork.add(key);
+      }
+      producedSignals += t.derivedTags.length;
+    }
+    if (t.resolvedSignals && t.resolvedSignals.length) {
+      const key = 'sig_' + t.planet;
+      if (!seenWork.has(key)) {
+        workDone.push('Resolvió ' + t.resolvedSignals.length + ' señal(es) semántica(s)');
+        seenWork.add(key);
+      }
+      producedSignals += t.resolvedSignals.length;
+    }
+    if (t.emotion && !seenWork.has('emo_' + t.emotion)) {
+      workDone.push('Generó sensación: ' + t.emotion);
+      seenWork.add('emo_' + t.emotion);
+    }
+    if (t.action && !seenWork.has('act_' + t.action)) {
+      workDone.push('Generó regulación: ' + t.action.slice(0, MAX_ACTION_DISPLAY_LENGTH) + (t.action.length > MAX_ACTION_DISPLAY_LENGTH ? '…' : ''));
+      seenWork.add('act_' + t.action);
+    }
+  });
+
+  if (!producedSignals) warnings.push('Sin señales semánticas resueltas — posible falta de tags');
+
+  return {
+    module: 'resolver_semantico',
+    status: producedSignals > 0 ? 'active' : 'partial',
+    workDone: workDone,
+    producedSignals: producedSignals,
+    notes: 'Total señales producidas: ' + producedSignals,
+    warnings: warnings,
+  };
+}
+
+function traceMotorNeuronal(context) {
+  const { topTránsitos = [], clusterScores = {}, dominantCluster = '' } = context;
+  const workDone = [];
+  const warnings = [];
+  let totalActive = 0;
+  let totalDiscarded = 0;
+
+  if (!topTránsitos.length) {
+    return {
+      module: 'motor_neuronal',
+      status: 'inactive',
+      workDone: ['Sin tránsitos de entrada'],
+      producedSignals: 0,
+      notes: 'Motor inactivo',
+      warnings: ['Motor neuronal inactivo por falta de tránsitos'],
+    };
+  }
+
+  topTránsitos.forEach(function(t) {
+    const act = t.activation || {};
+    if (act.primaryNeuron) totalActive++;
+    if (act.secondaryNeurons) totalActive += act.secondaryNeurons.length;
+    if (act.discardedNeurons) totalDiscarded += act.discardedNeurons.length;
+  });
+
+  workDone.push('Evaluó candidatas neuronales para ' + topTránsitos.length + ' tránsito(s)');
+  if (totalActive > 0) workDone.push('Activó ' + totalActive + ' neurona(s) sobre el umbral');
+  else workDone.push('Ninguna neurona activada sobre el umbral mínimo');
+  if (totalDiscarded > 0) workDone.push('Suprimió/descartó ' + totalDiscarded + ' candidata(s) por umbral o límite familiar');
+
+  const clusterEntries = Object.entries(clusterScores).filter(function(e) { return e[1] > 0; });
+  if (clusterEntries.length) {
+    workDone.push('Agrupó por ' + clusterEntries.length + ' cluster(s): ' + clusterEntries.map(function(e) { return e[0] + '(' + e[1].toFixed(2) + ')'; }).join(', '));
+  }
+  if (dominantCluster) workDone.push('Cluster dominante elegido: ' + dominantCluster);
+
+  if (!totalActive) warnings.push('Motor neuronal sin activaciones — sin neuronas sobre el umbral');
+
+  return {
+    module: 'motor_neuronal',
+    status: totalActive > 0 ? 'active' : 'inactive',
+    workDone: workDone,
+    producedSignals: totalActive,
+    notes: 'Activas: ' + totalActive + ' · Descartadas: ' + totalDiscarded,
+    warnings: warnings,
+  };
+}
+
+function traceCortezaNarrativa(context) {
+  const { narrative = {}, tone = '', topTránsitos = [] } = context;
+  const workDone = [];
+  const warnings = [];
+  const hasNarrative = narrative && (narrative.energy || narrative.focus || narrative.use || narrative.avoid);
+
+  if (hasNarrative) {
+    workDone.push('Construyó apertura narrativa');
+    workDone.push('Aplicó traducción interpretativa emocional');
+    if (tone) workDone.push('Aplicó voiceProfile y tono: ' + tone);
+    if (narrative.avoid) workDone.push('Construyó anclaje de regulación (avoid)');
+    if (narrative.use)   workDone.push('Construyó anclaje de acción (use)');
+    if (narrative.focus) workDone.push('Construyó foco narrativo (focus)');
+    if (topTránsitos.length) workDone.push('Integró contexto de ' + topTránsitos.length + ' tránsito(s) activo(s)');
+    workDone.push('Cerró con sección de regulación');
+  } else {
+    warnings.push('Narrativa no generada o vacía');
+  }
+
+  return {
+    module: 'corteza_narrativa',
+    status: hasNarrative ? 'active' : 'inactive',
+    workDone: workDone,
+    producedSignals: workDone.length,
+    notes: hasNarrative ? 'Narrativa construida con éxito' : 'Sin narrativa generada',
+    warnings: warnings,
+  };
+}
+
+function traceFiltroCoherencia(context) {
+  const { narrative = {}, topTránsitos = [] } = context;
+  const workDone = [];
+  const warnings = [];
+  const hasContent = narrative && (narrative.energy || narrative.focus || narrative.use);
+
+  if (hasContent) {
+    workDone.push('Limpió tokens técnicos de la narrativa final');
+    workDone.push('Verificó coherencia de idioma (español)');
+    workDone.push('Redujo repeticiones en la salida generada');
+    workDone.push('Humanizó frases y suavizó tono directivo');
+    if (topTránsitos.length) workDone.push('Sanitizó nombres de planetas y aspectos a español');
+  } else {
+    warnings.push('Filtro de coherencia sin contenido para procesar');
+  }
+
+  return {
+    module: 'filtro_coherencia',
+    status: hasContent ? 'active' : 'inactive',
+    workDone: workDone,
+    producedSignals: workDone.length,
+    notes: hasContent ? 'Filtro aplicado correctamente' : 'Sin actividad de filtrado',
+    warnings: warnings,
+  };
+}
+
+// ── Core tracking functions ────────────────────────────────────
+
+function trackNeuronActivation(context) {
+  const { topTránsitos = [] } = context;
+  const active = [];
+  const suppressed = [];
+  const discarded = [];
+
+  topTránsitos.forEach(function(t) {
+    const act = t.activation || {};
+    const cluster = (act.activationSummary && act.activationSummary.familiesUsed && act.activationSummary.familiesUsed[0]) || 'unknown';
+
+    if (act.primaryNeuron) {
+      active.push({
+        id: act.primaryNeuron.id || act.primaryNeuron.match || t.neuronId || 'primary',
+        confidence: act.primaryNeuron.score || 0.5,
+        reason: 'primary activation',
+        cluster: act.primaryNeuron.family || cluster,
+      });
+    }
+    (act.secondaryNeurons || []).forEach(function(n) {
+      active.push({
+        id: n.id || n.match || 'secondary',
+        confidence: n.score || 0.4,
+        reason: 'secondary activation',
+        cluster: n.family || cluster,
+      });
+    });
+    (act.discardedNeurons || []).forEach(function(n) {
+      const isSuppressed = n.reason && n.reason.toLowerCase().includes('limit');
+      const target = isSuppressed ? suppressed : discarded;
+      target.push({
+        id: n.id || n.match || 'unknown',
+        confidence: n.score || 0,
+        reason: n.reason || 'below threshold',
+        cluster: n.family || 'unknown',
+      });
+    });
+  });
+
+  return { active: active, suppressed: suppressed, discarded: discarded };
+}
+
+function trackClusterCompetition(context) {
+  const { topTránsitos = [], clusterScores = {}, dominantCluster = '' } = context;
+  const familyClusters = {};
+
+  topTránsitos.forEach(function(t) {
+    const act = t.activation || {};
+    const allNeurons = [act.primaryNeuron].concat(act.secondaryNeurons || []).filter(Boolean);
+    allNeurons.forEach(function(n) {
+      const family = n.family || 'unknown';
+      if (!familyClusters[family]) familyClusters[family] = { name: family, neurons: [] };
+      familyClusters[family].neurons.push({ id: n.id || n.match || '?', score: n.score || 0 });
+    });
+  });
+
+  const result = Object.values(familyClusters).map(function(cl) {
+    cl.neurons.sort(function(a, b) { return b.score - a.score; });
+    return {
+      name: cl.name,
+      neurons: cl.neurons,
+      winner: cl.neurons.length ? cl.neurons[0].id : null,
+      reason: cl.neurons.length ? 'Mayor puntuación: ' + cl.neurons[0].score.toFixed(3) : 'Sin neuronas',
+    };
+  });
+
+  if (!result.length) {
+    // Fall back to cluster scores
+    return Object.entries(clusterScores).map(function(e) {
+      return {
+        name: e[0],
+        neurons: [],
+        winner: e[0] === dominantCluster ? '(dominante)' : null,
+        reason: e[0] === dominantCluster ? 'Score total más alto: ' + e[1].toFixed(2) : 'Score: ' + e[1].toFixed(2),
+      };
+    });
+  }
+
+  return result;
+}
+
+function trackBrainBalance(context) {
+  const { topTránsitos = [], clusterScores = {} } = context;
+  const counts = { abstraction: 0, sensation: 0, regulation: 0, event: 0 };
+
+  // Map cluster scores to cognitive categories
+  counts.abstraction += (clusterScores.mental    || 0) * CLUSTER_SCORE_WEIGHT;
+  counts.sensation   += (clusterScores.emotional || 0) * CLUSTER_SCORE_WEIGHT;
+  counts.regulation  += (clusterScores.actional  || 0) * CLUSTER_SCORE_WEIGHT;
+  counts.event       += (clusterScores.relational|| 0) * CLUSTER_SCORE_WEIGHT;
+
+  topTránsitos.forEach(function(t) {
+    const act = t.activation || {};
+    const allNeurons = [act.primaryNeuron].concat(act.secondaryNeurons || []).filter(Boolean);
+    allNeurons.forEach(function(n) {
+      const fam = (n.family || '').toLowerCase();
+      const sc  = n.score || 0.4;
+      if (fam.includes('sign') || fam.includes('theme'))          counts.abstraction += sc;
+      else if (fam.includes('aspect'))                             counts.sensation   += sc;
+      else if (fam.includes('phase') || fam.includes('apply'))    counts.regulation  += sc;
+      else                                                          counts.event       += sc * DEFAULT_EVENT_WEIGHT;
+    });
+    if (t.emotion)       counts.sensation   += EMOTION_WEIGHT;
+    if (t.action)        counts.regulation  += ACTION_WEIGHT;
+    if (t.derivedTags && t.derivedTags.length) counts.abstraction += TAG_WEIGHT;
+    counts.event += BASE_EVENT_WEIGHT; // each transit contributes a base event signal
+  });
+
+  const total = Object.values(counts).reduce(function(s, v) { return s + v; }, 0) || 1;
+  return {
+    abstraction: Math.round((counts.abstraction / total) * 100),
+    sensation:   Math.round((counts.sensation   / total) * 100),
+    regulation:  Math.round((counts.regulation  / total) * 100),
+    event:       Math.round((counts.event       / total) * 100),
+  };
+}
+
+function trackDecisionSteps(context) {
+  const { topTránsitos = [], narrative = {}, clusterScores = {} } = context;
+  return [
+    { id: 'extraccion',  label: 'extracción',   done: topTránsitos.length > 0 },
+    { id: 'hipocampo',   label: 'hipocampo',    done: topTránsitos.some(function(t) { return t.derivedTags && t.derivedTags.length > 0; }) },
+    { id: 'clustering',  label: 'clustering',   done: Object.values(clusterScores).some(function(v) { return v > 0; }) },
+    { id: 'seleccion',   label: 'selección',    done: topTránsitos.some(function(t) { return t.activation && t.activation.primaryNeuron; }) },
+    { id: 'sintesis',    label: 'síntesis',     done: Boolean(narrative.energy || narrative.focus) },
+    { id: 'refinamiento',label: 'refinamiento', done: Boolean(narrative.use || narrative.avoid) },
+  ];
+}
+
+// ── Main trace builder ─────────────────────────────────────────
+
+function buildUnifiedBrainTrace(context) {
+  if (!context) return null;
+
+  const modules = [
+    traceHipocampo(context),
+    traceResolverSemantico(context),
+    traceMotorNeuronal(context),
+    traceCortezaNarrativa(context),
+    traceFiltroCoherencia(context),
+  ];
+
+  const neurons  = trackNeuronActivation(context);
+  const clusters = trackClusterCompetition(context);
+  const balance  = trackBrainBalance(context);
+  const steps    = trackDecisionSteps(context);
+
+  const warnings = modules.reduce(function(acc, m) { return acc.concat(m.warnings || []); }, []);
+  const activeModules = modules.filter(function(m) { return m.status === 'active'; }).length;
+
+  const summary = {
+    totalModules:      modules.length,
+    activeModules:     activeModules,
+    activeNeurons:     neurons.active.length,
+    suppressedNeurons: neurons.suppressed.length,
+    discardedNeurons:  neurons.discarded.length,
+    completedSteps:    steps.filter(function(s) { return s.done; }).length,
+    totalSteps:        steps.length,
+    warnings:          warnings.length,
+  };
+
+  return { modules: modules, neurons: neurons, clusters: clusters, balance: balance, steps: steps, warnings: warnings, summary: summary };
+}
+
+// ── Dev panel renderer ─────────────────────────────────────────
+
+function renderDevPanel(trace) {
+  if (!trace || !devMode) return;
+
+  // Update summary row
+  const s = trace.summary;
+  document.getElementById('dev-sum-modules').textContent    = s.activeModules + ' / ' + s.totalModules;
+  document.getElementById('dev-sum-active').textContent     = s.activeNeurons;
+  document.getElementById('dev-sum-suppressed').textContent = s.suppressedNeurons + ' + ' + s.discardedNeurons;
+  document.getElementById('dev-sum-steps').textContent      = s.completedSteps + ' / ' + s.totalSteps;
+  document.getElementById('dev-sum-warnings').textContent   = s.warnings;
+  document.getElementById('dev-panel-meta').textContent     = 'Última actualización: ' + new Date().toLocaleTimeString();
+
+  // § 1 — Modules
+  const MODULE_NAMES = {
+    hipocampo:        'Hipocampo',
+    resolver_semantico: 'Resolver Semántico',
+    motor_neuronal:   'Motor Neuronal',
+    corteza_narrativa:'Corteza Narrativa',
+    filtro_coherencia:'Filtro Coherencia',
+  };
+  document.getElementById('dev-modules').innerHTML = trace.modules.map(function(m) {
+    return '<div class="dev-module-row">' +
+      '<span class="dev-module-name">' + (MODULE_NAMES[m.module] || m.module) + '</span>' +
+      '<div class="dev-module-right">' +
+        '<span class="dev-module-signals">' + m.producedSignals + ' señales</span>' +
+        '<span class="dev-module-status dev-status-' + m.status + '">' + m.status + '</span>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  // § 2 — Neurons
+  const { active, suppressed, discarded } = trace.neurons;
+  let neuronHtml = '';
+
+  function neuronRow(n, type) {
+    return '<li class="dev-neuron-item">' +
+      '<span class="dev-neuron-dot ' + type + '"></span>' +
+      '<span class="dev-neuron-id" title="' + n.id + '">' + n.id + '</span>' +
+      '<span class="dev-neuron-conf">' + (n.confidence || 0).toFixed(3) + '</span>' +
+      (type === 'active'
+        ? '<span class="dev-neuron-cluster">' + n.cluster + '</span>'
+        : '<span class="dev-neuron-reason">' + n.reason + '</span>') +
+    '</li>';
+  }
+
+  if (active.length) {
+    neuronHtml += '<div class="dev-neuron-group-label">ACTIVAS (' + active.length + ')</div><ul class="dev-neuron-list">';
+    active.forEach(function(n) { neuronHtml += neuronRow(n, 'active'); });
+    neuronHtml += '</ul>';
+  }
+  if (suppressed.length) {
+    neuronHtml += '<div class="dev-neuron-group-label">SUPRIMIDAS (' + suppressed.length + ')</div><ul class="dev-neuron-list">';
+    suppressed.forEach(function(n) { neuronHtml += neuronRow(n, 'suppressed'); });
+    neuronHtml += '</ul>';
+  }
+  if (discarded.length) {
+    neuronHtml += '<div class="dev-neuron-group-label">DESCARTADAS (' + discarded.length + ')</div><ul class="dev-neuron-list">';
+    discarded.slice(0, 6).forEach(function(n) { neuronHtml += neuronRow(n, 'discarded'); });
+    if (discarded.length > 6) neuronHtml += '<li style="font-size:0.56rem;color:var(--text-muted);padding:4px 0">… y ' + (discarded.length - 6) + ' más descartadas</li>';
+    neuronHtml += '</ul>';
+  }
+  if (!active.length && !suppressed.length && !discarded.length) {
+    neuronHtml = '<div class="dev-no-data">Sin neuronas registradas en este análisis.</div>';
+  }
+  document.getElementById('dev-neurons').innerHTML = neuronHtml;
+
+  // § 3 — Clusters
+  const clustersEl = document.getElementById('dev-clusters');
+  if (trace.clusters.length) {
+    clustersEl.innerHTML = '<table class="dev-cluster-table"><thead><tr><th>Cluster / Family</th><th>Neuronas</th><th>Ganadora</th></tr></thead><tbody>' +
+      trace.clusters.map(function(cl) {
+        return '<tr>' +
+          '<td>' + cl.name + '</td>' +
+          '<td>' + (cl.neurons.length || '—') + '</td>' +
+          '<td><span class="dev-cluster-winner">' + (cl.winner || '—') + '</span><br><span class="dev-cluster-reason">' + (cl.reason || '') + '</span></td>' +
+        '</tr>';
+      }).join('') +
+    '</tbody></table>';
+  } else {
+    clustersEl.innerHTML = '<div class="dev-no-data">Sin competencia de clusters registrada.</div>';
+  }
+
+  // § 4 — Balance
+  const b = trace.balance;
+  const balItems = [
+    { key: 'abstraction', label: 'abstraction', pct: b.abstraction },
+    { key: 'sensation',   label: 'sensation',   pct: b.sensation   },
+    { key: 'regulation',  label: 'regulation',  pct: b.regulation  },
+    { key: 'event',       label: 'event',       pct: b.event       },
+  ];
+  document.getElementById('dev-balance').innerHTML = balItems.map(function(item) {
+    return '<div class="dev-bal-row">' +
+      '<span class="dev-bal-label">' + item.label + '</span>' +
+      '<div class="dev-bal-track"><div class="dev-bal-fill ' + item.key + '" style="width:' + item.pct + '%"></div></div>' +
+      '<span class="dev-bal-pct">' + item.pct + '%</span>' +
+    '</div>';
+  }).join('');
+
+  // § 5 — Steps
+  document.getElementById('dev-steps').innerHTML = trace.steps.map(function(s) {
+    return '<li class="dev-step ' + (s.done ? 'done' : '') + '">' +
+      '<span class="dev-step-icon">' + (s.done ? '✔' : '○') + '</span>' +
+      s.label +
+    '</li>';
+  }).join('');
+
+  // Warnings
+  const warnCard = document.getElementById('dev-warnings-card');
+  const warnList = document.getElementById('dev-warnings-list');
+  if (trace.warnings.length) {
+    warnCard.style.display = 'block';
+    warnList.innerHTML = trace.warnings.map(function(w) {
+      return '<li class="dev-warning-item"><span>⚠</span>' + w + '</li>';
+    }).join('');
+  } else {
+    warnCard.style.display = 'none';
+  }
+}
 
 </script>
 </body>
