@@ -2388,19 +2388,24 @@
   <!-- ── CONVERSATIONAL LAYER ── -->
   <section class="chat-section" id="chat-section" style="display:none">
     <div class="section-header">
-      <h2 class="section-title">Capa Conversacional</h2>
+      <h2 class="section-title">Consulta Astrológica</h2>
       <span class="section-badge">MEMORIA ACTIVA</span>
     </div>
     <div class="chat-container">
       <div class="chat-messages" id="chat-messages">
         <div class="chat-msg assistant">
+          <div class="chat-avatar">✦</div>
           <div class="chat-bubble">
-            <p>Hola. Acabo de leer los tránsitos activos. ¿Qué quieres explorar de este momento?</p>
+            <p>Hola. Puedes preguntarme sobre los tránsitos y fases lunares de cualquier fecha. Por ejemplo:<br>
+            <em>· ¿En qué signo cae la próxima luna nueva?<br>
+            · ¿Qué tránsitos hay el 20 de abril?<br>
+            · ¿Cuál es el tránsito más fuerte esta semana?<br>
+            · ¿Dónde está Mercurio ahora?</em></p>
           </div>
         </div>
       </div>
       <div class="chat-input-row">
-        <input type="text" id="chat-input" class="chat-input" placeholder="Pregunta sobre tu momento actual…" autocomplete="off" />
+        <input type="text" id="chat-input" class="chat-input" placeholder="Ej: ¿En qué signo cae la próxima luna nueva?" autocomplete="off" />
         <button class="btn-chat-send" id="btn-chat-send" onclick="sendChatMessage()">↑</button>
       </div>
     </div>
@@ -2759,6 +2764,7 @@
 <script src="./astrobrain/astro/astroTranslations.js"></script>
 <script src="./astrobrain/astro/astroFormatters.js"></script>
 <script src="./astrobrain/astro/renderSpanishNarrative.js"></script>
+<script src="./astrobrain/core/astroQA.js"></script>
 <script src="./astrobrain/ui/transitVault.js"></script>
 <script>
 // ─────────────────────────────────────────────────────────────
@@ -6070,7 +6076,13 @@ function initChatSession(result, narrativeParagraph) {
   const toneLabel = { intense:'intensa', active:'activa', soft:'suave', intensa:'intensa', activa:'activa', suave:'suave' };
   const tone = toneLabel[result.tone] || result.tone || 'activa';
   msgs.innerHTML = '';
-  appendChatMsg('assistant', `La energía de hoy es <strong>${tone}</strong>. Ya leí los tránsitos activos y generé tu narrativa. ¿Qué quieres explorar de este momento?`);
+  appendChatMsg('assistant',
+    `La energía de hoy es <strong>${tone}</strong>. Ya leí los tránsitos activos.<br>` +
+    `Puedes preguntarme cosas concretas, como:<br>` +
+    `<em>· ¿En qué signo cae la próxima luna nueva?<br>` +
+    `· ¿Qué tránsitos hay el 15 de abril?<br>` +
+    `· ¿Cuál es el tránsito más fuerte esta semana?</em>`
+  );
 }
 
 function appendChatMsg(role, html) {
@@ -6131,6 +6143,30 @@ async function generateChatResponse(userText) {
 
   const lower = userText.toLowerCase();
   const { narrative, tone, dominantCluster, metaSignals, topTránsitos, paragraph } = chatSession;
+
+  // ── Try AstroQA with a minimal same-day dataset built from session transits ──
+  if (window.AstroQA && topTránsitos && topTránsitos.length) {
+    const today = new Date().toISOString().split('T')[0];
+    const miniDataset = {
+      days: [{
+        date: today,
+        moonPhase: chatSession.moonPhase || {},
+        transits: topTránsitos,
+        bodies: chatSession.bodies || {},
+      }],
+    };
+    const qaAnswer = window.AstroQA.answer(userText, miniDataset);
+    if (qaAnswer !== null) return qaAnswer;
+  }
+
+  // ── Data-lookup intent: guide user to load a dataset ─────────────────────
+  const needsData = /luna\s*nueva|luna\s*llena|cuarto\s*(creciente|menguante)|eclipse|proxim|siguiente|que hay el|transitos del|que pasa el|mañana|mercurio retro|donde esta|en que signo|esta semana|proxima semana/.test(
+    lower.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  );
+  if (needsData) {
+    return 'Para responder preguntas sobre fechas y fases lunares futuras necesito un dataset cargado. ' +
+      'Ve a la sección <strong>Transit Vault</strong>, importa un archivo JSON con tus tránsitos y actívalo para el chat.';
+  }
 
   // Load recent context memory from IndexedDB for enriched replies
   const recentCtx = await dbGetAll('contextMemory')
