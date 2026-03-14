@@ -40,8 +40,29 @@ function scoreTransit(transit) {
   };
 }
 
+/**
+ * Maps a numeric transit score to a semantic strength label.
+ *
+ * Thresholds derived from the scoring system:
+ *   Max possible: Moon(5) + conjunction(3) + tight orb(3) = 11
+ *   very_strong : ≥ 10  (extremely tight, high-impact transit)
+ *   strong      : ≥ 7   (noticeable, significant energy)
+ *   medium      : ≥ 4   (moderate, worth noting)
+ *   soft        : < 4   (subtle background influence)
+ *
+ * @param {number} score - Numeric score from scoreTransit()
+ * @returns {'very_strong'|'strong'|'medium'|'soft'}
+ */
+function strengthLabel(score) {
+  if (score >= 10) return 'very_strong';
+  if (score >= 7) return 'strong';
+  if (score >= 4) return 'medium';
+  return 'soft';
+}
+
 module.exports = {
   scoreTransit,
+  strengthLabel,
   PLANET_BASE_SCORE,
   ASPECT_SCORE,
 };

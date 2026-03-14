@@ -8,6 +8,7 @@ const { generateAstrologerVoice } = require('./core/astrologerVoice');
 const { enrichTransitContext, enrichTransits } = require('./core/enrichTransitContext');
 const { detectEventType } = require('./core/eventClassifier');
 const learningEngine = require('./core/learningEngine');
+const { runConversationalMode, detectIntent, filterByIntent } = require('./core/conversationalMode');
 
 function runAstroBrain(transits) {
   return interpretTransits(transits).narrative;
@@ -16,6 +17,9 @@ function runAstroBrain(transits) {
 module.exports = {
   runAstroBrain,
   interpretTransits,
+  runConversationalMode,
+  detectIntent,
+  filterByIntent,
   ingestTranscript,
   runRawPipeline,
   parseRaw,
