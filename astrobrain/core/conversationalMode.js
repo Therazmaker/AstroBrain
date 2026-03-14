@@ -10,8 +10,9 @@
  *   2. Grafo neuronal astrológico (neuronas semánticas, aspectos, signos, activaciones).
  *   3. Contexto conversacional activo del usuario (userMessage, history).
  *
- * OBJETIVO:
- *   Convertir datos astronómicos en narrativa astrológica viva, clara y significativa.
+ * MODOS DE RESPUESTA:
+ *   - 'data'      (default): devuelve JSON estructurado sin narrativa.
+ *   - 'narrative': devuelve narrativa interpretativa (modo legado).
  */
 
 const interpretTransits = require('./interpretTransits');
@@ -19,12 +20,35 @@ const { enrichTransits } = require('./enrichTransitContext');
 const { scoreTransit, strengthLabel } = require('./scoreTransits');
 const { assignStrength, isMoonPhaseTransit, STRENGTH_RANK } = require('./filterTransits');
 
+// ─── RESPONSE MODE ────────────────────────────────────────────────────────────
+
+/** Default response mode: returns structured JSON instead of narrative text. */
+const DEFAULT_RESPONSE_MODE = 'data';
+
+// ─── CONVERSATIONAL STATE ─────────────────────────────────────────────────────
+
+/**
+ * Persists context across conversational turns so that relative references
+ * ("y el 15", "y mañana", "y ese día") resolve correctly without repeating
+ * the previous date by mistake.
+ */
+const astroConversationState = {
+  lastReferencedDate: null,
+  lastDatasetType:    null,
+  lastIntent:         null,
+};
+
 // ─── INTENT DETECTION ────────────────────────────────────────────────────────
 
 // Intent detection patterns.
 // Note: 'accion' is intentionally stored without the accent to keep object keys
 // ASCII-safe. The regex below matches both 'accion' and 'acción' from user input.
+// 'transit_data_request' is listed first so it takes priority over overlapping patterns.
 const INTENT_PATTERNS = [
+  {
+    intent: 'transit_data_request',
+    pattern: /tr[aá]nsito.*d[ií]a|tr[aá]nsito.*ma[nñ]ana|qu[eé].*hay.*semana|dame\s+(varios|uno\s+fuerte)|cu[aá]l\s+meto|tr[aá]nsito\s+del\s+d[ií]a|y\s+(el\s+\d+|ma[nñ]ana|ese\s+d[ií]a)/i,
+  },
   { intent: 'semana',       pattern: /\bsemana\b/i },
   { intent: 'interesantes', pattern: /\binteresantes?\b/i },
   { intent: 'emocional',    pattern: /\bemocional(es)?\b/i },
@@ -37,7 +61,7 @@ const INTENT_PATTERNS = [
  * Defaults to 'hoy' when no keyword matches.
  *
  * @param {string} userMessage
- * @returns {'hoy'|'semana'|'interesantes'|'emocional'|'accion'}
+ * @returns {'transit_data_request'|'hoy'|'semana'|'interesantes'|'emocional'|'accion'}
  */
 function detectIntent(userMessage = '') {
   for (const { intent, pattern } of INTENT_PATTERNS) {
@@ -247,8 +271,324 @@ function buildSemanticParagraph(transit) {
   return context;
 }
 
-// ─── NARRATIVE BUILDING ───────────────────────────────────────────────────────
+// ─── DATA MODE CONSTANTS ─────────────────────────────────────────────────────
 
+/** Aspect labels in Spanish for form preset sectionB.aspectType. */
+const ASPECT_LABEL_ES = {
+  conjunction: 'Conjunción',
+  square:      'Cuadratura',
+  trine:       'Trígono',
+  opposition:  'Oposición',
+  sextile:     'Sextil',
+};
+
+/** Active signal tags emitted per moon phase (English phase names). */
+const MOON_PHASE_SIGNALS = {
+  'New Moon':       ['moon_new_moon',       'inicio'],
+  'First Quarter':  ['moon_first_quarter',  'accion', 'decision'],
+  'Full Moon':      ['moon_full_moon',       'culminacion', 'intensidad'],
+  'Last Quarter':   ['moon_last_quarter',   'revision', 'cierre'],
+  'Waxing Crescent': ['moon_waxing_crescent', 'crecimiento'],
+  'Waxing Gibbous':  ['moon_waxing_gibbous',  'maduracion'],
+  'Waning Gibbous':  ['moon_waning_gibbous',  'integracion'],
+  'Waning Crescent': ['moon_waning_crescent', 'descanso', 'introspeccion'],
+};
+
+/** Spanish month name → 1-based month number. */
+const MONTH_MAP_ES = {
+  enero: 1, febrero: 2, marzo: 3, abril: 4, mayo: 5, junio: 6,
+  julio: 7, agosto: 8, septiembre: 9, octubre: 10, noviembre: 11, diciembre: 12,
+};
+
+// ─── DATA MODE: LOOKUP TYPE DETECTION ────────────────────────────────────────
+
+/**
+ * Determines how many transits and what date range the user is asking for.
+ *
+ * Rules:
+ *   "dame varios"             → 'multiple'   (up to 5 transits)
+ *   "cuál meto" / "más fuerte" / "dame uno fuerte" → 'strongest' (1 transit)
+ *   "semana" / "esta semana"  → 'week'
+ *   default                   → 'specific_day' (1–3 transits)
+ *
+ * @param {string} userText
+ * @returns {'specific_day'|'week'|'strongest'|'multiple'}
+ */
+function detectLookupType(userText = '') {
+  if (/dame\s+varios/i.test(userText)) return 'multiple';
+  if (/cu[aá]l\s+meto|dame\s+uno\s+fuerte|m[aá]s\s+fuerte/i.test(userText)) return 'strongest';
+  if (/semana/i.test(userText)) return 'week';
+  return 'specific_day';
+}
+
+// ─── DATA MODE: DATE RESOLUTION ──────────────────────────────────────────────
+
+/**
+ * Resolves the target date from the user text and the dataset.
+ *
+ * Priority order:
+ *   1. Contextual back-reference ("y ese día" → lastReferencedDate)
+ *   2. "y mañana" relative reference
+ *   3. "el 15 [de marzo]" — explicit day with optional Spanish month
+ *   4. "mañana" → tomorrow
+ *   5. "hoy"    → today
+ *   6. First date in dataset, otherwise today
+ *
+ * @param {string} userText
+ * @param {Array}  days  - Array of { date?, ... } objects
+ * @returns {string}  ISO date string "YYYY-MM-DD"
+ */
+function resolveDate(userText, days) {
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0, 10);
+
+  // 1. Contextual back-reference
+  if (/y\s+(ese\s+d[ií]a|eso|ese\s+mismo)/i.test(userText) && astroConversationState.lastReferencedDate) {
+    return astroConversationState.lastReferencedDate;
+  }
+
+  // 2. "y mañana" relative reference
+  if (/y\s+ma[nñ]ana/i.test(userText)) {
+    const d = new Date(today);
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().slice(0, 10);
+  }
+
+  // 3. "el 15 [de marzo]"
+  const dayMatch = userText.match(/\bel\s+(\d{1,2})(?:\s+de\s+([a-záéíóúñ]+))?/i);
+  if (dayMatch) {
+    const dayNum = parseInt(dayMatch[1], 10);
+    const monthName = (dayMatch[2] || '').toLowerCase();
+    const monthNum = MONTH_MAP_ES[monthName] || today.getMonth() + 1;
+    const year = today.getFullYear();
+    // Validate the parsed date before returning
+    const candidate = new Date(Date.UTC(year, monthNum - 1, dayNum));
+    if (
+      !Number.isNaN(candidate.getTime())
+      && candidate.getUTCMonth() === monthNum - 1
+      && candidate.getUTCDate() === dayNum
+    ) {
+      return candidate.toISOString().slice(0, 10);
+    }
+  }
+
+  // 4. "mañana"
+  if (/\bma[nñ]ana\b/i.test(userText)) {
+    const d = new Date(today);
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().slice(0, 10);
+  }
+
+  // 5. "hoy"
+  if (/\bhoy\b/i.test(userText)) return todayStr;
+
+  // 6. First day in dataset or today
+  const firstDay = Array.isArray(days) && days.length > 0 ? days[0] : null;
+  return (firstDay && firstDay.date) ? firstDay.date : todayStr;
+}
+
+// ─── DATA MODE: FORM PRESET BUILDER ─────────────────────────────────────────
+
+/**
+ * Builds a UI-ready form preset object from a single enriched transit.
+ *
+ * Maps:
+ *   transit.planet / context.planetSign / context.planetDegree  → sectionA
+ *   transit.aspect / transit.orb / context.isApplying           → sectionB
+ *   transit.target / context.targetSign / context.targetDegree  → sectionC
+ *
+ * @param {object} transit
+ * @returns {{sectionA: object, sectionB: object, sectionC: object}}
+ */
+function buildFormPreset(transit) {
+  const ctx = transit.context || {};
+  const applyingRaw = ctx.isApplying !== undefined ? ctx.isApplying : transit.applying;
+  const aspectState = applyingRaw === true
+    ? 'Aplicativo'
+    : applyingRaw === false
+      ? 'Separativo'
+      : '';
+
+  return {
+    sectionA: {
+      planet:   transit.planet   || '',
+      bodyType: 'Planeta',
+      sign:     ctx.planetSign   || transit.sign   || '',
+      degree:   ctx.planetDegree !== undefined ? ctx.planetDegree  : (transit.degree  ?? null),
+    },
+    sectionB: {
+      aspectType:  ASPECT_LABEL_ES[transit.aspect] || transit.aspect || '',
+      orb:         transit.orb !== undefined ? transit.orb : null,
+      aspectState,
+    },
+    sectionC: {
+      targetPlanet: transit.target     || '',
+      targetType:   'Planeta',
+      targetSign:   ctx.targetSign     || '',
+      targetDegree: ctx.targetDegree   !== undefined ? ctx.targetDegree : null,
+    },
+  };
+}
+
+// ─── DATA MODE: ACTIVE SIGNALS BUILDER ───────────────────────────────────────
+
+/**
+ * Aggregates active signal tags for a day from the moon phase and transits.
+ *
+ * Includes:
+ *   - Phase-specific signals (moon_new_moon, descanso, introspeccion, …)
+ *   - Moon-in-sign signal   (moon_in_capricorn, moon_in_aries, …)
+ *   - Per-transit resolvedSignals already computed by enrichTransitContext
+ *
+ * Tags are NOT translated — they stay in their canonical lowercase form.
+ *
+ * @param {object} moonPhase - { phaseName?, phase?, sign?, degree? }
+ * @param {Array}  transits  - Enriched transit objects (may have resolvedSignals)
+ * @returns {string[]}
+ */
+function buildActiveSignals(moonPhase = {}, transits = []) {
+  const signals = [];
+
+  // Phase signals
+  const phaseName = moonPhase.phaseName || moonPhase.phase || '';
+  const phaseSignals = MOON_PHASE_SIGNALS[phaseName] || [];
+  signals.push(...phaseSignals);
+
+  // Moon-in-sign signal
+  const sign = moonPhase.sign || '';
+  if (sign) signals.push(`moon_in_${sign.toLowerCase()}`);
+
+  // Per-transit resolved signals (computed during enrichment)
+  for (const t of transits) {
+    if (Array.isArray(t.resolvedSignals)) signals.push(...t.resolvedSignals);
+  }
+
+  return [...new Set(signals)];
+}
+
+// ─── DATA MODE: SINGLE DAY PAYLOAD ───────────────────────────────────────────
+
+/**
+ * Builds a structured data payload for a single day.
+ *
+ * @param {object} day          - { date?, transits: [], moonPhase?: {} }
+ * @param {string} lookupType   - 'specific_day' | 'week' | 'strongest' | 'multiple'
+ * @param {number} transitCount - Max number of topTransits to include
+ * @returns {object}
+ */
+function buildDayPayload(day = {}, lookupType, transitCount) {
+  const rawTransits = day.transits || [];
+  const moonPhase   = day.moonPhase || {};
+  const date        = day.date || new Date().toISOString().slice(0, 10);
+
+  // Enrich, score, and sort transits by strength
+  const enriched = enrichTransits(rawTransits);
+  const scored   = enriched
+    .map((t) => {
+      const s = t.score !== undefined ? t : scoreTransit(t);
+      return { ...s, strength: assignStrength(s) };
+    })
+    .sort((a, b) => (STRENGTH_RANK[b.strength] ?? 0) - (STRENGTH_RANK[a.strength] ?? 0));
+
+  const topTransits = scored.slice(0, transitCount);
+
+  return {
+    mode: 'data',
+    date,
+    lookupType,
+    moonPhase: {
+      phaseName: moonPhase.phaseName || moonPhase.phase || '',
+      sign:      moonPhase.sign      || '',
+      degree:    moonPhase.degree    !== undefined ? moonPhase.degree : null,
+    },
+    topTransits: topTransits.map((t) => ({
+      planet:   t.planet,
+      aspect:   t.aspect,
+      target:   t.target,
+      strength: t.strength,
+      orb:      t.orb !== undefined ? t.orb : null,
+      sign:     (t.context && t.context.planetSign) || t.sign   || null,
+      degree:   (t.context && t.context.planetDegree) !== undefined
+        ? t.context.planetDegree
+        : (t.degree ?? null),
+      applying: t.context && t.context.isApplying !== undefined
+        ? t.context.isApplying
+        : (t.applying !== undefined ? t.applying : null),
+    })),
+    activeSignals: buildActiveSignals(moonPhase, topTransits),
+    formPresets:   topTransits.map(buildFormPreset),
+  };
+}
+
+// ─── DATA MODE: MAIN BUILDER ─────────────────────────────────────────────────
+
+/**
+ * buildTransitDataResponse — resolves intent, picks transits and date, and
+ * returns a clean structured JSON payload with NO narrative text.
+ *
+ * Pipeline:
+ *   intent → dataset → select day → select transits →
+ *   resolve signals → build JSON → return
+ *
+ * Transit count rules:
+ *   specific_day → 1–3 transits
+ *   strongest    → 1 transit (the highest-scoring one)
+ *   multiple     → up to 5 transits
+ *   week         → each day gets its own payload (up to 3 transits each)
+ *
+ * @param {Array}  days     - Array of day objects: { date?, transits: [], moonPhase?: {} }
+ * @param {string} userText - The user's raw message (used for intent & date resolution)
+ * @returns {object}        - Structured data payload (always JSON, never narrative)
+ */
+function buildTransitDataResponse(days = [], userText = '') {
+  const safeDays   = Array.isArray(days) ? days : [days];
+  const lookupType = detectLookupType(userText);
+
+  // Update state
+  astroConversationState.lastIntent = 'transit_data_request';
+
+  // Week lookup: return one payload per day
+  if (lookupType === 'week') {
+    astroConversationState.lastDatasetType = 'week';
+    return {
+      mode:       'data',
+      lookupType: 'week',
+      days:       safeDays.map((day) => buildDayPayload(day, 'week', 3)),
+    };
+  }
+
+  // Specific-day / strongest / multiple lookup
+  const targetDate = resolveDate(userText, safeDays);
+  const targetDay  = safeDays.find((d) => d.date === targetDate)
+    || (safeDays.length > 0 ? safeDays[0] : null);
+
+  // Guard: if no day data is available return a minimal valid payload
+  if (!targetDay) {
+    return {
+      mode:          'data',
+      date:          targetDate,
+      lookupType,
+      moonPhase:     { phaseName: '', sign: '', degree: null },
+      topTransits:   [],
+      activeSignals: [],
+      formPresets:   [],
+    };
+  }
+
+  const transitCount = lookupType === 'strongest' ? 1
+    : lookupType === 'multiple' ? 5
+    : 3; // specific_day default
+
+  const payload = buildDayPayload(targetDay, lookupType, transitCount);
+
+  // Persist for contextual back-references in next turn
+  astroConversationState.lastReferencedDate = payload.date;
+  astroConversationState.lastDatasetType    = lookupType;
+
+  return payload;
+}
+
+// ─── NARRATIVE BUILDING ───────────────────────────────────────────────────────
 /**
  * Builds the semantic-context block that precedes the full narrative:
  * one paragraph per top transit (max 3) explaining sign/aspect/energy.
@@ -298,35 +638,56 @@ function buildSynthesis(topTransits = [], intent = 'hoy') {
  *   {
  *     transits:        Array  – transit objects (planet, aspect, target, orb, strength?)
  *     dailyPositions:  object – (optional) planet positions by sign/degree
- *     moonPhase:       object – (optional) { phase, sign }
+ *     moonPhase:       object – (optional) { phaseName?, phase?, sign?, degree? }
+ *     date:            string – (optional) ISO date of the day
+ *     days:            Array  – (optional) multi-day array [{ date, transits, moonPhase }]
  *     summary:         string – (optional) day summary
  *   }
  *   Alternatively, pass a raw Array of transit objects directly.
  *
  * @param {object} conversationalContext - Active user conversation context:
  *   {
- *     userMessage: string  – the user's message (used for intent detection)
- *     history:     Array   – (optional) previous conversation turns
+ *     userMessage:  string – the user's message (used for intent detection)
+ *     message:      string – alias for userMessage
+ *     history:      Array  – (optional) previous conversation turns
+ *     responseMode: string – 'data' (default) | 'narrative'
  *   }
  *
  * @param {object} [neuralGraph] - (optional) Astrological neural graph
  *   { neurons, aspects, signs, activations }
- *   Passed through to the neural engine when present.
+ *   Passed through to the neural engine when present (narrative mode only).
  *
- * @returns {{
- *   intent:           string,
- *   narrative:        { reading: object, semanticContext: string },
- *   synthesis:        string,
- *   filteredTransits: Array,
- *   sessionId:        string,
- *   recordFeedback:   Function
- * }}
+ * @returns {object}
+ *   In 'data' mode    : structured JSON payload (buildTransitDataResponse output)
+ *   In 'narrative' mode: { intent, narrative, synthesis, filteredTransits, sessionId, recordFeedback }
  */
 function runConversationalMode(transitData = {}, conversationalContext = {}, neuralGraph = null) {
   const userMessage = conversationalContext.userMessage
     || conversationalContext.message
     || '';
 
+  const responseMode = conversationalContext.responseMode || DEFAULT_RESPONSE_MODE;
+
+  // ── DATA MODE (default) ───────────────────────────────────────────────────
+  if (responseMode === 'data') {
+    // Normalise transitData into the days array format expected by buildTransitDataResponse.
+    let days;
+    if (Array.isArray(transitData)) {
+      days = [{ transits: transitData }];
+    } else if (Array.isArray(transitData.days)) {
+      days = transitData.days;
+    } else {
+      days = [{
+        date:       transitData.date,
+        transits:   transitData.transits || [],
+        moonPhase:  transitData.moonPhase,
+      }];
+    }
+
+    return buildTransitDataResponse(days, userMessage);
+  }
+
+  // ── NARRATIVE MODE (legacy) ───────────────────────────────────────────────
   const intent = detectIntent(userMessage);
 
   // ── 1. Extract transits ───────────────────────────────────────────────────
@@ -356,7 +717,7 @@ function runConversationalMode(transitData = {}, conversationalContext = {}, neu
   const interpretation = interpretTransits(filteredTransits.slice(0, 5));
 
   // ── 5. Build semantic context block (sign, aspect nature, energy type) ──
-  const topTransits    = interpretation.topTransits || filteredTransits;
+  const topTransits     = interpretation.topTransits || filteredTransits;
   const semanticContext = buildSemanticBlock(topTransits);
 
   // ── 6. Build brief synthesis ─────────────────────────────────────────────
@@ -379,13 +740,20 @@ function runConversationalMode(transitData = {}, conversationalContext = {}, neu
 
 module.exports = {
   runConversationalMode,
+  buildTransitDataResponse,
   detectIntent,
+  detectLookupType,
+  resolveDate,
   prioritizeByStrength,
   filterByIntent,
   getSemanticMeaning,
   buildAstroContextSentence,
   buildSemanticParagraph,
+  buildFormPreset,
+  buildActiveSignals,
   buildSynthesis,
+  astroConversationState,
+  DEFAULT_RESPONSE_MODE,
   INTENT_PLANET_PRIORITY,
   STRENGTH_RANK,
 };
