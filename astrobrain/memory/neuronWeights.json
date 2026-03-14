@@ -1,6 +1,11 @@
 {
-  "mars_moon_square": 0.52,
-  "saturn_sun_conjunction": 0.55,
-  "venus_sun_trine": 0.49,
-  "moon_venus_sextile": 0.37
+  "mars_moon_square": 0.6200000000000001,
+  "saturn_sun_conjunction": 0.6500000000000001,
+  "venus_sun_trine": 0.54,
+  "moon_venus_sextile": 0.37,
+  "mars_moon_square_saturn_sun_conjunction_pattern": 0.45,
+  "venus_jupiter_trine": 0.45,
+  "moon_mars_square": 0.45,
+  "mars_sun_conjunction": 0.45,
+  "mars_saturn_trine": 0.45
 }

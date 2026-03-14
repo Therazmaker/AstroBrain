@@ -4,5 +4,11 @@
     "emotion": "sensibilidad",
     "tone": "active",
     "dominantCluster": "relational"
+  },
+  {
+    "date": "2026-03-14",
+    "emotion": "reactividad",
+    "tone": "intense",
+    "dominantCluster": "emotional"
   }
 ]
