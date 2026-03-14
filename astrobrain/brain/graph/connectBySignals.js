@@ -98,10 +98,10 @@
       var otherSignals = other.signals || [];
       var shared = neuronSignals.filter(function(s) { return otherSignals.indexOf(s) !== -1; });
       if (shared.length > 0) {
-        var ids = [neuron.id, other.id].sort();
+        var sorted = [neuron.id, other.id].sort();
         connections.push({
-          from: ids[0],
-          to: ids[1],
+          from: sorted[0],
+          to: sorted[1],
           type: 'signal_overlap',
           weight: shared.length,
           signals: shared,
@@ -125,7 +125,7 @@
    * @returns {{from:string, to:string, type:string, weight:number, signals:string[]}[]}
    */
   function rebuildGraphConnections(allNeurons) {
-    var seen = new Set ? new Set() : {};
+    var seen = new Set();
     var connections = [];
 
     for (var i = 0; i < allNeurons.length; i++) {
@@ -137,10 +137,9 @@
         var shared = aSignals.filter(function(s) { return bSignals.indexOf(s) !== -1; });
 
         if (shared.length > 0) {
-          var key = [a.id, b.id].sort().join('|');
-          var isDup = seen.has ? seen.has(key) : seen[key];
-          if (!isDup) {
-            if (seen.has) { seen.add(key); } else { seen[key] = true; }
+          var key = signalConnectionId(a.id, b.id);
+          if (!seen.has(key)) {
+            seen.add(key);
             connections.push({
               from: a.id,
               to: b.id,
@@ -167,15 +166,12 @@
    * @returns {{id:string, label:string, type:string, signals:string[], activation:number, createdFrom:string}[]}
    */
   function ensureSignalNeurons(signals, allNeurons) {
-    var existingIds = new Set ? new Set(allNeurons.map(function(n) { return n.id; })) : {};
-    if (!existingIds.has) {
-      allNeurons.forEach(function(n) { existingIds[n.id] = true; });
-    }
+    var existingIds = new Set(allNeurons.map(function(n) { return n.id; }));
     var newNeurons = [];
 
     signals.forEach(function(signal) {
-      var exists = existingIds.has ? existingIds.has(signal) : existingIds[signal];
-      if (!exists) {
+      if (!existingIds.has(signal)) {
+        existingIds.add(signal); // prevent duplicate creation within same call
         var newNeuron = {
           id: signal,
           label: signal,
@@ -195,6 +191,17 @@
     return newNeurons;
   }
 
+  // ── signalConnectionId ───────────────────────────────────────
+  /**
+   * Genera un ID de conexión canónico (ordenado) para evitar duplicados.
+   * @param {string} fromId
+   * @param {string} toId
+   * @returns {string}
+   */
+  function signalConnectionId(fromId, toId) {
+    return [fromId, toId].sort().join('|');
+  }
+
   // ── Expose ───────────────────────────────────────────────────
   global.ConnectBySignals = {
     SIGNAL_ALIASES: SIGNAL_ALIASES,
@@ -202,6 +209,7 @@
     connectNeuronBySignals: connectNeuronBySignals,
     rebuildGraphConnections: rebuildGraphConnections,
     ensureSignalNeurons: ensureSignalNeurons,
+    signalConnectionId: signalConnectionId,
   };
 
 })(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));

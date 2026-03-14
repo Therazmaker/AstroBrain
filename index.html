@@ -5776,9 +5776,10 @@ function actualizarDraftDesdeUI(index) {
   d.peso = document.getElementById(pref+'peso').value ? Number(document.getElementById(pref+'peso').value) : '';
   d.clusters = extraerListaPorComas(document.getElementById(pref+'clusters').value);
   const rawSignals = document.getElementById(pref+'signals').value;
+  // Always normalize signals using the module; fall back to basic split if module unavailable
   d.signals = window.ConnectBySignals
     ? window.ConnectBySignals.normalizeSignals(rawSignals)
-    : extraerListaPorComas(rawSignals);
+    : rawSignals.split(',').map(s => s.trim().toLowerCase().replace(/\s+/g, '_')).filter(Boolean);
   d.output.energy = document.getElementById(pref+'energy').value.trim();
   d.output.avoid = document.getElementById(pref+'avoid').value.trim();
   d.output.use = document.getElementById(pref+'use').value.trim();
@@ -6084,10 +6085,6 @@ async function guardarNeuronasTraining() {
   if (!completas.length) { showToast('No hay neuronas completas para guardar.', 'error'); return; }
 
   for (const n of completas) {
-    // Normalize signals before saving
-    if (window.ConnectBySignals && Array.isArray(n.signals)) {
-      n.signals = window.ConnectBySignals.normalizeSignals(n.signals);
-    }
     await dbPut('trainingNeurons', n);
     markNeuronAsUpdated(n.id);
     await dbPut('neuronWeights', { id: n.id, weight: n.peso || 0.45, source: 'training_room' });
@@ -6109,7 +6106,7 @@ async function guardarNeuronasTraining() {
   if (window.ConnectBySignals) {
     const allSaved = await obtenerNeuronasTrainingGuardadas();
     // Create base signal neurons for any new signals not yet in the catalog
-    const allSignals = allSaved.flatMap(n => n.signals || []);
+    const allSignals = [...new Set(allSaved.flatMap(n => n.signals || []))];
     const newSignalNeurons = window.ConnectBySignals.ensureSignalNeurons(allSignals, allSaved);
     for (const sn of newSignalNeurons) {
       await dbPut('trainingNeurons', sn);
@@ -6119,11 +6116,11 @@ async function guardarNeuronasTraining() {
     const connections = window.ConnectBySignals.rebuildGraphConnections(allWithSignalNeurons);
     await dbClearStore('signalConnections');
     for (const conn of connections) {
-      const id = [conn.from, conn.to].sort().join('|');
+      const id = window.ConnectBySignals.signalConnectionId(conn.from, conn.to);
       await dbPut('signalConnections', { ...conn, id });
       console.log(`[graph] connecting ${conn.from} → ${conn.to} (shared: ${conn.signals.join(', ')})`);
     }
-    console.log(`[graph] signals detectados: ${allSignals.length} | normalizados: ${[...new Set(allSignals)].length} | conexiones: ${connections.length}`);
+    console.log(`[graph] signals detectados: ${allSignals.length} | conexiones: ${connections.length}`);
   }
 
   await saveNarrativePatterns(trainingRoomState.detectedNarrativePatterns);
@@ -6162,7 +6159,7 @@ async function reconstruirConexionesGrafo() {
   const connections = window.ConnectBySignals.rebuildGraphConnections(allNeurons);
   await dbClearStore('signalConnections');
   for (const conn of connections) {
-    const id = [conn.from, conn.to].sort().join('|');
+    const id = window.ConnectBySignals.signalConnectionId(conn.from, conn.to);
     await dbPut('signalConnections', { ...conn, id });
     console.log(`[graph] connecting ${conn.from} → ${conn.to} (shared: ${conn.signals.join(', ')})`);
   }
