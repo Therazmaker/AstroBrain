@@ -1999,6 +1999,388 @@
     .dev-steps { grid-template-columns: repeat(3,1fr); }
   }
 
+  /* ─── TRANSIT VAULT BUTTON (header) ─────────────────── */
+  .btn-vault-shortcut {
+    background: rgba(212,168,67,0.08);
+    border: 1px solid rgba(212,168,67,0.28);
+    border-radius: 100px;
+    color: var(--gold);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    padding: 7px 14px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-vault-shortcut:hover {
+    border-color: var(--gold);
+    background: rgba(212,168,67,0.14);
+    box-shadow: 0 0 12px rgba(212,168,67,0.18);
+  }
+
+  /* ─── TRANSIT VAULT SECTION ──────────────────────────── */
+  .transit-vault-section { margin-bottom: 48px; }
+
+  .tv-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .tv-tab {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.60rem;
+    padding: 6px 14px;
+    letter-spacing: 0.10em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .tv-tab:hover { border-color: var(--gold-dim); color: var(--gold); }
+  .tv-tab.active {
+    background: rgba(212,168,67,0.12);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .tv-panel { display: none; }
+  .tv-panel.active { display: block; }
+
+  /* Import panel */
+  .tv-import-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 768px) { .tv-import-grid { grid-template-columns: 1fr; } }
+
+  .tv-import-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+  }
+  .tv-import-card .panel-title { margin-bottom: 6px; }
+  .tv-import-card .panel-sub { margin-bottom: 12px; }
+  .tv-dropzone {
+    border: 2px dashed rgba(212,168,67,0.25);
+    border-radius: 10px;
+    padding: 28px 16px;
+    text-align: center;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.60rem;
+    letter-spacing: 0.10em;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .tv-dropzone:hover,
+  .tv-dropzone.drag-over { border-color: var(--gold); color: var(--gold-dim); }
+  .tv-dropzone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+  .tv-dropzone-icon { font-size: 1.6rem; margin-bottom: 6px; }
+  .tv-import-textarea {
+    width: 100%;
+    min-height: 180px;
+    background: rgba(14,12,26,0.8);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    padding: 12px;
+    resize: vertical;
+    margin-bottom: 10px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .tv-import-textarea:focus { border-color: var(--gold-dim); }
+  .tv-import-feedback {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    color: var(--text-muted);
+    min-height: 22px;
+    margin-top: 6px;
+  }
+  .tv-import-feedback.ok { color: var(--teal); }
+  .tv-import-feedback.err { color: var(--rose); }
+
+  /* Library panel */
+  .tv-library-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .tv-dataset-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    transition: border-color 0.2s;
+  }
+  .tv-dataset-card:hover { border-color: var(--border-hi); }
+  .tv-dataset-card.active-chat { border-left: 3px solid var(--violet); }
+  .tv-dataset-card.active-graph { border-left: 3px solid var(--teal); }
+  .tv-dataset-card.active-both { border-left: 3px solid var(--gold); }
+  .tv-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .tv-card-name {
+    font-family: var(--font-display);
+    font-size: 0.96rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .tv-type-badge {
+    font-family: var(--font-mono);
+    font-size: 0.52rem;
+    padding: 3px 9px;
+    border-radius: 100px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  .tv-type-badge.today { background: rgba(212,168,67,0.12); border: 1px solid rgba(212,168,67,0.3); color: var(--gold); }
+  .tv-type-badge.weekly { background: rgba(77,208,196,0.10); border: 1px solid rgba(77,208,196,0.3); color: var(--teal); }
+  .tv-type-badge.monthly { background: rgba(155,114,245,0.10); border: 1px solid rgba(155,114,245,0.3); color: var(--violet); }
+  .tv-type-badge.full { background: rgba(229,115,115,0.10); border: 1px solid rgba(229,115,115,0.3); color: var(--rose); }
+  .tv-card-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .tv-meta-item {
+    font-family: var(--font-mono);
+    font-size: 0.56rem;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+  }
+  .tv-meta-item span { color: var(--text-secondary); }
+  .tv-card-status {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .tv-status-pill {
+    font-family: var(--font-mono);
+    font-size: 0.50rem;
+    padding: 2px 8px;
+    border-radius: 100px;
+    letter-spacing: 0.08em;
+  }
+  .tv-status-pill.chat-on { background: rgba(155,114,245,0.14); border: 1px solid rgba(155,114,245,0.3); color: var(--violet); }
+  .tv-status-pill.graph-on { background: rgba(77,208,196,0.12); border: 1px solid rgba(77,208,196,0.3); color: var(--teal); }
+  .tv-status-pill.off { background: rgba(93,88,128,0.15); border: 1px solid var(--border); color: var(--text-muted); }
+  .tv-card-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .tv-btn {
+    background: rgba(160,130,255,0.07);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.54rem;
+    padding: 5px 11px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: all 0.18s;
+  }
+  .tv-btn:hover { border-color: var(--violet-dim); color: var(--violet); background: rgba(155,114,245,0.10); }
+  .tv-btn.chat { border-color: rgba(155,114,245,0.3); color: var(--violet); }
+  .tv-btn.graph { border-color: rgba(77,208,196,0.3); color: var(--teal); }
+  .tv-btn.danger { border-color: rgba(229,115,115,0.25); color: var(--rose); }
+  .tv-btn.danger:hover { background: rgba(229,115,115,0.08); border-color: var(--rose); }
+  .tv-btn.summary { border-color: rgba(212,168,67,0.25); color: var(--gold); }
+  .tv-btn.summary:hover { background: rgba(212,168,67,0.08); border-color: var(--gold); }
+
+  /* Activation panel */
+  .tv-activation-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 768px) { .tv-activation-grid { grid-template-columns: 1fr; } }
+  .tv-activation-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+  }
+  .tv-activation-label {
+    font-family: var(--font-mono);
+    font-size: 0.54rem;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .tv-activation-name {
+    font-family: var(--font-display);
+    font-size: 1.0rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .tv-activation-meta {
+    font-family: var(--font-mono);
+    font-size: 0.56rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .tv-quick-access {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+  }
+  .tv-quick-access .panel-sub { margin-bottom: 12px; }
+  .tv-quick-btns {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .tv-quick-btn {
+    background: rgba(212,168,67,0.08);
+    border: 1px solid rgba(212,168,67,0.25);
+    border-radius: 8px;
+    color: var(--gold);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    padding: 7px 14px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: all 0.18s;
+  }
+  .tv-quick-btn:hover { background: rgba(212,168,67,0.14); border-color: var(--gold); }
+
+  /* Debug panel */
+  .tv-debug-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 768px) { .tv-debug-grid { grid-template-columns: 1fr; } }
+  .tv-debug-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+  }
+  .tv-debug-title {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    color: var(--teal);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .tv-debug-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+  }
+  .tv-debug-row:last-child { border-bottom: none; }
+  .tv-debug-row .k { color: var(--text-muted); }
+  .tv-debug-row .v { color: var(--text-secondary); }
+  .tv-debug-pre {
+    background: rgba(6,5,13,0.8);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.54rem;
+    color: var(--text-secondary);
+    max-height: 200px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin-top: 8px;
+  }
+
+  /* Summary inline modal */
+  .tv-summary-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(6,5,13,0.82);
+    z-index: 9000;
+    align-items: center;
+    justify-content: center;
+  }
+  .tv-summary-overlay.open { display: flex; }
+  .tv-summary-modal {
+    background: var(--card);
+    border: 1px solid var(--border-hi);
+    border-radius: 16px;
+    padding: 28px;
+    width: min(640px, 96vw);
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .tv-summary-modal .panel-title { margin-bottom: 4px; }
+  .tv-summary-modal .panel-sub { margin-bottom: 16px; }
+  .tv-summary-close {
+    float: right;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+  }
+  .tv-summary-body { clear: both; }
+  .tv-summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+  }
+  .tv-summary-row:last-child { border-bottom: none; }
+  .tv-summary-row .k { color: var(--text-muted); }
+  .tv-summary-row .v { color: var(--text-secondary); max-width: 60%; text-align: right; word-break: break-word; }
+  .tv-summary-transits {
+    margin-top: 14px;
+    background: rgba(6,5,13,0.8);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.54rem;
+    color: var(--text-secondary);
+    max-height: 160px;
+    overflow-y: auto;
+  }
+
 </style>
 </head>
 <body>
@@ -2022,6 +2404,7 @@
         <span class="graph-btn-icon">✦</span>
         Red Neuronal
       </button>
+      <button class="btn-vault-shortcut" onclick="irATransitVault()">⬡ Transit Vault</button>
       <button class="btn-training-shortcut" onclick="irATrainingRoom()">Training Room</button>
       <button class="btn-dev-mode" id="btn-dev-mode" onclick="toggleDevMode()" title="Modo Dev — Auditoría cognitiva interna">
         <span class="dev-btn-icon">⚙</span>
@@ -2661,6 +3044,128 @@
     </div>
   </section>
 
+  <hr class="divider">
+
+  <!-- ── TRANSIT VAULT ── -->
+  <section class="transit-vault-section reveal" id="transit-vault-section">
+    <div class="section-header">
+      <h2 class="section-title" style="color:var(--gold)">⬡ Transit Vault</h2>
+      <span class="section-badge" style="border-color:rgba(212,168,67,0.3);color:var(--gold)" id="vault-count-badge">0 DATASETS</span>
+    </div>
+
+    <div class="tv-tabs">
+      <button class="tv-tab active" id="tv-tab-import" onclick="setVaultTab('import')">Importar</button>
+      <button class="tv-tab" id="tv-tab-library" onclick="setVaultTab('library')">Librería</button>
+      <button class="tv-tab" id="tv-tab-activation" onclick="setVaultTab('activation')">Activación</button>
+      <button class="tv-tab" id="tv-tab-debug" onclick="setVaultTab('debug')">Debug</button>
+    </div>
+
+    <!-- A. IMPORT -->
+    <div class="tv-panel active" id="tv-panel-import">
+      <div class="tv-import-grid">
+        <div class="tv-import-card">
+          <div class="panel-title">Importar archivos JSON</div>
+          <div class="panel-sub">ARRASTRA O SELECCIONA ARCHIVOS .JSON</div>
+          <div class="tv-dropzone" id="tv-dropzone"
+               ondragover="event.preventDefault();this.classList.add('drag-over')"
+               ondragleave="this.classList.remove('drag-over')"
+               ondrop="tvHandleDrop(event)">
+            <input type="file" accept=".json" multiple id="tv-file-input" onchange="tvImportFiles(this.files)" />
+            <div class="tv-dropzone-icon">⬇</div>
+            <div>SUELTA ARCHIVOS AQUÍ</div>
+            <div style="margin-top:4px;font-size:0.52rem;opacity:0.6">o haz clic para seleccionar</div>
+          </div>
+          <div class="tv-import-feedback" id="tv-file-feedback">Selecciona uno o más archivos .json para importar.</div>
+        </div>
+        <div class="tv-import-card">
+          <div class="panel-title">Pegar JSON manualmente</div>
+          <div class="panel-sub">PEGA UN JSON DE TRÁNSITOS Y HAZ CLIC EN IMPORTAR</div>
+          <textarea class="tv-import-textarea" id="tv-paste-textarea"
+            placeholder='{ "days": [ { "date": "2025-01-15", "transits": [...] } ] }'></textarea>
+          <button class="btn-run" style="width:100%;margin-top:4px" onclick="tvImportPasted()">
+            <span>⬡ Importar JSON pegado</span>
+          </button>
+          <div class="tv-import-feedback" id="tv-paste-feedback">Pega un JSON válido de tránsitos astrológicos.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B. LIBRARY -->
+    <div class="tv-panel" id="tv-panel-library">
+      <div class="tv-library-list" id="tv-library-list">
+        <div class="empty-state">
+          <span class="es-icon">📦</span>
+          <p>SIN DATASETS IMPORTADOS — USA LA PESTAÑA "IMPORTAR"</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- C. ACTIVATION -->
+    <div class="tv-panel" id="tv-panel-activation">
+      <div class="tv-activation-grid">
+        <div class="tv-activation-block">
+          <div class="tv-activation-label">💬 Activo para Chat</div>
+          <div class="tv-activation-name" id="tv-act-chat-name">— ninguno —</div>
+          <div class="tv-activation-meta" id="tv-act-chat-meta">Sin dataset activo</div>
+        </div>
+        <div class="tv-activation-block">
+          <div class="tv-activation-label">✦ Activo para Grafo</div>
+          <div class="tv-activation-name" id="tv-act-graph-name">— ninguno —</div>
+          <div class="tv-activation-meta" id="tv-act-graph-meta">Sin dataset activo</div>
+        </div>
+        <div class="tv-activation-block">
+          <div class="tv-activation-label">📅 Cobertura total</div>
+          <div class="tv-activation-name" id="tv-act-total-days">0 días</div>
+          <div class="tv-activation-meta" id="tv-act-total-meta">Sin datasets cargados</div>
+        </div>
+      </div>
+      <div class="tv-quick-access">
+        <div class="panel-sub">ACCESO RÁPIDO — ACTIVAR POR TIPO</div>
+        <div class="tv-quick-btns">
+          <button class="tv-quick-btn" onclick="tvActivateByType('today')">⬡ Usar Today</button>
+          <button class="tv-quick-btn" onclick="tvActivateByType('weekly')">⬡ Usar Weekly</button>
+          <button class="tv-quick-btn" onclick="tvActivateByType('monthly')">⬡ Usar Monthly</button>
+          <button class="tv-quick-btn" onclick="tvActivateByType('full')">⬡ Usar Full</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- D. DEBUG -->
+    <div class="tv-panel" id="tv-panel-debug">
+      <div class="tv-debug-grid">
+        <div class="tv-debug-card">
+          <div class="tv-debug-title">Estadísticas Globales</div>
+          <div id="tv-debug-stats">
+            <div class="tv-debug-row"><span class="k">Datasets guardados</span><span class="v" id="tvd-total-datasets">—</span></div>
+            <div class="tv-debug-row"><span class="k">Días indexados totales</span><span class="v" id="tvd-total-days">—</span></div>
+            <div class="tv-debug-row"><span class="k">Días con moonPhase</span><span class="v" id="tvd-moon-days">—</span></div>
+            <div class="tv-debug-row"><span class="k">Tránsitos fuertes (score≥3)</span><span class="v" id="tvd-strong-transits">—</span></div>
+            <div class="tv-debug-row"><span class="k">Dataset chat activo</span><span class="v" id="tvd-chat-active">—</span></div>
+            <div class="tv-debug-row"><span class="k">Dataset grafo activo</span><span class="v" id="tvd-graph-active">—</span></div>
+          </div>
+        </div>
+        <div class="tv-debug-card">
+          <div class="tv-debug-title">Preview Día Actual</div>
+          <div class="tv-activation-label" style="margin-bottom:6px" id="tvd-today-date">—</div>
+          <pre class="tv-debug-pre" id="tvd-today-preview">Sin dataset activo para mostrar el día actual.</pre>
+          <div class="tv-debug-title" style="margin-top:14px">Señales Lunares Resueltas</div>
+          <pre class="tv-debug-pre" id="tvd-moon-signals">Sin señales lunares detectadas.</pre>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+</div>
+
+<!-- TRANSIT VAULT SUMMARY MODAL -->
+<div class="tv-summary-overlay" id="tv-summary-overlay">
+  <div class="tv-summary-modal">
+    <button class="tv-summary-close" onclick="closeVaultSummary()">✕</button>
+    <div class="panel-title" id="tv-summary-title">Resumen del Dataset</div>
+    <div class="panel-sub" id="tv-summary-sub">—</div>
+    <div class="tv-summary-body" id="tv-summary-body"></div>
+  </div>
 </div>
 
 <div class="training-import-overlay" id="training-import-overlay">
@@ -2731,7 +3236,7 @@
 // INDEXEDDB
 // ─────────────────────────────────────────────────────────────
 const DB_NAME = 'AstroBrainDB';
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 let db = null;
 
 function openDB() {
@@ -2786,6 +3291,11 @@ function openDB() {
       if (!d.objectStoreNames.contains('trainingVoiceProfiles')) {
         d.createObjectStore('trainingVoiceProfiles', { keyPath: 'id' });
       }
+      if (!d.objectStoreNames.contains('transitDatasets')) {
+        const tv = d.createObjectStore('transitDatasets', { keyPath: 'id' });
+        tv.createIndex('type', 'type');
+        tv.createIndex('importedAt', 'importedAt');
+      }
     };
     req.onsuccess = e => { db = e.target.result; resolve(db); };
     req.onerror = e => reject(e.target.error);
@@ -2818,6 +3328,16 @@ async function dbAdd(store, item) {
     const tx = d.transaction(store, 'readwrite');
     const req = tx.objectStore(store).add(item);
     req.onsuccess = () => res(req.result);
+    req.onerror = e => rej(e.target.error);
+  });
+}
+
+async function dbDelete(store, key) {
+  const d = await openDB();
+  return new Promise((res, rej) => {
+    const tx = d.transaction(store, 'readwrite');
+    const req = tx.objectStore(store).delete(key);
+    req.onsuccess = () => res();
     req.onerror = e => rej(e.target.error);
   });
 }
@@ -6691,6 +7211,611 @@ function renderDevPanel(trace) {
     warnCard.style.display = 'none';
   }
 }
+
+// ─────────────────────────────────────────────────────────────
+// TRANSIT VAULT
+// Gestión de datasets JSON astrológicos precalculados
+// ─────────────────────────────────────────────────────────────
+
+const TRANSIT_SCORE_STRONG = 3; // mínimo score para considerar un tránsito "fuerte"
+
+// ── Navigation ──────────────────────────────────────────────
+
+function irATransitVault() {
+  const section = document.getElementById('transit-vault-section');
+  if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function setVaultTab(tab) {
+  const tabs = ['import', 'library', 'activation', 'debug'];
+  tabs.forEach(t => {
+    document.getElementById('tv-tab-' + t).classList.toggle('active', t === tab);
+    document.getElementById('tv-panel-' + t).classList.toggle('active', t === tab);
+  });
+  if (tab === 'library') loadVaultLibrary();
+  if (tab === 'activation') loadVaultActivation();
+  if (tab === 'debug') loadVaultDebug();
+  console.log('[TransitVault] Tab activo:', tab);
+}
+
+// ── Dataset type detection ───────────────────────────────────
+
+function detectDatasetType(days) {
+  if (!Array.isArray(days) || days.length === 0) return 'full';
+  const n = days.length;
+  if (n <= 1) return 'today';
+  if (n <= 9) return 'weekly';
+  if (n <= 45) return 'monthly';
+  return 'full';
+}
+
+// ── JSON Validation ──────────────────────────────────────────
+
+function validateTransitDataset(data) {
+  const errors = [];
+  if (typeof data !== 'object' || data === null) {
+    errors.push('El JSON no es un objeto válido.');
+    return { valid: false, errors };
+  }
+  // Accept top-level days array OR wrap as single day
+  let days = null;
+  if (Array.isArray(data.days)) {
+    days = data.days;
+  } else if (Array.isArray(data)) {
+    days = data;
+  } else if (data.date) {
+    // Single-day object
+    days = [data];
+  }
+  if (!days || days.length === 0) {
+    errors.push('No se encontró un array "days" con al menos un día.');
+    return { valid: false, errors };
+  }
+  const sampleDay = days[0];
+  if (!sampleDay.date) {
+    errors.push('Cada entrada de "days" debe tener un campo "date".');
+  }
+  return { valid: errors.length === 0, errors, days };
+}
+
+// ── Dataset meta extraction ──────────────────────────────────
+
+function extractDatasetMeta(days) {
+  const dates = days.map(d => d.date).filter(Boolean).sort();
+  const dateFrom = dates[0] || null;
+  const dateTo = dates[dates.length - 1] || null;
+  const moonDays = days.filter(d => d.moonPhase || d.moon_phase || (d.lunar && d.lunar.phase)).length;
+  const type = detectDatasetType(days);
+  return { dateFrom, dateTo, dayCount: days.length, moonDays, type };
+}
+
+// ── Score a single transit entry ────────────────────────────
+
+function scoreVaultTransit(t) {
+  const pScore = { Moon:5, Mars:4, Saturn:4, Mercury:3, Venus:3, Sun:3, Jupiter:2, Uranus:2, Neptune:2, Pluto:3 };
+  const aScore = { conjunction:3, opposition:3, square:2, trine:2, sextile:1 };
+  const p = pScore[t.planet] || pScore[t.transiting] || 1;
+  const a = aScore[t.aspect] || aScore[t.type] || 1;
+  const orb = parseFloat(t.orb || t.orbDegrees || 2);
+  const orbBonus = orb < 1 ? 3 : orb < 2 ? 2 : orb < 3 ? 1 : 0;
+  return p + a + orbBonus;
+}
+
+// ── File import ──────────────────────────────────────────────
+
+function tvHandleDrop(event) {
+  event.preventDefault();
+  document.getElementById('tv-dropzone').classList.remove('drag-over');
+  const files = event.dataTransfer.files;
+  if (files.length) tvImportFiles(files);
+}
+
+async function tvImportFiles(files) {
+  const feedback = document.getElementById('tv-file-feedback');
+  if (!files || files.length === 0) return;
+  const jsonFiles = Array.from(files).filter(f => f.name.endsWith('.json'));
+  if (jsonFiles.length === 0) {
+    feedback.textContent = 'Selecciona al menos un archivo .json';
+    feedback.className = 'tv-import-feedback err';
+    return;
+  }
+  feedback.textContent = `Procesando ${jsonFiles.length} archivo(s)…`;
+  feedback.className = 'tv-import-feedback';
+  let imported = 0;
+  let errors = 0;
+  for (const file of jsonFiles) {
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+      const result = await tvProcessAndSave(data, file.name);
+      if (result.ok) {
+        imported++;
+        console.log('[TransitVault] Importado:', file.name, '→', result.dataset.type, result.dataset.meta.dayCount, 'días');
+      } else {
+        errors++;
+        console.warn('[TransitVault] Error en', file.name, ':', result.errors);
+      }
+    } catch (e) {
+      errors++;
+      console.error('[TransitVault] Error parseando', file.name, e);
+    }
+  }
+  if (imported > 0) {
+    feedback.textContent = `✓ ${imported} dataset(s) importados correctamente.${errors ? ' ' + errors + ' errores.' : ''}`;
+    feedback.className = 'tv-import-feedback ok';
+    showToast(`${imported} dataset(s) importados al Vault`, 'success');
+    tvUpdateBadge();
+  } else {
+    feedback.textContent = `✕ No se pudo importar ningún archivo. ${errors} errores.`;
+    feedback.className = 'tv-import-feedback err';
+  }
+  // Reset file input
+  const fi = document.getElementById('tv-file-input');
+  if (fi) fi.value = '';
+}
+
+// ── Paste import ─────────────────────────────────────────────
+
+async function tvImportPasted() {
+  const ta = document.getElementById('tv-paste-textarea');
+  const feedback = document.getElementById('tv-paste-feedback');
+  const raw = (ta.value || '').trim();
+  if (!raw) {
+    feedback.textContent = 'El textarea está vacío.';
+    feedback.className = 'tv-import-feedback err';
+    return;
+  }
+  let data;
+  try {
+    data = JSON.parse(raw);
+  } catch (e) {
+    feedback.textContent = '✕ JSON inválido: ' + e.message;
+    feedback.className = 'tv-import-feedback err';
+    return;
+  }
+  const result = await tvProcessAndSave(data, 'pasted_json');
+  if (result.ok) {
+    feedback.textContent = `✓ Dataset importado: ${result.dataset.label} (${result.dataset.meta.dayCount} días, tipo: ${result.dataset.type})`;
+    feedback.className = 'tv-import-feedback ok';
+    ta.value = '';
+    showToast('Dataset importado al Vault', 'success');
+    tvUpdateBadge();
+    console.log('[TransitVault] JSON pegado importado:', result.dataset.id, result.dataset.type);
+  } else {
+    feedback.textContent = '✕ ' + result.errors.join(' ');
+    feedback.className = 'tv-import-feedback err';
+  }
+}
+
+// ── Process and save dataset ─────────────────────────────────
+
+async function tvProcessAndSave(rawData, filename) {
+  const validation = validateTransitDataset(rawData);
+  if (!validation.valid) return { ok: false, errors: validation.errors };
+  const days = validation.days;
+  const meta = extractDatasetMeta(days);
+  const type = meta.type;
+  const labelBase = filename.replace(/\.json$/i, '').replace(/_/g, ' ').replace(/-/g, ' ');
+  const label = rawData.label || rawData.name || rawData.title || labelBase;
+  const id = 'tv_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+  const dataset = {
+    id,
+    type,
+    label,
+    sourceFile: filename,
+    importedAt: new Date().toISOString(),
+    isActiveForChat: false,
+    isActiveForGraph: false,
+    meta,
+    days,
+  };
+  await dbPut('transitDatasets', dataset);
+  return { ok: true, dataset };
+}
+
+// ── Library rendering ────────────────────────────────────────
+
+async function loadVaultLibrary() {
+  const container = document.getElementById('tv-library-list');
+  let datasets = [];
+  try {
+    datasets = (await dbGetAll('transitDatasets')) || [];
+  } catch (e) {
+    console.error('[TransitVault] Error cargando librería:', e);
+  }
+  tvUpdateBadge(datasets.length);
+  if (datasets.length === 0) {
+    container.innerHTML = '<div class="empty-state"><span class="es-icon">📦</span><p>SIN DATASETS IMPORTADOS — USA LA PESTAÑA "IMPORTAR"</p></div>';
+    return;
+  }
+  datasets.sort((a, b) => (b.importedAt || '') > (a.importedAt || '') ? 1 : -1);
+  container.innerHTML = datasets.map(ds => tvRenderDatasetCard(ds)).join('');
+  console.log('[TransitVault] Librería cargada:', datasets.length, 'datasets');
+}
+
+function tvRenderDatasetCard(ds) {
+  const activeClass = ds.isActiveForChat && ds.isActiveForGraph ? 'active-both'
+    : ds.isActiveForChat ? 'active-chat'
+    : ds.isActiveForGraph ? 'active-graph'
+    : '';
+  const chatPill = ds.isActiveForChat
+    ? '<span class="tv-status-pill chat-on">💬 Chat activo</span>'
+    : '<span class="tv-status-pill off">💬 Chat inactivo</span>';
+  const graphPill = ds.isActiveForGraph
+    ? '<span class="tv-status-pill graph-on">✦ Grafo activo</span>'
+    : '<span class="tv-status-pill off">✦ Grafo inactivo</span>';
+  const dateRange = ds.meta.dateFrom && ds.meta.dateTo
+    ? ds.meta.dateFrom + ' → ' + ds.meta.dateTo
+    : 'sin fechas';
+  const importedDate = ds.importedAt ? ds.importedAt.slice(0, 10) : '—';
+  return `<div class="tv-dataset-card ${activeClass}" id="tvcard-${ds.id}">
+    <div class="tv-card-header">
+      <div class="tv-card-name">${escHtml(ds.label)}</div>
+      <span class="tv-type-badge ${ds.type}">${ds.type}</span>
+    </div>
+    <div class="tv-card-meta">
+      <div class="tv-meta-item">RANGO <span>${escHtml(dateRange)}</span></div>
+      <div class="tv-meta-item">DÍAS <span>${ds.meta.dayCount}</span></div>
+      <div class="tv-meta-item">LUNA <span>${ds.meta.moonDays} días con fase</span></div>
+      <div class="tv-meta-item">IMPORTADO <span>${importedDate}</span></div>
+      <div class="tv-meta-item">FUENTE <span>${escHtml(ds.sourceFile)}</span></div>
+    </div>
+    <div class="tv-card-status">${chatPill}${graphPill}</div>
+    <div class="tv-card-actions">
+      <button class="tv-btn chat" onclick="tvActivateDataset('${ds.id}','chat')">💬 Activar para Chat</button>
+      <button class="tv-btn graph" onclick="tvActivateDataset('${ds.id}','graph')">✦ Activar para Grafo</button>
+      <button class="tv-btn summary" onclick="tvShowSummary('${ds.id}')">📋 Resumen</button>
+      <button class="tv-btn danger" onclick="tvDeleteDataset('${ds.id}')">✕ Eliminar</button>
+    </div>
+  </div>`;
+}
+
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Activation ────────────────────────────────────────────────
+
+async function tvActivateDataset(id, target) {
+  // target: 'chat' | 'graph'
+  let datasets = [];
+  try {
+    datasets = (await dbGetAll('transitDatasets')) || [];
+  } catch (e) { return; }
+
+  for (const ds of datasets) {
+    let changed = false;
+    if (target === 'chat') {
+      const newVal = ds.id === id ? !ds.isActiveForChat : false;
+      if (ds.isActiveForChat !== newVal) { ds.isActiveForChat = newVal; changed = true; }
+    } else if (target === 'graph') {
+      const newVal = ds.id === id ? !ds.isActiveForGraph : false;
+      if (ds.isActiveForGraph !== newVal) { ds.isActiveForGraph = newVal; changed = true; }
+    }
+    if (changed) await dbPut('transitDatasets', ds);
+  }
+  const updated = datasets.find(d => d.id === id);
+  const statusMsg = updated
+    ? `${updated.label} → chat:${updated.isActiveForChat}, grafo:${updated.isActiveForGraph}`
+    : id;
+  console.log('[TransitVault] Activación actualizada:', statusMsg);
+  showToast(`Dataset ${target === 'chat' ? 'chat' : 'grafo'} actualizado`, 'success');
+  loadVaultLibrary();
+}
+
+async function tvActivateByType(type) {
+  let datasets = [];
+  try {
+    datasets = (await dbGetAll('transitDatasets')) || [];
+  } catch (e) { return; }
+  const match = datasets.find(d => d.type === type);
+  if (!match) {
+    showToast(`No hay dataset de tipo "${type}" en el Vault`, 'error');
+    return;
+  }
+  // Activate for both chat and graph
+  for (const ds of datasets) {
+    const shouldActivate = ds.id === match.id;
+    let changed = false;
+    if (ds.isActiveForChat !== shouldActivate) { ds.isActiveForChat = shouldActivate; changed = true; }
+    if (ds.isActiveForGraph !== shouldActivate) { ds.isActiveForGraph = shouldActivate; changed = true; }
+    if (changed) await dbPut('transitDatasets', ds);
+  }
+  console.log('[TransitVault] Activado por tipo:', type, '→', match.label);
+  showToast(`Dataset "${match.label}" activado (${type})`, 'success');
+  loadVaultActivation();
+}
+
+// ── Delete ─────────────────────────────────────────────────────
+
+async function tvDeleteDataset(id) {
+  if (!confirm('¿Eliminar este dataset del Vault?')) return;
+  try {
+    await dbDelete('transitDatasets', id);
+    console.log('[TransitVault] Dataset eliminado:', id);
+    showToast('Dataset eliminado del Vault', 'info');
+    tvUpdateBadge();
+    loadVaultLibrary();
+  } catch (e) {
+    console.error('[TransitVault] Error al eliminar:', e);
+    showToast('Error al eliminar dataset', 'error');
+  }
+}
+
+// ── Summary modal ─────────────────────────────────────────────
+
+async function tvShowSummary(id) {
+  let datasets = [];
+  try {
+    datasets = (await dbGetAll('transitDatasets')) || [];
+  } catch (e) { return; }
+  const ds = datasets.find(d => d.id === id);
+  if (!ds) return;
+  document.getElementById('tv-summary-title').textContent = ds.label;
+  document.getElementById('tv-summary-sub').textContent = ds.type.toUpperCase() + ' · ' + ds.meta.dayCount + ' DÍAS';
+  const allTransits = ds.days.flatMap(d => {
+    const ts = d.transits || d.transit || d.aspects || [];
+    return Array.isArray(ts) ? ts : [];
+  });
+  const strongTransits = allTransits.filter(t => scoreVaultTransit(t) >= TRANSIT_SCORE_STRONG);
+  const moonDays = ds.days.filter(d => d.moonPhase || d.moon_phase || (d.lunar && d.lunar.phase));
+  const body = document.getElementById('tv-summary-body');
+  body.innerHTML = `
+    <div class="tv-summary-row"><span class="k">ID</span><span class="v">${escHtml(ds.id)}</span></div>
+    <div class="tv-summary-row"><span class="k">Tipo</span><span class="v">${ds.type}</span></div>
+    <div class="tv-summary-row"><span class="k">Rango</span><span class="v">${escHtml(ds.meta.dateFrom)} → ${escHtml(ds.meta.dateTo)}</span></div>
+    <div class="tv-summary-row"><span class="k">Días totales</span><span class="v">${ds.meta.dayCount}</span></div>
+    <div class="tv-summary-row"><span class="k">Días con fase lunar</span><span class="v">${moonDays.length}</span></div>
+    <div class="tv-summary-row"><span class="k">Tránsitos totales</span><span class="v">${allTransits.length}</span></div>
+    <div class="tv-summary-row"><span class="k">Tránsitos fuertes (score≥${TRANSIT_SCORE_STRONG})</span><span class="v">${strongTransits.length}</span></div>
+    <div class="tv-summary-row"><span class="k">Importado</span><span class="v">${ds.importedAt ? ds.importedAt.slice(0,16).replace('T',' ') : '—'}</span></div>
+    <div class="tv-summary-row"><span class="k">Activo chat</span><span class="v">${ds.isActiveForChat ? '✓ sí' : '✗ no'}</span></div>
+    <div class="tv-summary-row"><span class="k">Activo grafo</span><span class="v">${ds.isActiveForGraph ? '✓ sí' : '✗ no'}</span></div>
+    ${strongTransits.length ? `<div class="tv-summary-transits"><strong style="color:var(--gold)">Tránsitos fuertes:</strong><br>${strongTransits.slice(0,20).map(t => escHtml((t.planet||t.transiting||'?') + ' ' + (t.aspect||t.type||'') + ' ' + (t.target||t.natal||'?') + (t.orb != null ? ' (orb ' + t.orb + '°)' : ''))).join('<br>')}</div>` : ''}
+  `;
+  document.getElementById('tv-summary-overlay').classList.add('open');
+}
+
+function closeVaultSummary() {
+  document.getElementById('tv-summary-overlay').classList.remove('open');
+}
+
+// ── Activation panel ──────────────────────────────────────────
+
+async function loadVaultActivation() {
+  let datasets = [];
+  try {
+    datasets = (await dbGetAll('transitDatasets')) || [];
+  } catch (e) {}
+  const chatDs = datasets.find(d => d.isActiveForChat);
+  const graphDs = datasets.find(d => d.isActiveForGraph);
+  const totalDays = datasets.reduce((s, d) => s + (d.meta.dayCount || 0), 0);
+
+  document.getElementById('tv-act-chat-name').textContent = chatDs ? chatDs.label : '— ninguno —';
+  document.getElementById('tv-act-chat-meta').textContent = chatDs
+    ? `${chatDs.type} · ${chatDs.meta.dayCount} días · ${chatDs.meta.dateFrom || '?'} → ${chatDs.meta.dateTo || '?'}`
+    : 'Sin dataset activo para chat';
+
+  document.getElementById('tv-act-graph-name').textContent = graphDs ? graphDs.label : '— ninguno —';
+  document.getElementById('tv-act-graph-meta').textContent = graphDs
+    ? `${graphDs.type} · ${graphDs.meta.dayCount} días · ${graphDs.meta.dateFrom || '?'} → ${graphDs.meta.dateTo || '?'}`
+    : 'Sin dataset activo para grafo';
+
+  document.getElementById('tv-act-total-days').textContent = totalDays + ' días';
+  document.getElementById('tv-act-total-meta').textContent = datasets.length + ' datasets · tipos: ' +
+    [...new Set(datasets.map(d => d.type))].join(', ') || 'Sin datasets cargados';
+
+  console.log('[TransitVault] Activación cargada: chat=', chatDs?.label, 'grafo=', graphDs?.label);
+}
+
+// ── Debug panel ───────────────────────────────────────────────
+
+async function loadVaultDebug() {
+  let datasets = [];
+  try {
+    datasets = (await dbGetAll('transitDatasets')) || [];
+  } catch (e) {}
+
+  const today = new Date().toISOString().slice(0, 10);
+  const chatDs = datasets.find(d => d.isActiveForChat);
+  const graphDs = datasets.find(d => d.isActiveForGraph);
+  const totalDays = datasets.reduce((s, d) => s + (d.meta.dayCount || 0), 0);
+  const totalMoonDays = datasets.reduce((s, d) => s + (d.meta.moonDays || 0), 0);
+
+  let strongCount = 0;
+  if (chatDs) {
+    chatDs.days.forEach(d => {
+      const ts = d.transits || d.transit || d.aspects || [];
+      (Array.isArray(ts) ? ts : []).forEach(t => {
+        if (scoreVaultTransit(t) >= TRANSIT_SCORE_STRONG) strongCount++;
+      });
+    });
+  }
+
+  document.getElementById('tvd-total-datasets').textContent = datasets.length;
+  document.getElementById('tvd-total-days').textContent = totalDays;
+  document.getElementById('tvd-moon-days').textContent = totalMoonDays;
+  document.getElementById('tvd-strong-transits').textContent = strongCount + (chatDs ? ' (en dataset chat activo)' : ' (sin dataset activo)');
+  document.getElementById('tvd-chat-active').textContent = chatDs ? chatDs.label : '— ninguno —';
+  document.getElementById('tvd-graph-active').textContent = graphDs ? graphDs.label : '— ninguno —';
+  document.getElementById('tvd-today-date').textContent = 'HOY: ' + today;
+
+  // Today preview
+  const previewDs = chatDs || graphDs || datasets[0];
+  if (previewDs) {
+    const todayEntry = previewDs.days.find(d => d.date === today);
+    document.getElementById('tvd-today-preview').textContent = todayEntry
+      ? JSON.stringify(todayEntry, null, 2)
+      : `Sin entrada para ${today} en este dataset.\nRango disponible: ${previewDs.meta.dateFrom} → ${previewDs.meta.dateTo}`;
+    // Moon signals
+    const moonSignals = resolveMoonSignals(previewDs, today);
+    document.getElementById('tvd-moon-signals').textContent = moonSignals.length
+      ? moonSignals.join('\n')
+      : 'Sin señales lunares para hoy en el dataset activo.';
+  } else {
+    document.getElementById('tvd-today-preview').textContent = 'Sin dataset activo para mostrar el día actual.';
+    document.getElementById('tvd-moon-signals').textContent = 'Sin señales lunares detectadas.';
+  }
+
+  console.log('[TransitVault] Debug cargado: total datasets=', datasets.length, 'días=', totalDays, 'hoy=', today);
+}
+
+// ── Moon signal resolution ────────────────────────────────────
+
+function resolveMoonSignals(dataset, date) {
+  const signals = [];
+  if (!dataset || !Array.isArray(dataset.days)) return signals;
+  const entry = dataset.days.find(d => d.date === date);
+  if (!entry) return signals;
+  const phase = entry.moonPhase || entry.moon_phase || (entry.lunar && entry.lunar.phase);
+  if (phase) signals.push('🌙 Fase lunar: ' + phase);
+  const lunarSign = entry.moonSign || entry.moon_sign || (entry.lunar && entry.lunar.sign);
+  if (lunarSign) signals.push('☽ Luna en: ' + lunarSign);
+  const lunarAspects = entry.moonAspects || entry.moon_aspects || (entry.lunar && entry.lunar.aspects);
+  if (Array.isArray(lunarAspects) && lunarAspects.length) {
+    lunarAspects.forEach(a => signals.push('⟳ ' + (a.aspect || a.type || '') + ' ' + (a.planet || a.target || '')));
+  }
+  // Also look for Moon transits in the transits array
+  const ts = entry.transits || entry.transit || entry.aspects || [];
+  (Array.isArray(ts) ? ts : []).forEach(t => {
+    const p = (t.planet || t.transiting || '').toLowerCase();
+    const tgt = (t.target || t.natal || '').toLowerCase();
+    if (p === 'moon' || tgt === 'moon') {
+      signals.push('⚡ Luna ' + (t.aspect || t.type || '') + ' ' + (p === 'moon' ? (t.target || t.natal || '') : (t.planet || t.transiting || '')));
+    }
+  });
+  return signals;
+}
+
+// ── Vault query helpers ───────────────────────────────────────
+
+async function getActiveChatDataset() {
+  try {
+    const datasets = (await dbGetAll('transitDatasets')) || [];
+    return datasets.find(d => d.isActiveForChat) || null;
+  } catch (e) { return null; }
+}
+
+async function getActiveGraphDataset() {
+  try {
+    const datasets = (await dbGetAll('transitDatasets')) || [];
+    return datasets.find(d => d.isActiveForGraph) || null;
+  } catch (e) { return null; }
+}
+
+function getVaultDayEntry(dataset, date) {
+  if (!dataset || !Array.isArray(dataset.days)) return null;
+  return dataset.days.find(d => d.date === date) || null;
+}
+
+function getVaultWeekEntries(dataset) {
+  if (!dataset || !Array.isArray(dataset.days)) return [];
+  const today = new Date();
+  const in7 = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+  return dataset.days.filter(d => {
+    if (!d.date) return false;
+    const dd = new Date(d.date);
+    return dd >= today && dd <= in7;
+  });
+}
+
+function getVaultStrongTransitsForDay(dayEntry) {
+  if (!dayEntry) return [];
+  const ts = dayEntry.transits || dayEntry.transit || dayEntry.aspects || [];
+  return (Array.isArray(ts) ? ts : []).filter(t => scoreVaultTransit(t) >= TRANSIT_SCORE_STRONG);
+}
+
+// ── Badge update ──────────────────────────────────────────────
+
+async function tvUpdateBadge(count) {
+  if (count === undefined) {
+    try {
+      const ds = (await dbGetAll('transitDatasets')) || [];
+      count = ds.length;
+    } catch (e) { count = 0; }
+  }
+  const badge = document.getElementById('vault-count-badge');
+  if (badge) badge.textContent = count + ' DATASET' + (count !== 1 ? 'S' : '');
+}
+
+// ── Chat integration ──────────────────────────────────────────
+// Overrides the existing generateChatResponse to add vault-aware queries
+
+const _originalGenerateChatResponse = generateChatResponse;
+
+async function generateChatResponse(userText) {
+  const lower = userText.toLowerCase();
+  const asksVault = (keys) => keys.some(k => lower.includes(k));
+
+  // Vault-specific intents
+  const wantsToday = asksVault(['cómo viene hoy','como viene hoy','cómo estoy hoy','como estoy hoy','hoy','día de hoy','dia de hoy']);
+  const wantsWeek = asksVault(['esta semana','semana','week','tránsitos interesantes','transitos interesantes','qué pasa esta semana','que pasa esta semana']);
+  const wantsMoon = asksVault(['energía lunar','energia lunar','luna de hoy','fase lunar','luna hoy','moon']);
+
+  if (wantsToday || wantsWeek || wantsMoon) {
+    const vaultDs = await getActiveChatDataset();
+    if (!vaultDs) {
+      // Fall through to original handler
+    } else {
+      const today = new Date().toISOString().slice(0, 10);
+
+      if (wantsMoon) {
+        const signals = resolveMoonSignals(vaultDs, today);
+        if (signals.length) {
+          return 'Señales lunares para hoy (<strong>' + today + '</strong>) desde el Vault:<br><strong>' + signals.join('<br>') + '</strong>';
+        }
+        return 'No encontré señales lunares para hoy en el dataset activo del Vault. El rango disponible es ' + vaultDs.meta.dateFrom + ' → ' + vaultDs.meta.dateTo + '.';
+      }
+
+      if (wantsWeek) {
+        const weekEntries = getVaultWeekEntries(vaultDs);
+        if (weekEntries.length === 0) {
+          return 'No hay datos para esta semana en el dataset activo del Vault. Rango disponible: ' + vaultDs.meta.dateFrom + ' → ' + vaultDs.meta.dateTo + '.';
+        }
+        const highlights = [];
+        weekEntries.forEach(entry => {
+          const strong = getVaultStrongTransitsForDay(entry);
+          if (strong.length) {
+            highlights.push('<strong>' + entry.date + ':</strong> ' + strong.slice(0, 3).map(t => (t.planet || t.transiting || '?') + ' ' + (t.aspect || t.type || '') + ' ' + (t.target || t.natal || '')).join(', '));
+          }
+        });
+        if (highlights.length) {
+          return 'Tránsitos interesantes de esta semana (Vault · ' + vaultDs.label + '):<br>' + highlights.join('<br>');
+        }
+        return 'Esta semana hay ' + weekEntries.length + ' días en el Vault pero ningún tránsito especialmente fuerte. El período es ' + weekEntries[0].date + ' → ' + weekEntries[weekEntries.length - 1].date + '.';
+      }
+
+      if (wantsToday) {
+        const dayEntry = getVaultDayEntry(vaultDs, today);
+        if (!dayEntry) {
+          return 'No hay datos para hoy (' + today + ') en el dataset activo del Vault. Rango disponible: ' + vaultDs.meta.dateFrom + ' → ' + vaultDs.meta.dateTo + '.';
+        }
+        const strong = getVaultStrongTransitsForDay(dayEntry);
+        const moonSigs = resolveMoonSignals(vaultDs, today);
+        let resp = 'Desde el Vault (<strong>' + vaultDs.label + '</strong>) para hoy <strong>' + today + '</strong>:<br>';
+        if (strong.length) {
+          resp += '<strong>Tránsitos principales:</strong> ' + strong.slice(0, 5).map(t => (t.planet || t.transiting || '?') + ' ' + (t.aspect || t.type || '') + ' ' + (t.target || t.natal || '')).join(', ') + '.<br>';
+        } else {
+          resp += 'No hay tránsitos fuertes hoy según el dataset.<br>';
+        }
+        if (moonSigs.length) {
+          resp += '<strong>Luna:</strong> ' + moonSigs.slice(0, 2).join(' · ');
+        }
+        return resp;
+      }
+    }
+  }
+
+  // Default: original handler
+  return _originalGenerateChatResponse(userText);
+}
+
+// ── Init ──────────────────────────────────────────────────────
+
+(async function initTransitVault() {
+  await tvUpdateBadge();
+  console.log('[TransitVault] Inicializado correctamente.');
+})();
 
 </script>
 </body>
