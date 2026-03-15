@@ -2568,6 +2568,76 @@
   }
   #settings-import-file { display: none; }
 
+  /* ─── PASTE JSON NEURONS ──────────────────── */
+  .paste-json-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .paste-json-textarea {
+    width: 100%;
+    min-height: 130px;
+    max-height: 260px;
+    background: rgba(6,5,13,0.8);
+    border: 1px solid rgba(212,168,67,0.22);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    line-height: 1.55;
+    color: var(--text-primary);
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .paste-json-textarea::placeholder { color: var(--text-muted); }
+  .paste-json-textarea:focus { border-color: rgba(212,168,67,0.5); }
+  .paste-json-textarea.valid   { border-color: rgba(77,208,196,0.5); }
+  .paste-json-textarea.invalid { border-color: rgba(229,115,115,0.5); }
+  .paste-json-row {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .paste-json-status {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    min-height: 16px;
+    transition: color 0.2s;
+  }
+  .paste-json-status.ok  { color: rgba(77,208,196,0.9); }
+  .paste-json-status.err { color: rgba(229,115,115,0.9); }
+  .paste-json-btn {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(212,168,67,0.35);
+    background: rgba(212,168,67,0.08);
+    color: var(--gold);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .paste-json-btn:hover { background: rgba(212,168,67,0.16); border-color: var(--gold); }
+  .paste-json-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .paste-json-clear {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .paste-json-clear:hover { color: var(--text-secondary); border-color: var(--border-hi); }
+
   /* ─── DEV PANEL ───────────────────────────────────── */
   .dev-panel-section { display: none; margin-bottom: 48px; }
   .dev-panel-section.visible { display: block; }
@@ -2959,6 +3029,25 @@
             </div>
             <button class="settings-action-btn" onclick="document.getElementById('settings-import-file').click()">Importar</button>
             <input type="file" id="settings-import-file" accept=".json,application/json" onchange="importTrainedNeurons(event)">
+          </div>
+        </div>
+
+        <!-- Paste JSON group -->
+        <div class="settings-action-group">
+          <div class="settings-action-label">Pegar Neuronas — JSON directo</div>
+          <div class="paste-json-wrap">
+            <textarea
+              class="paste-json-textarea"
+              id="paste-neurons-input"
+              placeholder='Pega aquí un array JSON de neuronas generadas con el prompt:&#10;[&#10;  {&#10;    "id": "luna_en_piscis_asc_acuario_casa_2",&#10;    "triggers": ["casa_2_activa", "moon_casa_2", "signo_piscis_activo"],&#10;    "match": "any",&#10;    "peso": 0.85,&#10;    "clusters": ["emocional", "valor"],&#10;    "output": {&#10;      "energy": "...",&#10;      "avoid": "...",&#10;      "use": "...",&#10;      "focus": "..."&#10;    }&#10;  }&#10;]'
+              oninput="onPasteNeuronsInput()"
+              spellcheck="false"
+            ></textarea>
+            <div class="paste-json-row">
+              <div class="paste-json-status" id="paste-neurons-status">Esperando JSON…</div>
+              <button class="paste-json-clear" onclick="clearPasteNeurons()">Limpiar</button>
+              <button class="paste-json-btn" id="paste-neurons-btn" onclick="importPastedNeurons()" disabled>✦ Cargar</button>
+            </div>
           </div>
         </div>
 
@@ -4164,6 +4253,9 @@ const EMOTION_FOCUS_ES = {
 // MÓDULO: PERFIL NATAL — Cálculo de Casas por Ascendente
 // ═══════════════════════════════════════════════════════════════
 
+// ─── NEURONAS DE CASAS EMBEBIDAS (casas + contextoCasas + signos + combinaciones) ──
+const CASA_NEURONS = [{"id":"casa_1_escenario_base","triggers":["casa_1_activa"],"match":"all","peso":0.56,"clusters":["identidad","presencia"],"output":{"energy":"la experiencia pasa por tu identidad y tu forma inmediata de reaccionar","avoid":"actuar por reflejo sin notar lo que realmente te mueve","use":"escuchar cómo se siente esto en tu cuerpo y en tu presencia","focus":"identidad, presencia y reacción personal"}},{"id":"casa_2_escenario_base","triggers":["casa_2_activa"],"match":"all","peso":0.56,"clusters":["valor","seguridad"],"output":{"energy":"el tránsito toca valor personal, recursos y sensación de estabilidad","avoid":"confundir ansiedad con falta de valor o con escasez real","use":"revisar qué te da seguridad de verdad","focus":"recursos, autoestima y estabilidad"}},{"id":"casa_3_escenario_base","triggers":["casa_3_activa"],"match":"all","peso":0.56,"clusters":["mente","comunicación"],"output":{"energy":"la experiencia se mueve a través de pensamientos, palabras y entorno cercano","avoid":"decir algo demasiado rápido sin dejar que madure","use":"ordenar la idea antes de comunicarla","focus":"ideas, conversación y entorno cercano"}},{"id":"casa_4_escenario_base","triggers":["casa_4_activa"],"match":"all","peso":0.56,"clusters":["emocional","hogar"],"output":{"energy":"el movimiento se siente íntimo y ligado a tu base emocional","avoid":"encerrarte en memorias o defensas automáticas","use":"dar espacio a lo que necesita contención y raíz","focus":"hogar, refugio y mundo interno"}},{"id":"casa_5_escenario_base","triggers":["casa_5_activa"],"match":"all","peso":0.56,"clusters":["creatividad","expresión"],"output":{"energy":"el tránsito busca expresarse con deseo, juego y creatividad","avoid":"buscar validación inmediata o dramatizar para sentir intensidad","use":"canalizar lo que sientes en arte, juego o expresión genuina","focus":"creatividad, deseo y autoexpresión"}},{"id":"casa_6_escenario_base","triggers":["casa_6_activa"],"match":"all","peso":0.56,"clusters":["rutina","cuidado"],"output":{"energy":"la experiencia pide orden, hábito y conciencia del día a día","avoid":"querer controlar todo desde la autoexigencia","use":"hacer ajustes pequeños y sostenibles","focus":"rutina, cuerpo y organización"}},{"id":"casa_7_escenario_base","triggers":["casa_7_activa"],"match":"all","peso":0.56,"clusters":["relacional","vínculos"],"output":{"energy":"el tránsito toma forma a través del vínculo y la respuesta del otro","avoid":"poner toda tu estabilidad emocional en la reacción ajena","use":"negociar con claridad, límites y escucha","focus":"pareja, vínculos y equilibrio"}},{"id":"casa_8_escenario_base","triggers":["casa_8_activa"],"match":"all","peso":0.56,"clusters":["profundidad","transformación"],"output":{"energy":"la experiencia toca capas intensas y difíciles de controlar","avoid":"forzar intimidad o control por miedo","use":"nombrar lo profundo con honestidad","focus":"intimidad, crisis y transformación"}},{"id":"casa_9_escenario_base","triggers":["casa_9_activa"],"match":"all","peso":0.56,"clusters":["sentido","expansión"],"output":{"energy":"el tránsito abre preguntas de sentido, visión y creencias","avoid":"aferrarte a una verdad rígida para no sentir incertidumbre","use":"abrir la mirada y permitir aprendizaje","focus":"creencias, horizonte y expansión"}},{"id":"casa_10_escenario_base","triggers":["casa_10_activa"],"match":"all","peso":0.56,"clusters":["vocación","imagen_publica"],"output":{"energy":"la experiencia se vuelve visible y toca metas, deberes o exposición","avoid":"medir todo por rendimiento o aprobación","use":"alinear lo que haces afuera con lo que sostienes adentro","focus":"vocación, dirección y reputación"}},{"id":"casa_11_escenario_base","triggers":["casa_11_activa"],"match":"all","peso":0.56,"clusters":["colectivo","futuro"],"output":{"energy":"el tránsito se mueve entre amistades, redes y visión de futuro","avoid":"diluirte en el grupo o desconectarte de tu deseo propio","use":"revisar qué alianzas sí te acercan a la vida que quieres","focus":"amistades, comunidad y futuro"}},{"id":"casa_12_escenario_base","triggers":["casa_12_activa"],"match":"all","peso":0.56,"clusters":["inconsciente","cierre"],"output":{"energy":"la experiencia ocurre en planos sutiles e internos","avoid":"huir de lo que sientes con distracción o agotamiento","use":"bajar el ritmo y escuchar lo que emerge desde el fondo","focus":"descanso, cierre y mundo invisible"}},{"id":"venus_casa_1","triggers":["venus_casa_1"],"match":"all","peso":0.75,"clusters":["relacional","casa_1"],"output":{"energy":"el deseo y el magnetismo pasan por tu presencia y tu forma de mostrarte","avoid":"buscar aprobación estética o afectiva para sentirte suficiente","use":"habitar tu encanto sin dejarte definir por la mirada ajena","focus":"magnetismo y presencia"}},{"id":"venus_casa_2","triggers":["venus_casa_2"],"match":"all","peso":0.75,"clusters":["relacional","casa_2"],"output":{"energy":"el valor, el placer y el dinero se vuelven tema sensible","avoid":"gastar o aferrarte por ansiedad emocional","use":"revisar qué te nutre de verdad y qué solo calma un rato","focus":"valor, placer y recursos"}},{"id":"venus_casa_3","triggers":["venus_casa_3"],"match":"all","peso":0.75,"clusters":["relacional","casa_3"],"output":{"energy":"la conexión se juega en palabras, tono y pequeños gestos","avoid":"decir lo amable sin decir lo verdadero","use":"cuidar la forma de decir sin perder verdad","focus":"afecto y comunicación"}},{"id":"venus_casa_4","triggers":["venus_casa_4"],"match":"all","peso":0.75,"clusters":["relacional","casa_4"],"output":{"energy":"lo afectivo busca intimidad, calma y sensación de hogar","avoid":"callar necesidades afectivas por miedo a incomodar","use":"crear intimidad con honestidad emocional","focus":"intimidad y hogar"}},{"id":"venus_casa_5","triggers":["venus_casa_5"],"match":"all","peso":0.75,"clusters":["relacional","casa_5"],"output":{"energy":"el deseo quiere expresión, romance, belleza y juego","avoid":"confundir intensidad romántica con conexión real","use":"dar salida creativa a lo afectivo y al deseo","focus":"romance y creatividad"}},{"id":"venus_casa_6","triggers":["venus_casa_6"],"match":"all","peso":0.75,"clusters":["relacional","casa_6"],"output":{"energy":"el vínculo entra en la rutina y muestra cómo cuidas o te cuidan","avoid":"normalizar desequilibrios en la forma de cuidar","use":"observar cómo el amor aparece en lo cotidiano","focus":"cuidado cotidiano"}},{"id":"venus_casa_7","triggers":["venus_casa_7"],"match":"all","peso":0.75,"clusters":["relacional","casa_7"],"output":{"energy":"las relaciones cercanas toman protagonismo y funcionan como espejo","avoid":"ceder tu centro para sostener la paz","use":"negociar con claridad, reciprocidad y respeto propio","focus":"relaciones y espejo"}},{"id":"venus_casa_8","triggers":["venus_casa_8"],"match":"all","peso":0.75,"clusters":["relacional","casa_8"],"output":{"energy":"el deseo se vuelve intenso, vulnerable y transformador","avoid":"fusionarte por miedo a perder cercanía","use":"dejar que la intimidad sea profunda sin volverse invasiva","focus":"intimidad y transformación"}},{"id":"venus_casa_9","triggers":["venus_casa_9"],"match":"all","peso":0.75,"clusters":["relacional","casa_9"],"output":{"energy":"el amor y el valor buscan expansión, sentido y apertura","avoid":"idealizar demasiado y omitir límites concretos","use":"abrirte al amor con visión, pero también con realidad","focus":"amor y expansión"}},{"id":"venus_casa_10","triggers":["venus_casa_10"],"match":"all","peso":0.75,"clusters":["relacional","casa_10"],"output":{"energy":"el afecto toca imagen pública, metas o necesidad de reconocimiento","avoid":"medir tu valor por respuesta externa o imagen","use":"alinear valor personal con vocación y dignidad","focus":"valor e imagen pública"}},{"id":"venus_casa_11","triggers":["venus_casa_11"],"match":"all","peso":0.75,"clusters":["relacional","casa_11"],"output":{"energy":"la afinidad se mueve en amistades, redes y visión compartida","avoid":"quedarte en lo amistoso cuando en realidad necesitas definición","use":"cultivar vínculos que compartan futuro y libertad","focus":"afinidad y redes"}},{"id":"venus_casa_12","triggers":["venus_casa_12"],"match":"all","peso":0.75,"clusters":["relacional","casa_12"],"output":{"energy":"lo afectivo se vuelve sutil, reservado o difícil de expresar de inmediato","avoid":"esconder deseo, tristeza o ternura hasta confundirlo todo","use":"darle nombre a lo que sientes aunque aún esté madurando","focus":"deseo sutil y mundo interno"}},{"id":"luna_casa_1","triggers":["luna_casa_1"],"match":"all","peso":0.78,"clusters":["emocional","casa_1"],"output":{"energy":"lo emocional se vuelve visible y reacciona rápido a lo que pasa","avoid":"reaccionar sin filtrar lo que estás sintiendo","use":"darle nombre a tu reacción antes de convertirla en acción","focus":"reacción emocional y presencia"}},{"id":"luna_casa_2","triggers":["luna_casa_2"],"match":"all","peso":0.78,"clusters":["emocional","casa_2"],"output":{"energy":"la seguridad afectiva se mezcla con recursos, cuerpo y necesidad de estabilidad","avoid":"buscar calma comprando seguridad externa a toda prisa","use":"crear pequeñas bases de estabilidad emocional concreta","focus":"seguridad y calma"}},{"id":"luna_casa_3","triggers":["luna_casa_3"],"match":"all","peso":0.78,"clusters":["emocional","casa_3"],"output":{"energy":"las emociones pasan por palabras, pensamientos y conversaciones","avoid":"hablar desde el pico emocional sin procesar","use":"hablar con honestidad después de respirar y ordenar","focus":"palabra y procesamiento"}},{"id":"luna_casa_4","triggers":["luna_casa_4"],"match":"all","peso":0.78,"clusters":["emocional","casa_4"],"output":{"energy":"la sensibilidad vuelve a casa y busca protección, intimidad y refugio","avoid":"encerrarte en memorias o defensas automáticas","use":"cuidar tu refugio y escuchar lo que tu mundo interno necesita","focus":"refugio y raíz"}},{"id":"luna_casa_5","triggers":["luna_casa_5"],"match":"all","peso":0.78,"clusters":["emocional","casa_5"],"output":{"energy":"la emoción quiere expresarse, jugar o recibir respuesta cálida","avoid":"pedir validación afectiva a través de drama innecesario","use":"expresar ternura, juego o creatividad sin sobredramatizar","focus":"expresión afectiva"}},{"id":"luna_casa_6","triggers":["luna_casa_6"],"match":"all","peso":0.78,"clusters":["emocional","casa_6"],"output":{"energy":"el estado anímico afecta rutinas, cuerpo y nivel de orden interno","avoid":"somatizar en exceso por no escuchar tu estado interno","use":"revisar hábitos que afectan tu ánimo","focus":"cuerpo y hábitos emocionales"}},{"id":"luna_casa_7","triggers":["luna_casa_7"],"match":"all","peso":0.78,"clusters":["emocional","casa_7"],"output":{"energy":"lo que sientes se activa con fuerza en el vínculo y en la respuesta ajena","avoid":"esperar que el otro regule todo lo que tú sientes","use":"distinguir entre necesidad emocional y expectativa proyectada","focus":"vínculo y espejo emocional"}},{"id":"luna_casa_8","triggers":["luna_casa_8"],"match":"all","peso":0.78,"clusters":["emocional","casa_8"],"output":{"energy":"la emoción se hace honda, intensa y difícil de controlar del todo","avoid":"irte a extremos emocionales por miedo a la vulnerabilidad","use":"permitirte sentir sin necesidad de controlar cada ola","focus":"intensidad y vulnerabilidad"}},{"id":"luna_casa_9","triggers":["luna_casa_9"],"match":"all","peso":0.78,"clusters":["emocional","casa_9"],"output":{"energy":"el sentir busca sentido, fe o perspectiva para acomodarse","avoid":"intelectualizar el sentir para no habitarlo","use":"abrir preguntas que te den aire sin negar lo que te duele","focus":"sentido para lo que sientes"}},{"id":"luna_casa_10","triggers":["luna_casa_10"],"match":"all","peso":0.78,"clusters":["emocional","casa_10"],"output":{"energy":"el estado emocional se vuelve visible en deberes, metas o exposición","avoid":"esconder emoción detrás de control o eficiencia","use":"hacer espacio para sentir sin abandonar lo importante","focus":"emoción y responsabilidad"}},{"id":"luna_casa_11","triggers":["luna_casa_11"],"match":"all","peso":0.78,"clusters":["emocional","casa_11"],"output":{"energy":"la sensibilidad se mueve a través de amistades, grupo y futuro","avoid":"buscar pertenencia sacrificando autenticidad emocional","use":"observar qué grupos sí nutren tu sensibilidad","focus":"pertenencia y afecto colectivo"}},{"id":"luna_casa_12","triggers":["luna_casa_12"],"match":"all","peso":0.78,"clusters":["emocional","casa_12"],"output":{"energy":"lo emocional se vuelve silencioso, poroso y más difícil de nombrar al instante","avoid":"ahogarte en silencio sin darte tiempo de descanso real","use":"descansar, escribir o quedarte a solas para aclararte","focus":"descanso y mundo interno"}},{"id":"sol_casa_1","triggers":["sol_casa_1","eje_angular_casa_1"],"match":"any","peso":0.74,"clusters":["identidad","casa_1"],"output":{"energy":"tu presencia se vuelve más visible y hay necesidad de afirmarte con claridad","avoid":"creer que afirmarte implica endurecerte o imponerte","use":"mostrarte con presencia sin sobreactuar","focus":"presencia y autoafirmación"}},{"id":"sol_casa_4","triggers":["sol_casa_4","eje_angular_casa_4"],"match":"any","peso":0.74,"clusters":["identidad","casa_4"],"output":{"energy":"tu centro se vuelve más íntimo y necesita raíz antes que exhibición","avoid":"cerrarte cuando algo toca tu sensibilidad de fondo","use":"volver a tu base y cuidar lo que sostiene tu energía","focus":"raíz y refugio interno"}},{"id":"sol_casa_7","triggers":["sol_casa_7","eje_angular_casa_7"],"match":"any","peso":0.74,"clusters":["identidad","casa_7"],"output":{"energy":"tu identidad se espeja con fuerza en vínculos y acuerdos","avoid":"perderte en el otro para sentirte validado","use":"ver qué te muestran los vínculos sobre tu identidad","focus":"vínculos y espejo"}},{"id":"sol_casa_10","triggers":["sol_casa_10","eje_angular_casa_10"],"match":"any","peso":0.74,"clusters":["identidad","casa_10"],"output":{"energy":"tu identidad se vuelve pública y pide dirección, autoridad y coherencia","avoid":"confundir éxito con desconexión emocional","use":"asumir liderazgo con humanidad y eje interno","focus":"dirección y visibilidad"}},{"id":"marte_casa_1","triggers":["marte_casa_1","eje_angular_casa_1"],"match":"any","peso":0.76,"clusters":["acción","casa_1"],"output":{"energy":"la energía sale directa y te empuja a actuar con rapidez","avoid":"reaccionar antes de escuchar el contexto","use":"moverte con decisión pero con conciencia del impacto","focus":"acción personal"}},{"id":"marte_casa_4","triggers":["marte_casa_4","eje_angular_casa_4"],"match":"any","peso":0.76,"clusters":["acción","casa_4"],"output":{"energy":"la fuerza se mueve en lo privado, lo emocional y lo doméstico","avoid":"guardar enojo hasta que salga de forma brusca","use":"ordenar lo que sientes para no explotar desde abajo","focus":"fuerza interna y hogar"}},{"id":"marte_casa_7","triggers":["marte_casa_7","eje_angular_casa_7"],"match":"any","peso":0.76,"clusters":["acción","casa_7"],"output":{"energy":"la energía aparece con fuerza en vínculos, acuerdos o fricción con otros","avoid":"convertir todo desacuerdo en combate","use":"negociar firmeza sin perder escucha","focus":"fricción y negociación"}},{"id":"marte_casa_10","triggers":["marte_casa_10","eje_angular_casa_10"],"match":"any","peso":0.76,"clusters":["acción","casa_10"],"output":{"energy":"la ambición sube y empuja a moverte hacia metas visibles","avoid":"quemarte por demostrar fuerza o capacidad","use":"dirigir tu ambición con estrategia y no solo con prisa","focus":"meta y ambición"}},{"id":"saturno_casa_10","triggers":["saturno_casa_10","eje_angular_casa_10"],"match":"any","peso":0.77,"clusters":["estructura","casa_10"],"output":{"energy":"la vocación y la imagen pública entran en fase de exigencia y consolidación","avoid":"sacrificar humanidad por cumplimiento","use":"asumir autoridad desde coherencia interna","focus":"vocación y estructura"}},{"id":"jupiter_casa_9","triggers":["jupiter_casa_9"],"match":"all","peso":0.68,"clusters":["expansión","casa_9"],"output":{"energy":"el sentido, el estudio y la visión de vida se expanden con fuerza","avoid":"usar grandes verdades para esquivar preguntas humildes","use":"expandir horizonte y sentido con aprendizaje real","focus":"sentido y horizonte"}},{"id":"mercurio_casa_3","triggers":["mercurio_casa_3"],"match":"all","peso":0.69,"clusters":["mente","casa_3"],"output":{"energy":"la mente se acelera y necesita intercambio, curiosidad y movimiento","avoid":"dispersarte entre demasiados estímulos","use":"ordenar conversaciones y aprender del intercambio","focus":"comunicación y aprendizaje"}},{"id":"quiron_casa_7","triggers":["quiron_casa_7"],"match":"all","peso":0.73,"clusters":["herida","relacional","casa_7"],"output":{"energy":"los vínculos espejan heridas relacionales y necesidad de reparación consciente","avoid":"esperar que el otro cure lo que te toca mirar","use":"mirar qué se activa en vínculo sin entregar tu centro","focus":"herida vincular"}},{"id":"lilith_casa_8","triggers":["lilith_casa_8"],"match":"all","peso":0.72,"clusters":["sombra","transformación","casa_8"],"output":{"energy":"se despiertan capas tabúes, intensas y profundamente vulnerables","avoid":"quedarte atrapado en lo tabú sin procesarlo","use":"nombrar lo tabú con profundidad y cuidado","focus":"tabú y profundidad"}},{"id":"luna_casa_4__venus_casa_7","triggers":["luna_casa_4","venus_casa_7"],"match":"all","peso":0.87,"clusters":["emocional","relacional","hogar"],"output":{"energy":"la necesidad de refugio emocional puede chocar o dialogar con lo que pasa en el vínculo cercano","avoid":"esperar que la relación adivine lo que necesitas cuando en realidad buscas contención más íntima","use":"nombrar necesidad afectiva y cuidar tu base antes de pedir respuesta afuera","focus":"hogar interno, cercanía y equilibrio relacional"}},{"id":"sol_casa_10__saturno_casa_10","triggers":["sol_casa_10","saturno_casa_10"],"match":"all","peso":0.91,"clusters":["vocación","estructura","imagen_publica"],"output":{"energy":"la dirección pública se vuelve seria y exige coherencia, autoridad y madurez","avoid":"creer que solo vales si rindes perfecto frente a los demás","use":"asumir responsabilidad sin desconectarte de tu centro humano","focus":"vocación, estructura y autoridad interna"}},{"id":"marte_casa_1__jupiter_casa_9","triggers":["marte_casa_1","jupiter_casa_9"],"match":"all","peso":0.84,"clusters":["acción","expansión","dirección"],"output":{"energy":"hay impulso para abrir camino con fuerza y moverte hacia una visión más grande","avoid":"lanzarte con entusiasmo sin medir sostén real","use":"convertir coraje en dirección consciente","focus":"acción con horizonte"}},{"id":"venus_casa_2__lilith_casa_8","triggers":["venus_casa_2","lilith_casa_8"],"match":"all","peso":0.88,"clusters":["valor","intimidad","transformación"],"output":{"energy":"se activan temas de valor, apego y deseo profundo con bastante intensidad","avoid":"confundir necesidad de seguridad con control afectivo","use":"revisar qué deseas conservar y qué te pide verdad cruda","focus":"valor propio, apego y profundidad"}},{"id":"contexto_casa_1_general","triggers":["casa_1_activa"],"match":"all","peso":0.55,"clusters":["contextual"],"output":{"energy":"los temas de la casa 1 se vuelven más visibles y piden atención consciente","avoid":"dispersarte o ignorar lo que se está activando","use":"observar con calma qué área de vida pide movimiento","focus":"temas de casa 1"}},{"id":"contexto_casa_2_general","triggers":["casa_2_activa"],"match":"all","peso":0.55,"clusters":["contextual"],"output":{"energy":"los temas de la casa 2 se vuelven más visibles y piden atención consciente","avoid":"dispersarte o ignorar lo que se está activando","use":"observar con calma qué área de vida pide movimiento","focus":"temas de casa 2"}},{"id":"contexto_casa_3_general","triggers":["casa_3_activa"],"match":"all","peso":0.55,"clusters":["contextual"],"output":{"energy":"los temas de la casa 3 se vuelven más visibles y piden atención consciente","avoid":"dispersarte o ignorar lo que se está activando","use":"observar con calma qué área de vida pide movimiento","focus":"temas de casa 3"}},{"id":"contexto_casa_4_general","triggers":["casa_4_activa"],"match":"all","peso":0.55,"clusters":["contextual"],"output":{"energy":"los temas de la casa 4 se vuelven más visibles y piden atención consciente","avoid":"dispersarte o ignorar lo que se está activando","use":"observar con calma qué área de vida pide movimiento","focus":"temas de casa 4"}},{"id":"contexto_casa_5_general","triggers":["casa_5_activa"],"match":"all","peso":0.55,"clusters":["contextual"],"output":{"energy":"los temas de la casa 5 se vuelven más visibles y piden atención consciente","avoid":"dispersarte o ignorar lo que se está activando","use":"observar con calma qué área de vida pide movimiento","focus":"temas de casa 5"}},{"id":"contexto_casa_6_general","triggers":["casa_6_activa"],"match":"all","peso":0.55,"clusters":["contextual"],"output":{"energy":"los temas de la casa 6 se vuelven más visibles y piden atención consciente","avoid":"dispersarte o ignorar lo que se está activando","use":"observar con calma qué área de vida pide movimiento","focus":"temas de casa 6"}},{"id":"contexto_casa_7_general","triggers":["casa_7_activa"],"match":"all","peso":0.55,"clusters":["contextual"],"output":{"energy":"los temas de la casa 7 se vuelven más visibles y piden atención consciente","avoid":"dispersarte o ignorar lo que se está activando","use":"observar con calma qué área de vida pide movimiento","focus":"temas de casa 7"}},{"id":"contexto_casa_8_general","triggers":["casa_8_activa"],"match":"all","peso":0.55,"clusters":["contextual"],"output":{"energy":"los temas de la casa 8 se vuelven más visibles y piden atención consciente","avoid":"dispersarte o ignorar lo que se está activando","use":"observar con calma qué área de vida pide movimiento","focus":"temas de casa 8"}},{"id":"contexto_casa_9_general","triggers":["casa_9_activa"],"match":"all","peso":0.55,"clusters":["contextual"],"output":{"energy":"los temas de la casa 9 se vuelven más visibles y piden atención consciente","avoid":"dispersarte o ignorar lo que se está activando","use":"observar con calma qué área de vida pide movimiento","focus":"temas de casa 9"}},{"id":"contexto_casa_10_general","triggers":["casa_10_activa"],"match":"all","peso":0.55,"clusters":["contextual"],"output":{"energy":"los temas de la casa 10 se vuelven más visibles y piden atención consciente","avoid":"dispersarte o ignorar lo que se está activando","use":"observar con calma qué área de vida pide movimiento","focus":"temas de casa 10"}},{"id":"contexto_casa_11_general","triggers":["casa_11_activa"],"match":"all","peso":0.55,"clusters":["contextual"],"output":{"energy":"los temas de la casa 11 se vuelven más visibles y piden atención consciente","avoid":"dispersarte o ignorar lo que se está activando","use":"observar con calma qué área de vida pide movimiento","focus":"temas de casa 11"}},{"id":"contexto_casa_12_general","triggers":["casa_12_activa"],"match":"all","peso":0.55,"clusters":["contextual"],"output":{"energy":"los temas de la casa 12 se vuelven más visibles y piden atención consciente","avoid":"dispersarte o ignorar lo que se está activando","use":"observar con calma qué área de vida pide movimiento","focus":"temas de casa 12"}},{"id":"contexto_venus_casa_1","triggers":["venus_casa_1"],"match":"all","peso":0.72,"clusters":["relacional","venus"],"output":{"energy":"lo afectivo se mueve alrededor de los temas de la casa 1","avoid":"buscar validación externa sin escuchar lo que sientes","use":"observar cómo deseas vincularte en esta área","focus":"vínculos en casa 1"}},{"id":"contexto_venus_casa_2","triggers":["venus_casa_2"],"match":"all","peso":0.72,"clusters":["relacional","venus"],"output":{"energy":"lo afectivo se mueve alrededor de los temas de la casa 2","avoid":"buscar validación externa sin escuchar lo que sientes","use":"observar cómo deseas vincularte en esta área","focus":"vínculos en casa 2"}},{"id":"contexto_venus_casa_3","triggers":["venus_casa_3"],"match":"all","peso":0.72,"clusters":["relacional","venus"],"output":{"energy":"lo afectivo se mueve alrededor de los temas de la casa 3","avoid":"buscar validación externa sin escuchar lo que sientes","use":"observar cómo deseas vincularte en esta área","focus":"vínculos en casa 3"}},{"id":"contexto_venus_casa_4","triggers":["venus_casa_4"],"match":"all","peso":0.72,"clusters":["relacional","venus"],"output":{"energy":"lo afectivo se mueve alrededor de los temas de la casa 4","avoid":"buscar validación externa sin escuchar lo que sientes","use":"observar cómo deseas vincularte en esta área","focus":"vínculos en casa 4"}},{"id":"contexto_venus_casa_5","triggers":["venus_casa_5"],"match":"all","peso":0.72,"clusters":["relacional","venus"],"output":{"energy":"lo afectivo se mueve alrededor de los temas de la casa 5","avoid":"buscar validación externa sin escuchar lo que sientes","use":"observar cómo deseas vincularte en esta área","focus":"vínculos en casa 5"}},{"id":"contexto_venus_casa_6","triggers":["venus_casa_6"],"match":"all","peso":0.72,"clusters":["relacional","venus"],"output":{"energy":"lo afectivo se mueve alrededor de los temas de la casa 6","avoid":"buscar validación externa sin escuchar lo que sientes","use":"observar cómo deseas vincularte en esta área","focus":"vínculos en casa 6"}},{"id":"contexto_venus_casa_7","triggers":["venus_casa_7"],"match":"all","peso":0.72,"clusters":["relacional","venus"],"output":{"energy":"lo afectivo se mueve alrededor de los temas de la casa 7","avoid":"buscar validación externa sin escuchar lo que sientes","use":"observar cómo deseas vincularte en esta área","focus":"vínculos en casa 7"}},{"id":"contexto_venus_casa_8","triggers":["venus_casa_8"],"match":"all","peso":0.72,"clusters":["relacional","venus"],"output":{"energy":"lo afectivo se mueve alrededor de los temas de la casa 8","avoid":"buscar validación externa sin escuchar lo que sientes","use":"observar cómo deseas vincularte en esta área","focus":"vínculos en casa 8"}},{"id":"contexto_venus_casa_9","triggers":["venus_casa_9"],"match":"all","peso":0.72,"clusters":["relacional","venus"],"output":{"energy":"lo afectivo se mueve alrededor de los temas de la casa 9","avoid":"buscar validación externa sin escuchar lo que sientes","use":"observar cómo deseas vincularte en esta área","focus":"vínculos en casa 9"}},{"id":"contexto_venus_casa_10","triggers":["venus_casa_10"],"match":"all","peso":0.72,"clusters":["relacional","venus"],"output":{"energy":"lo afectivo se mueve alrededor de los temas de la casa 10","avoid":"buscar validación externa sin escuchar lo que sientes","use":"observar cómo deseas vincularte en esta área","focus":"vínculos en casa 10"}},{"id":"contexto_venus_casa_11","triggers":["venus_casa_11"],"match":"all","peso":0.72,"clusters":["relacional","venus"],"output":{"energy":"lo afectivo se mueve alrededor de los temas de la casa 11","avoid":"buscar validación externa sin escuchar lo que sientes","use":"observar cómo deseas vincularte en esta área","focus":"vínculos en casa 11"}},{"id":"contexto_venus_casa_12","triggers":["venus_casa_12"],"match":"all","peso":0.72,"clusters":["relacional","venus"],"output":{"energy":"lo afectivo se mueve alrededor de los temas de la casa 12","avoid":"buscar validación externa sin escuchar lo que sientes","use":"observar cómo deseas vincularte en esta área","focus":"vínculos en casa 12"}},{"id":"contexto_luna_casa_1","triggers":["moon_casa_1"],"match":"all","peso":0.74,"clusters":["emocional","luna"],"output":{"energy":"la emoción se sensibiliza en los temas de la casa 1","avoid":"reaccionar desde intensidad sin procesar","use":"dar espacio a lo que sientes","focus":"emoción en casa 1"}},{"id":"contexto_luna_casa_2","triggers":["moon_casa_2"],"match":"all","peso":0.74,"clusters":["emocional","luna"],"output":{"energy":"la emoción se sensibiliza en los temas de la casa 2","avoid":"reaccionar desde intensidad sin procesar","use":"dar espacio a lo que sientes","focus":"emoción en casa 2"}},{"id":"contexto_luna_casa_3","triggers":["moon_casa_3"],"match":"all","peso":0.74,"clusters":["emocional","luna"],"output":{"energy":"la emoción se sensibiliza en los temas de la casa 3","avoid":"reaccionar desde intensidad sin procesar","use":"dar espacio a lo que sientes","focus":"emoción en casa 3"}},{"id":"contexto_luna_casa_4","triggers":["moon_casa_4"],"match":"all","peso":0.74,"clusters":["emocional","luna"],"output":{"energy":"la emoción se sensibiliza en los temas de la casa 4","avoid":"reaccionar desde intensidad sin procesar","use":"dar espacio a lo que sientes","focus":"emoción en casa 4"}},{"id":"contexto_luna_casa_5","triggers":["moon_casa_5"],"match":"all","peso":0.74,"clusters":["emocional","luna"],"output":{"energy":"la emoción se sensibiliza en los temas de la casa 5","avoid":"reaccionar desde intensidad sin procesar","use":"dar espacio a lo que sientes","focus":"emoción en casa 5"}},{"id":"contexto_luna_casa_6","triggers":["moon_casa_6"],"match":"all","peso":0.74,"clusters":["emocional","luna"],"output":{"energy":"la emoción se sensibiliza en los temas de la casa 6","avoid":"reaccionar desde intensidad sin procesar","use":"dar espacio a lo que sientes","focus":"emoción en casa 6"}},{"id":"contexto_luna_casa_7","triggers":["moon_casa_7"],"match":"all","peso":0.74,"clusters":["emocional","luna"],"output":{"energy":"la emoción se sensibiliza en los temas de la casa 7","avoid":"reaccionar desde intensidad sin procesar","use":"dar espacio a lo que sientes","focus":"emoción en casa 7"}},{"id":"contexto_luna_casa_8","triggers":["moon_casa_8"],"match":"all","peso":0.74,"clusters":["emocional","luna"],"output":{"energy":"la emoción se sensibiliza en los temas de la casa 8","avoid":"reaccionar desde intensidad sin procesar","use":"dar espacio a lo que sientes","focus":"emoción en casa 8"}},{"id":"contexto_luna_casa_9","triggers":["moon_casa_9"],"match":"all","peso":0.74,"clusters":["emocional","luna"],"output":{"energy":"la emoción se sensibiliza en los temas de la casa 9","avoid":"reaccionar desde intensidad sin procesar","use":"dar espacio a lo que sientes","focus":"emoción en casa 9"}},{"id":"contexto_luna_casa_10","triggers":["moon_casa_10"],"match":"all","peso":0.74,"clusters":["emocional","luna"],"output":{"energy":"la emoción se sensibiliza en los temas de la casa 10","avoid":"reaccionar desde intensidad sin procesar","use":"dar espacio a lo que sientes","focus":"emoción en casa 10"}},{"id":"contexto_luna_casa_11","triggers":["moon_casa_11"],"match":"all","peso":0.74,"clusters":["emocional","luna"],"output":{"energy":"la emoción se sensibiliza en los temas de la casa 11","avoid":"reaccionar desde intensidad sin procesar","use":"dar espacio a lo que sientes","focus":"emoción en casa 11"}},{"id":"contexto_luna_casa_12","triggers":["moon_casa_12"],"match":"all","peso":0.74,"clusters":["emocional","luna"],"output":{"energy":"la emoción se sensibiliza en los temas de la casa 12","avoid":"reaccionar desde intensidad sin procesar","use":"dar espacio a lo que sientes","focus":"emoción en casa 12"}},{"id":"contexto_sol_casa_1","triggers":["sun_casa_1"],"match":"all","peso":0.7,"clusters":["identidad","sol"],"output":{"energy":"tu identidad se enfoca en los temas de la casa 1","avoid":"sobrecargarte tratando de sostenerlo todo","use":"actuar con claridad y dirección","focus":"dirección personal en casa 1"}},{"id":"contexto_sol_casa_2","triggers":["sun_casa_2"],"match":"all","peso":0.7,"clusters":["identidad","sol"],"output":{"energy":"tu identidad se enfoca en los temas de la casa 2","avoid":"sobrecargarte tratando de sostenerlo todo","use":"actuar con claridad y dirección","focus":"dirección personal en casa 2"}},{"id":"contexto_sol_casa_3","triggers":["sun_casa_3"],"match":"all","peso":0.7,"clusters":["identidad","sol"],"output":{"energy":"tu identidad se enfoca en los temas de la casa 3","avoid":"sobrecargarte tratando de sostenerlo todo","use":"actuar con claridad y dirección","focus":"dirección personal en casa 3"}},{"id":"contexto_sol_casa_4","triggers":["sun_casa_4"],"match":"all","peso":0.7,"clusters":["identidad","sol"],"output":{"energy":"tu identidad se enfoca en los temas de la casa 4","avoid":"sobrecargarte tratando de sostenerlo todo","use":"actuar con claridad y dirección","focus":"dirección personal en casa 4"}},{"id":"contexto_sol_casa_5","triggers":["sun_casa_5"],"match":"all","peso":0.7,"clusters":["identidad","sol"],"output":{"energy":"tu identidad se enfoca en los temas de la casa 5","avoid":"sobrecargarte tratando de sostenerlo todo","use":"actuar con claridad y dirección","focus":"dirección personal en casa 5"}},{"id":"contexto_sol_casa_6","triggers":["sun_casa_6"],"match":"all","peso":0.7,"clusters":["identidad","sol"],"output":{"energy":"tu identidad se enfoca en los temas de la casa 6","avoid":"sobrecargarte tratando de sostenerlo todo","use":"actuar con claridad y dirección","focus":"dirección personal en casa 6"}},{"id":"contexto_sol_casa_7","triggers":["sun_casa_7"],"match":"all","peso":0.7,"clusters":["identidad","sol"],"output":{"energy":"tu identidad se enfoca en los temas de la casa 7","avoid":"sobrecargarte tratando de sostenerlo todo","use":"actuar con claridad y dirección","focus":"dirección personal en casa 7"}},{"id":"contexto_sol_casa_8","triggers":["sun_casa_8"],"match":"all","peso":0.7,"clusters":["identidad","sol"],"output":{"energy":"tu identidad se enfoca en los temas de la casa 8","avoid":"sobrecargarte tratando de sostenerlo todo","use":"actuar con claridad y dirección","focus":"dirección personal en casa 8"}},{"id":"contexto_sol_casa_9","triggers":["sun_casa_9"],"match":"all","peso":0.7,"clusters":["identidad","sol"],"output":{"energy":"tu identidad se enfoca en los temas de la casa 9","avoid":"sobrecargarte tratando de sostenerlo todo","use":"actuar con claridad y dirección","focus":"dirección personal en casa 9"}},{"id":"contexto_sol_casa_10","triggers":["sun_casa_10"],"match":"all","peso":0.7,"clusters":["identidad","sol"],"output":{"energy":"tu identidad se enfoca en los temas de la casa 10","avoid":"sobrecargarte tratando de sostenerlo todo","use":"actuar con claridad y dirección","focus":"dirección personal en casa 10"}},{"id":"contexto_sol_casa_11","triggers":["sun_casa_11"],"match":"all","peso":0.7,"clusters":["identidad","sol"],"output":{"energy":"tu identidad se enfoca en los temas de la casa 11","avoid":"sobrecargarte tratando de sostenerlo todo","use":"actuar con claridad y dirección","focus":"dirección personal en casa 11"}},{"id":"contexto_sol_casa_12","triggers":["sun_casa_12"],"match":"all","peso":0.7,"clusters":["identidad","sol"],"output":{"energy":"tu identidad se enfoca en los temas de la casa 12","avoid":"sobrecargarte tratando de sostenerlo todo","use":"actuar con claridad y dirección","focus":"dirección personal en casa 12"}},{"id":"contexto_marte_casa_1","triggers":["marte_casa_1"],"match":"all","peso":0.73,"clusters":["accion","marte"],"output":{"energy":"la acción se activa en los temas de la casa 1","avoid":"actuar por impulso sin medir el contexto","use":"canalizar energía con intención","focus":"acción en casa 1"}},{"id":"contexto_marte_casa_2","triggers":["marte_casa_2"],"match":"all","peso":0.73,"clusters":["accion","marte"],"output":{"energy":"la acción se activa en los temas de la casa 2","avoid":"actuar por impulso sin medir el contexto","use":"canalizar energía con intención","focus":"acción en casa 2"}},{"id":"contexto_marte_casa_3","triggers":["marte_casa_3"],"match":"all","peso":0.73,"clusters":["accion","marte"],"output":{"energy":"la acción se activa en los temas de la casa 3","avoid":"actuar por impulso sin medir el contexto","use":"canalizar energía con intención","focus":"acción en casa 3"}},{"id":"contexto_marte_casa_4","triggers":["marte_casa_4"],"match":"all","peso":0.73,"clusters":["accion","marte"],"output":{"energy":"la acción se activa en los temas de la casa 4","avoid":"actuar por impulso sin medir el contexto","use":"canalizar energía con intención","focus":"acción en casa 4"}},{"id":"contexto_marte_casa_5","triggers":["marte_casa_5"],"match":"all","peso":0.73,"clusters":["accion","marte"],"output":{"energy":"la acción se activa en los temas de la casa 5","avoid":"actuar por impulso sin medir el contexto","use":"canalizar energía con intención","focus":"acción en casa 5"}},{"id":"contexto_marte_casa_6","triggers":["marte_casa_6"],"match":"all","peso":0.73,"clusters":["accion","marte"],"output":{"energy":"la acción se activa en los temas de la casa 6","avoid":"actuar por impulso sin medir el contexto","use":"canalizar energía con intención","focus":"acción en casa 6"}},{"id":"contexto_marte_casa_7","triggers":["marte_casa_7"],"match":"all","peso":0.73,"clusters":["accion","marte"],"output":{"energy":"la acción se activa en los temas de la casa 7","avoid":"actuar por impulso sin medir el contexto","use":"canalizar energía con intención","focus":"acción en casa 7"}},{"id":"contexto_marte_casa_8","triggers":["marte_casa_8"],"match":"all","peso":0.73,"clusters":["accion","marte"],"output":{"energy":"la acción se activa en los temas de la casa 8","avoid":"actuar por impulso sin medir el contexto","use":"canalizar energía con intención","focus":"acción en casa 8"}},{"id":"contexto_marte_casa_9","triggers":["marte_casa_9"],"match":"all","peso":0.73,"clusters":["accion","marte"],"output":{"energy":"la acción se activa en los temas de la casa 9","avoid":"actuar por impulso sin medir el contexto","use":"canalizar energía con intención","focus":"acción en casa 9"}},{"id":"contexto_marte_casa_10","triggers":["marte_casa_10"],"match":"all","peso":0.73,"clusters":["accion","marte"],"output":{"energy":"la acción se activa en los temas de la casa 10","avoid":"actuar por impulso sin medir el contexto","use":"canalizar energía con intención","focus":"acción en casa 10"}},{"id":"contexto_marte_casa_11","triggers":["marte_casa_11"],"match":"all","peso":0.73,"clusters":["accion","marte"],"output":{"energy":"la acción se activa en los temas de la casa 11","avoid":"actuar por impulso sin medir el contexto","use":"canalizar energía con intención","focus":"acción en casa 11"}},{"id":"contexto_marte_casa_12","triggers":["marte_casa_12"],"match":"all","peso":0.73,"clusters":["accion","marte"],"output":{"energy":"la acción se activa en los temas de la casa 12","avoid":"actuar por impulso sin medir el contexto","use":"canalizar energía con intención","focus":"acción en casa 12"}},{"id":"contexto_jupiter_casa_9","triggers":["jupiter_casa_9"],"match":"all","peso":0.77,"clusters":["expansion","sentido"],"output":{"energy":"se amplía la búsqueda de sentido, visión y aprendizaje","avoid":"creer que todo tiene respuesta inmediata","use":"abrirte a nuevas perspectivas","focus":"sentido y expansión"}},{"id":"contexto_saturno_casa_10","triggers":["saturno_casa_10"],"match":"all","peso":0.82,"clusters":["estructura","vocacion"],"output":{"energy":"la responsabilidad profesional pide orden y madurez","avoid":"medirte solo por exigencia","use":"construir paso a paso","focus":"vocación y estructura"}},{"id":"contexto_quiron_casa_6","triggers":["quiron_casa_6"],"match":"all","peso":0.76,"clusters":["sanacion","rutina"],"output":{"energy":"se activa conciencia sobre hábitos, cuerpo y mejora personal","avoid":"exigirte sin compasión","use":"escuchar lo que el cuerpo muestra","focus":"sanación cotidiana"}},{"id":"aries_tono_base","triggers":["signo_aries_activo"],"match":"all","peso":0.58,"clusters":["aries"],"output":{"energy":"el tono general es directo, impulsivo y orientado a iniciar","avoid":"confundir impulso con claridad definitiva","use":"usar el impulso como chispa, no como única brújula","focus":"inicio, coraje y movimiento"}},{"id":"tauro_tono_base","triggers":["signo_tauro_activo"],"match":"all","peso":0.58,"clusters":["tauro"],"output":{"energy":"el tono general busca estabilidad, cuerpo, sostén y continuidad","avoid":"aferrarte por seguridad aunque algo ya pida cambio","use":"darle valor a lo que sí nutre y sostiene de verdad","focus":"estabilidad, placer y arraigo"}},{"id":"geminis_tono_base","triggers":["signo_geminis_activo"],"match":"all","peso":0.58,"clusters":["geminis"],"output":{"energy":"el tono general se mueve rápido, conecta ideas y abre posibilidades","avoid":"dispersarte entre demasiadas opciones o estímulos","use":"ordenar curiosidad y elegir qué conversación sí importa","focus":"ideas, intercambio y movilidad"}},{"id":"cancer_tono_base","triggers":["signo_cancer_activo"],"match":"all","peso":0.58,"clusters":["cancer"],"output":{"energy":"el tono general es sensible, protector y atento a la seguridad emocional","avoid":"replegarte demasiado o reaccionar desde memoria vieja","use":"escuchar lo que realmente necesitas para sentirte a salvo","focus":"cuidado, refugio y sensibilidad"}},{"id":"leo_tono_base","triggers":["signo_leo_activo"],"match":"all","peso":0.58,"clusters":["leo"],"output":{"energy":"el tono general quiere expresarse con calor, presencia y creatividad","avoid":"buscar validación externa antes que verdad interna","use":"crear y mostrarte desde autenticidad y corazón","focus":"brillo, deseo y autoexpresión"}},{"id":"virgo_tono_base","triggers":["signo_virgo_activo"],"match":"all","peso":0.58,"clusters":["virgo"],"output":{"energy":"el tono general observa detalles, ordena y busca mejorar lo concreto","avoid":"caer en crítica excesiva o autoexigencia constante","use":"usar discernimiento para servir sin castigarte","focus":"orden, ajuste y utilidad"}},{"id":"libra_tono_base","triggers":["signo_libra_activo"],"match":"all","peso":0.58,"clusters":["libra"],"output":{"energy":"el tono general busca equilibrio, acuerdo y lectura del otro","avoid":"ceder demasiado para evitar tensión","use":"negociar sin abandonar tu eje","focus":"vínculo, armonía y decisión compartida"}},{"id":"escorpio_tono_base","triggers":["signo_escorpio_activo"],"match":"all","peso":0.58,"clusters":["escorpio"],"output":{"energy":"el tono general va al fondo, intensifica y transforma","avoid":"controlar por miedo a perder poder o profundidad","use":"sostener verdad emocional sin volverte implacable","focus":"intensidad, intimidad y transformación"}},{"id":"sagitario_tono_base","triggers":["signo_sagitario_activo"],"match":"all","peso":0.58,"clusters":["sagitario"],"output":{"energy":"el tono general expande, busca sentido y abre horizonte","avoid":"usar entusiasmo para esquivar la complejidad real","use":"crecer con visión y también con aterrizaje","focus":"sentido, expansión y camino"}},{"id":"capricornio_tono_base","triggers":["signo_capricornio_activo"],"match":"all","peso":0.58,"clusters":["capricornio"],"output":{"energy":"el tono general estructura, madura y prioriza resultados sólidos","avoid":"endurecerte demasiado o medir todo por rendimiento","use":"construir con paciencia sin desconectarte de lo humano","focus":"estructura, meta y responsabilidad"}},{"id":"acuario_tono_base","triggers":["signo_acuario_activo"],"match":"all","peso":0.58,"clusters":["acuario"],"output":{"energy":"el tono general busca autenticidad, aire mental y visión de futuro","avoid":"desconectarte emocionalmente en nombre de la libertad","use":"abrir espacio a lo nuevo sin cortar todo puente","focus":"innovación, distancia y visión"}},{"id":"piscis_tono_base","triggers":["signo_piscis_activo"],"match":"all","peso":0.58,"clusters":["piscis"],"output":{"energy":"el tono general se vuelve más poroso, intuitivo y sensible a lo invisible","avoid":"perder límites o confundirte en la niebla emocional","use":"dar cauce compasivo a lo sutil sin dejar de anclarte","focus":"intuición, entrega y sensibilidad"}},{"id":"venus_en_aries","triggers":["venus_en_aries"],"match":"all","peso":0.75,"clusters":["relacional","venus","aries","fuego"],"output":{"energy":"deseo directo y espontáneo","avoid":"confundir impulso con certeza","use":"expresar lo que quieres con tacto","focus":"iniciativa afectiva consciente"}},{"id":"venus_en_tauro","triggers":["venus_en_tauro"],"match":"all","peso":0.75,"clusters":["relacional","venus","tauro","tierra"],"output":{"energy":"deseo estable, sensual y orientado a sostener","avoid":"aferrarte a lo cómodo aunque algo ya haya cambiado","use":"cultivar placer con presencia y valor real","focus":"placer, calma y sostén"}},{"id":"venus_en_geminis","triggers":["venus_en_geminis"],"match":"all","peso":0.75,"clusters":["relacional","venus","geminis","aire"],"output":{"energy":"el deseo se mueve por curiosidad, juego mental y ligereza","avoid":"usar encanto verbal para evitar profundidad emocional","use":"decir lo que sientes sin perder frescura","focus":"curiosidad afectiva y comunicación"}},{"id":"venus_en_cancer","triggers":["venus_en_cancer"],"match":"all","peso":0.75,"clusters":["relacional","venus","cancer","agua"],"output":{"energy":"lo afectivo busca contención, cercanía y seguridad emocional","avoid":"proteger tanto el corazón que termines cerrándolo","use":"pedir ternura y refugio con claridad","focus":"cuidado afectivo y pertenencia"}},{"id":"venus_en_leo","triggers":["venus_en_leo"],"match":"all","peso":0.75,"clusters":["relacional","venus","leo","fuego"],"output":{"energy":"el deseo quiere calor, expresión y reconocimiento sincero","avoid":"buscar validación romántica antes que conexión verdadera","use":"amar desde generosidad y autenticidad","focus":"romance, brillo y corazón"}},{"id":"venus_en_virgo","triggers":["venus_en_virgo"],"match":"all","peso":0.75,"clusters":["relacional","venus","virgo","tierra"],"output":{"energy":"el afecto se expresa en detalles, cuidado y presencia útil","avoid":"corregir tanto que se enfríe la conexión","use":"cuidar sin caer en perfeccionismo afectivo","focus":"afecto práctico y discernimiento"}},{"id":"venus_en_libra","triggers":["venus_en_libra"],"match":"all","peso":0.75,"clusters":["relacional","venus","libra","aire"],"output":{"energy":"Venus se mueve con gracia, reciprocidad y deseo de armonía","avoid":"ceder tu deseo para sostener paz aparente","use":"buscar equilibrio sin silenciar lo que quieres","focus":"reciprocidad y vínculo"}},{"id":"venus_en_escorpio","triggers":["venus_en_escorpio"],"match":"all","peso":0.75,"clusters":["relacional","venus","escorpio","agua"],"output":{"energy":"el deseo se intensifica, se vuelve profundo y nada superficial","avoid":"confundir fusión con amor o control con intimidad","use":"habitar profundidad con honestidad emocional","focus":"intimidad, deseo y verdad"}},{"id":"venus_en_sagitario","triggers":["venus_en_sagitario"],"match":"all","peso":0.75,"clusters":["relacional","venus","sagitario","fuego"],"output":{"energy":"lo afectivo busca expansión, libertad y una visión más amplia del vínculo","avoid":"idealizar el amor como promesa infinita sin raíz","use":"abrirte al amor con entusiasmo y honestidad","focus":"amor, libertad y horizonte"}},{"id":"venus_en_capricornio","triggers":["venus_en_capricornio"],"match":"all","peso":0.75,"clusters":["relacional","venus","capricornio","tierra"],"output":{"energy":"el valor afectivo se expresa con seriedad, lealtad y consistencia","avoid":"cerrarte demasiado por miedo a mostrar necesidad","use":"dar forma estable a lo que sientes","focus":"compromiso, dignidad y constancia"}},{"id":"venus_en_acuario","triggers":["venus_en_acuario"],"match":"all","peso":0.75,"clusters":["relacional","venus","acuario","aire"],"output":{"energy":"el deseo necesita espacio, autenticidad y una forma no rígida de vincularse","avoid":"usar distancia para no tocar lo vulnerable","use":"crear vínculos donde haya aire y verdad","focus":"libertad afectiva y autenticidad"}},{"id":"venus_en_piscis","triggers":["venus_en_piscis"],"match":"all","peso":0.75,"clusters":["relacional","venus","piscis","agua"],"output":{"energy":"el amor se vuelve compasivo, imaginativo y muy receptivo","avoid":"idealizar o disolver límites en nombre de la unión","use":"amar con sensibilidad sin perder discernimiento","focus":"ternura, empatía y sutileza"}},{"id":"luna_en_aries","triggers":["luna_en_aries"],"match":"all","peso":0.78,"clusters":["emocional","luna","aries"],"output":{"energy":"la emoción reacciona rápido y busca descarga inmediata","avoid":"responder antes de entender lo que sientes","use":"darle nombre al impulso emocional antes de actuar","focus":"reacción y regulación"}},{"id":"luna_en_tauro","triggers":["luna_en_tauro"],"match":"all","peso":0.78,"clusters":["emocional","luna","tauro"],"output":{"energy":"la emoción busca calma, cuerpo y continuidad","avoid":"resistirte al cambio solo para mantener paz aparente","use":"crear estabilidad emocional concreta","focus":"calma, cuerpo y seguridad"}},{"id":"luna_en_geminis","triggers":["luna_en_geminis"],"match":"all","peso":0.78,"clusters":["emocional","luna","geminis"],"output":{"energy":"lo emocional se mueve por pensamientos, palabras y cambios de foco","avoid":"hablar por nervio en vez de por claridad","use":"ordenar lo que sientes antes de verbalizarlo","focus":"procesamiento emocional y palabra"}},{"id":"luna_en_cancer","triggers":["luna_en_cancer"],"match":"all","peso":0.78,"clusters":["emocional","luna","cancer"],"output":{"energy":"la emoción se amplifica y necesita refugio, contención y pertenencia","avoid":"encerrarte en memoria o susceptibilidad","use":"escuchar qué te hace sentir cuidado de verdad","focus":"refugio, ternura y raíz"}},{"id":"luna_en_leo","triggers":["luna_en_leo"],"match":"all","peso":0.78,"clusters":["emocional","luna","leo"],"output":{"energy":"la emoción quiere calor, expresión y respuesta del corazón","avoid":"dramatizar para conseguir validación","use":"expresar lo que sientes con honestidad y nobleza","focus":"corazón y expresión afectiva"}},{"id":"luna_en_virgo","triggers":["luna_en_virgo"],"match":"all","peso":0.78,"clusters":["emocional","luna","virgo"],"output":{"energy":"el sentir pasa por filtro, detalle y necesidad de orden interno","avoid":"analizar tanto que te desconectes de la emoción viva","use":"cuidar tu mundo interno con sencillez y rutina","focus":"orden emocional y cuidado"}},{"id":"luna_en_libra","triggers":["luna_en_libra"],"match":"all","peso":0.78,"clusters":["emocional","luna","libra"],"output":{"energy":"la emoción busca equilibrio, armonía y buena respuesta del otro","avoid":"adaptarte demasiado para evitar incomodidad","use":"notar tu necesidad antes de negociar","focus":"equilibrio emocional y vínculo"}},{"id":"luna_en_escorpio","triggers":["luna_en_escorpio"],"match":"all","peso":0.78,"clusters":["emocional","luna","escorpio"],"output":{"energy":"la emoción se vuelve profunda, intensa y difícil de fingir","avoid":"irte al extremo por miedo a la vulnerabilidad","use":"habitar lo que sientes sin controlarlo todo","focus":"intensidad y verdad emocional"}},{"id":"luna_en_sagitario","triggers":["luna_en_sagitario"],"match":"all","peso":0.78,"clusters":["emocional","luna","sagitario"],"output":{"energy":"lo emocional busca aire, sentido y una lectura más amplia","avoid":"escapar hacia arriba para no tocar lo incómodo","use":"abrir perspectiva sin negar la herida","focus":"sentido emocional y expansión"}},{"id":"luna_en_capricornio","triggers":["luna_en_capricornio"],"match":"all","peso":0.78,"clusters":["emocional","luna","capricornio"],"output":{"energy":"la emoción se contiene, se ordena y a veces se vuelve sobria","avoid":"confundir madurez con bloqueo afectivo","use":"dar estructura a lo que sientes sin congelarlo","focus":"contención y responsabilidad emocional"}},{"id":"luna_en_acuario","triggers":["luna_en_acuario"],"match":"all","peso":0.78,"clusters":["emocional","luna","acuario"],"output":{"energy":"la emoción toma distancia para observar y ganar perspectiva","avoid":"desconectarte para no sentir intensidad","use":"darte espacio sin exiliarte de ti","focus":"perspectiva y libertad emocional"}},{"id":"luna_en_piscis","triggers":["luna_en_piscis"],"match":"all","peso":0.78,"clusters":["emocional","luna","piscis"],"output":{"energy":"la emoción se vuelve porosa, empática y muy receptiva al ambiente","avoid":"absorber demasiado sin límite claro","use":"descansar y discriminar qué es tuyo y qué no","focus":"sensibilidad, sueño y compasión"}},{"id":"sol_en_aries","triggers":["sol_en_aries"],"match":"all","peso":0.74,"clusters":["identidad","sol","aries"],"output":{"energy":"la identidad busca iniciar, afirmarse y abrir camino","avoid":"confundir autoafirmación con choque innecesario","use":"usar coraje con conciencia","focus":"presencia e iniciativa"}},{"id":"sol_en_leo","triggers":["sol_en_leo"],"match":"all","peso":0.74,"clusters":["identidad","sol","leo"],"output":{"energy":"la identidad quiere brillar, crear y expresarse con plenitud","avoid":"depender demasiado de reconocimiento externo","use":"brillar desde verdad y no solo desde imagen","focus":"brillo y autoexpresión"}},{"id":"sol_en_libra","triggers":["sol_en_libra"],"match":"all","peso":0.74,"clusters":["identidad","sol","libra"],"output":{"energy":"la identidad se define también en relación con el otro y el equilibrio","avoid":"perder eje por complacer","use":"elegir acuerdo sin traicionarte","focus":"identidad y vínculo"}},{"id":"sol_en_capricornio","triggers":["sol_en_capricornio"],"match":"all","peso":0.74,"clusters":["identidad","sol","capricornio"],"output":{"energy":"la identidad busca construir, sostener y asumir responsabilidad","avoid":"medirte solo por logro o rendimiento","use":"desarrollar autoridad con humanidad","focus":"dirección y madurez"}},{"id":"marte_en_aries","triggers":["marte_en_aries"],"match":"all","peso":0.76,"clusters":["acción","marte","aries"],"output":{"energy":"Marte actúa con rapidez, coraje y deseo de iniciar","avoid":"reaccionar sin medir consecuencias","use":"canalizar impulso en acción consciente","focus":"acción y coraje"}},{"id":"marte_en_cancer","triggers":["marte_en_cancer"],"match":"all","peso":0.76,"clusters":["acción","marte","cancer"],"output":{"energy":"la acción se mezcla con sensibilidad, defensa y reactividad emocional","avoid":"pelear desde la herida sin reconocerla","use":"proteger sin cerrarte ni explotar","focus":"defensa y cuidado"}},{"id":"marte_en_libra","triggers":["marte_en_libra"],"match":"all","peso":0.76,"clusters":["acción","marte","libra"],"output":{"energy":"la energía busca acuerdo, pero también puede frustrarse con indecisión","avoid":"ceder tanto que la rabia salga por debajo","use":"negociar firmeza sin perder armonía","focus":"fricción y equilibrio"}},{"id":"marte_en_capricornio","triggers":["marte_en_capricornio"],"match":"all","peso":0.76,"clusters":["acción","marte","capricornio"],"output":{"energy":"Marte se vuelve estratégico, persistente y orientado a resultados","avoid":"endurecerte o sobrefuncionar","use":"usar disciplina para avanzar sin quemarte","focus":"estrategia y constancia"}},{"id":"mercurio_en_geminis","triggers":["mercurio_en_geminis"],"match":"all","peso":0.69,"clusters":["mente","mercurio","geminis"],"output":{"energy":"Mercurio se mueve con rapidez, curiosidad y agilidad mental","avoid":"dispersarte entre demasiadas ideas","use":"filtrar y priorizar lo que sí merece tu atención","focus":"mente, palabra y movilidad"}},{"id":"jupiter_en_sagitario","triggers":["jupiter_en_sagitario"],"match":"all","peso":0.68,"clusters":["expansión","jupiter","sagitario"],"output":{"energy":"Júpiter amplía visión, fe y deseo de explorar","avoid":"prometer más de lo que puedes sostener","use":"crecer con entusiasmo y también con verdad","focus":"expansión, fe y horizonte"}},{"id":"saturno_en_capricornio","triggers":["saturno_en_capricornio"],"match":"all","peso":0.77,"clusters":["estructura","saturno","capricornio"],"output":{"energy":"Saturno busca consolidar, estructurar y asumir peso real","avoid":"volver la exigencia más grande que la vida misma","use":"construir con paciencia, sobriedad y propósito","focus":"estructura, tiempo y responsabilidad"}},{"id":"urano_en_acuario","triggers":["urano_en_acuario"],"match":"all","peso":0.67,"clusters":["cambio","urano","acuario"],"output":{"energy":"Urano abre visión de futuro, autenticidad y ruptura inteligente","avoid":"cortar demasiado rápido solo por incomodidad","use":"innovar sin romper lo que todavía sirve","focus":"libertad, futuro e innovación"}},{"id":"neptuno_en_piscis","triggers":["neptuno_en_piscis"],"match":"all","peso":0.66,"clusters":["sensibilidad","neptuno","piscis"],"output":{"energy":"Neptuno amplifica intuición, compasión y mundo sutil","avoid":"disolver límites en niebla emocional","use":"honrar lo sensible con anclaje y discernimiento","focus":"intuición, compasión y entrega"}},{"id":"pluton_en_escorpio","triggers":["pluton_en_escorpio"],"match":"all","peso":0.79,"clusters":["transformación","pluton","escorpio"],"output":{"energy":"Plutón intensifica profundidad, poder y procesos de muerte simbólica","avoid":"controlar por miedo a perder fondo o poder","use":"atravesar transformación con honestidad y coraje","focus":"poder, sombra y renacimiento"}},{"id":"lilith_en_escorpio","triggers":["lilith_en_escorpio"],"match":"all","peso":0.72,"clusters":["sombra","lilith","escorpio"],"output":{"energy":"Lilith despierta deseo crudo, verdad incómoda y necesidad de soberanía emocional","avoid":"usar intensidad como arma o prueba de poder","use":"nombrar deseo y sombra sin vergüenza","focus":"sombra, deseo y autonomía"}},{"id":"quiron_en_virgo","triggers":["quiron_en_virgo"],"match":"all","peso":0.73,"clusters":["herida","quiron","virgo"],"output":{"energy":"Quirón toca heridas ligadas a perfección, servicio y sensación de no ser suficiente","avoid":"castigarte por no poder hacerlo todo perfecto","use":"tratar tu sensibilidad con humildad y ternura práctica","focus":"herida, cuidado y reparación"}},{"id":"luna_en_cancer__venus_en_aries","triggers":["luna_en_cancer","venus_en_aries"],"match":"all","peso":0.88,"clusters":["emocional","relacional","agua","fuego"],"output":{"energy":"hay una mezcla entre necesidad de contención y deseo de respuesta rápida que puede sentirse muy viva","avoid":"pedir cercanía desde susceptibilidad e impulso al mismo tiempo","use":"nombrar la necesidad emocional antes de buscar solución inmediata","focus":"cuidado, deseo y regulación"}},{"id":"venus_en_libra__marte_en_aries","triggers":["venus_en_libra","marte_en_aries"],"match":"all","peso":0.89,"clusters":["relacional","acción","polaridad"],"output":{"energy":"se activa la tensión entre armonía vincular y acción directa","avoid":"oscilar entre complacer y reaccionar","use":"integrar deseo propio con capacidad de acuerdo","focus":"equilibrio, deseo y acción"}},{"id":"sol_en_capricornio__saturno_en_capricornio","triggers":["sol_en_capricornio","saturno_en_capricornio"],"match":"all","peso":0.91,"clusters":["identidad","estructura","tierra"],"output":{"energy":"la identidad se vuelve más seria, exigente y orientada a construcción real","avoid":"creer que tu valor depende solo de lo que logras","use":"dar forma a tu ambición sin apagar tu humanidad","focus":"madurez, dirección y estructura"}},{"id":"mercurio_en_geminis__jupiter_en_sagitario","triggers":["mercurio_en_geminis","jupiter_en_sagitario"],"match":"all","peso":0.84,"clusters":["mente","expansión","aire","fuego"],"output":{"energy":"la mente quiere aprender, conectar y abrir horizonte al mismo tiempo","avoid":"irte a demasiadas ideas sin aterrizar ninguna","use":"usar curiosidad y visión para construir pensamiento con sentido","focus":"aprendizaje, visión y palabra"}},{"id":"moon_square_venus__venus_en_aries","triggers":["moon_square_venus","venus_en_aries"],"match":"all","peso":0.8,"clusters":["emocional","relacional","fuego"],"output":{"energy":"intensidad emocional con deseo de respuesta inmediata","avoid":"reaccionar sin procesar lo que sientes","use":"poner en palabras la necesidad antes de actuar","focus":"regular emoción y deseo en el vínculo"}},{"id":"moon_square_venus__venus_en_piscis","triggers":["moon_square_venus","venus_en_piscis"],"match":"all","peso":0.81,"clusters":["emocional","relacional","agua"],"output":{"energy":"la sensibilidad afectiva se vuelve porosa, romántica y muy receptiva","avoid":"idealizar el vínculo mientras crece la incomodidad por debajo","use":"nombrar la herida sin perder delicadeza","focus":"sensibilidad, vínculo y límites"}},{"id":"moon_square_venus__venus_en_libra","triggers":["moon_square_venus","venus_en_libra"],"match":"all","peso":0.82,"clusters":["emocional","relacional","aire"],"output":{"energy":"hay tensión entre necesidad emocional y deseo de sostener armonía","avoid":"complacer por fuera mientras algo adentro ya se tensó","use":"buscar equilibrio sin silenciar lo que sientes","focus":"armonía, emoción y honestidad"}},{"id":"moon_square_venus__venus_en_escorpio","triggers":["moon_square_venus","venus_en_escorpio"],"match":"all","peso":0.85,"clusters":["emocional","relacional","agua","intensidad"],"output":{"energy":"la fricción afectiva se vuelve intensa y toca capas más profundas del deseo","avoid":"confundir necesidad emocional con control o prueba afectiva","use":"habitar lo que sientes sin irte al extremo","focus":"intimidad, intensidad y regulación"}},{"id":"saturn_conjunction_sun__sun_en_capricornio","triggers":["saturn_conjunction_sun","sol_en_capricornio"],"match":"all","peso":0.9,"clusters":["identidad","estructura","tierra"],"output":{"energy":"la identidad entra en una fase de exigencia, madurez y construcción real","avoid":"medirte solo por rendimiento o cumplimiento","use":"desarrollar autoridad interna con paciencia","focus":"madurez, estructura y propósito"}},{"id":"saturn_conjunction_sun__sun_en_aries","triggers":["saturn_conjunction_sun","sol_en_aries"],"match":"all","peso":0.87,"clusters":["identidad","estructura","fuego"],"output":{"energy":"el impulso de afirmarte se encuentra con un límite que pide más conciencia y forma","avoid":"chocar con la realidad como si fuera enemiga de tu deseo","use":"usar la frustración como entrenamiento de carácter","focus":"impulso, límite y madurez"}},{"id":"mars_conjunction_sun__sol_en_aries","triggers":["mars_conjunction_sun","sol_en_aries"],"match":"all","peso":0.89,"clusters":["acción","identidad","fuego"],"output":{"energy":"la energía vital sube y empuja a actuar con fuerza, rapidez y mucha afirmación","avoid":"quemarte o reaccionar sin medir el impacto","use":"canalizar coraje en acción enfocada","focus":"iniciativa, fuerza y dirección"}},{"id":"mars_conjunction_sun__sol_en_leo","triggers":["mars_conjunction_sun","sol_en_leo"],"match":"all","peso":0.88,"clusters":["acción","identidad","fuego","expresión"],"output":{"energy":"hay empuje para brillar, crear y moverte desde el corazón","avoid":"confundir entusiasmo con derecho a arrasar con todo","use":"expresar fuerza con nobleza y centro","focus":"expresión, coraje y presencia"}},{"id":"mercury_trine_jupiter__mercurio_en_geminis","triggers":["mercury_trine_jupiter","mercurio_en_geminis"],"match":"all","peso":0.83,"clusters":["mente","expansión","aire"],"output":{"energy":"la mente conecta ideas con rapidez y encuentra amplitud para pensar","avoid":"irte a demasiadas posibilidades sin aterrizar ninguna","use":"usar curiosidad con dirección","focus":"aprendizaje, visión y palabra"}},{"id":"venus_sextile_jupiter__venus_en_tauro","triggers":["venus_sextile_jupiter","venus_en_tauro"],"match":"all","peso":0.82,"clusters":["relacional","expansión","tierra"],"output":{"energy":"lo afectivo puede sentirse fértil, cálido y dispuesto a crecer con calma","avoid":"caer en exceso por comodidad o placer fácil","use":"disfrutar sin perder medida","focus":"placer, apertura y valor"}},{"id":"moon_square_venus__venus_casa_7","triggers":["moon_square_venus","venus_casa_7"],"match":"all","peso":0.88,"clusters":["emocional","relacional","vínculos"],"output":{"energy":"la fricción emocional se vuelve más visible en la relación y en la respuesta del otro","avoid":"esperar que el otro regule lo que se activó dentro de ti","use":"nombrar la necesidad antes de exigir cercanía","focus":"vínculo, emoción y espejo relacional"}},{"id":"moon_square_venus__venus_casa_4","triggers":["moon_square_venus","venus_casa_4"],"match":"all","peso":0.86,"clusters":["emocional","hogar","relacional"],"output":{"energy":"la tensión afectiva toca intimidad, refugio y sensación de hogar","avoid":"cerrarte por sensibilidad y después resentir la distancia","use":"cuidar tu base emocional antes de buscar respuesta afuera","focus":"intimidad, refugio y afecto"}},{"id":"saturn_conjunction_sun__sol_casa_10","triggers":["saturn_conjunction_sun","sol_casa_10"],"match":"all","peso":0.91,"clusters":["identidad","estructura","vocación"],"output":{"energy":"la exigencia cae sobre dirección, trabajo, reputación y sentido de responsabilidad","avoid":"creer que solo vales si sostienes todo perfecto","use":"construir autoridad con tiempo y coherencia","focus":"vocación, exigencia y madurez"}},{"id":"saturn_conjunction_sun__sol_casa_1","triggers":["saturn_conjunction_sun","sol_casa_1"],"match":"all","peso":0.89,"clusters":["identidad","estructura","presencia"],"output":{"energy":"la vida pide más sobriedad, contención y responsabilidad personal","avoid":"endurecerte demasiado para demostrar fortaleza","use":"afirmarte desde consistencia y no desde rigidez","focus":"presencia, madurez y autoestructura"}},{"id":"mars_conjunction_sun__marte_casa_1","triggers":["mars_conjunction_sun","marte_casa_1"],"match":"all","peso":0.9,"clusters":["acción","presencia","impulso"],"output":{"energy":"la energía busca salida directa y pide movimiento inmediato","avoid":"actuar tan rápido que no veas el contexto completo","use":"moverte con valentía y algo más de conciencia","focus":"acción, cuerpo y presencia"}},{"id":"mars_conjunction_sun__sol_casa_5","triggers":["mars_conjunction_sun","sol_casa_5"],"match":"all","peso":0.87,"clusters":["acción","creatividad","expresión"],"output":{"energy":"hay fuego para crear, expresarte y mostrar deseo con intensidad","avoid":"dramatizar para sostener atención o validación","use":"usar la fuerza para crear y no solo para imponerte","focus":"creatividad, deseo y expresión"}},{"id":"moon_square_venus__venus_grado_temprano","triggers":["moon_square_venus","venus_grado_temprano"],"match":"all","peso":0.84,"clusters":["emocional","relacional","fase_inicio"],"output":{"energy":"la experiencia afectiva aún está tomando forma y la tensión se siente más reactiva que clara","avoid":"forzar definiciones cuando todavía todo se está revelando","use":"observar el deseo antes de traducirlo en decisión","focus":"inicio emocional y aprendizaje vincular"}},{"id":"moon_square_venus__venus_grado_tardio","triggers":["moon_square_venus","venus_grado_tardio"],"match":"all","peso":0.86,"clusters":["emocional","relacional","fase_cierre"],"output":{"energy":"la fricción afectiva puede mostrar algo que ya viene pidiendo cierre o redefinición","avoid":"repetir un patrón solo porque cuesta soltarlo","use":"mirar con honestidad qué dinámica ya cumplió su ciclo","focus":"cierre afectivo y claridad"}},{"id":"saturn_conjunction_sun__sol_grado_tardio","triggers":["saturn_conjunction_sun","sol_grado_tardio"],"match":"all","peso":0.9,"clusters":["identidad","estructura","fase_cierre"],"output":{"energy":"la exigencia se siente como evaluación de una etapa que necesita madurar o reordenarse","avoid":"aferrarte a una versión antigua de ti solo por deber","use":"integrar lo aprendido y ajustar forma, ritmo o dirección","focus":"síntesis, madurez y redefinición"}},{"id":"mars_conjunction_sun__marte_grado_temprano","triggers":["mars_conjunction_sun","marte_grado_temprano"],"match":"all","peso":0.88,"clusters":["acción","fase_inicio","fuego"],"output":{"energy":"la energía arranca con mucha fuerza y ganas de abrir camino","avoid":"gastar impulso en reacción en vez de dirección","use":"usar el arranque como chispa y no como desborde","focus":"inicio, fuerza y dirección"}},{"id":"mercury_trine_jupiter__jupiter_grado_temprano","triggers":["mercury_trine_jupiter","jupiter_grado_temprano"],"match":"all","peso":0.81,"clusters":["mente","expansión","fase_inicio"],"output":{"energy":"las ideas quieren crecer y abrir horizonte, aunque todavía estén naciendo","avoid":"prometer más de lo que la visión puede sostener por ahora","use":"dejar que la comprensión se expanda paso a paso","focus":"aprendizaje y visión naciente"}},{"id":"moon_square_venus__venus_en_aries__venus_casa_7","triggers":["moon_square_venus","venus_en_aries","venus_casa_7"],"match":"all","peso":0.93,"clusters":["emocional","relacional","fuego","vínculos"],"output":{"energy":"hay deseo de respuesta inmediata y la tensión se juega con fuerza en la relación cercana","avoid":"responder desde herida e impulso al mismo tiempo","use":"decir lo que necesitas antes de actuarlo","focus":"deseo, vínculo y regulación emocional"}},{"id":"moon_square_venus__venus_en_aries__venus_grado_temprano","triggers":["moon_square_venus","venus_en_aries","venus_grado_temprano"],"match":"all","peso":0.92,"clusters":["emocional","relacional","fuego","fase_inicio"],"output":{"energy":"la tensión afectiva aparece rápida, viva y todavía en fase de descubrimiento","avoid":"querer resolver ya algo que aún está naciendo","use":"darle tiempo a la experiencia antes de fijar conclusiones","focus":"impulso afectivo e inicio"}},{"id":"saturn_conjunction_sun__sol_en_capricornio__sol_casa_10","triggers":["saturn_conjunction_sun","sol_en_capricornio","sol_casa_10"],"match":"all","peso":0.95,"clusters":["identidad","estructura","vocación","tierra"],"output":{"energy":"la vida aprieta en la zona de responsabilidad, propósito y dirección pública para consolidar algo serio","avoid":"creer que la exigencia es castigo en vez de proceso de construcción","use":"ordenar prioridades y asumir autoridad con paciencia","focus":"vocación, madurez y estructura profunda"}},{"id":"mars_conjunction_sun__sol_en_aries__marte_grado_temprano","triggers":["mars_conjunction_sun","sol_en_aries","marte_grado_temprano"],"match":"all","peso":0.94,"clusters":["acción","identidad","fuego","fase_inicio"],"output":{"energy":"hay arranque, impulso y deseo de afirmarte con fuerza inmediata","avoid":"confundir valentía con precipitación","use":"dar dirección al fuego antes de lanzarlo","focus":"inicio, coraje y enfoque"}},{"id":"venus_en_libra__marte_en_aries__venus_grado_medio","triggers":["venus_en_libra","marte_en_aries","venus_grado_medio"],"match":"all","peso":0.87,"clusters":["relacional","acción","polaridad"],"output":{"energy":"el deseo de armonía convive con una fuerza que quiere resolver rápido y tomar iniciativa","avoid":"oscilar entre diplomacia excesiva e impulso brusco","use":"integrar firmeza con capacidad de acuerdo","focus":"equilibrio, deseo y acción"}},{"id":"luna_en_cancer__saturn_conjunction_sun__sol_casa_1","triggers":["luna_en_cancer","saturn_conjunction_sun","sol_casa_1"],"match":"all","peso":0.9,"clusters":["emocional","identidad","estructura"],"output":{"energy":"la sensibilidad necesita cuidado mientras la vida exige más presencia, orden y madurez personal","avoid":"endurecerte para sostenerlo todo sin admitir que algo te pesa","use":"cuidar tu mundo emocional mientras fortaleces tu centro","focus":"contención, presencia y responsabilidad"}},{"id":"mercurio_en_geminis__jupiter_en_sagitario__mercury_trine_jupiter","triggers":["mercurio_en_geminis","jupiter_en_sagitario","mercury_trine_jupiter"],"match":"all","peso":0.88,"clusters":["mente","expansión","aire","fuego"],"output":{"energy":"la mente se abre con rapidez y encuentra un puente entre curiosidad y sentido","avoid":"irte a demasiadas ideas sin construir una línea clara","use":"usar apertura mental con propósito y síntesis","focus":"aprendizaje, visión y pensamiento amplio"}}];
+
 const SIGNOS_ORDEN = [
   'Aries','Tauro','Géminis','Cáncer','Leo','Virgo',
   'Libra','Escorpio','Sagitario','Capricornio','Acuario','Piscis'
@@ -4175,6 +4267,28 @@ const SIGN_SYMBOLS = {
   'Sagitario':'♐','Capricornio':'♑','Acuario':'♒','Piscis':'♓'
 };
 
+const PLANETAS_ES_TO_TRIGGER = {
+  'Luna':'moon','Sol':'sun','Mercurio':'mercurio','Venus':'venus',
+  'Marte':'marte','Júpiter':'jupiter','Saturno':'saturno',
+  'Urano':'urano','Neptuno':'neptuno','Plutón':'pluton',
+  'Quirón':'quiron','Lilith':'lilith',
+  'Moon':'moon','Sun':'sun','Mars':'marte','Saturn':'saturno','Jupiter':'jupiter',
+};
+
+const SIGNO_TO_TRIGGER = {
+  'Aries':'aries','Tauro':'tauro','Géminis':'geminis','Cáncer':'cancer',
+  'Leo':'leo','Virgo':'virgo','Libra':'libra','Escorpio':'escorpio',
+  'Sagitario':'sagitario','Capricornio':'capricornio','Acuario':'acuario','Piscis':'piscis',
+};
+
+const CASA_EMOJIS = {1:'🪞',2:'💰',3:'💬',4:'🏠',5:'🎨',6:'⚕️',7:'🤝',8:'🦋',9:'🌍',10:'🏆',11:'🌐',12:'🌊'};
+const CASA_NOMBRES = {
+  1:'Casa 1 · Identidad',2:'Casa 2 · Recursos',3:'Casa 3 · Comunicación',
+  4:'Casa 4 · Hogar',5:'Casa 5 · Creatividad',6:'Casa 6 · Servicio',
+  7:'Casa 7 · Vínculos',8:'Casa 8 · Transformación',9:'Casa 9 · Expansión',
+  10:'Casa 10 · Carrera',11:'Casa 11 · Comunidad',12:'Casa 12 · Trascendencia',
+};
+
 // Calcula en qué casa cae un signo dado el ascendente
 function calcularCasa(signoTransito, ascendente) {
   if (!signoTransito || !ascendente) return null;
@@ -4184,61 +4298,225 @@ function calcularCasa(signoTransito, ascendente) {
   return ((idxSigno - idxAsc + 12) % 12) + 1;
 }
 
-// Devuelve qué signo rige cada casa para un ascendente dado
-function getCasaSigno(numeroCasa, ascendente) {
-  const idxAsc = SIGNOS_ORDEN.indexOf(ascendente);
-  if (idxAsc === -1) return null;
-  return SIGNOS_ORDEN[(idxAsc + numeroCasa - 1) % 12];
+// Construye los triggers de una neurona para el tránsito+casa actual
+function buildTriggersForTransit(transit, casa, signoTransito) {
+  const triggers = new Set();
+  const planeta = transit.planet || transit.planeta || '';
+  const target  = transit.target || '';
+  const aspecto = transit.aspect || transit.aspecto || '';
+  const signo   = signoTransito || transit.context?.planetSign || '';
+
+  const pKey = PLANETAS_ES_TO_TRIGGER[planeta] || planeta.toLowerCase();
+  const tKey = PLANETAS_ES_TO_TRIGGER[target]  || target.toLowerCase();
+  const sKey = signo ? (SIGNO_TO_TRIGGER[signo] || signo.toLowerCase()) : '';
+
+  if (casa) {
+    triggers.add(`casa_${casa}_activa`);
+    if (pKey) {
+      triggers.add(`${pKey}_casa_${casa}`);
+      triggers.add(`moon_casa_${casa}`);  // alias
+    }
+    if (tKey) triggers.add(`${tKey}_casa_${casa}`);
+  }
+
+  // Signo triggers
+  if (sKey) {
+    triggers.add(`signo_${sKey}_activo`);
+    if (pKey) triggers.add(`${pKey}_en_${sKey}`);
+    triggers.add(`${pKey}_en_${sKey}`);
+  }
+
+  // Aspecto triggers (compound)
+  if (pKey && aspecto && tKey) {
+    const asp = aspecto.toLowerCase()
+      .replace('conjunción','conjunction').replace('oposición','opposition')
+      .replace('cuadratura','square').replace('trígono','trine').replace('sextil','sextile');
+    triggers.add(`${pKey}_${asp}_${tKey}`);
+  }
+
+  return [...triggers];
 }
 
-const TEMAS_CASAS = {
-  1:  { titulo: 'Casa 1 · Identidad',       emoji: '🪞', desc: 'Tu yo, apariencia física, imagen proyectada al mundo, el inicio de ciclos.', area: 'identidad y presencia personal' },
-  2:  { titulo: 'Casa 2 · Recursos',        emoji: '💰', desc: 'Dinero, posesiones materiales, valor propio, autoestima y seguridad económica.', area: 'recursos, dinero y valor propio' },
-  3:  { titulo: 'Casa 3 · Comunicación',    emoji: '💬', desc: 'Mente cotidiana, hermanos, vecinos, viajes cortos, escritura y aprendizaje cercano.', area: 'comunicación y mente cotidiana' },
-  4:  { titulo: 'Casa 4 · Hogar',           emoji: '🏠', desc: 'Familia, raíces, hogar físico y emocional, el pasado y los cimientos internos.', area: 'hogar, familia y raíces' },
-  5:  { titulo: 'Casa 5 · Creatividad',     emoji: '🎨', desc: 'Placer, romance, hijos, creatividad, juego, riesgo y autoexpresión genuina.', area: 'creatividad, romance y placer' },
-  6:  { titulo: 'Casa 6 · Servicio',        emoji: '⚕️', desc: 'Trabajo diario, salud, rutinas, hábitos, servicio y relación con el cuerpo.', area: 'salud, trabajo y rutinas' },
-  7:  { titulo: 'Casa 7 · Vínculos',        emoji: '🤝', desc: 'Relaciones serias, pareja, socios, contratos y proyecciones en el otro.', area: 'relaciones, pareja y alianzas' },
-  8:  { titulo: 'Casa 8 · Transformación',  emoji: '🦋', desc: 'Profundidad, sexualidad, muerte y renacimiento, recursos compartidos, lo oculto.', area: 'transformación profunda y lo oculto' },
-  9:  { titulo: 'Casa 9 · Expansión',       emoji: '🌍', desc: 'Filosofía, espiritualidad, viajes largos, educación superior, creencias y visión.', area: 'creencias, expansión y filosofía' },
-  10: { titulo: 'Casa 10 · Carrera',        emoji: '🏆', desc: 'Carrera profesional, reputación pública, legado y ambición en el mundo exterior.', area: 'carrera, reputación y legado' },
-  11: { titulo: 'Casa 11 · Comunidad',      emoji: '🌐', desc: 'Amigos, grupos, causas colectivas, sueños futuros, redes y pertenencia social.', area: 'comunidad, amistades y futuros' },
-  12: { titulo: 'Casa 12 · Trascendencia',  emoji: '🌊', desc: 'Lo inconsciente, karma, retiros, espiritualidad profunda, lo que está oculto en ti.', area: 'espiritualidad, inconsciente y karma' },
-};
+// Match y rankea neuronas contra los triggers del tránsito
+function matchNeuronsForTransit(triggers) {
+  const triggerSet = new Set(triggers.map(t => t.toLowerCase()));
 
-const ASPECTOS_TEXTO = {
-  'Conjunción':'fusionado con', 'conjunction':'fusionado con',
-  'Oposición':'en tensión con', 'opposition':'en tensión con',
-  'Cuadratura':'en fricción con', 'square':'en fricción con',
-  'Trígono':'fluyendo hacia', 'trine':'fluyendo hacia',
-  'Sextil':'abriendo puertas hacia', 'sextile':'abriendo puertas hacia',
-};
+  const scored = CASA_NEURONS.map(neuron => {
+    const nTriggers = (neuron.triggers || []).map(t => t.toLowerCase());
+    const matchCount = nTriggers.filter(t => triggerSet.has(t)).length;
+    if (matchCount === 0) return null;
 
-// Genera la narrativa personalizada de impacto de casa
-function generarNarrativaImpacto(planeta, aspecto, destino, signoTransito, casa, tema, nombre, ascendente) {
-  const nombreStr = nombre ? `${nombre}, con` : 'Con';
-  const aspectoTexto = ASPECTOS_TEXTO[aspecto] || 'conectando con';
-  const casaInfo = TEMAS_CASAS[casa];
-  if (!casaInfo) return '';
+    const coverage = matchCount / nTriggers.length;
+    const score = (neuron.peso || 0.5) * coverage * (0.5 + 0.5 * (matchCount / Math.max(triggerSet.size, 1)));
+    return { ...neuron, _matchCount: matchCount, _score: score };
+  }).filter(Boolean);
 
-  const intensidades = {
-    'Conjunción': 'activa con fuerza', 'conjunction': 'activa con fuerza',
-    'Oposición': 'tensiona directamente', 'opposition': 'tensiona directamente',
-    'Cuadratura': 'genera fricción en', 'square': 'genera fricción en',
-    'Trígono': 'fluye armoniosamente hacia', 'trine': 'fluye armoniosamente hacia',
-    'Sextil': 'abre oportunidades en', 'sextile': 'abre oportunidades en',
-  };
-  const verbo = intensidades[aspecto] || 'activa';
+  // Sort by score desc, deduplicate by output similarity
+  scored.sort((a, b) => b._score - a._score);
 
-  return `${nombreStr} Ascendente ${ascendente}, el tránsito de ${planeta} en ${signoTransito || ''} ${verbo} tu ${casaInfo.titulo}. ` +
-    `Esto pone el foco en ${casaInfo.area}. ` +
-    `${casaInfo.desc} Es un momento para prestar atención a esta esfera de tu vida.`;
+  // Take top unique neurons (avoid near-duplicates)
+  const seen = new Set();
+  const unique = [];
+  for (const n of scored) {
+    const key = (n.output?.focus || n.id || '').slice(0, 40);
+    if (!seen.has(key)) {
+      seen.add(key);
+      unique.push(n);
+    }
+    if (unique.length >= 5) break;
+  }
+  return unique;
 }
 
-// ─── PERFIL NATAL — Estado global ────────────────────────────
+// ─── CSS para las tarjetas neuronales ───────────────────────
+// (inyectado dinámicamente una vez)
+function injectNeuronStyles() {
+  if (document.getElementById('neuron-impact-styles')) return;
+  const style = document.createElement('style');
+  style.id = 'neuron-impact-styles';
+  style.textContent = `
+    .ni-header-row {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 16px;
+    }
+    .ni-house-badge {
+      display: flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, rgba(212,168,67,0.12), rgba(155,114,245,0.08));
+      border: 1px solid rgba(212,168,67,0.3);
+      border-radius: 12px; padding: 10px 16px;
+      flex: 1;
+    }
+    .ni-house-emoji { font-size: 1.4rem; }
+    .ni-house-name {
+      font-family: var(--font-display);
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--text-primary);
+    }
+    .ni-house-sub {
+      font-family: var(--font-mono);
+      font-size: 0.58rem; letter-spacing: 0.14em;
+      color: var(--gold); text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .ni-asc-pill {
+      font-family: var(--font-mono);
+      font-size: 0.62rem; letter-spacing: 0.12em;
+      color: var(--violet-dim);
+      border: 1px solid var(--border-hi);
+      border-radius: 8px; padding: 8px 12px;
+      white-space: nowrap; text-align: center;
+    }
+    .ni-neurons-grid {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .ni-neuron-card {
+      background: rgba(14,12,26,0.7);
+      border: 1px solid rgba(155,114,245,0.15);
+      border-radius: 12px; padding: 16px 18px;
+      position: relative; overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .ni-neuron-card:first-child {
+      border-color: rgba(212,168,67,0.28);
+      background: rgba(212,168,67,0.04);
+    }
+    .ni-neuron-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, var(--violet-dim), transparent);
+    }
+    .ni-neuron-card:first-child::before {
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+    .ni-neuron-head {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: 12px;
+    }
+    .ni-neuron-id {
+      font-family: var(--font-mono);
+      font-size: 0.58rem; letter-spacing: 0.12em;
+      color: var(--text-muted); text-transform: uppercase;
+    }
+    .ni-neuron-card:first-child .ni-neuron-id { color: var(--gold); }
+    .ni-peso-bar {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .ni-peso-track {
+      width: 50px; height: 3px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px; overflow: hidden;
+    }
+    .ni-peso-fill {
+      height: 100%; border-radius: 2px;
+      background: var(--violet-dim);
+      transition: width 0.4s;
+    }
+    .ni-neuron-card:first-child .ni-peso-fill { background: var(--gold); }
+    .ni-peso-val {
+      font-family: var(--font-mono);
+      font-size: 0.56rem; color: var(--text-muted);
+    }
+    .ni-rows { display: flex; flex-direction: column; gap: 8px; }
+    .ni-row {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 10px; align-items: baseline;
+    }
+    .ni-row-key {
+      font-family: var(--font-mono);
+      font-size: 0.54rem; letter-spacing: 0.14em;
+      text-transform: uppercase; padding-top: 2px;
+    }
+    .ni-row-key.energy  { color: rgba(77,208,196,0.8); }
+    .ni-row-key.avoid   { color: rgba(229,115,115,0.8); }
+    .ni-row-key.use     { color: rgba(155,114,245,0.8); }
+    .ni-row-key.focus   { color: rgba(212,168,67,0.8);  }
+    .ni-row-val {
+      font-family: var(--font-body);
+      font-size: 0.97rem; line-height: 1.55;
+      color: var(--text-primary);
+    }
+    .ni-clusters {
+      display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px;
+    }
+    .ni-cluster-tag {
+      font-family: var(--font-mono);
+      font-size: 0.52rem; letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 2px 8px; border-radius: 100px;
+      border: 1px solid rgba(155,114,245,0.2);
+      color: var(--violet-dim);
+      background: rgba(155,114,245,0.05);
+    }
+    .ni-neuron-card:first-child .ni-cluster-tag {
+      border-color: rgba(212,168,67,0.2);
+      color: var(--gold-dim);
+      background: rgba(212,168,67,0.05);
+    }
+    .ni-no-sign {
+      font-family: var(--font-body);
+      font-size: 0.92rem; color: var(--text-muted);
+      font-style: italic; padding: 14px 0;
+      text-align: center;
+    }
+    .ni-teach-tip {
+      margin-top: 14px;
+      background: rgba(77,208,196,0.04);
+      border: 1px solid rgba(77,208,196,0.12);
+      border-radius: 10px; padding: 12px 16px;
+      font-family: var(--font-mono);
+      font-size: 0.6rem; letter-spacing: 0.1em;
+      color: var(--teal-dim); line-height: 1.7;
+    }
+    .ni-teach-tip strong { color: var(--teal); }
+  `;
+  document.head.appendChild(style);
+}
+
+// ─── PERFIL NATAL — Estado global ───────────────────────────
 let natalProfile = {
   rising: localStorage.getItem('natal_rising') || '',
-  name: localStorage.getItem('natal_name') || '',
+  name:   localStorage.getItem('natal_name')   || '',
 };
 
 function onNatalChange() {
@@ -4250,12 +4528,12 @@ function onNatalChange() {
 }
 
 function updateNatalUI() {
-  const badge = document.getElementById('natal-active-badge');
+  const badge    = document.getElementById('natal-active-badge');
   const badgeText = document.getElementById('natal-badge-text');
   if (natalProfile.rising) {
     badge.classList.add('show');
     const sym = SIGN_SYMBOLS[natalProfile.rising] || '';
-    const n = natalProfile.name ? ` · ${natalProfile.name}` : '';
+    const n   = natalProfile.name ? ` · ${natalProfile.name}` : '';
     badgeText.textContent = `${sym} Asc. ${natalProfile.rising}${n}`;
   } else {
     badge.classList.remove('show');
@@ -4263,14 +4541,13 @@ function updateNatalUI() {
   renderHouseWheel(natalProfile.rising);
 }
 
-// ─── RUEDA DE CASAS SVG ──────────────────────────────────────
+// ─── RUEDA DE CASAS SVG ─────────────────────────────────────
 function renderHouseWheel(ascendente) {
   const sectorsG = document.getElementById('wheel-sectors');
   const labelsG  = document.getElementById('wheel-labels');
   if (!sectorsG || !labelsG) return;
   sectorsG.innerHTML = '';
   labelsG.innerHTML  = '';
-
   if (!ascendente) return;
 
   const cx = 41, cy = 41, r = 38, rInner = 22, rLabel = 31;
@@ -4281,14 +4558,10 @@ function renderHouseWheel(ascendente) {
     const endAngle   = startAngle + step;
     const midAngle   = startAngle + step / 2;
 
-    const x1 = cx + r * Math.cos(startAngle);
-    const y1 = cy + r * Math.sin(startAngle);
-    const x2 = cx + r * Math.cos(endAngle);
-    const y2 = cy + r * Math.sin(endAngle);
-    const xi1 = cx + rInner * Math.cos(startAngle);
-    const yi1 = cy + rInner * Math.sin(startAngle);
-    const xi2 = cx + rInner * Math.cos(endAngle);
-    const yi2 = cy + rInner * Math.sin(endAngle);
+    const x1 = cx + r * Math.cos(startAngle), y1 = cy + r * Math.sin(startAngle);
+    const x2 = cx + r * Math.cos(endAngle),   y2 = cy + r * Math.sin(endAngle);
+    const xi1 = cx + rInner * Math.cos(startAngle), yi1 = cy + rInner * Math.sin(startAngle);
+    const xi2 = cx + rInner * Math.cos(endAngle),   yi2 = cy + rInner * Math.sin(endAngle);
 
     const path = document.createElementNS('http://www.w3.org/2000/svg','path');
     const d = `M ${xi1} ${yi1} L ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2} L ${xi2} ${yi2} A ${rInner} ${rInner} 0 0 0 ${xi1} ${yi1} Z`;
@@ -4298,130 +4571,128 @@ function renderHouseWheel(ascendente) {
     path.setAttribute('stroke-width', '0.5');
     sectorsG.appendChild(path);
 
-    // House number label
     const lx = cx + rLabel * Math.cos(midAngle);
     const ly = cy + rLabel * Math.sin(midAngle);
     const text = document.createElementNS('http://www.w3.org/2000/svg','text');
-    text.setAttribute('x', lx);
-    text.setAttribute('y', ly);
-    text.setAttribute('text-anchor', 'middle');
-    text.setAttribute('dominant-baseline', 'central');
-    text.setAttribute('font-size', '5.5');
-    text.setAttribute('font-family', 'JetBrains Mono, monospace');
+    text.setAttribute('x', lx); text.setAttribute('y', ly);
+    text.setAttribute('text-anchor', 'middle'); text.setAttribute('dominant-baseline', 'central');
+    text.setAttribute('font-size', '5.5'); text.setAttribute('font-family', 'JetBrains Mono, monospace');
     text.setAttribute('fill', i === 0 ? 'rgba(212,168,67,0.9)' : 'rgba(155,114,245,0.55)');
     text.textContent = i + 1;
     labelsG.appendChild(text);
   }
 }
 
-// ─── RENDERIZAR BLOQUE IMPACTO PERSONAL ──────────────────────
+// ─── RENDERIZAR IMPACTO PERSONAL CON NEURONAS REALES ────────
 function renderImpactoPersonal(result) {
-  const section = document.getElementById('impact-section');
-  const cardsEl = document.getElementById('impact-cards');
+  injectNeuronStyles();
+  const section  = document.getElementById('impact-section');
+  const cardsEl  = document.getElementById('impact-cards');
   if (!section || !cardsEl) return;
 
-  if (!natalProfile.rising) {
-    section.classList.remove('visible');
-    return;
-  }
+  if (!natalProfile.rising) { section.classList.remove('visible'); return; }
 
   const transits = result.topTránsitos || [];
   if (!transits.length) { section.classList.remove('visible'); return; }
 
-  // Calcular impacto para cada tránsito top
-  const impactos = transits.map(t => {
-    const signoTransito = t.context?.planetSign || t.sign || t.planetSign || '';
-    const casa = signoTransito ? calcularCasa(signoTransito, natalProfile.rising) : null;
-    return { ...t, casaCalculada: casa, signoTransito };
-  }).filter(t => t.casaCalculada);
-
-  // Si el tránsito no tiene signo, intentar con el destino
-  const impactosConDestino = transits.map(t => {
-    if (t.casaCalculada) return null;
-    const signoDestino = t.context?.targetSign || t.targetSign || '';
-    const casa = signoDestino ? calcularCasa(signoDestino, natalProfile.rising) : null;
-    return casa ? { ...t, casaCalculada: casa, signoTransito: signoDestino, esDestino: true } : null;
-  }).filter(Boolean);
-
-  const todos = [...impactos, ...impactosConDestino];
-
-  if (!todos.length) {
-    // No hay signos — mostrar aviso de que se necesita más dato
-    section.classList.add('visible');
-    cardsEl.innerHTML = `
-      <div class="impact-card" style="grid-column:1/-1;text-align:center;opacity:0.6">
-        <span class="impact-card-icon">ℹ️</span>
-        <div class="impact-card-desc">
-          Para ver el impacto personal en casas, usa el modo <strong>Tránsito Enriquecido</strong> 
-          e indica el <em>Signo</em> del planeta y destino.
-        </div>
-      </div>`;
-    return;
-  }
-
-  const html = [];
-
-  // Card de rueda personalizada
-  const casa1 = todos[0].casaCalculada;
-  const tema1  = TEMAS_CASAS[casa1];
-  const sym    = SIGN_SYMBOLS[natalProfile.rising] || '';
-
-  if (tema1) {
-    html.push(`
-      <div class="impact-card">
-        <span class="impact-card-icon">${tema1.emoji}</span>
-        <div class="impact-card-label">Tránsito principal activa</div>
-        <div class="impact-card-value">${tema1.titulo}</div>
-        <div class="impact-card-desc">${tema1.desc}</div>
-      </div>`);
-  }
-
-  // Card de signos en esa casa
-  html.push(`
-    <div class="impact-card">
-      <span class="impact-card-icon">${sym}</span>
-      <div class="impact-card-label">Tu Ascendente</div>
-      <div class="impact-card-value">Ascendente ${natalProfile.rising}</div>
-      <div class="impact-card-desc">
-        Tu Casa 1 comienza en <strong>${natalProfile.rising}</strong>. 
-        Los signos rotan desde ahí en orden natural del zodíaco.
-      </div>
-    </div>`);
-
-  // Cards adicionales si hay más tránsitos con signo
-  todos.slice(1,3).forEach(t => {
-    const c = t.casaCalculada;
-    const tm = TEMAS_CASAS[c];
-    if (!tm) return;
-    html.push(`
-      <div class="impact-card">
-        <span class="impact-card-icon">${tm.emoji}</span>
-        <div class="impact-card-label">${t.planet} ${t.aspect} ${t.target}</div>
-        <div class="impact-card-value">${tm.titulo}</div>
-        <div class="impact-card-desc">${tm.area}</div>
-      </div>`);
+  // Calcular casa para cada tránsito
+  const enriched = transits.map(t => {
+    const signo = t.context?.planetSign || t.sign || t.planetSign || '';
+    const casa  = signo ? calcularCasa(signo, natalProfile.rising) : null;
+    return { ...t, _signo: signo, _casa: casa };
   });
 
-  // Narrativa completa del tránsito principal
-  const tp = todos[0];
-  const narrativa = generarNarrativaImpacto(
-    tp.planet, tp.aspect, tp.target,
-    tp.signoTransito, tp.casaCalculada, tema1,
-    natalProfile.name, natalProfile.rising
-  );
-  if (narrativa) {
-    html.push(`
-      <div class="impact-narrative">
-        <div class="impact-card-label" style="margin-bottom:10px">Lectura personalizada</div>
-        <div class="impact-narrative-text">${narrativa}</div>
-      </div>`);
+  const withCasa = enriched.filter(t => t._casa);
+  const primary  = withCasa[0] || enriched[0];
+  const hasCasa  = !!primary._casa;
+
+  // ── HEADER: badge de casa + ascendente ──
+  const sym      = SIGN_SYMBOLS[natalProfile.rising] || '';
+  const casaNom  = hasCasa ? (CASA_NOMBRES[primary._casa] || `Casa ${primary._casa}`) : null;
+  const casaEmj  = hasCasa ? (CASA_EMOJIS[primary._casa] || '✦') : '✦';
+  const nombre   = natalProfile.name ? `<span style="color:var(--gold)">${natalProfile.name}</span> · ` : '';
+
+  let html = `<div class="ni-header-row">`;
+
+  if (hasCasa) {
+    html += `
+      <div class="ni-house-badge">
+        <span class="ni-house-emoji">${casaEmj}</span>
+        <div>
+          <div class="ni-house-name">${casaNom}</div>
+          <div class="ni-house-sub">Tránsito activa esta casa</div>
+        </div>
+      </div>`;
   }
 
-  cardsEl.innerHTML = html.join('');
+  html += `
+    <div class="ni-asc-pill">
+      ${nombre}${sym}<br>Asc. ${natalProfile.rising}
+    </div>
+  </div>`;
+
+  // ── NEURONAS ACTIVADAS ──
+  if (hasCasa) {
+    const triggers = buildTriggersForTransit(primary, primary._casa, primary._signo);
+    const neurons  = matchNeuronsForTransit(triggers);
+
+    html += `<div class="ni-neurons-grid">`;
+
+    if (!neurons.length) {
+      html += `<div class="ni-no-sign">No se encontraron neuronas específicas para esta combinación.<br>
+        <span style="font-size:0.82rem">Agrega neuronas en el Training Room con trigger <code>casa_${primary._casa}_activa</code> para enriquecer esta lectura.</span></div>`;
+    } else {
+      neurons.forEach((n, idx) => {
+        const out    = n.output || {};
+        const peso   = (n.peso || n.weight || 0.5);
+        const pct    = Math.round(peso * 100);
+        const clusters = (n.clusters || []).map(c => `<span class="ni-cluster-tag">${c}</span>`).join('');
+        const isPrimary = idx === 0;
+
+        html += `
+          <div class="ni-neuron-card">
+            <div class="ni-neuron-head">
+              <div class="ni-neuron-id">${isPrimary ? '⬟ NEURONA PRINCIPAL' : '◇ NEURONA SECUNDARIA'} · ${n.id}</div>
+              <div class="ni-peso-bar">
+                <div class="ni-peso-track"><div class="ni-peso-fill" style="width:${pct}%"></div></div>
+                <div class="ni-peso-val">${peso.toFixed(2)}</div>
+              </div>
+            </div>
+            <div class="ni-rows">
+              ${out.energy ? `<div class="ni-row"><div class="ni-row-key energy">Energía</div><div class="ni-row-val">${out.energy}</div></div>` : ''}
+              ${out.avoid  ? `<div class="ni-row"><div class="ni-row-key avoid">Evitar</div><div class="ni-row-val">${out.avoid}</div></div>` : ''}
+              ${out.use    ? `<div class="ni-row"><div class="ni-row-key use">Usar</div><div class="ni-row-val">${out.use}</div></div>` : ''}
+              ${out.focus  ? `<div class="ni-row"><div class="ni-row-key focus">Foco</div><div class="ni-row-val">${out.focus}</div></div>` : ''}
+            </div>
+            ${clusters ? `<div class="ni-clusters">${clusters}</div>` : ''}
+          </div>`;
+      });
+    }
+
+    html += `</div>`;
+
+    // ── TIP DE ENTRENAMIENTO (siempre visible) ──
+    const triggerSugerido = `${(PLANETAS_ES_TO_TRIGGER[primary.planet || primary.planeta] || 'luna')}_casa_${primary._casa}`;
+    html += `
+      <div class="ni-teach-tip">
+        <strong>✦ ENSEÑAR MÁS</strong> · Triggers activos: 
+        <code>${buildTriggersForTransit(primary, primary._casa, primary._signo).slice(0,4).join(', ')}</code>
+        <br>Para enriquecer esta lectura, agrega una neurona con trigger <code>${triggerSugerido}</code> en el Training Room.
+      </div>`;
+
+  } else {
+    // Sin signo — solo puede mostrar la rueda
+    html += `<div class="ni-no-sign">
+      Para ver el impacto en casas, indica el <strong>signo</strong> del planeta en la columna 
+      <em>SIGNO</em> del modo Tránsitos, o usa el modo <em>Tránsito Enriquecido</em>.
+    </div>`;
+  }
+
+  cardsEl.innerHTML = html;
   section.classList.add('visible');
 }
 
-// ─── INIT NATAL PROFILE ──────────────────────────────────────
+// ─── INIT NATAL PROFILE ─────────────────────────────────────
 function initNatalProfile() {
   const risingEl = document.getElementById('natal-rising');
   const nameEl   = document.getElementById('natal-name');
@@ -8329,6 +8600,119 @@ async function importTrainedNeurons(event) {
     await refreshGraphLive();
   } catch(e) {
     showToast('Error al leer el archivo: ' + e.message, 'error');
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// PASTE NEURONS — Cargar neuronas pegando JSON directamente
+// ─────────────────────────────────────────────────────────────
+function parsePasteNeurons(raw) {
+  const text = raw.trim();
+  if (!text) return { ok: false, neurons: [], msg: 'Esperando JSON…' };
+  try {
+    let parsed = JSON.parse(text);
+    // Accept array or { neurons: [...] } or single object
+    if (Array.isArray(parsed)) {
+      // ok
+    } else if (parsed && Array.isArray(parsed.neurons)) {
+      parsed = parsed.neurons;
+    } else if (parsed && parsed.id) {
+      parsed = [parsed]; // single neuron
+    } else {
+      return { ok: false, neurons: [], msg: '⚠ Formato no reconocido — debe ser array o { neurons: [...] }' };
+    }
+    const valid = parsed.filter(n => n && n.id && n.output);
+    const invalid = parsed.length - valid.length;
+    if (!valid.length) return { ok: false, neurons: [], msg: '⚠ Ninguna neurona válida (requieren id + output)' };
+    const warn = invalid > 0 ? ` · ${invalid} sin id/output ignoradas` : '';
+    return { ok: true, neurons: valid, msg: `✓ ${valid.length} neurona(s) lista(s)${warn}` };
+  } catch(e) {
+    // Try to give a useful line hint
+    const match = e.message.match(/position (\d+)/);
+    const hint = match ? ` (pos ${match[1]})` : '';
+    return { ok: false, neurons: [], msg: `⚠ JSON inválido${hint}: ${e.message.slice(0,60)}` };
+  }
+}
+
+function onPasteNeuronsInput() {
+  const ta  = document.getElementById('paste-neurons-input');
+  const st  = document.getElementById('paste-neurons-status');
+  const btn = document.getElementById('paste-neurons-btn');
+  if (!ta || !st || !btn) return;
+
+  const { ok, neurons, msg } = parsePasteNeurons(ta.value);
+  st.textContent = msg;
+  st.className = 'paste-json-status' + (ok ? ' ok' : (ta.value.trim() ? ' err' : ''));
+  ta.className  = 'paste-json-textarea' + (ok ? ' valid' : (ta.value.trim() ? ' invalid' : ''));
+  btn.disabled  = !ok;
+  btn.textContent = ok ? `✦ Cargar ${neurons.length}` : '✦ Cargar';
+}
+
+function clearPasteNeurons() {
+  const ta  = document.getElementById('paste-neurons-input');
+  const st  = document.getElementById('paste-neurons-status');
+  const btn = document.getElementById('paste-neurons-btn');
+  if (ta)  { ta.value = ''; ta.className = 'paste-json-textarea'; }
+  if (st)  { st.textContent = 'Esperando JSON…'; st.className = 'paste-json-status'; }
+  if (btn) { btn.disabled = true; btn.textContent = '✦ Cargar'; }
+}
+
+async function importPastedNeurons() {
+  const ta  = document.getElementById('paste-neurons-input');
+  const btn = document.getElementById('paste-neurons-btn');
+  const st  = document.getElementById('paste-neurons-status');
+  if (!ta) return;
+
+  const { ok, neurons, msg } = parsePasteNeurons(ta.value);
+  if (!ok || !neurons.length) { showToast(msg, 'error'); return; }
+
+  btn.disabled = true;
+  btn.textContent = '⟳ Cargando…';
+
+  try {
+    let imported = 0;
+    for (const n of neurons) {
+      // Ensure minimum required fields with sensible defaults
+      const neuron = {
+        peso: 0.75,
+        clusters: [],
+        triggers: [],
+        match: 'any',
+        tags: [],
+        createdAt: new Date().toISOString(),
+        validationStatus: 'imported_paste',
+        sourceTextType: 'manual_json',
+        ...n,
+      };
+      await dbPut('trainingNeurons', neuron);
+      // Also register weight
+      await dbPut('neuronWeights', {
+        id: neuron.id,
+        weight: neuron.peso || 0.75,
+        source: 'paste_import',
+      });
+      imported++;
+    }
+
+    await updateNeuronCounter();
+    await refreshGraphLive().catch(() => {});
+
+    st.textContent = `✓ ${imported} neurona(s) cargadas en Training Room`;
+    st.className = 'paste-json-status ok';
+    btn.textContent = `✦ Cargar ${neurons.length}`;
+    btn.disabled = false;
+
+    showToast(`${imported} neurona(s) cargadas correctamente ✦`, 'success');
+
+    // Auto-clear after 3s
+    setTimeout(() => {
+      clearPasteNeurons();
+    }, 3000);
+
+  } catch(e) {
+    showToast('Error al guardar: ' + e.message, 'error');
+    btn.disabled = false;
+    btn.textContent = `✦ Cargar ${neurons.length}`;
   }
 }
 
