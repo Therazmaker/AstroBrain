@@ -4416,7 +4416,13 @@ async function matchNeuronsForTransit(triggers) {
   const trainingIds = new Set(fromTraining.map(n => n.id));
   const baseFiltered = fromBase.filter(n => !trainingIds.has(n.id));
 
-  return deduplicateNeurons([...fromTraining, ...baseFiltered]);
+  const allMatched = [...fromTraining, ...baseFiltered];
+  // Build the full coverage set from ALL matching neurons before the display limit is applied.
+  // This ensures the missing-trigger check is not restricted to the top-5 displayed neurons.
+  const allMatchedTriggers = new Set(
+    allMatched.flatMap(n => (n.triggers || n.tags || []).map(t => String(t).toLowerCase()))
+  );
+  return { neurons: deduplicateNeurons(allMatched), allMatchedTriggers };
 }
 
 // ─── CSS para las tarjetas neuronales ───────────────────────
@@ -4783,7 +4789,7 @@ async function renderImpactoPersonal(result) {
   // ── NEURONAS ACTIVADAS ──
   if (hasCasa) {
     const triggers = buildTriggersForTransit(primary, primary._casa, primary._signo);
-    const neurons  = await matchNeuronsForTransit(triggers);
+    const { neurons, allMatchedTriggers } = await matchNeuronsForTransit(triggers);
 
     if (!neurons.length) {
       html += `<div class="ni-no-sign">No se encontraron neuronas específicas para esta combinación.<br>
@@ -4888,9 +4894,9 @@ async function renderImpactoPersonal(result) {
     // ── NEURONAS ESPECÍFICAS FALTANTES ──
     // Find compound triggers (planet_aspect_target, planet_en_sign) that no matched neuron covers
     const allTriggers    = buildTriggersForTransit(primary, primary._casa, primary._signo);
-    const coveredTriggers = new Set(
-      neurons.flatMap(n => (n.triggers || n.tags || []).map(t => t.toLowerCase()))
-    );
+    // Use the full set of all matched neurons (not only the top-5 displayed) so training neurons
+    // that scored below the display cutoff still suppress the "missing" chip for their triggers.
+    const coveredTriggers = allMatchedTriggers;
     // Only suggest the compound triggers that aren't generic house/alias triggers
     const genericPrefixes = /^(casa_|moon_casa_)/;
     const missingSpecific = allTriggers.filter(t =>
@@ -7400,6 +7406,8 @@ async function guardarNeuronasTraining() {
   await refreshGraphLive();
   await enviarNeuronasAlGrafo(false);
   await updateNeuronCounter();
+  // Re-render the NI interpretation panel so newly saved neurons are reflected immediately
+  if (_niLastResult) renderImpactoPersonal(_niLastResult);
 }
 
 async function obtenerNeuronasTrainingGuardadas() {
