@@ -2260,6 +2260,8 @@
     border-radius: 12px;
     padding: 16px 18px;
     max-width: 280px;
+    max-height: 320px;
+    overflow-y: auto;
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.2s;
@@ -2306,6 +2308,89 @@
   .gt-focus { color: rgba(77,208,196,0.85); line-height: 1.4; }
   .gt-avoid::before { content: "✕ "; opacity: 0.6; }
   .gt-focus::before { content: "✦ "; opacity: 0.6; }
+
+  /* ─── BRAINPOWER INDICATOR ──────────────────────────── */
+  .graph-brainpower {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 6px;
+  }
+  .gbp-label {
+    font-family: var(--font-mono);
+    font-size: 0.52rem;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .gbp-bar-track {
+    width: 100px;
+    height: 5px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .gbp-bar-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #4dd0c4, #9b72f5);
+    transition: width 0.6s ease;
+  }
+  .gbp-value {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--teal);
+    min-width: 30px;
+  }
+
+  /* ─── NEURON SUGGESTIONS PANEL ─────────────────────── */
+  .graph-suggestions {
+    position: absolute;
+    bottom: 60px;
+    right: 16px;
+    width: 220px;
+    background: rgba(14,12,26,0.93);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(155,114,245,0.3);
+    border-radius: 10px;
+    z-index: 9;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+  }
+  .gs-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .gs-title { color: #9b72f5; font-size: 0.6rem; }
+  .gs-toggle { color: var(--text-muted); font-size: 0.7rem; transition: transform 0.2s; }
+  .gs-toggle.collapsed { transform: rotate(-90deg); }
+  .gs-body {
+    padding: 0 12px 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .gs-body.hidden { display: none; }
+  .gs-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 4px 6px;
+    border-radius: 5px;
+    background: rgba(155,114,245,0.06);
+    border: 1px solid rgba(155,114,245,0.15);
+  }
+  .gs-planet { color: var(--text-secondary); flex: 1; }
+  .gs-hint { color: var(--text-muted); font-size: 0.52rem; flex: 2; }
+  .gs-empty { color: var(--text-muted); font-size: 0.58rem; text-align: center; padding: 8px 0; }
 
   /* ─── DEV PANEL section title overrides ─────────── */
   .dev-section-title { color: var(--teal); }
@@ -2955,7 +3040,14 @@
       <div class="graph-modal-header">
         <div>
           <div class="graph-modal-title">Red Neuronal</div>
-          <div class="graph-modal-sub">210 NEURONAS · FÍSICA INTERACTIVA</div>
+          <div class="graph-modal-sub" id="graph-modal-sub">— NEURONAS · FÍSICA INTERACTIVA</div>
+          <div class="graph-brainpower" id="graph-brainpower-wrap">
+            <span class="gbp-label">BRAINPOWER</span>
+            <div class="gbp-bar-track">
+              <div class="gbp-bar-fill" id="gbp-bar-fill"></div>
+            </div>
+            <span class="gbp-value" id="gbp-value">0%</span>
+          </div>
         </div>
         <div class="graph-modal-controls">
           <div class="aspect-filters">
@@ -2989,6 +3081,13 @@
           <div class="gl-item"><span class="gl-line" style="background:#9b72f5"></span>Sextil</div>
           <div class="gl-item"><span class="gl-line" style="background:#4dd0c4"></span>Conexión Training Room</div>
           <div class="gl-item"><span class="gl-line" style="background:#9b72f5"></span>Conexión por Signals</div>
+        </div>
+        <div class="graph-suggestions" id="graph-suggestions">
+          <div class="gs-header" onclick="toggleGraphSuggestions()">
+            <span class="gs-title">✦ Neuronas sugeridas</span>
+            <span class="gs-toggle" id="gs-toggle">▾</span>
+          </div>
+          <div class="gs-body" id="gs-body"></div>
         </div>
         <div class="graph-tooltip" id="graph-tooltip"></div>
       </div>
@@ -7832,6 +7931,7 @@ async function refreshGraphLive() {
   rebuildGraphNodes();
   buildEdges();
   if (isGraphOpen()) startGraphLoop();
+  if (isGraphOpen()) updateGraphStats();
 }
 
 async function openGraphModal() {
@@ -7840,6 +7940,7 @@ async function openGraphModal() {
   await refreshGraphData();
   if (!graphInitialized) { initGraph(); graphInitialized = true; }
   else { rebuildGraphNodes(); buildEdges(); startGraphLoop(); }
+  updateGraphStats();
 }
 
 function closeGraphModal() {
@@ -7848,6 +7949,84 @@ function closeGraphModal() {
   pinnedNodeId = null;
   hideTooltip();
   if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }
+}
+
+function updateGraphStats() {
+  const total = trainingGraphNeurons.length;
+  // Brainpower: score based on neuron count (target: 30+ neurons = 100%)
+  // Bonus for signal connections and cross-planet coverage
+  const coveredPlanets = new Set();
+  trainingGraphNeurons.forEach(n => {
+    resolveNeuronGraphLinks(n).forEach(l => coveredPlanets.add(l.target));
+    (n.triggers || []).forEach(t => {
+      const mapped = TRIGGER_PLANET_MAP[t.split('_')[0]];
+      if (mapped) coveredPlanets.add(mapped);
+    });
+  });
+  const planetCoverage = Math.min(coveredPlanets.size / PLANETS_LIST.length, 1);
+  const neuronScore = Math.min(total / 30, 1);
+  const signalBonus = Math.min(signalEdgesCache.length / 10, 0.1);
+  const power = Math.round((neuronScore * 0.6 + planetCoverage * 0.4 + signalBonus) * 100);
+
+  const subEl = document.getElementById('graph-modal-sub');
+  if (subEl) subEl.textContent = `${total} NEURONAS · FÍSICA INTERACTIVA`;
+
+  const fillEl = document.getElementById('gbp-bar-fill');
+  const valEl = document.getElementById('gbp-value');
+  if (fillEl) fillEl.style.width = power + '%';
+  if (valEl) valEl.textContent = power + '%';
+
+  renderGraphSuggestions();
+}
+
+function computeGraphSuggestions() {
+  // Find planets with no training neuron connections
+  const coveredPlanets = new Set();
+  trainingGraphNeurons.forEach(n => {
+    resolveNeuronGraphLinks(n).forEach(l => coveredPlanets.add(l.target));
+    (n.triggers || []).forEach(t => {
+      const mapped = TRIGGER_PLANET_MAP[t.split('_')[0]];
+      if (mapped) coveredPlanets.add(mapped);
+    });
+    (n.clusters || []).forEach(c => {
+      const mapped = CLUSTER_PLANET_MAP[c.toLowerCase()];
+      if (mapped) coveredPlanets.add(mapped);
+    });
+  });
+
+  const suggestions = [];
+  PLANETS_LIST.forEach(planet => {
+    if (!coveredPlanets.has(planet)) {
+      const label = PLANET_LABELS[planet] || planet;
+      const trigger = planet.toLowerCase();
+      suggestions.push({ planet, label, trigger });
+    }
+  });
+  return suggestions;
+}
+
+function renderGraphSuggestions() {
+  const suggestions = computeGraphSuggestions();
+  const body = document.getElementById('gs-body');
+  if (!body) return;
+  if (!suggestions.length) {
+    body.innerHTML = `<div class="gs-empty">✦ Todos los planetas cubiertos</div>`;
+    return;
+  }
+  body.innerHTML = suggestions.map(s =>
+    `<div class="gs-item">
+      <span class="gs-planet" style="color:${PLANET_COLORS[s.planet]||'#90a4ae'}">${s.label}</span>
+      <span class="gs-hint">sin neurona</span>
+    </div>`
+  ).join('');
+}
+
+function toggleGraphSuggestions() {
+  const body = document.getElementById('gs-body');
+  const toggle = document.getElementById('gs-toggle');
+  if (!body || !toggle) return;
+  const collapsed = body.classList.toggle('hidden');
+  toggle.classList.toggle('collapsed', collapsed);
 }
 
 function filterAspect(aspect, btn) {
@@ -8137,10 +8316,12 @@ function draw() {
 
 function bindCanvasEvents(canvas) {
   let hoveredNode = null;
+  let wasDragging = false;
 
   canvas.addEventListener('mousedown', e => {
     const pos = canvasPos(e, canvas);
     const node = nodeAt(pos);
+    wasDragging = false;
     if (node) { dragging = node; canvas.style.cursor = 'grabbing'; }
     else { isPanning = true; panStart = {x: e.clientX - camX, y: e.clientY - camY}; }
   });
@@ -8148,6 +8329,7 @@ function bindCanvasEvents(canvas) {
   canvas.addEventListener('mousemove', e => {
     const pos = canvasPos(e, canvas);
     if (dragging) {
+      wasDragging = true;
       dragging.x = pos.x; dragging.y = pos.y;
       dragging.vx = 0; dragging.vy = 0;
     } else if (isPanning && panStart) {
@@ -8155,25 +8337,23 @@ function bindCanvasEvents(canvas) {
       camY = e.clientY - panStart.y;
     } else {
       const node = nodeAt(pos);
-      if (!pinnedNodeId) {
-        if (node !== hoveredNode) {
-          hoveredNode = node;
-          if (node) showTooltip(node, e);
-          else hideTooltip();
-        } else if (node) {
-          moveTooltip(e);
-        }
-      }
+      hoveredNode = node;
       canvas.style.cursor = node ? 'pointer' : 'grab';
     }
   });
 
   canvas.addEventListener('click', e => {
+    if (wasDragging) { wasDragging = false; return; }
     const pos = canvasPos(e, canvas);
     const node = nodeAt(pos);
     if (node) {
-      pinnedNodeId = node.id;
-      showTooltip(node, e, true);
+      if (pinnedNodeId === node.id) {
+        pinnedNodeId = null;
+        hideTooltip();
+      } else {
+        pinnedNodeId = node.id;
+        showTooltip(node);
+      }
     } else {
       pinnedNodeId = null;
       hideTooltip();
@@ -8186,7 +8366,7 @@ function bindCanvasEvents(canvas) {
   });
 
   canvas.addEventListener('mouseleave', () => {
-    dragging = null; isPanning = false; hideTooltip();
+    dragging = null; isPanning = false;
   });
 
   canvas.addEventListener('wheel', e => {
@@ -8236,7 +8416,7 @@ function nodeAt(pos) {
   }) || null;
 }
 
-function showTooltip(node, e, isPinned = false) {
+function showTooltip(node) {
   const tip = document.getElementById('graph-tooltip');
   const nodeEdges = edges.filter(ed => ed.source === node.id || ed.target === node.id);
   const byTarget = {};
@@ -8272,7 +8452,7 @@ function showTooltip(node, e, isPinned = false) {
     : '';
 
   tip.innerHTML = `
-    <div class="gt-planet" style="color:${node.color}">${node.label}${isPinned ? ' · seleccionado' : ''}</div>
+    <div class="gt-planet" style="color:${node.color}">${node.label} <span style="font-size:0.5rem;opacity:0.5">· click para cerrar</span></div>
     ${data ? `<div style="font-size:0.58rem;color:var(--text-secondary);line-height:1.4;margin-bottom:8px">
       <div><b>ID:</b> ${data.id}</div>
       <div><b>Triggers:</b> ${(data.triggers || []).join(', ') || '—'}</div>
@@ -8285,18 +8465,39 @@ function showTooltip(node, e, isPinned = false) {
     ${items || '<div style="color:var(--text-muted);font-size:0.6rem">Sin conexiones visibles</div>'}
   `;
 
-  moveTooltip(e);
+  moveTooltipToNode(node);
   tip.classList.add('visible');
 }
 
-function moveTooltip(e) {
+function moveTooltipToNode(node) {
   const tip = document.getElementById('graph-tooltip');
-  const modal = document.getElementById('graph-modal');
-  const rect = modal.getBoundingClientRect();
-  let x = e.clientX - rect.left + 16;
-  let y = e.clientY - rect.top + 16;
-  if (x + 290 > rect.width) x = e.clientX - rect.left - 300;
-  if (y + 200 > rect.height) y = e.clientY - rect.top - 220;
+  const canvas = document.getElementById('graph-canvas');
+  const body = document.querySelector('.graph-body');
+  const bodyRect = body.getBoundingClientRect();
+  const canvasRect = canvas.getBoundingClientRect();
+
+  // Convert canvas-space node coords to screen coords
+  const screenX = canvasRect.left + node.x * camScale + camX;
+  const screenY = canvasRect.top + node.y * camScale + camY;
+
+  // Position relative to graph-body
+  const relX = screenX - bodyRect.left;
+  const relY = screenY - bodyRect.top;
+
+  const tipW = 290;
+  const tipH = 260;
+  const nodeR = node.radius * camScale + 6;
+
+  // Prefer above the node
+  let x = relX - tipW / 2;
+  let y = relY - tipH - nodeR;
+
+  // Clamp horizontally
+  x = Math.max(8, Math.min(x, bodyRect.width - tipW - 8));
+
+  // If above goes off-screen, place below
+  if (y < 8) y = relY + nodeR;
+
   tip.style.left = x + 'px';
   tip.style.top = y + 'px';
 }
