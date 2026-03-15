@@ -639,6 +639,17 @@
   .nsig-energy { color: var(--gold-dim); border-color: var(--gold-dim); background: var(--gold-glow); }
   .nsig-cluster { color: var(--violet-dim); border-color: var(--violet-glow); background: var(--violet-glow); }
   .nsig-meta { color: var(--teal-dim); border-color: rgba(77,208,196,0.2); background: rgba(77,208,196,0.06); }
+  .nsig-neural { color: rgba(77,208,196,0.85); border-color: rgba(77,208,196,0.35); background: rgba(77,208,196,0.07); }
+
+  /* ─── NARRATIVE BODY: neural-enriched state ──────────── */
+  .narrative-section.neural-enriched .narrative-body {
+    border-color: rgba(212,168,67,0.35);
+    background: linear-gradient(160deg, rgba(212,168,67,0.04) 0%, var(--card) 45%);
+  }
+  .narrative-section.neural-enriched .narrative-body::before {
+    color: var(--gold);
+    opacity: 0.15;
+  }
 
   /* ─── NATAL PROFILE STRIP ────────────────────────── */
   .natal-strip {
@@ -4589,6 +4600,14 @@ function injectNeuronStyles() {
     }
     details[open].ni-detail-toggle summary::before { transform: rotate(90deg); }
     details.ni-detail-toggle summary:hover { color: var(--text-secondary); }
+
+    /* ── Narrative block sin párrafo duplicado ── */
+    .ni-narrative-block {
+      padding-bottom: 14px;
+    }
+    .ni-narrative-block .ni-clusters {
+      margin-top: 10px;
+    }
   `;
   document.head.appendChild(style);
 }
@@ -4720,19 +4739,34 @@ async function renderImpactoPersonal(result) {
       html += `<div class="ni-no-sign">No se encontraron neuronas específicas para esta combinación.<br>
         <span style="font-size:0.82rem">Agrega neuronas en el Training Room con trigger <code>casa_${primary._casa}_activa</code> para enriquecer esta lectura.</span></div>`;
     } else {
-      // ── Sintetizar outputs de todas las neuronas en un solo objeto ──
-      const synthesized = {
-        energy: neurons.map(n => n.output?.energy).filter(Boolean).join('. '),
-        avoid:  neurons[0]?.output?.avoid  || '',
-        use:    neurons[0]?.output?.use    || '',
-        focus:  neurons.map(n => n.output?.focus).filter(Boolean).join(', '),
-        tone:   'activa',
+      // ── Señales unificadas: combinar datos neuronales con narrativa de tránsitos ──
+      const unifiedSignals = {
+        energy: neurons.map(n => n.output?.energy).filter(Boolean).join('. ') || result.narrative?.energy || '',
+        avoid:  neurons[0]?.output?.avoid  || result.narrative?.avoid  || '',
+        use:    neurons[0]?.output?.use    || result.narrative?.use    || '',
+        focus:  neurons.map(n => n.output?.focus).filter(Boolean).join(', ') || result.narrative?.focus || '',
+        tone:   result.tone || 'activa',
         transits: result.topTránsitos || [],
         metaSignals: result.metaSignals || [],
+        dominantCluster: result.dominantCluster,
       };
 
-      // ── Párrafo narrativo usando la voz del astrólogo ──
-      const narrativeParagraph = generateVoiceParagraph(synthesized);
+      // ── Actualizar el párrafo principal con contenido enriquecido neuralmente ──
+      const unifiedParagraph = generateVoiceParagraph(unifiedSignals);
+      const mainParagraph = document.getElementById('narrative-paragraph');
+      if (mainParagraph) mainParagraph.textContent = unifiedParagraph;
+
+      // Marcar la sección narrativa como enriquecida y agregar chip NEURONAL
+      const narrativeSection = document.getElementById('narrative-section');
+      if (narrativeSection) narrativeSection.classList.add('neural-enriched');
+      const signalsEl = document.getElementById('narrative-signals');
+      if (signalsEl && !signalsEl.querySelector('.nsig-neural')) {
+        const neuralChip = document.createElement('span');
+        neuralChip.className = 'nsig-chip nsig-neural';
+        neuralChip.textContent = '✦ NEURONAL';
+        signalsEl.appendChild(neuralChip);
+      }
+
       const isTrainingAny = neurons.some(n => n._source === 'training');
       const trainingBadge = isTrainingAny
         ? `<span style="font-size:0.52rem;color:rgba(77,208,196,0.8);border:1px solid rgba(77,208,196,0.25);border-radius:4px;padding:2px 7px;margin-left:8px;vertical-align:middle">TRAINING ROOM</span>`
@@ -4748,8 +4782,7 @@ async function renderImpactoPersonal(result) {
             <span class="ni-narrative-label">✦ LECTURA NEURONAL${trainingBadge}</span>
             <span class="ni-narrative-count">${neurons.length} neurona${neurons.length > 1 ? 's' : ''} activada${neurons.length > 1 ? 's' : ''}</span>
           </div>
-          <p class="ni-narrative-text">${narrativeParagraph.replace(/\n\n/g, '<br><br>')}</p>
-          ${clusterTags ? `<div class="ni-clusters" style="margin-top:12px">${clusterTags}</div>` : ''}
+          ${clusterTags ? `<div class="ni-clusters">${clusterTags}</div>` : ''}
         </div>
 
         <details class="ni-detail-toggle">
