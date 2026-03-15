@@ -4742,8 +4742,8 @@ async function renderImpactoPersonal(result) {
       // ── Señales unificadas: combinar datos neuronales con narrativa de tránsitos ──
       const unifiedSignals = {
         energy: neurons.map(n => n.output?.energy).filter(Boolean).join('. ') || result.narrative?.energy || '',
-        avoid:  neurons[0]?.output?.avoid  || result.narrative?.avoid  || '',
-        use:    neurons[0]?.output?.use    || result.narrative?.use    || '',
+        avoid:  neurons.map(n => n.output?.avoid).filter(Boolean).slice(0, 2).join(' y también ') || result.narrative?.avoid  || '',
+        use:    neurons.map(n => n.output?.use).filter(Boolean).slice(0, 2).join(' y también ') || result.narrative?.use    || '',
         focus:  neurons.map(n => n.output?.focus).filter(Boolean).join(', ') || result.narrative?.focus || '',
         tone:   result.tone || 'activa',
         transits: result.topTránsitos || [],
@@ -4822,11 +4822,17 @@ async function renderImpactoPersonal(result) {
 
     // ── TIP DE ENTRENAMIENTO ──
     const triggerSugerido = `${(PLANETAS_ES_TO_TRIGGER[primary.planet || primary.planeta] || 'luna')}_casa_${primary._casa}`;
+    const isTriggerCovered = neurons.some(n =>
+      (n.triggers || n.tags || []).some(t => t.toLowerCase() === triggerSugerido.toLowerCase())
+    );
     html += `
       <div class="ni-teach-tip">
         <strong>✦ ENSEÑAR MÁS</strong> · Triggers activos: 
         <code>${buildTriggersForTransit(primary, primary._casa, primary._signo).slice(0,4).join(', ')}</code>
-        <br>Para enriquecer esta lectura, agrega una neurona con trigger <code>${triggerSugerido}</code> en el Training Room.
+        <br>${isTriggerCovered
+          ? `Neurona activa para <code>${triggerSugerido}</code>. Puedes agregar variantes adicionales en el Training Room.`
+          : `Para enriquecer esta lectura, agrega una neurona con trigger <code>${triggerSugerido}</code> en el Training Room.`
+        }
       </div>`;
 
   } else {
