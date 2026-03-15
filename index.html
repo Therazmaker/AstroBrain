@@ -3040,7 +3040,7 @@
       <div class="graph-modal-header">
         <div>
           <div class="graph-modal-title">Red Neuronal</div>
-          <div class="graph-modal-sub" id="graph-modal-sub">— NEURONAS · FÍSICA INTERACTIVA</div>
+          <div class="graph-modal-sub" id="graph-modal-sub">0 NEURONAS · FÍSICA INTERACTIVA</div>
           <div class="graph-brainpower" id="graph-brainpower-wrap">
             <span class="gbp-label">BRAINPOWER</span>
             <div class="gbp-bar-track">
@@ -8452,7 +8452,7 @@ function showTooltip(node) {
     : '';
 
   tip.innerHTML = `
-    <div class="gt-planet" style="color:${node.color}">${node.label} <span style="font-size:0.5rem;opacity:0.5">· click para cerrar</span></div>
+    <div class="gt-planet" style="color:${node.color}">${node.label} <span style="font-size:0.58rem;opacity:0.7">· click para cerrar</span></div>
     ${data ? `<div style="font-size:0.58rem;color:var(--text-secondary);line-height:1.4;margin-bottom:8px">
       <div><b>ID:</b> ${data.id}</div>
       <div><b>Triggers:</b> ${(data.triggers || []).join(', ') || '—'}</div>
@@ -8484,8 +8484,9 @@ function moveTooltipToNode(node) {
   const relX = screenX - bodyRect.left;
   const relY = screenY - bodyRect.top;
 
-  const tipW = 290;
-  const tipH = 260;
+  // Use actual tooltip dimensions (element is in DOM but opacity:0, so offsetWidth is valid)
+  const tipW = tip.offsetWidth || 280;
+  const tipH = tip.offsetHeight || 260;
   const nodeR = node.radius * camScale + 6;
 
   // Prefer above the node
