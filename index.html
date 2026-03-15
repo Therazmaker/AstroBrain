@@ -3889,6 +3889,24 @@
   </div>
 </div>
 
+<!-- MODAL ENTRENAR NEURONA DESDE NI -->
+<div class="training-import-overlay" id="ni-train-modal-overlay" onclick="if(event.target===this)cerrarNITrainModal()">
+  <div class="training-import-modal">
+    <div class="panel-title" style="display:flex;align-items:center;justify-content:space-between">
+      <span>Entrenar neurona: <code id="ni-train-modal-title" style="color:var(--gold);font-size:0.85em"></code></span>
+      <button class="btn-training-room" style="padding:4px 10px;font-size:0.7rem" onclick="cerrarNITrainModal()">✕ Cerrar</button>
+    </div>
+    <div class="panel-sub" style="margin-bottom:10px">EDITA EL JSON Y GUARDA PARA ACTUALIZAR EL TEXTO</div>
+    <textarea id="ni-train-modal-json" style="min-height:260px" aria-label="JSON de la neurona para editar" placeholder='{"id":"...","match":"...","triggers":["..."],"clusters":["contextual"],"peso":0.75,"output":{"energy":"...","avoid":"...","use":"...","focus":"..."}}'></textarea>
+    <div class="training-room-actions" style="margin-top:10px">
+      <button class="btn-training-room" onclick="validarJSONNITrain()">Validar</button>
+      <button class="btn-training-room" onclick="guardarNeuronaDesdNIModal()">✦ Guardar neurona</button>
+      <button class="btn-training-room" onclick="cerrarNITrainModal()">Cerrar</button>
+    </div>
+    <div class="training-import-feedback" id="ni-train-modal-feedback">Carga tu JSON corregido y presiona Guardar.</div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -4559,6 +4577,14 @@ function injectNeuronStyles() {
       border-radius: 4px; padding: 2px 7px;
       font-size: 0.65rem; color: var(--gold);
     }
+    .ni-missing-triggers code.ni-trigger-clickable {
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .ni-missing-triggers code.ni-trigger-clickable:hover {
+      background: rgba(245,159,68,0.22);
+      border-color: rgba(245,159,68,0.55);
+    }
     .ni-create-neurons-btn {
       margin-top: 4px;
       background: rgba(245,159,68,0.12);
@@ -4881,7 +4907,7 @@ async function renderImpactoPersonal(result) {
         casa:     primary._casa,
       };
       const chipList = missingSpecific
-        .map(t => `<code>${t}</code>`)
+        .map(t => `<code class="ni-trigger-clickable" onclick="abrirModalEntrenarNeurona(this.dataset.trigger)" data-trigger="${t.replace(/"/g, '&quot;')}" title="Click para entrenar esta neurona">${t}</code>`)
         .join('');
       html += `
         <div class="ni-missing-notice">
@@ -5680,6 +5706,7 @@ function renderResult(result, isRaw=false) {
   document.getElementById('narrative-signals').innerHTML = chips.join('');
 
   // ── Impacto Personal por Ascendente ──
+  _niLastResult = result;
   renderImpactoPersonal(result); // async — renders when ready
 
   section.classList.add('visible');
@@ -5970,6 +5997,8 @@ function irATrainingRoom() {
 
 // Module-level context set by the neural display so the button can call this without args
 let _niPendingNeuronContext = null;
+let _niLastResult = null;
+let _niTrainModalTrigger = null;
 
 /**
  * Creates blank draft neurons in the Training Room for the specific triggers
@@ -6019,6 +6048,136 @@ function crearNeuronasEspecificasDesdeNI() {
   _niPendingNeuronContext = null;
   const plural = newDrafts.length > 1 ? 's' : '';
   showToast(`${newDrafts.length} neurona${plural} creada${plural} en Training Room`, 'success');
+}
+
+// ─── MODAL ENTRENAR NEURONA DESDE NI ────────────────────────
+
+async function abrirModalEntrenarNeurona(trigger) {
+  _niTrainModalTrigger = trigger;
+  const overlay = document.getElementById('ni-train-modal-overlay');
+  const titleEl = document.getElementById('ni-train-modal-title');
+  const ta      = document.getElementById('ni-train-modal-json');
+  const fb      = document.getElementById('ni-train-modal-feedback');
+
+  titleEl.textContent = trigger;
+  fb.textContent = 'Carga tu JSON corregido y presiona Guardar.';
+  fb.style.color = 'var(--text-secondary)';
+
+  // Try to find an existing neuron that has this trigger
+  const allNeurons = await dbGetAll('trainingNeurons');
+  const existing = (allNeurons || []).find(n =>
+    [...(n.triggers || []), ...(n.tags || [])].map(t => t.toLowerCase()).includes(trigger.toLowerCase())
+  );
+
+  if (existing) {
+    ta.value = JSON.stringify(existing, null, 2);
+    fb.textContent = '✓ Neurona existente cargada. Edita el JSON y guarda.';
+    fb.style.color = 'var(--teal)';
+  } else {
+    // Pre-fill a template for the new neuron
+    const ctx = _niPendingNeuronContext || {};
+    const planet = ctx.planet || '';
+    const planetLabel = (typeof CUERPOS_ES !== 'undefined' && CUERPOS_ES[planet]) || planet;
+    const template = {
+      id: `ni_${trigger}_${typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID().slice(0,8) : Date.now()}`,
+      match: trigger.replace(/_/g, ' '),
+      triggers: [trigger],
+      clusters: ['contextual'],
+      signals: [],
+      peso: 0.75,
+      categoriaNarrativa: 'interpretación de tránsito',
+      tipoEvento: 'personal',
+      contexto: trigger,
+      output: {
+        energy: '',
+        avoid: '',
+        use: '',
+        focus: planetLabel ? planetLabel.toLowerCase() : trigger.replace(/_/g, ' '),
+      },
+      source: 'training_room',
+      sourceTextType: 'especifica_transito',
+      createdAt: new Date().toISOString(),
+      validationStatus: 'borrador',
+    };
+    ta.value = JSON.stringify(template, null, 2);
+    fb.textContent = 'Neurona nueva — completa los campos y guarda.';
+    fb.style.color = 'var(--gold)';
+  }
+
+  overlay.classList.add('open');
+}
+
+function cerrarNITrainModal() {
+  const overlay = document.getElementById('ni-train-modal-overlay');
+  overlay.classList.remove('open');
+  _niTrainModalTrigger = null;
+}
+
+function validarJSONNITrain() {
+  const ta = document.getElementById('ni-train-modal-json');
+  const fb = document.getElementById('ni-train-modal-feedback');
+  const raw = ta.value.trim();
+  if (!raw) {
+    fb.textContent = 'Pega un JSON antes de validar.';
+    fb.style.color = 'var(--rose)';
+    return;
+  }
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed.id)       { fb.style.color = 'var(--rose)'; fb.textContent = 'Falta el campo "id".'; return; }
+    if (!parsed.triggers) { fb.style.color = 'var(--rose)'; fb.textContent = 'Falta el campo "triggers".'; return; }
+    const warnings = [];
+    if (!parsed.match)            warnings.push('"match" vacío');
+    if (!parsed.output?.energy)   warnings.push('"output.energy" vacío');
+    if (!parsed.output?.focus)    warnings.push('"output.focus" vacío');
+    if (warnings.length) {
+      fb.style.color = 'var(--gold)';
+      fb.textContent = `JSON válido con advertencias: ${warnings.join(', ')}.`;
+    } else {
+      fb.style.color = 'var(--teal)';
+      fb.textContent = '✓ JSON válido y completo.';
+    }
+  } catch(e) {
+    fb.style.color = 'var(--rose)';
+    fb.textContent = `JSON mal formado: ${e.message}`;
+  }
+}
+
+async function guardarNeuronaDesdNIModal() {
+  const ta = document.getElementById('ni-train-modal-json');
+  const fb = document.getElementById('ni-train-modal-feedback');
+  const raw = ta.value.trim();
+  if (!raw) { fb.style.color='var(--rose)'; fb.textContent='El JSON está vacío.'; return; }
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch(e) {
+    fb.style.color = 'var(--rose)';
+    fb.textContent = `JSON mal formado: ${e.message}`;
+    return;
+  }
+  if (!parsed.id || !parsed.triggers) {
+    fb.style.color = 'var(--rose)';
+    fb.textContent = 'Faltan campos requeridos: id, triggers.';
+    return;
+  }
+  try {
+    await dbPut('trainingNeurons', parsed);
+    if (parsed.peso != null) {
+      await dbPut('neuronWeights', { id: parsed.id, weight: parsed.peso, source: 'ni_train_modal' });
+    }
+    await updateNeuronCounter();
+    await refreshGraphLive();
+    fb.style.color = 'var(--teal)';
+    fb.textContent = '✓ Neurona guardada correctamente.';
+    showToast(`Neurona "${parsed.id}" guardada`, 'success');
+    // Re-render the NI panel so missing chips update
+    if (_niLastResult) renderImpactoPersonal(_niLastResult);
+    setTimeout(() => cerrarNITrainModal(), 900);
+  } catch(e) {
+    fb.style.color = 'var(--rose)';
+    fb.textContent = `Error al guardar: ${e.message}`;
+  }
 }
 
 const trainingRoomState = {
