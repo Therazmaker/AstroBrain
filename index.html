@@ -3039,7 +3039,7 @@
             <textarea
               class="paste-json-textarea"
               id="paste-neurons-input"
-              placeholder='Pega aquí un array JSON de neuronas generadas con el prompt:&#10;[&#10;  {&#10;    "id": "luna_en_piscis_asc_acuario_casa_2",&#10;    "triggers": ["casa_2_activa", "moon_casa_2", "signo_piscis_activo"],&#10;    "match": "any",&#10;    "peso": 0.85,&#10;    "clusters": ["emocional", "valor"],&#10;    "output": {&#10;      "energy": "...",&#10;      "avoid": "...",&#10;      "use": "...",&#10;      "focus": "..."&#10;    }&#10;  }&#10;]'
+              placeholder='Acepta 3 formatos:&#10;&#10;① Array (12 neuronas del prompt):&#10;[{"id":"luna_en_piscis_asc_acuario_casa_2","triggers":["casa_2_activa","moon_casa_2"],"peso":0.85,"clusters":["emocional"],"output":{"energy":"...","avoid":"...","use":"...","focus":"..."}}]&#10;&#10;② Neurona sola:&#10;{"id":"mi_neurona","triggers":["casa_5_activa"],"peso":0.8,"clusters":["creatividad"],"output":{"energy":"...","avoid":"...","use":"...","focus":"..."}}&#10;&#10;③ Objeto con key neurons:&#10;{"neurons":[{"id":"..."}]}'
               oninput="onPasteNeuronsInput()"
               spellcheck="false"
             ></textarea>
@@ -4338,34 +4338,56 @@ function buildTriggersForTransit(transit, casa, signoTransito) {
 }
 
 // Match y rankea neuronas contra los triggers del tránsito
-function matchNeuronsForTransit(triggers) {
-  const triggerSet = new Set(triggers.map(t => t.toLowerCase()));
+// Busca en CASA_NEURONS (embebidas) + trainingNeurons (IndexedDB) en paralelo
+async function getTrainingNeuronsForMatch() {
+  try {
+    const all = await dbGetAll('trainingNeurons');
+    return (all || []).filter(n => n && n.id && n.output && (n.triggers || n.tags));
+  } catch(_) { return []; }
+}
 
-  const scored = CASA_NEURONS.map(neuron => {
-    const nTriggers = (neuron.triggers || []).map(t => t.toLowerCase());
-    const matchCount = nTriggers.filter(t => triggerSet.has(t)).length;
-    if (matchCount === 0) return null;
+function scoreNeuronAgainstTriggers(neuron, triggerSet) {
+  const nTriggers = (neuron.triggers || neuron.tags || []).map(t => String(t).toLowerCase());
+  const matchCount = nTriggers.filter(t => triggerSet.has(t)).length;
+  if (matchCount === 0) return null;
+  const coverage = matchCount / nTriggers.length;
+  const peso = neuron.peso || neuron.weight || 0.5;
+  const score = peso * coverage * (0.5 + 0.5 * (matchCount / Math.max(triggerSet.size, 1)));
+  return { ...neuron, _matchCount: matchCount, _score: score };
+}
 
-    const coverage = matchCount / nTriggers.length;
-    const score = (neuron.peso || 0.5) * coverage * (0.5 + 0.5 * (matchCount / Math.max(triggerSet.size, 1)));
-    return { ...neuron, _matchCount: matchCount, _score: score };
-  }).filter(Boolean);
-
-  // Sort by score desc, deduplicate by output similarity
+function deduplicateNeurons(scored) {
   scored.sort((a, b) => b._score - a._score);
-
-  // Take top unique neurons (avoid near-duplicates)
   const seen = new Set();
   const unique = [];
   for (const n of scored) {
     const key = (n.output?.focus || n.id || '').slice(0, 40);
-    if (!seen.has(key)) {
-      seen.add(key);
-      unique.push(n);
-    }
+    if (!seen.has(key)) { seen.add(key); unique.push(n); }
     if (unique.length >= 5) break;
   }
   return unique;
+}
+
+async function matchNeuronsForTransit(triggers) {
+  const triggerSet = new Set(triggers.map(t => t.toLowerCase()));
+
+  // Score embebidas
+  const fromBase = CASA_NEURONS
+    .map(n => scoreNeuronAgainstTriggers(n, triggerSet))
+    .filter(Boolean);
+
+  // Score Training Room (IndexedDB) — marcadas con _source: 'training'
+  const trainingNeurons = await getTrainingNeuronsForMatch();
+  const fromTraining = trainingNeurons
+    .map(n => scoreNeuronAgainstTriggers(n, triggerSet))
+    .filter(Boolean)
+    .map(n => ({ ...n, _source: 'training' }));
+
+  // Training Room tiene prioridad: si existe una con el mismo id, la de training gana
+  const trainingIds = new Set(fromTraining.map(n => n.id));
+  const baseFiltered = fromBase.filter(n => !trainingIds.has(n.id));
+
+  return deduplicateNeurons([...fromTraining, ...baseFiltered]);
 }
 
 // ─── CSS para las tarjetas neuronales ───────────────────────
@@ -4509,6 +4531,64 @@ function injectNeuronStyles() {
       color: var(--teal-dim); line-height: 1.7;
     }
     .ni-teach-tip strong { color: var(--teal); }
+
+    /* ── Narrative block ── */
+    .ni-narrative-block {
+      background: linear-gradient(135deg, rgba(212,168,67,0.06), rgba(155,114,245,0.04));
+      border: 1px solid rgba(212,168,67,0.22);
+      border-radius: 14px;
+      padding: 20px 22px;
+      position: relative;
+    }
+    .ni-narrative-block::before {
+      content: '"';
+      position: absolute; top: 10px; left: 16px;
+      font-family: var(--font-display);
+      font-size: 3.5rem; line-height: 1;
+      color: var(--gold); opacity: 0.1;
+      pointer-events: none;
+    }
+    .ni-narrative-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .ni-narrative-label {
+      font-family: var(--font-mono);
+      font-size: 0.58rem; letter-spacing: 0.16em;
+      color: var(--gold); text-transform: uppercase;
+    }
+    .ni-narrative-count {
+      font-family: var(--font-mono);
+      font-size: 0.55rem; letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+    .ni-narrative-text {
+      font-family: var(--font-body);
+      font-size: 1.05rem; line-height: 1.82;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    /* ── Details / accordion ── */
+    details.ni-detail-toggle {
+      margin-top: 10px;
+    }
+    details.ni-detail-toggle summary {
+      font-family: var(--font-mono);
+      font-size: 0.6rem; letter-spacing: 0.12em;
+      color: var(--text-muted); text-transform: uppercase;
+      cursor: pointer; padding: 6px 2px;
+      list-style: none;
+      display: flex; align-items: center; gap: 6px;
+      transition: color 0.2s;
+      user-select: none;
+    }
+    details.ni-detail-toggle summary::before {
+      content: '▶'; font-size: 0.5rem;
+      transition: transform 0.2s;
+    }
+    details[open].ni-detail-toggle summary::before { transform: rotate(90deg); }
+    details.ni-detail-toggle summary:hover { color: var(--text-secondary); }
   `;
   document.head.appendChild(style);
 }
@@ -4584,7 +4664,7 @@ function renderHouseWheel(ascendente) {
 }
 
 // ─── RENDERIZAR IMPACTO PERSONAL CON NEURONAS REALES ────────
-function renderImpactoPersonal(result) {
+async function renderImpactoPersonal(result) {
   injectNeuronStyles();
   const section  = document.getElementById('impact-section');
   const cardsEl  = document.getElementById('impact-cards');
@@ -4634,44 +4714,80 @@ function renderImpactoPersonal(result) {
   // ── NEURONAS ACTIVADAS ──
   if (hasCasa) {
     const triggers = buildTriggersForTransit(primary, primary._casa, primary._signo);
-    const neurons  = matchNeuronsForTransit(triggers);
-
-    html += `<div class="ni-neurons-grid">`;
+    const neurons  = await matchNeuronsForTransit(triggers);
 
     if (!neurons.length) {
       html += `<div class="ni-no-sign">No se encontraron neuronas específicas para esta combinación.<br>
         <span style="font-size:0.82rem">Agrega neuronas en el Training Room con trigger <code>casa_${primary._casa}_activa</code> para enriquecer esta lectura.</span></div>`;
     } else {
-      neurons.forEach((n, idx) => {
-        const out    = n.output || {};
-        const peso   = (n.peso || n.weight || 0.5);
-        const pct    = Math.round(peso * 100);
-        const clusters = (n.clusters || []).map(c => `<span class="ni-cluster-tag">${c}</span>`).join('');
-        const isPrimary = idx === 0;
+      // ── Sintetizar outputs de todas las neuronas en un solo objeto ──
+      const synthesized = {
+        energy: neurons.map(n => n.output?.energy).filter(Boolean).join('. '),
+        avoid:  neurons[0]?.output?.avoid  || '',
+        use:    neurons[0]?.output?.use    || '',
+        focus:  neurons.map(n => n.output?.focus).filter(Boolean).join(', '),
+        tone:   'activa',
+        transits: result.topTránsitos || [],
+        metaSignals: result.metaSignals || [],
+      };
 
-        html += `
-          <div class="ni-neuron-card">
-            <div class="ni-neuron-head">
-              <div class="ni-neuron-id">${isPrimary ? '⬟ NEURONA PRINCIPAL' : '◇ NEURONA SECUNDARIA'} · ${n.id}</div>
-              <div class="ni-peso-bar">
-                <div class="ni-peso-track"><div class="ni-peso-fill" style="width:${pct}%"></div></div>
-                <div class="ni-peso-val">${peso.toFixed(2)}</div>
-              </div>
-            </div>
-            <div class="ni-rows">
-              ${out.energy ? `<div class="ni-row"><div class="ni-row-key energy">Energía</div><div class="ni-row-val">${out.energy}</div></div>` : ''}
-              ${out.avoid  ? `<div class="ni-row"><div class="ni-row-key avoid">Evitar</div><div class="ni-row-val">${out.avoid}</div></div>` : ''}
-              ${out.use    ? `<div class="ni-row"><div class="ni-row-key use">Usar</div><div class="ni-row-val">${out.use}</div></div>` : ''}
-              ${out.focus  ? `<div class="ni-row"><div class="ni-row-key focus">Foco</div><div class="ni-row-val">${out.focus}</div></div>` : ''}
-            </div>
-            ${clusters ? `<div class="ni-clusters">${clusters}</div>` : ''}
-          </div>`;
-      });
+      // ── Párrafo narrativo usando la voz del astrólogo ──
+      const narrativeParagraph = generateVoiceParagraph(synthesized);
+      const isTrainingAny = neurons.some(n => n._source === 'training');
+      const trainingBadge = isTrainingAny
+        ? `<span style="font-size:0.52rem;color:rgba(77,208,196,0.8);border:1px solid rgba(77,208,196,0.25);border-radius:4px;padding:2px 7px;margin-left:8px;vertical-align:middle">TRAINING ROOM</span>`
+        : '';
+
+      // Clusters únicos de todas las neuronas
+      const allClusters = [...new Set(neurons.flatMap(n => n.clusters || []))];
+      const clusterTags = allClusters.map(c => `<span class="ni-cluster-tag">${c}</span>`).join('');
+
+      html += `
+        <div class="ni-narrative-block">
+          <div class="ni-narrative-header">
+            <span class="ni-narrative-label">✦ LECTURA NEURONAL${trainingBadge}</span>
+            <span class="ni-narrative-count">${neurons.length} neurona${neurons.length > 1 ? 's' : ''} activada${neurons.length > 1 ? 's' : ''}</span>
+          </div>
+          <p class="ni-narrative-text">${narrativeParagraph.replace(/\n\n/g, '<br><br>')}</p>
+          ${clusterTags ? `<div class="ni-clusters" style="margin-top:12px">${clusterTags}</div>` : ''}
+        </div>
+
+        <details class="ni-detail-toggle">
+          <summary>Ver neuronas activadas</summary>
+          <div class="ni-neurons-grid" style="margin-top:10px">
+            ${neurons.map((n, idx) => {
+              const out  = n.output || {};
+              const peso = (n.peso || n.weight || 0.5);
+              const pct  = Math.round(peso * 100);
+              const clusters = (n.clusters || []).map(c => `<span class="ni-cluster-tag">${c}</span>`).join('');
+              const isPrimary  = idx === 0;
+              const isTraining = n._source === 'training';
+              const sourceTag  = isTraining
+                ? `<span style="font-size:0.5rem;color:rgba(77,208,196,0.8);border:1px solid rgba(77,208,196,0.3);border-radius:4px;padding:1px 6px;margin-left:6px">TR</span>`
+                : '';
+              return `
+                <div class="ni-neuron-card">
+                  <div class="ni-neuron-head">
+                    <div class="ni-neuron-id">${isPrimary ? '⬟' : '◇'} ${n.id}${sourceTag}</div>
+                    <div class="ni-peso-bar">
+                      <div class="ni-peso-track"><div class="ni-peso-fill" style="width:${pct}%"></div></div>
+                      <div class="ni-peso-val">${peso.toFixed(2)}</div>
+                    </div>
+                  </div>
+                  <div class="ni-rows">
+                    ${out.energy ? `<div class="ni-row"><div class="ni-row-key energy">Energía</div><div class="ni-row-val">${out.energy}</div></div>` : ''}
+                    ${out.avoid  ? `<div class="ni-row"><div class="ni-row-key avoid">Evitar</div><div class="ni-row-val">${out.avoid}</div></div>` : ''}
+                    ${out.use    ? `<div class="ni-row"><div class="ni-row-key use">Usar</div><div class="ni-row-val">${out.use}</div></div>` : ''}
+                    ${out.focus  ? `<div class="ni-row"><div class="ni-row-key focus">Foco</div><div class="ni-row-val">${out.focus}</div></div>` : ''}
+                  </div>
+                  ${clusters ? `<div class="ni-clusters">${clusters}</div>` : ''}
+                </div>`;
+            }).join('')}
+          </div>
+        </details>`;
     }
 
-    html += `</div>`;
-
-    // ── TIP DE ENTRENAMIENTO (siempre visible) ──
+    // ── TIP DE ENTRENAMIENTO ──
     const triggerSugerido = `${(PLANETAS_ES_TO_TRIGGER[primary.planet || primary.planeta] || 'luna')}_casa_${primary._casa}`;
     html += `
       <div class="ni-teach-tip">
@@ -5439,7 +5555,7 @@ function renderResult(result, isRaw=false) {
   document.getElementById('narrative-signals').innerHTML = chips.join('');
 
   // ── Impacto Personal por Ascendente ──
-  renderImpactoPersonal(result);
+  renderImpactoPersonal(result); // async — renders when ready
 
   section.classList.add('visible');
 
