@@ -4543,8 +4543,32 @@ function injectNeuronStyles() {
     }
     .ni-teach-tip strong { color: var(--teal); }
 
-    /* ── Narrative block ── */
-    .ni-narrative-block {
+    .ni-missing-notice {
+      margin-top: 12px;
+      background: rgba(245,159,68,0.06);
+      border: 1px solid rgba(245,159,68,0.25);
+      border-radius: 10px; padding: 12px 16px;
+      font-size: 0.72rem; line-height: 1.65;
+      color: var(--text-secondary);
+    }
+    .ni-missing-notice strong { color: var(--gold); }
+    .ni-missing-triggers { display:flex; flex-wrap:wrap; gap:5px; margin: 6px 0 10px; }
+    .ni-missing-triggers code {
+      background: rgba(245,159,68,0.1);
+      border: 1px solid rgba(245,159,68,0.2);
+      border-radius: 4px; padding: 2px 7px;
+      font-size: 0.65rem; color: var(--gold);
+    }
+    .ni-create-neurons-btn {
+      margin-top: 4px;
+      background: rgba(245,159,68,0.12);
+      border: 1px solid rgba(245,159,68,0.3);
+      border-radius: 7px; padding: 6px 14px;
+      color: var(--gold); font-size: 0.7rem;
+      cursor: pointer; letter-spacing: 0.04em;
+      transition: background 0.15s;
+    }
+    .ni-create-neurons-btn:hover { background: rgba(245,159,68,0.22); }
       background: linear-gradient(135deg, rgba(212,168,67,0.06), rgba(155,114,245,0.04));
       border: 1px solid rgba(212,168,67,0.22);
       border-radius: 14px;
@@ -4744,7 +4768,7 @@ async function renderImpactoPersonal(result) {
         energy: neurons.map(n => n.output?.energy).filter(Boolean).join('. ') || result.narrative?.energy || '',
         avoid:  neurons.map(n => n.output?.avoid).filter(Boolean).slice(0, 2).join(' y también ') || result.narrative?.avoid  || '',
         use:    neurons.map(n => n.output?.use).filter(Boolean).slice(0, 2).join(' y también ') || result.narrative?.use    || '',
-        focus:  neurons.map(n => n.output?.focus).filter(Boolean).join(', ') || result.narrative?.focus || '',
+        focus:  mergeFocusList(neurons.map(n => n.output?.focus).filter(Boolean)) || result.narrative?.focus || '',
         tone:   result.tone || 'activa',
         transits: result.topTránsitos || [],
         metaSignals: result.metaSignals || [],
@@ -4834,6 +4858,43 @@ async function renderImpactoPersonal(result) {
           : `Para enriquecer esta lectura, agrega una neurona con trigger <code>${triggerSugerido}</code> en el Training Room.`
         }
       </div>`;
+
+    // ── NEURONAS ESPECÍFICAS FALTANTES ──
+    // Find compound triggers (planet_aspect_target, planet_en_sign) that no matched neuron covers
+    const allTriggers    = buildTriggersForTransit(primary, primary._casa, primary._signo);
+    const coveredTriggers = new Set(
+      neurons.flatMap(n => (n.triggers || n.tags || []).map(t => t.toLowerCase()))
+    );
+    // Only suggest the compound triggers that aren't generic house/alias triggers
+    const genericPrefixes = /^(casa_|moon_casa_)/;
+    const missingSpecific = allTriggers.filter(t =>
+      !genericPrefixes.test(t) && !coveredTriggers.has(t.toLowerCase())
+    );
+
+    if (missingSpecific.length) {
+      // Store context so the create button can use it without passing args through HTML
+      _niPendingNeuronContext = {
+        triggers: missingSpecific,
+        planet:   primary.planet || primary.planeta || '',
+        aspect:   primary.aspect || primary.aspecto || '',
+        target:   primary.target || '',
+        casa:     primary._casa,
+      };
+      const chipList = missingSpecific
+        .map(t => `<code>${t}</code>`)
+        .join('');
+      html += `
+        <div class="ni-missing-notice">
+          <strong>⚠ Faltan neuronas específicas</strong>
+          <br>Para que el texto sea más preciso, se necesitan neuronas para:
+          <div class="ni-missing-triggers">${chipList}</div>
+          <button class="ni-create-neurons-btn" onclick="crearNeuronasEspecificasDesdeNI()">
+            ✦ Crear neuronas en Training Room
+          </button>
+        </div>`;
+    } else {
+      _niPendingNeuronContext = null;
+    }
 
   } else {
     // Sin signo — solo puede mostrar la rueda
@@ -5467,6 +5528,31 @@ const VOICE_EMOTION_MAP = [
 
 const PLANET_ES_MAP = { Moon:'Luna', Mars:'Marte', Saturn:'Saturno', Sun:'Sol', Venus:'Venus', Mercury:'Mercurio', Jupiter:'Júpiter' };
 
+// ── Agrupa ítems de foco que comparten "en/de casa N" para evitar repetición ──
+function mergeFocusList(items) {
+  const houseGroups = {}; // houseNum → [keyword strings]
+  const others = [];
+  for (const item of items) {
+    // Matches: "keyword en casa N", "keyword de casa N"
+    const m = item.match(/^(.+?)\s+(?:en\s+|de\s+)casa\s+(\d+)$/i);
+    if (m) {
+      const keyword = m[1].trim();
+      const houseNum = m[2];
+      if (!houseGroups[houseNum]) houseGroups[houseNum] = [];
+      houseGroups[houseNum].push(keyword);
+    } else {
+      others.push(item);
+    }
+  }
+  const grouped = Object.entries(houseGroups).map(([num, keywords]) => {
+    if (keywords.length === 1) return `${keywords[0]} en casa ${num}`;
+    const last = keywords[keywords.length - 1];
+    const rest = keywords.slice(0, -1);
+    return `${rest.join(', ')} y ${last} en casa ${num}`;
+  });
+  return [...grouped, ...others].join(', ');
+}
+
 function detectVoiceEmotion(energy, avoid) {
   const hay = (energy + ' ' + avoid).toLowerCase();
   for (const { keys, emotion } of VOICE_EMOTION_MAP) {
@@ -5880,6 +5966,59 @@ function showToast(msg, type='info') {
 function irATrainingRoom() {
   const section = document.getElementById('training-room');
   if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Module-level context set by the neural display so the button can call this without args
+let _niPendingNeuronContext = null;
+
+/**
+ * Creates blank draft neurons in the Training Room for the specific triggers
+ * that are missing from the neural display context.
+ */
+function crearNeuronasEspecificasDesdeNI() {
+  const ctx = _niPendingNeuronContext;
+  if (!ctx || !ctx.triggers.length) {
+    showToast('No hay triggers pendientes que crear.', 'info');
+    return;
+  }
+  const { triggers, planet, aspect, target, casa } = ctx;
+  const planetLabel = CUERPOS_ES[planet] || planet || '';
+  const targetLabel = CUERPOS_ES[target] || target || '';
+  const casaLabel   = casa ? `Casa ${casa}` : '';
+
+  const newDrafts = triggers.map((trigger, idx) => {
+    const id = `ni_specific_${Date.now()}_${idx + 1}`;
+    return evaluarEstadoDraftTraining({
+      id,
+      triggers: [trigger],
+      match: [planetLabel, aspect, targetLabel, casaLabel].filter(Boolean).join(' · '),
+      peso: 0.75,
+      clusters: ['contextual'],
+      output: {
+        energy: '',
+        avoid: '',
+        use:    '',
+        focus:  casaLabel ? `${planetLabel.toLowerCase()} en ${casaLabel.toLowerCase()}` : '',
+      },
+      categoriaNarrativa: 'interpretación de tránsito',
+      tipoEvento: 'personal',
+      contexto: trigger,
+      source: 'training_room',
+      sourceTextType: 'especifica_transito',
+      createdAt: new Date().toISOString(),
+      validationStatus: 'borrador',
+      estado: 'incompleta',
+      faltantes: [],
+      signals: [],
+    });
+  });
+
+  trainingRoomState.drafts.unshift(...newDrafts);
+  renderizarDraftsTraining();
+  irATrainingRoom();
+  _niPendingNeuronContext = null;
+  const plural = newDrafts.length > 1 ? 's' : '';
+  showToast(`${newDrafts.length} neurona${plural} creada${plural} en Training Room`, 'success');
 }
 
 const trainingRoomState = {
@@ -8028,6 +8167,13 @@ const TF_PLANET_ES = {
   Pluto: 'Plutón', Lilith: 'Lilith', Chiron: 'Quirón',
 };
 
+const TF_SIGN_ES = {
+  Aries: 'Aries', Taurus: 'Tauro', Gemini: 'Géminis', Cancer: 'Cáncer',
+  Leo: 'Leo', Virgo: 'Virgo', Libra: 'Libra', Scorpio: 'Escorpio',
+  Sagittarius: 'Sagitario', Capricorn: 'Capricornio', Aquarius: 'Acuario',
+  Pisces: 'Piscis',
+};
+
 const TF_SCORE_LABEL_ES = {
   premium_pick: 'Élite', strong_pick: 'Fuerte', usable_pick: 'Útil', low_priority: 'Bajo',
 };
@@ -8134,12 +8280,16 @@ function tfBuildFormPreset(transit, day) {
   const ctx = transit.context || {};
   const applyingRaw = ctx.isApplying !== undefined ? ctx.isApplying : transit.applying;
   const aspectState = TF_STATE_ES[applyingRaw] || '';
+  // Fall back to day.bodies for sign/degree when context fields are absent
+  const bodies = (day && day.bodies) ? day.bodies : {};
+  const planetBody = bodies[transit.planet] || {};
+  const targetBody = bodies[transit.target] || {};
   return {
     sectionA: {
       planet:   transit.planet || '',
       bodyType: 'Planeta',
-      sign:     ctx.planetSign || transit.sign || '',
-      degree:   ctx.planetDegree !== undefined ? ctx.planetDegree : (transit.degree ?? null),
+      sign:     ctx.planetSign || transit.sign || planetBody.sign || '',
+      degree:   ctx.planetDegree !== undefined ? ctx.planetDegree : (transit.degree ?? planetBody.degree ?? null),
       house:    ctx.house || transit.house || '',
     },
     sectionB: {
@@ -8150,8 +8300,8 @@ function tfBuildFormPreset(transit, day) {
     sectionC: {
       targetPlanet: transit.target || '',
       targetType:   'Planeta',
-      targetSign:   ctx.targetSign || '',
-      targetDegree: ctx.targetDegree !== undefined ? ctx.targetDegree : null,
+      targetSign:   ctx.targetSign || targetBody.sign || '',
+      targetDegree: ctx.targetDegree !== undefined ? ctx.targetDegree : (transit.targetDegree ?? targetBody.degree ?? null),
       house:        ctx.targetHouse || '',
     },
   };
@@ -8330,16 +8480,18 @@ function tfLoadIntoConstructor(preset) {
     const targetEs  = planetToEs[C.targetPlanet] || C.targetPlanet || '';
     const aspectEs  = B.aspectType ? (aspectToEs[B.aspectType.toLowerCase()] || B.aspectType) : '';
     const stateEs   = stateToEs[B.aspectState] || '';
+    // Normalize sign names: translate English names to Spanish for the form selects
+    const signToEs = TF_SIGN_ES;
 
     setSelect('et-planet', planetEs);
     setSelect('et-target', targetEs);
     setSelect('et-aspect', aspectEs);
     setInput('et-orb', B.orb);
     setSelect('et-applying', stateEs);
-    if (A.sign)         setSelect('et-planet-sign', A.sign);
+    if (A.sign)         setSelect('et-planet-sign', signToEs[A.sign] || A.sign);
     if (A.degree)       setInput('et-planet-degree', A.degree);
     if (A.house)        setSelect('et-planet-house', A.house);
-    if (C.targetSign)   setSelect('et-target-sign', C.targetSign);
+    if (C.targetSign)   setSelect('et-target-sign', signToEs[C.targetSign] || C.targetSign);
     if (C.targetDegree) setInput('et-target-degree', C.targetDegree);
     if (C.house)        setSelect('et-target-house', C.house);
 
