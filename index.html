@@ -2977,6 +2977,23 @@
 
   /* ─── TRANSIT VAULT ─────────────────────────────── */
   .transit-vault-section { margin-bottom: 48px; }
+  .section-actions { margin-left: auto; }
+  .section-toggle-btn { margin-left: 8px; }
+  .collapsible-section.collapsed > :not(.section-header) { display: none; }
+  .tv-toggle-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .tv-toggle-btn:hover { border-color: var(--violet-dim); color: var(--text-primary); }
+  .transit-vault-section.collapsed .tv-shell { display: none; }
   .tv-shell { background: var(--card); border:1px solid var(--border); border-radius:16px; padding:18px; }
   .tv-subtabs { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
   .tv-subtab-btn { background:var(--surface); border:1px solid var(--border); color:var(--text-secondary); border-radius:999px; padding:6px 12px; font-family:var(--font-mono); font-size:0.62rem; cursor:pointer; }
@@ -3491,38 +3508,8 @@
     </div>
   </section>
 
-  <!-- ── LOADER ── -->
-  <div class="loader" id="main-loader">
-    <div class="spinner"></div>
-    <span>PROCESANDO PIPELINE NEURONAL…</span>
-  </div>
-
-  <!-- ── NARRATIVE OUTPUT ── -->
-  <section class="narrative-section" id="narrative-section">
-    <div class="section-header">
-      <h2 class="section-title">Narrativa de Salida</h2>
-      <span class="section-badge" id="narrative-tone-badge">—</span>
-    </div>
-    <div class="narrative-body" id="narrative-body">
-      <p class="narrative-paragraph" id="narrative-paragraph"></p>
-      <div class="narrative-signals" id="narrative-signals"></div>
-
-      <!-- ── IMPACTO PERSONAL (aparece solo si hay ascendente) ── -->
-      <div class="impact-section" id="impact-section">
-        <div class="impact-header">
-          <div class="impact-header-line"></div>
-          <div class="impact-header-label">✦ Impacto Personal</div>
-          <div class="impact-header-line" style="background:linear-gradient(90deg,transparent,rgba(212,168,67,0.4))"></div>
-        </div>
-        <div class="impact-cards" id="impact-cards"></div>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider">
-
   <!-- ── TRANSIT FINDER ── -->
-  <section class="tf-section" id="tf-section">
+  <section class="tf-section collapsible-section collapsed" id="tf-section">
     <div class="section-header">
       <h2 class="section-title">Transit Finder</h2>
       <span class="section-badge">BÚSQUEDA AVANZADA</span>
@@ -3642,11 +3629,42 @@
 
   <hr class="divider">
 
+  <!-- ── LOADER ── -->
+  <div class="loader" id="main-loader">
+    <div class="spinner"></div>
+    <span>PROCESANDO PIPELINE NEURONAL…</span>
+  </div>
+
+  <!-- ── NARRATIVE OUTPUT ── -->
+  <section class="narrative-section collapsible-section collapsed" id="narrative-section">
+    <div class="section-header">
+      <h2 class="section-title">Narrativa de Salida</h2>
+      <span class="section-badge" id="narrative-tone-badge">—</span>
+    </div>
+    <div class="narrative-body" id="narrative-body">
+      <p class="narrative-paragraph" id="narrative-paragraph"></p>
+      <div class="narrative-signals" id="narrative-signals"></div>
+
+      <!-- ── IMPACTO PERSONAL (aparece solo si hay ascendente) ── -->
+      <div class="impact-section" id="impact-section">
+        <div class="impact-header">
+          <div class="impact-header-line"></div>
+          <div class="impact-header-label">✦ Impacto Personal</div>
+          <div class="impact-header-line" style="background:linear-gradient(90deg,transparent,rgba(212,168,67,0.4))"></div>
+        </div>
+        <div class="impact-cards" id="impact-cards"></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
   <!-- ── TRANSIT VAULT ── -->
-  <section class="transit-vault-section" id="transit-vault-section">
+  <section class="transit-vault-section collapsible-section collapsed" id="transit-vault-section">
     <div class="section-header">
       <h2 class="section-title">Transit Vault</h2>
       <span class="section-badge">BIBLIOTECA DE CIELO</span>
+      
     </div>
     <div class="tv-shell">
       <div class="tv-subtabs">
@@ -3704,7 +3722,7 @@
   <hr class="divider" id="divider-2" style="display:none">
 
   <!-- ── NEURAL ENGINE ── -->
-  <section class="engine-section reveal" id="engine-section">
+  <section class="engine-section reveal collapsible-section collapsed" id="engine-section">
     <div class="section-header">
       <h2 class="section-title">Motor Neuronal</h2>
       <span class="section-badge">ESTADO EN VIVO</span>
@@ -3823,7 +3841,7 @@
   <hr class="divider">
 
   <!-- ── CONTEXT MEMORY & META SIGNALS ── -->
-  <section class="memory-section reveal" id="memory-section">
+  <section class="memory-section reveal collapsible-section collapsed" id="memory-section">
     <div class="section-header">
       <h2 class="section-title">Memoria y Señales</h2>
       <span class="section-badge">INDEXEDDB</span>
@@ -3877,7 +3895,7 @@
   <hr class="divider">
 
   <!-- ── TRAINING ROOM ── -->
-  <section class="training-room-section reveal" id="training-room">
+  <section class="training-room-section reveal collapsible-section collapsed" id="training-room">
     <div class="section-header">
       <h2 class="section-title">Training Room</h2>
       <span class="section-badge">LABORATORIO DE ENTRENAMIENTO</span>
@@ -3962,7 +3980,7 @@
   <hr class="divider">
 
   <!-- ── HISTORY ── -->
-  <section class="history-section reveal">
+  <section class="history-section reveal collapsible-section collapsed" id="history-section">
     <div class="section-header">
       <h2 class="section-title">Historial de Sesiones</h2>
       <span class="section-badge" id="history-count">0 SESIONES</span>
@@ -7557,6 +7575,64 @@ window.addEventListener('scroll', () => {
   document.getElementById('fab').classList.toggle('visible', window.scrollY > 400);
 });
 
+function toggleSection(sectionId, forceExpanded) {
+  const section = document.getElementById(sectionId);
+  if (!section) return;
+
+  if (typeof forceExpanded === 'boolean') {
+    section.classList.toggle('collapsed', !forceExpanded);
+  } else {
+    section.classList.toggle('collapsed');
+  }
+
+  const isCollapsed = section.classList.contains('collapsed');
+  const toggleBtn = section.querySelector('[data-section-toggle]');
+  if (toggleBtn) toggleBtn.textContent = isCollapsed ? 'Mostrar' : 'Ocultar';
+}
+
+function initSectionToggles() {
+  const toggleSectionIds = [
+    'tf-section',
+    'narrative-section',
+    'transit-vault-section',
+    'engine-section',
+    'memory-section',
+    'training-room',
+    'history-section',
+  ];
+
+  toggleSectionIds.forEach(sectionId => {
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+
+    const header = section.querySelector('.section-header');
+    if (!header) return;
+
+    let actions = header.querySelector('.section-actions');
+    if (!actions) {
+      actions = document.createElement('div');
+      actions.className = 'section-actions';
+      header.appendChild(actions);
+    }
+
+    let btn = section.querySelector('[data-section-toggle]');
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'tv-toggle-btn section-toggle-btn';
+      btn.setAttribute('data-section-toggle', 'true');
+      btn.addEventListener('click', () => toggleSection(sectionId));
+      actions.appendChild(btn);
+    }
+
+    toggleSection(sectionId, !section.classList.contains('collapsed'));
+  });
+}
+
+function toggleTransitVault(forceExpanded) {
+  toggleSection('transit-vault-section', forceExpanded);
+}
+
 // ─────────────────────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────────────────────
@@ -7579,6 +7655,7 @@ window.addEventListener('scroll', () => {
       </div>
     `).join('');
   }
+  initSectionToggles();
 })();
 
 // ─────────────────────────────────────────────────────────────
