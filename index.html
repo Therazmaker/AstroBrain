@@ -2978,8 +2978,6 @@
   /* ─── TRANSIT VAULT ─────────────────────────────── */
   .transit-vault-section { margin-bottom: 48px; }
   .section-actions { margin-left: auto; }
-  .section-toggle-btn { margin-left: 8px; }
-  .collapsible-section.collapsed > :not(.section-header) { display: none; }
   .tv-toggle-btn {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -3636,7 +3634,7 @@
   </div>
 
   <!-- ── NARRATIVE OUTPUT ── -->
-  <section class="narrative-section collapsible-section collapsed" id="narrative-section">
+  <section class="narrative-section" id="narrative-section">
     <div class="section-header">
       <h2 class="section-title">Narrativa de Salida</h2>
       <span class="section-badge" id="narrative-tone-badge">—</span>
@@ -3660,11 +3658,13 @@
   <hr class="divider">
 
   <!-- ── TRANSIT VAULT ── -->
-  <section class="transit-vault-section collapsible-section collapsed" id="transit-vault-section">
+  <section class="transit-vault-section collapsed" id="transit-vault-section">
     <div class="section-header">
       <h2 class="section-title">Transit Vault</h2>
       <span class="section-badge">BIBLIOTECA DE CIELO</span>
-      
+      <div class="section-actions">
+        <button class="tv-toggle-btn" id="tv-toggle-btn" onclick="toggleTransitVault()">Mostrar</button>
+      </div>
     </div>
     <div class="tv-shell">
       <div class="tv-subtabs">
@@ -7575,9 +7575,10 @@ window.addEventListener('scroll', () => {
   document.getElementById('fab').classList.toggle('visible', window.scrollY > 400);
 });
 
-function toggleSection(sectionId, forceExpanded) {
-  const section = document.getElementById(sectionId);
-  if (!section) return;
+function toggleTransitVault(forceExpanded) {
+  const section = document.getElementById('transit-vault-section');
+  const btn = document.getElementById('tv-toggle-btn');
+  if (!section || !btn) return;
 
   if (typeof forceExpanded === 'boolean') {
     section.classList.toggle('collapsed', !forceExpanded);
@@ -7586,51 +7587,7 @@ function toggleSection(sectionId, forceExpanded) {
   }
 
   const isCollapsed = section.classList.contains('collapsed');
-  const toggleBtn = section.querySelector('[data-section-toggle]');
-  if (toggleBtn) toggleBtn.textContent = isCollapsed ? 'Mostrar' : 'Ocultar';
-}
-
-function initSectionToggles() {
-  const toggleSectionIds = [
-    'tf-section',
-    'narrative-section',
-    'transit-vault-section',
-    'engine-section',
-    'memory-section',
-    'training-room',
-    'history-section',
-  ];
-
-  toggleSectionIds.forEach(sectionId => {
-    const section = document.getElementById(sectionId);
-    if (!section) return;
-
-    const header = section.querySelector('.section-header');
-    if (!header) return;
-
-    let actions = header.querySelector('.section-actions');
-    if (!actions) {
-      actions = document.createElement('div');
-      actions.className = 'section-actions';
-      header.appendChild(actions);
-    }
-
-    let btn = section.querySelector('[data-section-toggle]');
-    if (!btn) {
-      btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'tv-toggle-btn section-toggle-btn';
-      btn.setAttribute('data-section-toggle', 'true');
-      btn.addEventListener('click', () => toggleSection(sectionId));
-      actions.appendChild(btn);
-    }
-
-    toggleSection(sectionId, !section.classList.contains('collapsed'));
-  });
-}
-
-function toggleTransitVault(forceExpanded) {
-  toggleSection('transit-vault-section', forceExpanded);
+  btn.textContent = isCollapsed ? 'Mostrar' : 'Ocultar';
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -7655,7 +7612,7 @@ function toggleTransitVault(forceExpanded) {
       </div>
     `).join('');
   }
-  initSectionToggles();
+  toggleTransitVault(false);
 })();
 
 // ─────────────────────────────────────────────────────────────
