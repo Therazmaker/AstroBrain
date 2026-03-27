@@ -3033,6 +3033,7 @@
         Red Neuronal
       </button>
       <button class="btn-training-shortcut" onclick="irATarotBrain()">TarotBrain</button>
+      <button class="btn-training-shortcut" onclick="irATarotDashboard()">Dashboard</button>
       <button class="btn-training-shortcut" onclick="irATrainingRoom()">Training Room</button>
       <button class="btn-settings" id="btn-settings" onclick="openSettingsModal()" title="Configuración — Exportar e importar neuronas entrenadas">
         <span class="settings-btn-icon">⚙</span>
@@ -3995,6 +3996,28 @@
         src="./astrobrain/ui/tarotGraph.html"
         title="TarotBrain Graph"
         style="width:100%;height:860px;border:0;background:var(--deep)"
+        loading="lazy"
+      ></iframe>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── TAROT DASHBOARD ── -->
+  <section class="training-room-section reveal" id="tarotdashboard-section">
+    <div class="section-header">
+      <h2 class="section-title">TarotDashboard</h2>
+      <span class="section-badge">TAROT ANALYTICS</span>
+    </div>
+    <p style="color:var(--text-secondary);max-width:900px;margin-bottom:14px">
+      Visualiza completitud, distribución, calidad y sugerencias del grafo de TarotBrain usando <code style="font-family:var(--font-mono)">astrobrain_tarot_graph_v1</code>.
+    </p>
+    <div class="training-room-card" style="padding:0;overflow:hidden">
+      <iframe
+        id="tarotdashboard-frame"
+        src="./astrobrain/ui/tarotDashboard.html"
+        title="TarotDashboard"
+        style="width:100%;height:1450px;border:0;background:var(--deep)"
         loading="lazy"
       ></iframe>
     </div>
@@ -6143,6 +6166,11 @@ function irATrainingRoom() {
 
 function irATarotBrain() {
   const section = document.getElementById('tarotbrain-section');
+  if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function irATarotDashboard() {
+  const section = document.getElementById('tarotdashboard-section');
   if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
