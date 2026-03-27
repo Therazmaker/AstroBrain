@@ -30,7 +30,6 @@ const {
   getChoiceHistory,
   clearChoiceHistory,
 } = require('./astro/scoring/userChoiceStorage');
-const tarotBrain = require('./tarot/tarotBrain');
 
 function runAstroBrain(transits) {
   return interpretTransits(transits).narrative;
@@ -67,8 +66,6 @@ module.exports = {
   recordChoice,
   getChoiceHistory,
   clearChoiceHistory,
-  // TarotBrain module
-  tarotBrain,
 };
 
 if (require.main === module) {
