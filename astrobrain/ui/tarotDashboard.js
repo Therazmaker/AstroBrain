@@ -15,6 +15,7 @@ const dashboardState = {
     statusDistributionChart: null,
   },
   sortHandlerAttached: false,
+  repairHandlerAttached: false,
 };
 
 function classifyCard(cardStats) {
@@ -411,9 +412,11 @@ async function loadDiagnostics() {
   if (!node) return;
   const d = dashboardState.diagnostics;
   node.textContent = [
+    `dbName=${d.dbName || 'N/D'}`,
     `storageMode=${d.storageMode || 'N/D'}`,
     `storage=${d.storage || 'N/D'}`,
     `dbVersion=${d.dbVersion || 'N/D'}`,
+    `stores=${(d.stores || []).join(',') || 'N/D'}`,
     `memoryFallback=${d.isMemoryFallback ? 'yes' : 'no'}`,
     `fallbackReason=${d.fallbackReason || 'N/D'}`,
     `cards=${d.counts?.cards ?? 0}`,
@@ -426,6 +429,39 @@ async function loadDiagnostics() {
     `persistenceErrorName=${d.persistenceErrorName || 'N/D'}`,
   ].join(' · ');
   console.debug(`[TarotDashboard] loaded graph version=${d.version || 1} cards=${d.counts?.cards ?? 0} insights=${d.counts?.insights ?? 0} themes=${d.counts?.themes ?? 0}`);
+}
+
+function attachStorageRepairHandler() {
+  if (dashboardState.repairHandlerAttached) return;
+  const button = document.getElementById('repair-storage-btn');
+  if (!button) return;
+  button.addEventListener('click', async () => {
+    const storage = window.AstroBrainTarotStorage;
+    if (!storage?.repairOrResetTarotStorage) {
+      window.alert('AstroBrainTarotStorage.repairOrResetTarotStorage no está disponible.');
+      return;
+    }
+
+    const confirmed = window.confirm('Esto intentará reparar el schema de IndexedDB y, si falla, hará reset total de TarotBrain Storage. ¿Continuar?');
+    if (!confirmed) return;
+
+    button.disabled = true;
+    const originalText = button.textContent;
+    button.textContent = 'Repairing...';
+    try {
+      const result = await storage.repairOrResetTarotStorage({ force: true });
+      console.debug(`[TarotDashboard] storage repair result mode=${result?.mode || 'N/D'} ok=${result?.ok ? 'yes' : 'no'}`);
+      await initTarotDashboard();
+    } catch (error) {
+      console.error('[TarotDashboard] storage repair failed', error);
+      window.alert(`No se pudo reparar/resetear storage: ${error?.message || error}`);
+    } finally {
+      button.disabled = false;
+      button.textContent = originalText;
+      await loadDiagnostics();
+    }
+  });
+  dashboardState.repairHandlerAttached = true;
 }
 
 function attachSortHandler(stats) {
@@ -452,6 +488,7 @@ async function initTarotDashboard() {
     attachSortHandler(stats);
     renderCharts(stats);
     await loadDiagnostics();
+    attachStorageRepairHandler();
 
     const storage = window.AstroBrainTarotStorage;
     if (storage?.subscribeTarotGraph) {
