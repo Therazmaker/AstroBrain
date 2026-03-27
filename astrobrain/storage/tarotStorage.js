@@ -1,6 +1,9 @@
 (function attachTarotStorage(global) {
   const DB_NAME = 'AstroBrainDB';
-  const DB_VERSION = 2;
+  // ⚠️ IMPORTANTE: la versión de IndexedDB jamás debe disminuir.
+  // Si hay cambios de esquema, SIEMPRE incrementar este número.
+  // Reducirlo dispara VersionError cuando el navegador ya tiene una versión superior.
+  const DB_VERSION = 6;
   const STORE_NAME = 'tarot_graph';
   const GRAPH_RECORD_KEY = 'primary';
   const SNAPSHOT_STORE_NAME = 'tarot_graph_snapshots';
@@ -167,10 +170,14 @@
     }
 
     return new Promise((resolve, reject) => {
+      console.debug(`[TarotStorage] Opening IndexedDB name=${DB_NAME} version=${DB_VERSION}`);
       const request = global.indexedDB.open(DB_NAME, DB_VERSION);
 
-      request.onupgradeneeded = () => {
+      request.onupgradeneeded = (event) => {
         const db = request.result;
+        const oldVersion = Number(event?.oldVersion || 0);
+        const newVersion = Number(event?.newVersion || db.version || DB_VERSION);
+        console.debug(`[TarotStorage] onupgradeneeded oldVersion=${oldVersion} newVersion=${newVersion}`);
         if (!db.objectStoreNames.contains(STORE_NAME)) {
           db.createObjectStore(STORE_NAME);
         }
@@ -179,7 +186,13 @@
         }
       };
 
-      request.onsuccess = () => resolve(request.result);
+      request.onsuccess = () => {
+        console.debug('[TarotStorage] IndexedDB ready');
+        resolve(request.result);
+      };
+      request.onblocked = () => {
+        console.warn('[TarotStorage] IndexedDB open blocked by another tab/process.');
+      };
       request.onerror = () => reject(request.error || new Error('No se pudo abrir IndexedDB.'));
     });
   }
@@ -357,6 +370,7 @@
         memoryGraph = fromDB;
         persistenceError = null;
         fallbackReason = null;
+        console.debug('[TarotStorage] IndexedDB load success');
         console.debug('[TarotStorage] load source: indexeddb');
         logGraphCounts('load(indexeddb)', fromDB);
         return { graph: fromDB, storage: 'indexeddb', initialized: false };
