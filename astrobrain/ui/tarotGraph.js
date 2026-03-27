@@ -1,4 +1,8 @@
-const GRAPH_SOURCE_PATHS = ['/memory/tarotGraph.json', '../memory/tarotGraph.json'];
+const GRAPH_SOURCE_PATHS = [
+  '/astrobrain/memory/tarotGraph.json',
+  '../memory/tarotGraph.json',
+  '/memory/tarotGraph.json',
+];
 
 const state = {
   graph: null,
@@ -126,7 +130,7 @@ function setupFilter() {
 async function bootstrap() {
   const graph = await fetchGraph();
   if (!graph?.nodes?.tarot_card) {
-    document.getElementById('selected-card').textContent = 'No se pudo cargar /memory/tarotGraph.json';
+    document.getElementById('selected-card').textContent = 'No se pudo cargar astrobrain/memory/tarotGraph.json';
     return;
   }
 
