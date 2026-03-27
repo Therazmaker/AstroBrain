@@ -44,6 +44,23 @@
           <ul id="edges-list"></ul>
         </article>
       </div>
+
+      <section class="import-panel" aria-label="Importar JSON">
+        <h3>Importar JSON</h3>
+        <textarea
+          id="json-import-input"
+          placeholder="Pega aquí el JSON de insights para TarotBrain..."
+          spellcheck="false"
+        ></textarea>
+        <div class="import-actions">
+          <button id="validate-json-btn" type="button">Validar JSON</button>
+          <button id="import-json-btn" type="button">Importar al grafo</button>
+          <button id="clear-json-btn" type="button">Limpiar</button>
+        </div>
+        <div id="import-result" class="import-result" role="status" aria-live="polite">
+          Esperando JSON para validar o importar.
+        </div>
+      </section>
     </section>
   </main>
 
