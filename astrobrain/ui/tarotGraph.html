@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TarotBrain Graph</title>
+  <link rel="stylesheet" href="./tarotGraph.css" />
+</head>
+<body>
+  <main class="layout">
+    <aside class="cards-panel">
+      <h1>TarotBrain</h1>
+      <p class="subtitle">78 cartas base</p>
+      <input id="card-filter" type="search" placeholder="Buscar carta..." />
+      <ul id="card-list"></ul>
+    </aside>
+
+    <section class="detail-panel">
+      <header>
+        <h2 id="selected-card">Selecciona una carta</h2>
+        <div class="legend">
+          <span class="badge base">Nodo base</span>
+          <span class="badge added">Nodo añadido</span>
+          <span class="edge edge-manual">Edge manual</span>
+          <span class="edge edge-auto">Edge auto_suggested</span>
+        </div>
+      </header>
+
+      <div id="cluster-content" class="cluster-grid">
+        <article>
+          <h3>Insights</h3>
+          <ul id="insights-list"></ul>
+        </article>
+        <article>
+          <h3>Temas</h3>
+          <ul id="themes-list"></ul>
+        </article>
+        <article>
+          <h3>Combinaciones</h3>
+          <ul id="combinations-list"></ul>
+        </article>
+        <article>
+          <h3>Edges</h3>
+          <ul id="edges-list"></ul>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="./tarotGraph.js"></script>
+</body>
+</html>
