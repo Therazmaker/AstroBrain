@@ -90,12 +90,16 @@ async function refreshDiagnostics() {
   const diagnostics = state.diagnostics || {};
   node.textContent = [
     `storage=${diagnostics.storage || 'N/D'}`,
+    `memoryFallback=${diagnostics.isMemoryFallback ? 'yes' : 'no'}`,
+    `fallbackReason=${diagnostics.fallbackReason || 'N/D'}`,
     `cards=${diagnostics.counts?.cards ?? 0}`,
     `insights=${diagnostics.counts?.insights ?? 0}`,
     `themes=${diagnostics.counts?.themes ?? 0}`,
     `lastSaved=${diagnostics.lastSavedAt || 'N/D'}`,
     `graphId=${diagnostics.graphId || 'tarot_primary'}`,
     `version=${diagnostics.version || 1}`,
+    `persistenceError=${diagnostics.persistenceError || 'N/D'}`,
+    `persistenceErrorName=${diagnostics.persistenceErrorName || 'N/D'}`,
   ].join(' · ');
 }
 

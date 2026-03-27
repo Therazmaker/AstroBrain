@@ -412,12 +412,16 @@ async function loadDiagnostics() {
   const d = dashboardState.diagnostics;
   node.textContent = [
     `storage=${d.storage || 'N/D'}`,
+    `memoryFallback=${d.isMemoryFallback ? 'yes' : 'no'}`,
+    `fallbackReason=${d.fallbackReason || 'N/D'}`,
     `cards=${d.counts?.cards ?? 0}`,
     `insights=${d.counts?.insights ?? 0}`,
     `themes=${d.counts?.themes ?? 0}`,
     `lastSaved=${d.lastSavedAt || 'N/D'}`,
     `graphId=${d.graphId || 'tarot_primary'}`,
     `version=${d.version || 1}`,
+    `persistenceError=${d.persistenceError || 'N/D'}`,
+    `persistenceErrorName=${d.persistenceErrorName || 'N/D'}`,
   ].join(' · ');
   console.debug(`[TarotDashboard] loaded graph version=${d.version || 1} cards=${d.counts?.cards ?? 0} insights=${d.counts?.insights ?? 0} themes=${d.counts?.themes ?? 0}`);
 }
@@ -449,7 +453,8 @@ async function initTarotDashboard() {
 
     const storage = window.AstroBrainTarotStorage;
     if (storage?.subscribeTarotGraph) {
-      storage.subscribeTarotGraph(async () => {
+      storage.subscribeTarotGraph(async (detail = {}) => {
+        console.debug(`[TarotDashboard] graph update event source=${detail.source || 'unknown'} insights=${detail.counts?.insights ?? 'N/D'} themes=${detail.counts?.themes ?? 'N/D'}`);
         dashboardState.graph = await loadTarotGraph();
         dashboardState.computed = computeTarotStats(dashboardState.graph);
         const current = dashboardState.computed;

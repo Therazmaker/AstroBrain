@@ -11,6 +11,7 @@
   let dbPromise = null;
   let memoryGraph = null;
   let persistenceError = null;
+  let fallbackReason = null;
   const subscribers = new Set();
 
   function getBaseGraphFactory() {
@@ -141,6 +142,23 @@
     if (channel) {
       channel.postMessage(payload);
     }
+  }
+
+  function formatPersistenceError(error) {
+    if (!error) return null;
+    return {
+      message: error.message || String(error),
+      name: error.name || 'Error',
+      stack: error.stack || null,
+    };
+  }
+
+  function logPersistenceError(context, error) {
+    const details = formatPersistenceError(error);
+    if (!details) return;
+    console.debug(
+      `[TarotStorage] ${context} persistenceError message="${details.message}" name="${details.name}" stack="${details.stack || 'N/D'}"`,
+    );
   }
 
   function openDB() {
@@ -301,8 +319,10 @@
       const saved = await writeGraphToIndexedDB(payload);
       memoryGraph = saved;
       persistenceError = null;
+      fallbackReason = null;
       console.debug('[TarotGraph] save completed');
       logGraphCounts('save', saved);
+      console.debug('[TarotStorage] notifyGraphChanged source=indexeddb');
       notifyGraphChanged({
         source: 'indexeddb',
         updated_at: saved.meta?.updated_at || null,
@@ -314,8 +334,18 @@
     } catch (error) {
       memoryGraph = payload;
       persistenceError = error;
+      fallbackReason = `saveTarotGraph failed: ${error?.message || error}`;
       console.debug('[TarotStorage] load source: memory (fallback after save error)');
+      logPersistenceError('saveTarotGraph', error);
       logGraphCounts('save(memory)', payload);
+      console.debug('[TarotStorage] notifyGraphChanged source=memory');
+      notifyGraphChanged({
+        source: 'memory',
+        updated_at: payload.meta?.updated_at || null,
+        graphVersion: payload.meta?.version || 1,
+        graphSchema: payload.schema,
+        counts: getGraphCounts(payload),
+      });
       return { ok: false, storage: 'memory', graph: payload, error };
     }
   }
@@ -326,6 +356,7 @@
       if (fromDB) {
         memoryGraph = fromDB;
         persistenceError = null;
+        fallbackReason = null;
         console.debug('[TarotStorage] load source: indexeddb');
         logGraphCounts('load(indexeddb)', fromDB);
         return { graph: fromDB, storage: 'indexeddb', initialized: false };
@@ -354,6 +385,8 @@
       };
     } catch (error) {
       persistenceError = error;
+      fallbackReason = `loadTarotGraph failed: ${error?.message || error}`;
+      logPersistenceError('loadTarotGraph', error);
       if (!memoryGraph) {
         const createBaseTarotGraph = getBaseGraphFactory();
         memoryGraph = createBaseTarotGraph();
@@ -384,10 +417,13 @@
       await clearGraphFromIndexedDB();
       memoryGraph = null;
       persistenceError = null;
+      fallbackReason = null;
       return { ok: true, storage: 'indexeddb' };
     } catch (error) {
       memoryGraph = null;
       persistenceError = error;
+      fallbackReason = `clearTarotGraph failed: ${error?.message || error}`;
+      logPersistenceError('clearTarotGraph', error);
       return { ok: false, storage: 'memory', error };
     }
   }
@@ -402,11 +438,15 @@
     const counts = getGraphCounts(graph);
     return {
       storage: loaded.storage,
+      isMemoryFallback: loaded.storage === 'memory',
+      fallbackReason: loaded.storage === 'memory' ? (fallbackReason || 'IndexedDB no disponible o falló la operación.') : null,
       graphId: graph?.meta?.graph_id || 'tarot_primary',
       version: graph?.meta?.version || 1,
       lastSavedAt: graph?.meta?.updated_at || graph?.meta?.created_at || null,
       counts,
       persistenceError: persistenceError ? String(persistenceError.message || persistenceError) : null,
+      persistenceErrorName: persistenceError?.name || null,
+      persistenceErrorStack: persistenceError?.stack || null,
     };
   }
 
