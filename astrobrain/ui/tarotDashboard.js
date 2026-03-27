@@ -9,6 +9,7 @@ const dashboardState = {
   graph: null,
   cardStatsById: new Map(),
   computed: null,
+  diagnostics: null,
   charts: {
     insightsPerCardChart: null,
     statusDistributionChart: null,
@@ -398,7 +399,27 @@ async function loadTarotGraph() {
     throw new Error('TarotStorage no está disponible.');
   }
   const result = await storage.loadTarotGraph();
+  console.debug(`[TarotStorage] load source: ${result?.storage || 'unknown'}`);
   return result?.graph || null;
+}
+
+async function loadDiagnostics() {
+  const storage = window.AstroBrainTarotStorage;
+  if (!storage || typeof storage.getStorageDiagnostics !== 'function') return;
+  dashboardState.diagnostics = await storage.getStorageDiagnostics();
+  const node = document.getElementById('dashboard-debug-status');
+  if (!node) return;
+  const d = dashboardState.diagnostics;
+  node.textContent = [
+    `storage=${d.storage || 'N/D'}`,
+    `cards=${d.counts?.cards ?? 0}`,
+    `insights=${d.counts?.insights ?? 0}`,
+    `themes=${d.counts?.themes ?? 0}`,
+    `lastSaved=${d.lastSavedAt || 'N/D'}`,
+    `graphId=${d.graphId || 'tarot_primary'}`,
+    `version=${d.version || 1}`,
+  ].join(' · ');
+  console.debug(`[TarotDashboard] loaded graph version=${d.version || 1} cards=${d.counts?.cards ?? 0} insights=${d.counts?.insights ?? 0} themes=${d.counts?.themes ?? 0}`);
 }
 
 function attachSortHandler(stats) {
@@ -424,6 +445,24 @@ async function initTarotDashboard() {
     renderCardsTable(stats.cardRows, document.getElementById('sort-select').value);
     attachSortHandler(stats);
     renderCharts(stats);
+    await loadDiagnostics();
+
+    const storage = window.AstroBrainTarotStorage;
+    if (storage?.subscribeTarotGraph) {
+      storage.subscribeTarotGraph(async () => {
+        dashboardState.graph = await loadTarotGraph();
+        dashboardState.computed = computeTarotStats(dashboardState.graph);
+        const current = dashboardState.computed;
+        renderOverview(current);
+        renderContent(current);
+        renderDistribution(current);
+        renderLists(current);
+        renderSuggestions(current);
+        renderCardsTable(current.cardRows, document.getElementById('sort-select').value);
+        renderCharts(current);
+        await loadDiagnostics();
+      });
+    }
 
     // Exposición para debugging/manual checks sin recálculo en cada render.
     window.TarotDashboardAPI = {

@@ -55,11 +55,17 @@
         <div class="import-actions">
           <button id="validate-json-btn" type="button">Validar JSON</button>
           <button id="import-json-btn" type="button">Importar al grafo</button>
+          <button id="restore-snapshot-btn" type="button">Restore snapshot</button>
           <button id="clear-json-btn" type="button">Limpiar</button>
         </div>
         <div id="import-result" class="import-result" role="status" aria-live="polite">
           Esperando JSON para validar o importar.
         </div>
+      </section>
+
+      <section class="import-panel" aria-label="Diagnóstico">
+        <h3>Debug Storage</h3>
+        <div id="graph-debug-status" class="debug-status">Cargando diagnóstico...</div>
       </section>
     </section>
   </main>

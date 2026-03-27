@@ -1,13 +1,10 @@
-const SAVE_DEBOUNCE_MS = 500;
-
 const state = {
   graph: null,
   cards: [],
   selectedCardId: null,
   importPreview: null,
-  persistTimer: null,
-  persistInFlight: null,
   persistenceWarning: null,
+  diagnostics: null,
 };
 
 function normalizeText(value) {
@@ -39,6 +36,15 @@ function ensureGraphShape(graph) {
   return next;
 }
 
+function countGraph(graph) {
+  const current = ensureGraphShape(graph);
+  return {
+    cards: Object.keys(current.nodes.tarot_card || {}).length,
+    insights: Object.keys(current.nodes.tarot_insight || {}).length,
+    themes: Object.keys(current.nodes.tarot_theme || {}).length,
+  };
+}
+
 async function loadGraph() {
   const storage = window.AstroBrainTarotStorage;
   if (!storage || typeof storage.loadTarotGraph !== 'function') {
@@ -46,44 +52,60 @@ async function loadGraph() {
   }
 
   const result = await storage.loadTarotGraph();
+  console.debug(`[TarotStorage] load source: ${result?.storage || 'unknown'}`);
   if (result?.error) {
     state.persistenceWarning = `Persistencia degradada: ${result.error.message || result.error}`;
   }
 
-  return ensureGraphShape(result?.graph || null);
+  const graph = ensureGraphShape(result?.graph || null);
+  const counts = countGraph(graph);
+  console.debug(`[TarotStorage] cards: ${counts.cards} insights: ${counts.insights} themes: ${counts.themes}`);
+  return graph;
 }
 
-async function saveGraphNow(graph) {
+async function refreshDiagnostics() {
+  const storage = window.AstroBrainTarotStorage;
+  if (!storage || typeof storage.getStorageDiagnostics !== 'function') return;
+
+  state.diagnostics = await storage.getStorageDiagnostics();
+  const node = document.getElementById('graph-debug-status');
+  if (!node) return;
+
+  const diagnostics = state.diagnostics || {};
+  node.textContent = [
+    `storage=${diagnostics.storage || 'N/D'}`,
+    `cards=${diagnostics.counts?.cards ?? 0}`,
+    `insights=${diagnostics.counts?.insights ?? 0}`,
+    `themes=${diagnostics.counts?.themes ?? 0}`,
+    `lastSaved=${diagnostics.lastSavedAt || 'N/D'}`,
+    `graphId=${diagnostics.graphId || 'tarot_primary'}`,
+    `version=${diagnostics.version || 1}`,
+  ].join(' · ');
+}
+
+async function saveGraphNow(graph, reason = 'manual_update') {
   const storage = window.AstroBrainTarotStorage;
   if (!storage || typeof storage.saveTarotGraph !== 'function') {
     return { persistedToIndexedDB: false, persistedToMemory: true, error: new Error('TarotStorage no está disponible.') };
   }
 
-  const result = await storage.saveTarotGraph(graph);
+  const result = await storage.saveTarotGraph(graph, { reason });
   if (!result.ok && result.error) {
     state.persistenceWarning = `Persistencia degradada: ${result.error.message || result.error}`;
   } else if (result.ok) {
     state.persistenceWarning = null;
   }
 
+  const counts = countGraph(graph);
+  console.debug(`[TarotGraph] save completed`);
+  console.debug(`[TarotStorage] cards: ${counts.cards} insights: ${counts.insights} themes: ${counts.themes}`);
+  await refreshDiagnostics();
+
   return {
     persistedToIndexedDB: result.ok && result.storage === 'indexeddb',
     persistedToMemory: !result.ok || result.storage === 'memory',
     error: result.error || null,
   };
-}
-
-function scheduleGraphSave(graph) {
-  if (state.persistTimer) clearTimeout(state.persistTimer);
-
-  return new Promise((resolve) => {
-    state.persistTimer = setTimeout(async () => {
-      state.persistTimer = null;
-      state.persistInFlight = saveGraphNow(graph);
-      const persistence = await state.persistInFlight;
-      resolve(persistence);
-    }, SAVE_DEBOUNCE_MS);
-  });
 }
 
 function findCardCluster(graph, cardId) {
@@ -160,9 +182,7 @@ function renderSelectedCard() {
 
   renderList(
     'insights-list',
-    cluster.insights.map(
-      (item) => `${item.description || item.energy_general || 'Sin contenido'} <span class="badge added">tarot_insight</span>`,
-    ),
+    cluster.insights.map((item) => `${item.description || item.energy_general || 'Sin contenido'} <span class="badge added">tarot_insight</span>`),
   );
 
   renderList(
@@ -172,16 +192,12 @@ function renderSelectedCard() {
 
   renderList(
     'combinations-list',
-    cluster.combinations.map(
-      (comb) => `${comb.with_card || 'Sin carta asociada'}: ${comb.effect || 'Sin descripción'} <span class="badge added">tarot_combination</span>`,
-    ),
+    cluster.combinations.map((comb) => `${comb.with_card || 'Sin carta asociada'}: ${comb.effect || 'Sin descripción'} <span class="badge added">tarot_combination</span>`),
   );
 
   renderList(
     'edges-list',
-    cluster.edges.map(
-      (edge) => `${edge.relation} (${edge.origin}) · peso ${Number(edge.weight || 0).toFixed(2)} <span class="edge ${edge.origin === 'manual' ? 'edge-manual' : 'edge-auto'}">${edge.origin}</span>`,
-    ),
+    cluster.edges.map((edge) => `${edge.relation} (${edge.origin}) · peso ${Number(edge.weight || 0).toFixed(2)} <span class="edge ${edge.origin === 'manual' ? 'edge-manual' : 'edge-auto'}">${edge.origin}</span>`),
   );
 }
 
@@ -189,9 +205,7 @@ function setupFilter() {
   const input = document.getElementById('card-filter');
   input.addEventListener('input', () => {
     const q = input.value.trim().toLowerCase();
-    const filtered = state.cards.filter(
-      (card) => card.name.toLowerCase().includes(q) || card.id.toLowerCase().includes(q),
-    );
+    const filtered = state.cards.filter((card) => card.name.toLowerCase().includes(q) || card.id.toLowerCase().includes(q));
     renderCardList(filtered);
   });
 }
@@ -269,8 +283,7 @@ function normalizeTarotImport(data) {
     key_meanings: (input.key_meanings || input.significados_clave || []).map(normalizeMeaning),
     combinations: (input.combinations || []).map(normalizeCombination),
     advice: input.advice || input.consejo || null,
-    raw_card_input:
-      input.raw_card_input || input.card?.id || input.card?.name || input.carta || input.card || null,
+    raw_card_input: input.raw_card_input || input.card?.id || input.card?.name || input.carta || input.card || null,
   };
 }
 
@@ -312,10 +325,7 @@ function createNodeId(prefix, seed, bucket) {
 
 function ensureEdge(graph, edge, result) {
   const exists = graph.tarot_edge.some(
-    (current) =>
-      current.from === edge.from &&
-      current.to === edge.to &&
-      current.relation === edge.relation,
+    (current) => current.from === edge.from && current.to === edge.to && current.relation === edge.relation,
   );
 
   if (exists) return false;
@@ -336,9 +346,7 @@ function ensureEdge(graph, edge, result) {
 
 function getOrCreateTheme(graph, themeName, result) {
   const normalized = normalizeCardName(themeName || 'General');
-  const existing = Object.values(graph.nodes.tarot_theme).find(
-    (theme) => normalizeCardName(theme.name) === normalized,
-  );
+  const existing = Object.values(graph.nodes.tarot_theme).find((theme) => normalizeCardName(theme.name) === normalized);
   if (existing) {
     result.counts.themesReused += 1;
     return existing;
@@ -419,9 +427,7 @@ function renderImportResult(result, tone = 'success') {
   ];
 
   if (result.persistence) {
-    lines.push(
-      `Persistencia: ${result.persistence.persistedToIndexedDB ? 'IndexedDB' : 'memoria temporal'}`,
-    );
+    lines.push(`Persistencia: ${result.persistence.persistedToIndexedDB ? 'IndexedDB' : 'memoria temporal'}`);
   }
 
   if (result.warnings?.length) {
@@ -465,19 +471,20 @@ async function importTarotJson(rawJson) {
   const card = resolveCard(normalized.card?.id || normalized.card?.name || normalized.raw_card_input);
 
   if (!card) {
-    result.errors.push(
-      `No se encontró la carta para "${rawCardValue || 'valor vacío'}". Revisa nombre o id (ej: "La Emperatriz" o "card_major_empress").`,
-    );
+    result.errors.push(`No se encontró la carta para "${rawCardValue || 'valor vacío'}". Revisa nombre o id (ej: "La Emperatriz" o "card_major_empress").`);
     return result;
   }
 
   result.cardDetected = `${card.name} (${card.id})`;
 
   const graph = state.graph;
+  const storage = window.AstroBrainTarotStorage;
+  if (storage?.createSnapshot) {
+    await storage.createSnapshot('before_import', graph);
+  }
+
   const sourceNode = getOrCreateSource(graph, normalized.source);
-  const sourceSignature = normalizeText(
-    `${normalized.source?.kind || ''}_${normalized.source?.name || ''}_${normalized.source?.content_ref || ''}`,
-  );
+  const sourceSignature = normalizeText(`${normalized.source?.kind || ''}_${normalized.source?.name || ''}_${normalized.source?.content_ref || ''}`);
 
   const safeKeyMeanings = normalized.key_meanings.filter((item) => item.description || item.theme);
   if (!safeKeyMeanings.length && (normalized.energy_general || normalized.advice)) {
@@ -551,11 +558,7 @@ async function importTarotJson(rawJson) {
 
     let node = dedupeCombination(graph, payload);
     if (!node) {
-      const id = createNodeId(
-        'combination',
-        `${card.id}_${withCard.id}_${combination.effect}`,
-        graph.nodes.tarot_combination,
-      );
+      const id = createNodeId('combination', `${card.id}_${withCard.id}_${combination.effect}`, graph.nodes.tarot_combination);
       node = {
         id,
         card_id: card.id,
@@ -587,11 +590,13 @@ async function importTarotJson(rawJson) {
     );
   });
 
-  result.persistence = await scheduleGraphSave(graph);
+  result.persistence = await saveGraphNow(graph, 'import_tarot_json');
+  console.debug(`[TarotImport] insights added: ${result.counts.insightsCreated}`);
 
   state.selectedCardId = card.id;
   renderCardList(state.cards);
   renderSelectedCard();
+  await refreshDiagnostics();
 
   return result;
 }
@@ -601,6 +606,7 @@ function setupImportUI() {
   const validateBtn = document.getElementById('validate-json-btn');
   const importBtn = document.getElementById('import-json-btn');
   const clearBtn = document.getElementById('clear-json-btn');
+  const restoreBtn = document.getElementById('restore-snapshot-btn');
 
   validateBtn.addEventListener('click', () => {
     const raw = input.value.trim();
@@ -625,9 +631,7 @@ function setupImportUI() {
             combinationsCreated: normalized.combinations.length,
             edgesCreated: 0,
           },
-          warnings: card
-            ? []
-            : [`Carta no encontrada para "${normalized.raw_card_input || 'sin valor'}". Verifica nombre o id.`],
+          warnings: card ? [] : [`Carta no encontrada para "${normalized.raw_card_input || 'sin valor'}". Verifica nombre o id.`],
           errors: [],
         },
         card ? 'success' : 'warning',
@@ -676,6 +680,37 @@ function setupImportUI() {
       'success',
     );
   });
+
+  if (restoreBtn) {
+    restoreBtn.addEventListener('click', async () => {
+      const storage = window.AstroBrainTarotStorage;
+      if (!storage || typeof storage.restoreLatestSnapshot !== 'function') return;
+      const restore = await storage.restoreLatestSnapshot();
+      if (!restore.ok) {
+        renderImportResult({ cardDetected: null, counts: {}, warnings: [], errors: [`No se pudo restaurar snapshot: ${restore.error?.message || restore.error}`] }, 'error');
+        return;
+      }
+      state.graph = ensureGraphShape(restore.graph);
+      state.cards = Object.values(state.graph.nodes.tarot_card);
+      renderCardList(state.cards);
+      renderSelectedCard();
+      await refreshDiagnostics();
+      renderImportResult({ cardDetected: state.selectedCardId, counts: { insightsCreated: 0, themesCreated: 0, themesReused: 0, combinationsCreated: 0, edgesCreated: 0 }, warnings: ['Snapshot restaurado correctamente.'], errors: [] }, 'warning');
+    });
+  }
+}
+
+async function syncFromStorage() {
+  const graph = await loadGraph();
+  state.graph = ensureGraphShape(graph);
+  state.cards = Object.values(state.graph.nodes.tarot_card);
+  if (!state.selectedCardId || !state.graph.nodes.tarot_card[state.selectedCardId]) {
+    state.selectedCardId = state.cards[0]?.id || null;
+  }
+
+  renderCardList(state.cards);
+  renderSelectedCard();
+  await refreshDiagnostics();
 }
 
 async function bootstrap() {
@@ -700,14 +735,25 @@ async function bootstrap() {
   renderSelectedCard();
   setupFilter();
   setupImportUI();
+  await refreshDiagnostics();
+
+  const storage = window.AstroBrainTarotStorage;
+  if (storage?.subscribeTarotGraph) {
+    storage.subscribeTarotGraph(async () => {
+      await syncFromStorage();
+    });
+  }
 
   if (state.persistenceWarning) {
-    renderImportResult({
-      cardDetected: state.selectedCardId,
-      counts: { insightsCreated: 0, themesCreated: 0, themesReused: 0, combinationsCreated: 0, edgesCreated: 0 },
-      warnings: [state.persistenceWarning],
-      errors: [],
-    }, 'warning');
+    renderImportResult(
+      {
+        cardDetected: state.selectedCardId,
+        counts: { insightsCreated: 0, themesCreated: 0, themesReused: 0, combinationsCreated: 0, edgesCreated: 0 },
+        warnings: [state.persistenceWarning],
+        errors: [],
+      },
+      'warning',
+    );
   }
 }
 
