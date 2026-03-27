@@ -3,15 +3,22 @@
   // ⚠️ IMPORTANTE: la versión de IndexedDB jamás debe disminuir.
   // Si hay cambios de esquema, SIEMPRE incrementar este número.
   // Reducirlo dispara VersionError cuando el navegador ya tiene una versión superior.
-  const DB_VERSION = 6;
+  const DB_VERSION = 7;
   const STORE_NAME = 'tarot_graph';
   const GRAPH_RECORD_KEY = 'primary';
-  const SNAPSHOT_STORE_NAME = 'tarot_graph_snapshots';
+  const SNAPSHOT_STORE_NAME = 'tarot_snapshots';
+  const METADATA_STORE_NAME = 'metadata';
+  const REQUIRED_STORES = Object.freeze([
+    { name: STORE_NAME, options: undefined },
+    { name: SNAPSHOT_STORE_NAME, options: { keyPath: 'id' } },
+    { name: METADATA_STORE_NAME, options: { keyPath: 'id' } },
+  ]);
   const MAX_SNAPSHOTS = 10;
   const GRAPH_CHANNEL_NAME = 'astrobrain_tarot_graph_sync_v1';
   const channel = typeof global.BroadcastChannel === 'function' ? new BroadcastChannel(GRAPH_CHANNEL_NAME) : null;
 
   let dbPromise = null;
+  let activeDB = null;
   let dbVersionInUse = null;
   let memoryGraph = null;
   let persistenceError = null;
@@ -171,7 +178,7 @@
     }
 
     return new Promise((resolve, reject) => {
-      console.debug(`[TarotStorage] Opening IndexedDB name=${DB_NAME} version=${DB_VERSION}`);
+      console.debug(`[TarotStorage] Opening DB version ${DB_VERSION}`);
       const request = global.indexedDB.open(DB_NAME, DB_VERSION);
 
       request.onupgradeneeded = (event) => {
@@ -179,16 +186,27 @@
         const oldVersion = Number(event?.oldVersion || 0);
         const newVersion = Number(event?.newVersion || db.version || DB_VERSION);
         console.debug(`[TarotStorage] onupgradeneeded oldVersion=${oldVersion} newVersion=${newVersion}`);
-        if (!db.objectStoreNames.contains(STORE_NAME)) {
-          db.createObjectStore(STORE_NAME);
-        }
-        if (!db.objectStoreNames.contains(SNAPSHOT_STORE_NAME)) {
-          db.createObjectStore(SNAPSHOT_STORE_NAME, { keyPath: 'id' });
-        }
+        REQUIRED_STORES.forEach((store) => {
+          if (!db.objectStoreNames.contains(store.name)) {
+            console.debug(`[TarotStorage] Creating missing store: ${store.name}`);
+            db.createObjectStore(store.name, store.options);
+          }
+        });
       };
 
       request.onsuccess = () => {
-        console.debug('[TarotStorage] IndexedDB ready');
+        activeDB = request.result;
+        console.debug(`[TarotStorage] Existing stores: ${JSON.stringify(Array.from(activeDB.objectStoreNames || []))}`);
+        console.debug(`[TarotStorage] IndexedDB ready name=${activeDB.name} version=${activeDB.version}`);
+        activeDB.onversionchange = () => {
+          try {
+            activeDB.close();
+          } catch (_error) {
+            // no-op
+          }
+          activeDB = null;
+          dbPromise = null;
+        };
         dbVersionInUse = Number(request.result?.version || DB_VERSION);
         resolve(request.result);
       };
@@ -209,10 +227,94 @@
     return dbPromise;
   }
 
+  function closeActiveDB() {
+    if (!activeDB) return;
+    try {
+      activeDB.close();
+    } catch (_error) {
+      // no-op
+    }
+    activeDB = null;
+    dbPromise = null;
+  }
+
+  function getMissingStores(db) {
+    const storeNames = Array.from(db?.objectStoreNames || []);
+    return REQUIRED_STORES.map((store) => store.name).filter((storeName) => !storeNames.includes(storeName));
+  }
+
+  function assertStoreExists(db, storeName, context) {
+    if (db?.objectStoreNames?.contains(storeName)) return;
+    const existing = Array.from(db?.objectStoreNames || []);
+    throw new Error(
+      `[TarotStorage] Missing object store "${storeName}" while ${context}. Existing stores: [${existing.join(', ')}]`,
+    );
+  }
+
+  function getStoreTransaction(db, storeName, mode, context) {
+    assertStoreExists(db, storeName, context);
+    return db.transaction(storeName, mode);
+  }
+
+  async function deleteDatabase() {
+    closeActiveDB();
+    return new Promise((resolve, reject) => {
+      const request = global.indexedDB.deleteDatabase(DB_NAME);
+      request.onsuccess = () => resolve(true);
+      request.onblocked = () => reject(new Error('No se pudo borrar la DB: operación bloqueada por otra pestaña.'));
+      request.onerror = () => reject(request.error || new Error('No se pudo borrar la DB rota.'));
+    });
+  }
+
+  async function repairSchema() {
+    const db = await initDB();
+    const missing = getMissingStores(db);
+    if (!missing.length) {
+      console.debug('[TarotStorage] repairSchema: schema is already complete.');
+      return { ok: true, repaired: false, missingStores: [] };
+    }
+
+    const targetVersion = Number((db.version || dbVersionInUse || DB_VERSION) + 1);
+    console.warn(`[TarotStorage] repairSchema: missing stores detected=${missing.join(', ')} targetVersion=${targetVersion}`);
+    closeActiveDB();
+
+    await new Promise((resolve, reject) => {
+      console.debug(`[TarotStorage] Opening DB version ${targetVersion} (repair)`);
+      const request = global.indexedDB.open(DB_NAME, targetVersion);
+      request.onupgradeneeded = () => {
+        const upgradeDB = request.result;
+        REQUIRED_STORES.forEach((store) => {
+          if (!upgradeDB.objectStoreNames.contains(store.name)) {
+            console.debug(`[TarotStorage] Creating missing store: ${store.name}`);
+            upgradeDB.createObjectStore(store.name, store.options);
+          }
+        });
+      };
+      request.onsuccess = () => {
+        request.result.close();
+        resolve();
+      };
+      request.onerror = () => reject(request.error || new Error('Falló la reparación del schema de IndexedDB.'));
+    });
+
+    dbPromise = null;
+    const repairedDB = await initDB();
+    const stillMissing = getMissingStores(repairedDB);
+    if (stillMissing.length) {
+      throw new Error(`[TarotStorage] repairSchema incomplete. Missing stores: ${stillMissing.join(', ')}`);
+    }
+    return { ok: true, repaired: true, missingStores: missing, targetVersion };
+  }
+
+  function shouldRepairFromError(error) {
+    const message = String(error?.message || '');
+    return error?.name === 'NotFoundError' || message.includes('object stores was not found') || message.includes('Missing object store');
+  }
+
   async function readGraphFromIndexedDB() {
     const db = await initDB();
     return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE_NAME, 'readonly');
+      const tx = getStoreTransaction(db, STORE_NAME, 'readonly', 'reading tarot graph');
       const store = tx.objectStore(STORE_NAME);
       const request = store.get(GRAPH_RECORD_KEY);
 
@@ -227,7 +329,7 @@
     payload.meta.updated_at = new Date().toISOString();
 
     return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const tx = getStoreTransaction(db, STORE_NAME, 'readwrite', 'writing tarot graph');
       const store = tx.objectStore(STORE_NAME);
       const request = store.put(payload, GRAPH_RECORD_KEY);
       request.onsuccess = () => resolve(payload);
@@ -238,7 +340,7 @@
   async function clearGraphFromIndexedDB() {
     const db = await initDB();
     return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const tx = getStoreTransaction(db, STORE_NAME, 'readwrite', 'clearing tarot graph');
       const store = tx.objectStore(STORE_NAME);
       const request = store.delete(GRAPH_RECORD_KEY);
       request.onsuccess = () => resolve();
@@ -249,7 +351,7 @@
   async function listSnapshotsFromIndexedDB() {
     const db = await initDB();
     return new Promise((resolve, reject) => {
-      const tx = db.transaction(SNAPSHOT_STORE_NAME, 'readonly');
+      const tx = getStoreTransaction(db, SNAPSHOT_STORE_NAME, 'readonly', 'listing snapshots');
       const store = tx.objectStore(SNAPSHOT_STORE_NAME);
       const request = store.getAll();
       request.onsuccess = () => resolve(Array.isArray(request.result) ? request.result : []);
@@ -260,7 +362,7 @@
   async function saveSnapshotToIndexedDB(snapshotRecord) {
     const db = await initDB();
     return new Promise((resolve, reject) => {
-      const tx = db.transaction(SNAPSHOT_STORE_NAME, 'readwrite');
+      const tx = getStoreTransaction(db, SNAPSHOT_STORE_NAME, 'readwrite', 'saving snapshots');
       const store = tx.objectStore(SNAPSHOT_STORE_NAME);
       const request = store.put(snapshotRecord);
       request.onsuccess = () => resolve(snapshotRecord);
@@ -271,7 +373,7 @@
   async function deleteSnapshotById(snapshotId) {
     const db = await initDB();
     return new Promise((resolve, reject) => {
-      const tx = db.transaction(SNAPSHOT_STORE_NAME, 'readwrite');
+      const tx = getStoreTransaction(db, SNAPSHOT_STORE_NAME, 'readwrite', 'deleting snapshots');
       const store = tx.objectStore(SNAPSHOT_STORE_NAME);
       const request = store.delete(snapshotId);
       request.onsuccess = () => resolve();
@@ -335,7 +437,7 @@
       memoryGraph = saved;
       persistenceError = null;
       fallbackReason = null;
-      console.debug('[TarotGraph] save completed');
+      console.debug('[TarotStorage] Save success');
       logGraphCounts('save', saved);
       console.debug('[TarotStorage] notifyGraphChanged source=indexeddb');
       notifyGraphChanged({
@@ -347,6 +449,11 @@
       });
       return { ok: true, storage: 'indexeddb', graph: saved };
     } catch (error) {
+      if (!options.repairAttempted && shouldRepairFromError(error)) {
+        console.warn(`[TarotStorage] saveTarotGraph detected schema error (${error.name}). Triggering repair.`);
+        await repairSchema();
+        return saveTarotGraph(payload, { ...options, repairAttempted: true, skipSnapshot: true });
+      }
       persistenceError = error;
       fallbackReason = `saveTarotGraph failed: ${error?.message || error}`;
       logPersistenceError('saveTarotGraph', error);
@@ -375,7 +482,7 @@
         memoryGraph = fromDB;
         persistenceError = null;
         fallbackReason = null;
-        console.debug('[TarotStorage] IndexedDB load success');
+        console.debug('[TarotStorage] Load success');
         console.debug('[TarotStorage] load source: indexeddb');
         logGraphCounts('load(indexeddb)', fromDB);
         return { graph: fromDB, storage: 'indexeddb', initialized: false };
@@ -403,6 +510,15 @@
         error: saveResult.ok ? null : saveResult.error,
       };
     } catch (error) {
+      if (shouldRepairFromError(error)) {
+        try {
+          console.warn(`[TarotStorage] loadTarotGraph detected schema error (${error.name}). Triggering repair.`);
+          await repairSchema();
+          return loadTarotGraph();
+        } catch (repairError) {
+          console.warn(`[TarotStorage] loadTarotGraph repair failed: ${repairError?.message || repairError}`);
+        }
+      }
       persistenceError = error;
       fallbackReason = `loadTarotGraph failed: ${error?.message || error}`;
       logPersistenceError('loadTarotGraph', error);
@@ -453,14 +569,49 @@
       return { ok: false, error: new Error('Reset cancelado: se requiere confirmación explícita (force=true).') };
     }
 
-    const loaded = await loadTarotGraph();
-    await createSnapshot('before_reset_storage', loaded.graph);
-    const cleared = await clearTarotGraph({ force: true });
-    if (!cleared.ok) return cleared;
+    let backupGraph = null;
+    try {
+      backupGraph = (await loadTarotGraph())?.graph || null;
+    } catch (_error) {
+      backupGraph = null;
+    }
+
+    try {
+      if (backupGraph) {
+        await createSnapshot('before_reset_storage', backupGraph);
+      }
+    } catch (error) {
+      console.warn(`[TarotStorage] resetTarotStorage snapshot warning: ${error?.message || error}`);
+    }
+
+    await deleteDatabase();
+    dbPromise = null;
+    await initDB();
 
     const createBaseTarotGraph = getBaseGraphFactory();
     const baseGraph = createBaseTarotGraph();
-    return saveTarotGraph(baseGraph, { reason: 'reset_storage_base' });
+    return saveTarotGraph(baseGraph, { reason: 'reset_storage_base', skipSnapshot: true });
+  }
+
+  async function repairOrResetTarotStorage(options = {}) {
+    try {
+      const repaired = await repairSchema();
+      if (repaired.ok) {
+        const loaded = await loadTarotGraph();
+        return { ok: true, mode: repaired.repaired ? 'repair' : 'healthy', graph: loaded.graph, storage: loaded.storage };
+      }
+      throw new Error('Repair no pudo completar el schema.');
+    } catch (repairError) {
+      console.warn(`[TarotStorage] repair failed, attempting reset. reason=${repairError?.message || repairError}`);
+      const resetResult = await resetTarotStorage({ force: true });
+      return {
+        ok: Boolean(resetResult?.ok),
+        mode: 'reset',
+        graph: resetResult?.graph || null,
+        storage: resetResult?.storage || 'indexeddb',
+        error: resetResult?.error || repairError,
+      };
+    }
   }
 
   function getPersistenceError() {
@@ -477,6 +628,8 @@
       isMemoryFallback: loaded.storage === 'memory',
       fallbackReason: loaded.storage === 'memory' ? (fallbackReason || 'IndexedDB no disponible o falló la operación.') : null,
       dbVersion: dbVersionInUse || DB_VERSION,
+      dbName: DB_NAME,
+      stores: Array.from(activeDB?.objectStoreNames || []),
       graphId: graph?.meta?.graph_id || 'tarot_primary',
       version: graph?.meta?.version || 1,
       lastSavedAt: graph?.meta?.updated_at || graph?.meta?.created_at || null,
@@ -517,6 +670,7 @@
     createSnapshot,
     restoreLatestSnapshot,
     resetTarotStorage,
+    repairOrResetTarotStorage,
     subscribeTarotGraph,
   };
 })(typeof globalThis !== 'undefined' ? globalThis : window);

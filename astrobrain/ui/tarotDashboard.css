@@ -206,3 +206,18 @@ th, td {
   padding: 10px;
   word-break: break-word;
 }
+
+.debug-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.btn-secondary {
+  background: #1d2544;
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
