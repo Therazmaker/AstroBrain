@@ -46,13 +46,19 @@
     <section class="panel charts-panel" aria-label="Visualización">
       <h2>Visualización</h2>
       <div class="charts-grid">
-        <article>
+        <article class="chart-card">
           <h3>Insights por carta</h3>
-          <canvas id="insights-chart" height="240"></canvas>
+          <div class="chart-wrap" data-chart-wrap="insights">
+            <canvas id="insights-chart"></canvas>
+          </div>
+          <p class="empty chart-empty" id="insights-chart-empty" hidden>Sin datos para mostrar insights por carta.</p>
         </article>
-        <article>
+        <article class="chart-card">
           <h3>Distribución de estados</h3>
-          <canvas id="state-chart" height="240"></canvas>
+          <div class="chart-wrap" data-chart-wrap="state">
+            <canvas id="state-chart"></canvas>
+          </div>
+          <p class="empty chart-empty" id="state-chart-empty" hidden>Sin datos para mostrar distribución de estados.</p>
         </article>
       </div>
     </section>

@@ -9,6 +9,11 @@ const dashboardState = {
   graph: null,
   cardStatsById: new Map(),
   computed: null,
+  charts: {
+    insightsPerCardChart: null,
+    statusDistributionChart: null,
+  },
+  sortHandlerAttached: false,
 };
 
 function classifyCard(cardStats) {
@@ -297,58 +302,94 @@ function renderCharts(stats) {
   const chartApi = window.Chart;
   if (!chartApi) return;
 
+  destroyChartInstance('insightsPerCardChart');
+  destroyChartInstance('statusDistributionChart');
+
   const insightLabels = stats.cardRows.map((row) => row.name);
   const insightData = stats.cardRows.map((row) => row.insightsCount);
+  const insightsCanvas = document.getElementById('insights-chart');
+  const stateCanvas = document.getElementById('state-chart');
 
-  new chartApi(document.getElementById('insights-chart'), {
-    type: 'bar',
-    data: {
-      labels: insightLabels,
-      datasets: [{
-        label: 'Insights',
-        data: insightData,
-        backgroundColor: 'rgba(110,168,255,0.6)',
-        borderColor: 'rgba(110,168,255,1)',
-        borderWidth: 1,
-      }],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        x: { ticks: { display: false } },
-        y: { beginAtZero: true },
+  const hasInsightsData = insightLabels.length > 0 && Boolean(insightsCanvas);
+  if (!hasInsightsData) {
+    toggleChartEmptyState('insights', true, 'Sin datos para mostrar insights por carta.');
+  } else {
+    toggleChartEmptyState('insights', false);
+    dashboardState.charts.insightsPerCardChart = new chartApi(insightsCanvas, {
+      type: 'bar',
+      data: {
+        labels: insightLabels,
+        datasets: [{
+          label: 'Insights',
+          data: insightData,
+          backgroundColor: 'rgba(110,168,255,0.6)',
+          borderColor: 'rgba(110,168,255,1)',
+          borderWidth: 1,
+        }],
       },
-      plugins: {
-        legend: { display: false },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { ticks: { display: false } },
+          y: { beginAtZero: true },
+        },
+        plugins: {
+          legend: { display: false },
+        },
       },
-    },
-  });
+    });
+  }
 
-  new chartApi(document.getElementById('state-chart'), {
-    type: 'pie',
-    data: {
-      labels: ['vacío', 'semilla', 'creciendo', 'maduro'],
-      datasets: [{
-        data: [
-          stats.distribution.vacio,
-          stats.distribution.semilla,
-          stats.distribution.creciendo,
-          stats.distribution.maduro,
-        ],
-        backgroundColor: [
-          'rgba(240,191,91,0.8)',
-          'rgba(110,168,255,0.8)',
-          'rgba(200,141,255,0.8)',
-          'rgba(138,214,162,0.8)',
-        ],
-      }],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-    },
-  });
+  const distributionData = [
+    stats.distribution.vacio,
+    stats.distribution.semilla,
+    stats.distribution.creciendo,
+    stats.distribution.maduro,
+  ];
+  const hasDistributionData = distributionData.some((value) => value > 0) && Boolean(stateCanvas);
+  if (!hasDistributionData) {
+    toggleChartEmptyState('state', true, 'Sin datos para mostrar distribución de estados.');
+  } else {
+    toggleChartEmptyState('state', false);
+    dashboardState.charts.statusDistributionChart = new chartApi(stateCanvas, {
+      type: 'pie',
+      data: {
+        labels: ['vacío', 'semilla', 'creciendo', 'maduro'],
+        datasets: [{
+          data: distributionData,
+          backgroundColor: [
+            'rgba(240,191,91,0.8)',
+            'rgba(110,168,255,0.8)',
+            'rgba(200,141,255,0.8)',
+            'rgba(138,214,162,0.8)',
+          ],
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+      },
+    });
+  }
+}
+
+function destroyChartInstance(chartKey) {
+  const chartInstance = dashboardState.charts[chartKey];
+  if (chartInstance && typeof chartInstance.destroy === 'function') {
+    chartInstance.destroy();
+  }
+  dashboardState.charts[chartKey] = null;
+}
+
+function toggleChartEmptyState(prefix, shouldShow, message = '') {
+  const wrap = document.querySelector(`[data-chart-wrap="${prefix}"]`);
+  const empty = document.getElementById(`${prefix}-chart-empty`);
+  if (!wrap || !empty) return;
+
+  wrap.hidden = shouldShow;
+  empty.hidden = !shouldShow;
+  if (message) empty.textContent = message;
 }
 
 async function loadTarotGraph() {
@@ -361,10 +402,12 @@ async function loadTarotGraph() {
 }
 
 function attachSortHandler(stats) {
+  if (dashboardState.sortHandlerAttached) return;
   const select = document.getElementById('sort-select');
   select.addEventListener('change', () => {
     renderCardsTable(stats.cardRows, select.value);
   });
+  dashboardState.sortHandlerAttached = true;
 }
 
 async function initTarotDashboard() {

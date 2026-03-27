@@ -95,6 +95,45 @@ body {
   gap: 10px;
 }
 
+.charts-panel,
+.charts-grid,
+.chart-card,
+.chart-wrap {
+  min-height: 0;
+}
+
+.charts-grid {
+  align-items: start;
+}
+
+.chart-card {
+  min-height: 380px;
+  border: 1px solid rgba(255, 255, 255, .08);
+  background: #11162a;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chart-wrap {
+  position: relative;
+  height: 320px;
+  width: 100%;
+  border: 1px dashed rgba(110, 168, 255, .45);
+}
+
+.chart-wrap canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-empty {
+  margin: 0;
+}
+
 .list {
   margin: 0;
   padding-left: 18px;
