@@ -411,7 +411,9 @@ async function loadDiagnostics() {
   if (!node) return;
   const d = dashboardState.diagnostics;
   node.textContent = [
+    `storageMode=${d.storageMode || 'N/D'}`,
     `storage=${d.storage || 'N/D'}`,
+    `dbVersion=${d.dbVersion || 'N/D'}`,
     `memoryFallback=${d.isMemoryFallback ? 'yes' : 'no'}`,
     `fallbackReason=${d.fallbackReason || 'N/D'}`,
     `cards=${d.counts?.cards ?? 0}`,

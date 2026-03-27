@@ -12,6 +12,7 @@
   const channel = typeof global.BroadcastChannel === 'function' ? new BroadcastChannel(GRAPH_CHANNEL_NAME) : null;
 
   let dbPromise = null;
+  let dbVersionInUse = null;
   let memoryGraph = null;
   let persistenceError = null;
   let fallbackReason = null;
@@ -188,6 +189,7 @@
 
       request.onsuccess = () => {
         console.debug('[TarotStorage] IndexedDB ready');
+        dbVersionInUse = Number(request.result?.version || DB_VERSION);
         resolve(request.result);
       };
       request.onblocked = () => {
@@ -214,7 +216,7 @@
       const store = tx.objectStore(STORE_NAME);
       const request = store.get(GRAPH_RECORD_KEY);
 
-      request.onsuccess = () => resolve(request.result ? ensureGraphShape(request.result) : null);
+      request.onsuccess = () => resolve(request.result || null);
       request.onerror = () => reject(request.error || new Error('No se pudo leer tarot_graph.'));
     });
   }
@@ -345,28 +347,31 @@
       });
       return { ok: true, storage: 'indexeddb', graph: saved };
     } catch (error) {
-      memoryGraph = payload;
       persistenceError = error;
       fallbackReason = `saveTarotGraph failed: ${error?.message || error}`;
-      console.debug('[TarotStorage] load source: memory (fallback after save error)');
       logPersistenceError('saveTarotGraph', error);
-      logGraphCounts('save(memory)', payload);
-      console.debug('[TarotStorage] notifyGraphChanged source=memory');
-      notifyGraphChanged({
-        source: 'memory',
-        updated_at: payload.meta?.updated_at || null,
-        graphVersion: payload.meta?.version || 1,
-        graphSchema: payload.schema,
-        counts: getGraphCounts(payload),
-      });
-      return { ok: false, storage: 'memory', graph: payload, error };
+      return { ok: false, storage: 'indexeddb', graph: payload, error };
     }
   }
 
   async function loadTarotGraph() {
     try {
-      const fromDB = await readGraphFromIndexedDB();
-      if (fromDB) {
+      const rawFromDB = await readGraphFromIndexedDB();
+      if (rawFromDB) {
+        const hasLegacyBuckets = [
+          rawFromDB?.nodes?.tarot_card,
+          rawFromDB?.nodes?.tarot_insight,
+          rawFromDB?.nodes?.tarot_combination,
+          rawFromDB?.nodes?.tarot_theme,
+          rawFromDB?.nodes?.tarot_source,
+        ].some((bucket) => Array.isArray(bucket));
+        const fromDB = ensureGraphShape(rawFromDB);
+
+        if (hasLegacyBuckets) {
+          await createSnapshot('before_legacy_migration', rawFromDB);
+          await saveTarotGraph(fromDB, { skipSnapshot: true, reason: 'legacy_migration' });
+        }
+
         memoryGraph = fromDB;
         persistenceError = null;
         fallbackReason = null;
@@ -405,7 +410,7 @@
         const createBaseTarotGraph = getBaseGraphFactory();
         memoryGraph = createBaseTarotGraph();
       }
-      console.debug('[TarotStorage] load source: memory (error fallback)');
+      console.debug('[TarotStorage] load source: memory (contingency fallback)');
       logGraphCounts('load(memory)', memoryGraph);
       return {
         graph: ensureGraphShape(clone(memoryGraph)),
@@ -442,6 +447,22 @@
     }
   }
 
+  async function resetTarotStorage(options = {}) {
+    const force = Boolean(options.force);
+    if (!force) {
+      return { ok: false, error: new Error('Reset cancelado: se requiere confirmación explícita (force=true).') };
+    }
+
+    const loaded = await loadTarotGraph();
+    await createSnapshot('before_reset_storage', loaded.graph);
+    const cleared = await clearTarotGraph({ force: true });
+    if (!cleared.ok) return cleared;
+
+    const createBaseTarotGraph = getBaseGraphFactory();
+    const baseGraph = createBaseTarotGraph();
+    return saveTarotGraph(baseGraph, { reason: 'reset_storage_base' });
+  }
+
   function getPersistenceError() {
     return persistenceError;
   }
@@ -451,9 +472,11 @@
     const graph = loaded.graph;
     const counts = getGraphCounts(graph);
     return {
+      storageMode: loaded.storage === 'memory' ? 'contingency' : 'persistent',
       storage: loaded.storage,
       isMemoryFallback: loaded.storage === 'memory',
       fallbackReason: loaded.storage === 'memory' ? (fallbackReason || 'IndexedDB no disponible o falló la operación.') : null,
+      dbVersion: dbVersionInUse || DB_VERSION,
       graphId: graph?.meta?.graph_id || 'tarot_primary',
       version: graph?.meta?.version || 1,
       lastSavedAt: graph?.meta?.updated_at || graph?.meta?.created_at || null,
@@ -493,6 +516,7 @@
     getStorageDiagnostics,
     createSnapshot,
     restoreLatestSnapshot,
+    resetTarotStorage,
     subscribeTarotGraph,
   };
 })(typeof globalThis !== 'undefined' ? globalThis : window);

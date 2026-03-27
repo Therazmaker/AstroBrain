@@ -89,7 +89,9 @@ async function refreshDiagnostics() {
 
   const diagnostics = state.diagnostics || {};
   node.textContent = [
+    `storageMode=${diagnostics.storageMode || 'N/D'}`,
     `storage=${diagnostics.storage || 'N/D'}`,
+    `dbVersion=${diagnostics.dbVersion || 'N/D'}`,
     `memoryFallback=${diagnostics.isMemoryFallback ? 'yes' : 'no'}`,
     `fallbackReason=${diagnostics.fallbackReason || 'N/D'}`,
     `cards=${diagnostics.counts?.cards ?? 0}`,
@@ -638,6 +640,7 @@ function setupImportUI() {
   const importBtn = document.getElementById('import-json-btn');
   const clearBtn = document.getElementById('clear-json-btn');
   const restoreBtn = document.getElementById('restore-snapshot-btn');
+  const resetBtn = document.getElementById('reset-storage-btn');
 
   validateBtn.addEventListener('click', () => {
     const raw = input.value.trim();
@@ -688,6 +691,9 @@ function setupImportUI() {
     }
 
     const result = await importTarotJson(raw);
+    if (result?.persistence?.persistedToMemory || result?.persistence?.error) {
+      result.errors.push(`Error de persistencia IndexedDB: ${result.persistence?.error?.message || 'guardado falló y no es persistente'}`);
+    }
     const tone = result.errors.length ? 'error' : result.warnings.length ? 'warning' : 'success';
     renderImportResult(result, tone);
   });
@@ -727,6 +733,33 @@ function setupImportUI() {
       renderSelectedCard();
       await refreshDiagnostics();
       renderImportResult({ cardDetected: state.selectedCardId, counts: { insightsCreated: 0, themesCreated: 0, themesReused: 0, combinationsCreated: 0, edgesCreated: 0 }, warnings: ['Snapshot restaurado correctamente.'], errors: [] }, 'warning');
+    });
+  }
+
+  if (resetBtn) {
+    resetBtn.addEventListener('click', async () => {
+      const userAccepted = window.confirm('Esto hará backup, borrará IndexedDB y reconstruirá el grafo base. ¿Continuar con Reset TarotBrain Storage?');
+      if (!userAccepted) return;
+
+      const storage = window.AstroBrainTarotStorage;
+      if (!storage || typeof storage.resetTarotStorage !== 'function') {
+        renderImportResult({ cardDetected: null, counts: {}, warnings: [], errors: ['resetTarotStorage no está disponible.'] }, 'error');
+        return;
+      }
+
+      const reset = await storage.resetTarotStorage({ force: true });
+      if (!reset.ok) {
+        renderImportResult({ cardDetected: null, counts: {}, warnings: [], errors: [`No se pudo resetear storage: ${reset.error?.message || reset.error}`] }, 'error');
+        return;
+      }
+
+      await syncFromStorage();
+      renderImportResult({
+        cardDetected: state.selectedCardId,
+        counts: { insightsCreated: 0, themesCreated: 0, themesReused: 0, combinationsCreated: 0, edgesCreated: 0 },
+        warnings: ['Storage reseteado con backup y reconstrucción base completada.'],
+        errors: [],
+      }, 'warning');
     });
   }
 }
