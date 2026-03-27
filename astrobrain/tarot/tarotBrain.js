@@ -40,20 +40,55 @@ function createBaseTarotGraph() {
       tarot_theme: {},
       tarot_source: {},
     },
+    edges: {},
     tarot_edge: [],
   };
 }
 
+function isPlainObject(value) {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function migrateNodeBucket(bucket, name) {
+  if (Array.isArray(bucket)) {
+    const migrated = {};
+    bucket.forEach((item) => {
+      if (!isPlainObject(item) || !item.id) return;
+      migrated[item.id] = item;
+    });
+    // eslint-disable-next-line no-console
+    console.warn(`[TarotBrain] ${name} llegó como array legacy y se migró a objeto indexado por id.`);
+    return migrated;
+  }
+  return isPlainObject(bucket) ? bucket : {};
+}
+
+function validateTarotGraph(graphInput) {
+  const graph = graphInput || {};
+  graph.schema = graph.schema || TAROT_GRAPH_SCHEMA;
+  graph.meta = isPlainObject(graph.meta) ? graph.meta : {};
+  graph.nodes = isPlainObject(graph.nodes) ? graph.nodes : {};
+  graph.nodes.tarot_card = migrateNodeBucket(graph.nodes.tarot_card, 'nodes.tarot_card');
+  graph.nodes.tarot_insight = migrateNodeBucket(graph.nodes.tarot_insight, 'nodes.tarot_insight');
+  graph.nodes.tarot_combination = migrateNodeBucket(graph.nodes.tarot_combination, 'nodes.tarot_combination');
+  graph.nodes.tarot_theme = migrateNodeBucket(graph.nodes.tarot_theme, 'nodes.tarot_theme');
+  graph.nodes.tarot_source = migrateNodeBucket(graph.nodes.tarot_source, 'nodes.tarot_source');
+
+  const validInsights = {};
+  Object.values(graph.nodes.tarot_insight).forEach((insight) => {
+    if (!insight || !insight.id || !insight.card_id) return;
+    validInsights[insight.id] = insight;
+  });
+  graph.nodes.tarot_insight = validInsights;
+
+  graph.edges = isPlainObject(graph.edges) ? graph.edges : {};
+  graph.tarot_edge = Array.isArray(graph.tarot_edge) ? graph.tarot_edge : [];
+  return graph;
+}
+
 function ensureGraphShape(graph) {
   const base = graph && graph.schema === TAROT_GRAPH_SCHEMA ? graph : createBaseTarotGraph();
-
-  base.nodes = base.nodes || {};
-  base.nodes.tarot_card = base.nodes.tarot_card || {};
-  base.nodes.tarot_insight = base.nodes.tarot_insight || {};
-  base.nodes.tarot_combination = base.nodes.tarot_combination || {};
-  base.nodes.tarot_theme = base.nodes.tarot_theme || {};
-  base.nodes.tarot_source = base.nodes.tarot_source || {};
-  base.tarot_edge = Array.isArray(base.tarot_edge) ? base.tarot_edge : [];
+  validateTarotGraph(base);
   base.meta = base.meta || {};
   base.meta.updated_at = new Date().toISOString();
 
@@ -80,7 +115,7 @@ function createEdge(graph, payload = {}) {
   return edge;
 }
 
-function ensureThemeNode(graph, themeName) {
+function createThemeNode(graph, themeName) {
   const trimmed = String(themeName || '').trim();
   if (!trimmed) return null;
 
@@ -104,6 +139,7 @@ function ensureThemeNode(graph, themeName) {
   graph.nodes.tarot_theme[id] = node;
   return node;
 }
+const ensureThemeNode = createThemeNode;
 
 function upsertSourceNode(graph, source = {}) {
   const kind = normalizeKey(source.kind || 'unknown');
@@ -143,18 +179,19 @@ function collectTags(payload = {}) {
 }
 
 function createInsightNode(graph, payload = {}, sourceNode = null) {
-  const cardId = payload.card?.id;
-  const keyMeanings = Array.isArray(payload.key_meanings) ? payload.key_meanings : [];
+  const cardId = payload.card_id || payload.card?.id || null;
   const id = `insight_${cardId || 'unknown'}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
   const node = {
     id,
-    card: payload.card || null,
+    card_id: cardId,
+    theme: payload.theme || 'General',
+    description: payload.description || '',
+    timestamp: payload.timestamp || null,
     source_id: sourceNode?.id || null,
     energy_general: payload.energy_general || '',
-    key_meanings: keyMeanings,
     advice: payload.advice || '',
-    tags: collectTags(payload),
+    tags: Array.isArray(payload.tags) ? payload.tags : collectTags(payload),
     meta: {
       node_type: 'tarot_insight',
       is_base: false,
@@ -196,23 +233,41 @@ function importTarotInsight(graphInput, jsonInsight) {
   }
 
   const sourceNode = upsertSourceNode(graph, payload.source || {});
-  const insightNode = createInsightNode(graph, payload, sourceNode);
+  const safeMeanings = Array.isArray(payload.key_meanings) && payload.key_meanings.length
+    ? payload.key_meanings
+    : [{ theme: 'General', description: payload.advice || payload.energy_general || '', tags: [] }];
+  let lastInsightId = null;
 
-  createEdge(graph, {
-    from: cardId,
-    to: insightNode.id,
-    relation: 'has_insight',
-    origin: 'manual',
-  });
+  safeMeanings.forEach((meaning, index) => {
+    const insightNode = createInsightNode(
+      graph,
+      {
+        card_id: cardId,
+        theme: meaning.theme || 'General',
+        description: meaning.description || '',
+        timestamp: meaning.timestamp || null,
+        tags: Array.isArray(meaning.tags) ? meaning.tags : [],
+        energy_general: payload.energy_general || '',
+        advice: payload.advice || '',
+      },
+      sourceNode,
+    );
+    lastInsightId = insightNode.id;
 
-  createEdge(graph, {
-    from: sourceNode.id,
-    to: insightNode.id,
-    relation: 'authored_insight',
-    origin: 'manual',
-  });
+    createEdge(graph, {
+      from: cardId,
+      to: insightNode.id,
+      relation: 'has_insight',
+      origin: 'manual',
+    });
 
-  (payload.key_meanings || []).forEach((meaning, index) => {
+    createEdge(graph, {
+      from: sourceNode.id,
+      to: insightNode.id,
+      relation: 'authored_insight',
+      origin: 'manual',
+    });
+
     const themeNode = ensureThemeNode(graph, meaning.theme);
     if (!themeNode) return;
 
@@ -235,15 +290,17 @@ function importTarotInsight(graphInput, jsonInsight) {
       sourceId: sourceNode.id,
     });
 
-    createEdge(graph, {
-      from: insightNode.id,
-      to: combinationNode.id,
-      relation: 'contains_combination',
-      origin: 'manual',
-      meta: {
-        combination_index: index,
-      },
-    });
+    if (lastInsightId) {
+      createEdge(graph, {
+        from: lastInsightId,
+        to: combinationNode.id,
+        relation: 'contains_combination',
+        origin: 'manual',
+        meta: {
+          combination_index: index,
+        },
+      });
+    }
 
     createEdge(graph, {
       from: cardId,
@@ -266,10 +323,7 @@ function importTarotInsight(graphInput, jsonInsight) {
   autoLinkByTags(graph);
   autoLinkByCombinationFrequency(graph);
 
-  return {
-    graph,
-    insight_id: insightNode.id,
-  };
+  return { graph, insight_id: lastInsightId };
 }
 
 function getNodeTagIndex(graph) {
@@ -478,7 +532,9 @@ module.exports = {
   TAROT_GRAPH_SCHEMA,
   TAROT_MEMORY_PATH,
   createBaseTarotGraph,
+  validateTarotGraph,
   importTarotInsight,
+  createThemeNode,
   ensureThemeNode,
   createInsightNode,
   createCombinationNode,

@@ -23,16 +23,32 @@ function normalizeCardName(value) {
 }
 
 function ensureGraphShape(graph) {
+  const isPlainObject = (value) => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+  const migrateNodeBucket = (bucket, name) => {
+    if (Array.isArray(bucket)) {
+      const migrated = {};
+      bucket.forEach((item, index) => {
+        if (!isPlainObject(item) || !item.id) return;
+        migrated[item.id] = item;
+      });
+      console.warn(`[TarotGraph] ${name} llegó como array (legacy). Migrado a objeto indexado por id.`);
+      return migrated;
+    }
+    return isPlainObject(bucket) ? bucket : {};
+  };
+
   const next = graph || {};
   next.schema = next.schema || 'astrobrain_tarot_graph_v1';
   next.meta = next.meta || {};
   next.nodes = next.nodes || {};
-  next.nodes.tarot_card = next.nodes.tarot_card || {};
-  next.nodes.tarot_insight = next.nodes.tarot_insight || {};
-  next.nodes.tarot_combination = next.nodes.tarot_combination || {};
-  next.nodes.tarot_theme = next.nodes.tarot_theme || {};
-  next.nodes.tarot_source = next.nodes.tarot_source || {};
+  next.nodes.tarot_card = migrateNodeBucket(next.nodes.tarot_card, 'nodes.tarot_card');
+  next.nodes.tarot_insight = migrateNodeBucket(next.nodes.tarot_insight, 'nodes.tarot_insight');
+  next.nodes.tarot_combination = migrateNodeBucket(next.nodes.tarot_combination, 'nodes.tarot_combination');
+  next.nodes.tarot_theme = migrateNodeBucket(next.nodes.tarot_theme, 'nodes.tarot_theme');
+  next.nodes.tarot_source = migrateNodeBucket(next.nodes.tarot_source, 'nodes.tarot_source');
+  next.edges = isPlainObject(next.edges) ? next.edges : {};
   next.tarot_edge = Array.isArray(next.tarot_edge) ? next.tarot_edge : [];
+  console.debug(`[TarotImport] tipo real nodes.tarot_insight: ${Array.isArray(next.nodes.tarot_insight) ? 'array' : typeof next.nodes.tarot_insight}`);
   return next;
 }
 
@@ -364,6 +380,7 @@ function getOrCreateTheme(graph, themeName, result) {
   };
   graph.nodes.tarot_theme[id] = node;
   result.counts.themesCreated += 1;
+  if (Array.isArray(result.createdThemeIds)) result.createdThemeIds.push(id);
   return node;
 }
 
@@ -456,6 +473,9 @@ async function importTarotJson(rawJson) {
     warnings: [],
     errors: [],
     persistence: null,
+    createdInsightIds: [],
+    createdCombinationIds: [],
+    createdThemeIds: [],
   };
 
   let parsed;
@@ -528,6 +548,7 @@ async function importTarotJson(rawJson) {
       };
       graph.nodes.tarot_insight[id] = insight;
       result.counts.insightsCreated += 1;
+      result.createdInsightIds.push(id);
     }
 
     ensureEdge(
@@ -576,6 +597,7 @@ async function importTarotJson(rawJson) {
       };
       graph.nodes.tarot_combination[id] = node;
       result.counts.combinationsCreated += 1;
+      result.createdCombinationIds.push(id);
     }
 
     ensureEdge(
@@ -591,6 +613,11 @@ async function importTarotJson(rawJson) {
   });
 
   result.persistence = await saveGraphNow(graph, 'import_tarot_json');
+  const totalInsights = Object.values(graph.nodes.tarot_insight || {}).filter((item) => item && item.id && item.card_id).length;
+  console.debug(`[TarotImport] insights válidos detectados: ${totalInsights}`);
+  console.debug(`[TarotImport] insight ids creados: ${result.createdInsightIds.join(', ') || '(ninguno)'}`);
+  console.debug(`[TarotImport] theme ids creados: ${result.createdThemeIds.join(', ') || '(ninguno)'}`);
+  console.debug(`[TarotImport] combination ids creados: ${result.createdCombinationIds.join(', ') || '(ninguno)'}`);
   console.debug(`[TarotImport] insights added: ${result.counts.insightsCreated}`);
 
   state.selectedCardId = card.id;

@@ -41,23 +41,67 @@
           tarot_theme: {},
           tarot_source: {},
         },
+        edges: {},
         tarot_edge: [],
       };
     };
   }
 
+  function isPlainObject(value) {
+    return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+  }
+
+  function migrateNodeBucket(bucket, bucketName) {
+    if (Array.isArray(bucket)) {
+      const migrated = {};
+      bucket.forEach((item, index) => {
+        if (!isPlainObject(item)) return;
+        const id = item.id || `${bucketName}_${index + 1}`;
+        if (!item.id) {
+          console.warn(`[TarotStorage] ${bucketName}[${index}] no tiene id. Se ignora durante migración de array->objeto.`);
+          return;
+        }
+        migrated[id] = item;
+      });
+      console.warn(`[TarotStorage] Se detectó estructura legacy en ${bucketName} (array). Migrada a objeto indexado por id.`);
+      return migrated;
+    }
+    return isPlainObject(bucket) ? bucket : {};
+  }
+
+  function validateTarotGraph(graphInput) {
+    const graph = graphInput || {};
+    graph.schema = graph.schema || 'astrobrain_tarot_graph_v1';
+    graph.meta = isPlainObject(graph.meta) ? graph.meta : {};
+    graph.nodes = isPlainObject(graph.nodes) ? graph.nodes : {};
+
+    graph.nodes.tarot_card = migrateNodeBucket(graph.nodes.tarot_card, 'nodes.tarot_card');
+    graph.nodes.tarot_insight = migrateNodeBucket(graph.nodes.tarot_insight, 'nodes.tarot_insight');
+    graph.nodes.tarot_combination = migrateNodeBucket(graph.nodes.tarot_combination, 'nodes.tarot_combination');
+    graph.nodes.tarot_theme = migrateNodeBucket(graph.nodes.tarot_theme, 'nodes.tarot_theme');
+    graph.nodes.tarot_source = migrateNodeBucket(graph.nodes.tarot_source, 'nodes.tarot_source');
+
+    const validInsights = {};
+    Object.entries(graph.nodes.tarot_insight).forEach(([key, insight]) => {
+      if (!isPlainObject(insight)) return;
+      if (!insight.id || !insight.card_id) {
+        console.warn(`[TarotStorage] tarot_insight inválido omitido: key=${key} id=${insight?.id || 'N/D'} card_id=${insight?.card_id || 'N/D'}`);
+        return;
+      }
+      validInsights[insight.id] = insight;
+    });
+    graph.nodes.tarot_insight = validInsights;
+
+    graph.edges = isPlainObject(graph.edges) ? graph.edges : {};
+    graph.tarot_edge = Array.isArray(graph.tarot_edge) ? graph.tarot_edge : [];
+
+    console.debug(`[TarotStorage] validateTarotGraph type(nodes.tarot_insight)=${Array.isArray(graph.nodes.tarot_insight) ? 'array' : typeof graph.nodes.tarot_insight}`);
+    console.debug(`[TarotStorage] validateTarotGraph valid insights=${Object.keys(graph.nodes.tarot_insight).length}`);
+    return graph;
+  }
+
   function ensureGraphShape(graph) {
-    const next = graph || {};
-    next.schema = next.schema || 'astrobrain_tarot_graph_v1';
-    next.meta = next.meta || {};
-    next.nodes = next.nodes || {};
-    next.nodes.tarot_card = next.nodes.tarot_card || {};
-    next.nodes.tarot_insight = next.nodes.tarot_insight || {};
-    next.nodes.tarot_combination = next.nodes.tarot_combination || {};
-    next.nodes.tarot_theme = next.nodes.tarot_theme || {};
-    next.nodes.tarot_source = next.nodes.tarot_source || {};
-    next.tarot_edge = Array.isArray(next.tarot_edge) ? next.tarot_edge : [];
-    return next;
+    return validateTarotGraph(graph || {});
   }
 
   function clone(value) {
@@ -246,7 +290,7 @@
   }
 
   async function saveTarotGraph(graph, options = {}) {
-    const payload = ensureGraphShape(clone(graph));
+    const payload = validateTarotGraph(clone(graph));
     const saveReason = options.reason || 'save';
 
     if (!options.skipSnapshot) {
@@ -389,6 +433,7 @@
     initDB,
     saveTarotGraph,
     loadTarotGraph,
+    validateTarotGraph,
     clearTarotGraph,
     getPersistenceError,
     getStorageDiagnostics,
