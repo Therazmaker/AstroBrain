@@ -5,6 +5,7 @@ const state = {
   cards: [],
   selectedCardId: null,
   importPreview: null,
+  importPreviewRaw: null,
   persistTimer: null,
   persistInFlight: null,
   persistenceWarning: null,
@@ -202,8 +203,9 @@ function parseFlexibleTarotInput(data) {
   const keyMeanings = [];
   const combinations = [];
   const source = data.fuente || data.source || null;
+  const flexibleMeanings = data.significados_clave || data.key_meanings || data.interpretaciones || [];
 
-  (data.significados_clave || []).forEach((entry) => {
+  flexibleMeanings.forEach((entry) => {
     if (entry?.tema || entry?.descripcion) {
       keyMeanings.push({
         theme: entry.tema || 'General',
@@ -229,15 +231,15 @@ function parseFlexibleTarotInput(data) {
   return {
     schema: 'astrobrain_tarot_insight_v1',
     card: {
-      id: data.card_id || data.id_carta || null,
+      id: data.card_id || data.id_carta || data.id || null,
       name: data.carta || data.card || data.nombre_carta || null,
     },
     source,
-    energy_general: data.energia_general || data.energy_general || null,
+    energy_general: data.energia_general || data.energy_general || data.contexto || null,
     key_meanings: keyMeanings,
     combinations,
-    advice: data.consejo || data.advice || null,
-    raw_card_input: data.carta || data.card || data.card_id || data.id_carta || null,
+    advice: data.consejo || data.advice || data.mensaje_clave || null,
+    raw_card_input: data.carta || data.card || data.card_id || data.id_carta || data.id || null,
   };
 }
 
@@ -258,19 +260,39 @@ function normalizeTarotImport(data) {
     tags: Array.isArray(item.tags) ? item.tags : [],
   });
 
-  return {
+  const normalized = {
     schema: 'astrobrain_tarot_insight_v1',
     card: {
-      id: input.card?.id || input.card_id || null,
+      id: input.card?.id || input.card_id || input.id || null,
       name: input.card?.name || input.carta || input.card || null,
     },
     source: input.source || null,
-    energy_general: input.energy_general || input.energia_general || null,
-    key_meanings: (input.key_meanings || input.significados_clave || []).map(normalizeMeaning),
+    energy_general: input.energy_general || input.energia_general || input.contexto || null,
+    key_meanings: (input.key_meanings || input.significados_clave || input.interpretaciones || []).map(normalizeMeaning),
     combinations: (input.combinations || []).map(normalizeCombination),
-    advice: input.advice || input.consejo || null,
+    advice: input.advice || input.consejo || input.mensaje_clave || null,
     raw_card_input:
-      input.raw_card_input || input.card?.id || input.card?.name || input.carta || input.card || null,
+      input.raw_card_input || input.card?.id || input.card?.name || input.carta || input.card || input.id || null,
+  };
+
+  const safeKeyMeanings = normalized.key_meanings.filter((item) => item.description || item.theme);
+  normalized.key_meanings = safeKeyMeanings;
+
+  console.info('[TarotImport] normalized.card', normalized.card);
+  console.info('[TarotImport] normalized.key_meanings.count', normalized.key_meanings.length);
+  console.info('[TarotImport] normalized.advice.present', Boolean(normalized.advice));
+
+  const normalizationErrors = [];
+  if (!normalized.card?.id || !normalized.card?.name) {
+    normalizationErrors.push('Normalización inválida: faltan card.id o card.name.');
+  }
+  if (!normalized.key_meanings.length) {
+    normalizationErrors.push('Normalización inválida: key_meanings quedó vacío.');
+  }
+
+  return {
+    ...normalized,
+    normalizationErrors,
   };
 }
 
@@ -460,7 +482,17 @@ async function importTarotJson(rawJson) {
     return result;
   }
 
-  const normalized = normalizeTarotImport(parsed);
+  const normalized = state.importPreviewRaw === rawJson && state.importPreview
+    ? state.importPreview
+    : normalizeTarotImport(parsed);
+  state.importPreview = normalized;
+  state.importPreviewRaw = rawJson;
+
+  if (normalized.normalizationErrors?.length) {
+    result.errors.push(...normalized.normalizationErrors);
+    return result;
+  }
+
   const rawCardValue = normalized.card?.id || normalized.card?.name || normalized.raw_card_input;
   const card = resolveCard(normalized.card?.id || normalized.card?.name || normalized.raw_card_input);
 
@@ -480,14 +512,11 @@ async function importTarotJson(rawJson) {
   );
 
   const safeKeyMeanings = normalized.key_meanings.filter((item) => item.description || item.theme);
-  if (!safeKeyMeanings.length && (normalized.energy_general || normalized.advice)) {
-    safeKeyMeanings.push({
-      theme: 'General',
-      description: normalized.advice || normalized.energy_general,
-      timestamp: null,
-      tags: [],
-    });
-    result.warnings.push('No llegaron key_meanings: se creó un insight general con energía/consejo.');
+  if (!safeKeyMeanings.length) {
+    result.errors.push(
+      'Carta detectada pero no se crearon insights: key_meanings quedó vacío después de normalizar.',
+    );
+    return result;
   }
 
   safeKeyMeanings.forEach((meaning) => {
@@ -613,6 +642,27 @@ function setupImportUI() {
       const parsed = JSON.parse(raw);
       const normalized = normalizeTarotImport(parsed);
       state.importPreview = normalized;
+      state.importPreviewRaw = raw;
+
+      if (normalized.normalizationErrors?.length) {
+        renderImportResult(
+          {
+            cardDetected: null,
+            counts: {
+              insightsCreated: 0,
+              themesCreated: 0,
+              themesReused: 0,
+              combinationsCreated: 0,
+              edgesCreated: 0,
+            },
+            warnings: [],
+            errors: normalized.normalizationErrors,
+          },
+          'error',
+        );
+        return;
+      }
+
       const card = resolveCard(normalized.card?.id || normalized.card?.name || normalized.raw_card_input);
 
       renderImportResult(
@@ -660,6 +710,7 @@ function setupImportUI() {
   clearBtn.addEventListener('click', () => {
     input.value = '';
     state.importPreview = null;
+    state.importPreviewRaw = null;
     renderImportResult(
       {
         cardDetected: null,
