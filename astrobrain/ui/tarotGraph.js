@@ -1,17 +1,13 @@
-const GRAPH_SOURCE_PATHS = [
-  '/astrobrain/memory/tarotGraph.json',
-  '../memory/tarotGraph.json',
-  '/memory/tarotGraph.json',
-];
-
-const GRAPH_PERSIST_API = '/api/tarot-graph';
-const LOCAL_GRAPH_STORAGE_KEY = 'astrobrain_tarot_graph_override_v1';
+const SAVE_DEBOUNCE_MS = 500;
 
 const state = {
   graph: null,
   cards: [],
   selectedCardId: null,
   importPreview: null,
+  persistTimer: null,
+  persistInFlight: null,
+  persistenceWarning: null,
 };
 
 function normalizeText(value) {
@@ -43,27 +39,51 @@ function ensureGraphShape(graph) {
   return next;
 }
 
-async function fetchGraph() {
-  const local = localStorage.getItem(LOCAL_GRAPH_STORAGE_KEY);
-  if (local) {
-    try {
-      return ensureGraphShape(JSON.parse(local));
-    } catch (_error) {
-      localStorage.removeItem(LOCAL_GRAPH_STORAGE_KEY);
-    }
+async function loadGraph() {
+  const storage = window.AstroBrainTarotStorage;
+  if (!storage || typeof storage.loadTarotGraph !== 'function') {
+    throw new Error('TarotStorage no está disponible.');
   }
 
-  for (const path of GRAPH_SOURCE_PATHS) {
-    try {
-      const response = await fetch(path, { cache: 'no-store' });
-      if (!response.ok) continue;
-      return ensureGraphShape(await response.json());
-    } catch (_error) {
-      // try next path
-    }
+  const result = await storage.loadTarotGraph();
+  if (result?.error) {
+    state.persistenceWarning = `Persistencia degradada: ${result.error.message || result.error}`;
   }
 
-  return null;
+  return ensureGraphShape(result?.graph || null);
+}
+
+async function saveGraphNow(graph) {
+  const storage = window.AstroBrainTarotStorage;
+  if (!storage || typeof storage.saveTarotGraph !== 'function') {
+    return { persistedToIndexedDB: false, persistedToMemory: true, error: new Error('TarotStorage no está disponible.') };
+  }
+
+  const result = await storage.saveTarotGraph(graph);
+  if (!result.ok && result.error) {
+    state.persistenceWarning = `Persistencia degradada: ${result.error.message || result.error}`;
+  } else if (result.ok) {
+    state.persistenceWarning = null;
+  }
+
+  return {
+    persistedToIndexedDB: result.ok && result.storage === 'indexeddb',
+    persistedToMemory: !result.ok || result.storage === 'memory',
+    error: result.error || null,
+  };
+}
+
+function scheduleGraphSave(graph) {
+  if (state.persistTimer) clearTimeout(state.persistTimer);
+
+  return new Promise((resolve) => {
+    state.persistTimer = setTimeout(async () => {
+      state.persistTimer = null;
+      state.persistInFlight = saveGraphNow(graph);
+      const persistence = await state.persistInFlight;
+      resolve(persistence);
+    }, SAVE_DEBOUNCE_MS);
+  });
 }
 
 function findCardCluster(graph, cardId) {
@@ -384,29 +404,6 @@ function dedupeCombination(graph, payload) {
   });
 }
 
-async function persistGraph(graph) {
-  const updated = ensureGraphShape(graph);
-  updated.meta.updated_at = new Date().toISOString();
-
-  let persistedToFile = false;
-  try {
-    const response = await fetch(GRAPH_PERSIST_API, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updated),
-    });
-    persistedToFile = response.ok;
-  } catch (_error) {
-    persistedToFile = false;
-  }
-
-  localStorage.setItem(LOCAL_GRAPH_STORAGE_KEY, JSON.stringify(updated));
-  return {
-    persistedToFile,
-    persistedToLocalStorage: true,
-  };
-}
-
 function renderImportResult(result, tone = 'success') {
   const panel = document.getElementById('import-result');
   panel.classList.remove('success', 'error', 'warning');
@@ -423,7 +420,7 @@ function renderImportResult(result, tone = 'success') {
 
   if (result.persistence) {
     lines.push(
-      `Persistencia: ${result.persistence.persistedToFile ? 'archivo actualizado vía API' : 'guardado local (localStorage)'}`,
+      `Persistencia: ${result.persistence.persistedToIndexedDB ? 'IndexedDB' : 'memoria temporal'}`,
     );
   }
 
@@ -590,7 +587,7 @@ async function importTarotJson(rawJson) {
     );
   });
 
-  result.persistence = await persistGraph(graph);
+  result.persistence = await scheduleGraphSave(graph);
 
   state.selectedCardId = card.id;
   renderCardList(state.cards);
@@ -682,9 +679,16 @@ function setupImportUI() {
 }
 
 async function bootstrap() {
-  const graph = await fetchGraph();
+  let graph;
+  try {
+    graph = await loadGraph();
+  } catch (error) {
+    document.getElementById('selected-card').textContent = `Error de inicialización: ${error.message || error}`;
+    return;
+  }
+
   if (!graph?.nodes?.tarot_card) {
-    document.getElementById('selected-card').textContent = 'No se pudo cargar astrobrain/memory/tarotGraph.json';
+    document.getElementById('selected-card').textContent = 'No se pudo construir el grafo base de TarotBrain.';
     return;
   }
 
@@ -696,6 +700,15 @@ async function bootstrap() {
   renderSelectedCard();
   setupFilter();
   setupImportUI();
+
+  if (state.persistenceWarning) {
+    renderImportResult({
+      cardDetected: state.selectedCardId,
+      counts: { insightsCreated: 0, themesCreated: 0, themesReused: 0, combinationsCreated: 0, edgesCreated: 0 },
+      warnings: [state.persistenceWarning],
+      errors: [],
+    }, 'warning');
+  }
 }
 
 bootstrap();
