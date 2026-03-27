@@ -1,18 +1,17 @@
 (function attachTarotStorage(global) {
   const DB_NAME = 'AstroBrainDB';
-  const DB_VERSION = 1;
+  const DB_VERSION = 2;
   const STORE_NAME = 'tarot_graph';
   const GRAPH_RECORD_KEY = 'primary';
-  const LEGACY_LOCAL_STORAGE_KEY = 'astrobrain_tarot_graph_override_v1';
-  const GRAPH_SOURCE_PATHS = [
-    '/astrobrain/memory/tarotGraph.json',
-    '../memory/tarotGraph.json',
-    '/memory/tarotGraph.json',
-  ];
+  const SNAPSHOT_STORE_NAME = 'tarot_graph_snapshots';
+  const MAX_SNAPSHOTS = 10;
+  const GRAPH_CHANNEL_NAME = 'astrobrain_tarot_graph_sync_v1';
+  const channel = typeof global.BroadcastChannel === 'function' ? new BroadcastChannel(GRAPH_CHANNEL_NAME) : null;
 
   let dbPromise = null;
   let memoryGraph = null;
   let persistenceError = null;
+  const subscribers = new Set();
 
   function getBaseGraphFactory() {
     const api = global.AstroBrainTarotBaseCards;
@@ -65,6 +64,41 @@
     return JSON.parse(JSON.stringify(value));
   }
 
+  function getGraphCounts(graph) {
+    const current = ensureGraphShape(graph);
+    return {
+      cards: Object.keys(current.nodes.tarot_card || {}).length,
+      insights: Object.keys(current.nodes.tarot_insight || {}).length,
+      themes: Object.keys(current.nodes.tarot_theme || {}).length,
+    };
+  }
+
+  function logGraphCounts(prefix, graph) {
+    const counts = getGraphCounts(graph);
+    console.debug(`[TarotStorage] ${prefix} cards: ${counts.cards} insights: ${counts.insights} themes: ${counts.themes}`);
+  }
+
+  function notifyGraphChanged(detail) {
+    const payload = detail || {};
+    subscribers.forEach((listener) => {
+      try {
+        listener(payload);
+      } catch (_error) {
+        // no-op
+      }
+    });
+
+    try {
+      global.dispatchEvent(new CustomEvent('astrobrain:tarot-graph-updated', { detail: payload }));
+    } catch (_error) {
+      // no-op
+    }
+
+    if (channel) {
+      channel.postMessage(payload);
+    }
+  }
+
   function openDB() {
     if (!global.indexedDB) {
       return Promise.reject(new Error('IndexedDB no está disponible en este navegador.'));
@@ -77,6 +111,9 @@
         const db = request.result;
         if (!db.objectStoreNames.contains(STORE_NAME)) {
           db.createObjectStore(STORE_NAME);
+        }
+        if (!db.objectStoreNames.contains(SNAPSHOT_STORE_NAME)) {
+          db.createObjectStore(SNAPSHOT_STORE_NAME, { keyPath: 'id' });
         }
       };
 
@@ -132,60 +169,121 @@
     });
   }
 
-  async function tryLoadOptionalGraphBackup() {
-    for (const path of GRAPH_SOURCE_PATHS) {
-      try {
-        const response = await fetch(path, { cache: 'no-store' });
-        if (!response.ok) continue;
-        const data = await response.json();
-        return ensureGraphShape(data);
-      } catch (_error) {
-        // backup opcional
-      }
-    }
-
-    return null;
+  async function listSnapshotsFromIndexedDB() {
+    const db = await initDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(SNAPSHOT_STORE_NAME, 'readonly');
+      const store = tx.objectStore(SNAPSHOT_STORE_NAME);
+      const request = store.getAll();
+      request.onsuccess = () => resolve(Array.isArray(request.result) ? request.result : []);
+      request.onerror = () => reject(request.error || new Error('No se pudieron listar snapshots.'));
+    });
   }
 
-  async function migrateLegacyLocalStorageIfNeeded() {
-    if (!global.localStorage) return { migrated: false };
+  async function saveSnapshotToIndexedDB(snapshotRecord) {
+    const db = await initDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(SNAPSHOT_STORE_NAME, 'readwrite');
+      const store = tx.objectStore(SNAPSHOT_STORE_NAME);
+      const request = store.put(snapshotRecord);
+      request.onsuccess = () => resolve(snapshotRecord);
+      request.onerror = () => reject(request.error || new Error('No se pudo guardar snapshot.'));
+    });
+  }
 
-    const raw = global.localStorage.getItem(LEGACY_LOCAL_STORAGE_KEY);
-    if (!raw) return { migrated: false };
+  async function deleteSnapshotById(snapshotId) {
+    const db = await initDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(SNAPSHOT_STORE_NAME, 'readwrite');
+      const store = tx.objectStore(SNAPSHOT_STORE_NAME);
+      const request = store.delete(snapshotId);
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(request.error || new Error('No se pudo borrar snapshot.'));
+    });
+  }
+
+  async function createSnapshot(reason = 'manual', graph = null) {
+    const loaded = graph ? ensureGraphShape(clone(graph)) : (await loadTarotGraph()).graph;
+    const snapshot = {
+      id: `snapshot_${Date.now()}_${Math.floor(Math.random() * 100000)}`,
+      created_at: new Date().toISOString(),
+      reason,
+      graph: loaded,
+      counts: getGraphCounts(loaded),
+      meta: loaded.meta || {},
+    };
 
     try {
-      const parsed = JSON.parse(raw);
-      await writeGraphToIndexedDB(parsed);
-      global.localStorage.removeItem(LEGACY_LOCAL_STORAGE_KEY);
-      return { migrated: true };
+      await saveSnapshotToIndexedDB(snapshot);
+      const snapshots = await listSnapshotsFromIndexedDB();
+      if (snapshots.length > MAX_SNAPSHOTS) {
+        snapshots
+          .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+          .slice(0, snapshots.length - MAX_SNAPSHOTS)
+          .forEach((item) => {
+            deleteSnapshotById(item.id).catch(() => {});
+          });
+      }
+      console.debug(`[TarotStorage] snapshot created: ${snapshot.id} reason: ${reason}`);
+      return { ok: true, snapshot };
     } catch (error) {
-      global.localStorage.removeItem(LEGACY_LOCAL_STORAGE_KEY);
-      return { migrated: false, error };
+      return { ok: false, error };
     }
   }
 
-  async function saveTarotGraph(graph) {
+  async function restoreLatestSnapshot() {
+    try {
+      const snapshots = await listSnapshotsFromIndexedDB();
+      if (!snapshots.length) {
+        return { ok: false, error: new Error('No hay snapshots para restaurar.') };
+      }
+      const latest = snapshots.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
+      const saveResult = await saveTarotGraph(latest.graph, { skipSnapshot: true, reason: 'restore_latest_snapshot' });
+      return { ok: Boolean(saveResult.ok), snapshot: latest, graph: saveResult.graph, storage: saveResult.storage };
+    } catch (error) {
+      return { ok: false, error };
+    }
+  }
+
+  async function saveTarotGraph(graph, options = {}) {
     const payload = ensureGraphShape(clone(graph));
+    const saveReason = options.reason || 'save';
+
+    if (!options.skipSnapshot) {
+      await createSnapshot(`before_${saveReason}`, payload);
+    }
 
     try {
       const saved = await writeGraphToIndexedDB(payload);
       memoryGraph = saved;
       persistenceError = null;
+      console.debug('[TarotGraph] save completed');
+      logGraphCounts('save', saved);
+      notifyGraphChanged({
+        source: 'indexeddb',
+        updated_at: saved.meta?.updated_at || null,
+        graphVersion: saved.meta?.version || 1,
+        graphSchema: saved.schema,
+        counts: getGraphCounts(saved),
+      });
       return { ok: true, storage: 'indexeddb', graph: saved };
     } catch (error) {
       memoryGraph = payload;
       persistenceError = error;
+      console.debug('[TarotStorage] load source: memory (fallback after save error)');
+      logGraphCounts('save(memory)', payload);
       return { ok: false, storage: 'memory', graph: payload, error };
     }
   }
 
   async function loadTarotGraph() {
     try {
-      await migrateLegacyLocalStorageIfNeeded();
       const fromDB = await readGraphFromIndexedDB();
       if (fromDB) {
         memoryGraph = fromDB;
         persistenceError = null;
+        console.debug('[TarotStorage] load source: indexeddb');
+        logGraphCounts('load(indexeddb)', fromDB);
         return { graph: fromDB, storage: 'indexeddb', initialized: false };
       }
 
@@ -194,14 +292,16 @@
         const createBaseTarotGraph = getBaseGraphFactory();
         baseGraph = createBaseTarotGraph();
       } catch (_error) {
-        baseGraph = await tryLoadOptionalGraphBackup();
+        baseGraph = null;
       }
 
       if (!baseGraph) {
         throw new Error('No se pudo construir el grafo base (ni dataset base ni backup opcional).');
       }
 
-      const saveResult = await saveTarotGraph(baseGraph);
+      console.debug('[TarotStorage] load source: fallback(base)');
+      logGraphCounts('load(base)', baseGraph);
+      const saveResult = await saveTarotGraph(baseGraph, { reason: 'bootstrap_base' });
       return {
         graph: saveResult.graph,
         storage: saveResult.storage,
@@ -214,6 +314,8 @@
         const createBaseTarotGraph = getBaseGraphFactory();
         memoryGraph = createBaseTarotGraph();
       }
+      console.debug('[TarotStorage] load source: memory (error fallback)');
+      logGraphCounts('load(memory)', memoryGraph);
       return {
         graph: ensureGraphShape(clone(memoryGraph)),
         storage: 'memory',
@@ -223,7 +325,17 @@
     }
   }
 
-  async function clearTarotGraph() {
+  async function clearTarotGraph(options = {}) {
+    const loaded = await loadTarotGraph();
+    const insightCount = Object.keys(loaded?.graph?.nodes?.tarot_insight || {}).length;
+    if (!options.force && insightCount > 0) {
+      return {
+        ok: false,
+        storage: loaded.storage || 'indexeddb',
+        error: new Error('Bloqueado: existe un grafo persistido con insights > 0. Usa clearTarotGraph({ force: true }) para reset explícito.'),
+      };
+    }
+
     try {
       await clearGraphFromIndexedDB();
       memoryGraph = null;
@@ -240,11 +352,48 @@
     return persistenceError;
   }
 
+  async function getStorageDiagnostics() {
+    const loaded = await loadTarotGraph();
+    const graph = loaded.graph;
+    const counts = getGraphCounts(graph);
+    return {
+      storage: loaded.storage,
+      graphId: graph?.meta?.graph_id || 'tarot_primary',
+      version: graph?.meta?.version || 1,
+      lastSavedAt: graph?.meta?.updated_at || graph?.meta?.created_at || null,
+      counts,
+      persistenceError: persistenceError ? String(persistenceError.message || persistenceError) : null,
+    };
+  }
+
+  function subscribeTarotGraph(listener) {
+    if (typeof listener !== 'function') return () => {};
+    subscribers.add(listener);
+    return () => subscribers.delete(listener);
+  }
+
+  if (channel) {
+    channel.addEventListener('message', (event) => {
+      const detail = event?.data || {};
+      subscribers.forEach((listener) => {
+        try {
+          listener(detail);
+        } catch (_error) {
+          // no-op
+        }
+      });
+    });
+  }
+
   global.AstroBrainTarotStorage = {
     initDB,
     saveTarotGraph,
     loadTarotGraph,
     clearTarotGraph,
     getPersistenceError,
+    getStorageDiagnostics,
+    createSnapshot,
+    restoreLatestSnapshot,
+    subscribeTarotGraph,
   };
 })(typeof globalThis !== 'undefined' ? globalThis : window);
